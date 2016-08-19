@@ -1,6 +1,6 @@
 # Komet
 
-A Cocoa text editor designed for creating commit messages
+A Cocoa text editor designed for creating commit messages (Work in Progress)
 
 ![Image of Komet](Screenshot.png)
 
