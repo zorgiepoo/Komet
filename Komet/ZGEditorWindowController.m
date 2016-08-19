@@ -26,6 +26,7 @@
 	IBOutlet ZGCommitTextView *_textView;
 	IBOutlet NSTextField *_commitLabelTextField;
 	BOOL _preventAccidentalNewline;
+	NSUInteger _commentSectionLength;
 }
 
 + (void)initialize
@@ -174,13 +175,14 @@
 	
 	[_textView.textStorage setAttributedString:plainAttributedString];
 	
-	NSRange commentRange = {.location = 0, .length = 0};
-	NSUInteger commitLength = [self commitTextLengthAndGetCommentRange:&commentRange];
+	_commentSectionLength = [self commentSectionLength];
+	
+	NSUInteger commitLength = [self commitTextLengthWithCommentLength:_commentSectionLength];
 	
 	[_textView setSelectedRange:NSMakeRange(commitLength, 0)];
-	if (commentRange.length != 0)
+	if (_commentSectionLength != 0)
 	{
-		[_textView.textStorage addAttribute:NSForegroundColorAttributeName value:[self colorFromUserDefaultsKey:ZGEditorCommentForegroundColorKey] range:commentRange];
+		[_textView.textStorage addAttribute:NSForegroundColorAttributeName value:[self colorFromUserDefaultsKey:ZGEditorCommentForegroundColorKey] range:NSMakeRange(plainString.length - _commentSectionLength, _commentSectionLength)];
 	}
 }
 
@@ -207,6 +209,21 @@
 		color = [NSColor colorWithRed:1.0 green:1.0 blue:1.0 alpha:1.0];
 	}
 	return color;
+}
+
+// Don't allow editing the comment section
+- (BOOL)textView:(NSTextView *)textView shouldChangeTextInRanges:(NSArray<NSValue *> *)affectedRanges replacementStrings:(NSArray<NSString *> *)__unused replacementStrings
+{
+	NSUInteger plainTextLength = textView.textStorage.string.length;
+	for (NSValue *rangeValue in affectedRanges)
+	{
+		NSRange range = rangeValue.rangeValue;
+		if (range.location + range.length >= plainTextLength - _commentSectionLength)
+		{
+			return NO;
+		}
+	}
+	return YES;
 }
 
 - (void)textStorage:(NSTextStorage *)textStorage didProcessEditing:(NSTextStorageEditActions)editedMask range:(NSRange)__unused editedRange changeInLength:(NSInteger)__unused delta
@@ -255,11 +272,9 @@
 	}
 	else
 	{
-		// Disable temporary attributes like spell checking red squiggle underlines if the line begins with a #
-		NSUInteger lineStartIndex = 0;
-		NSString *plainText = _textView.textStorage.string;
-		[plainText getLineStart:&lineStartIndex end:NULL contentsEnd:NULL forRange:*effectiveCharRange];
-		if ([plainText characterAtIndex:lineStartIndex] == '#')
+		// Disable temporary attributes like spell checking if they are in the comment section
+		NSUInteger plainTextLength = _textView.textStorage.string.length;
+		if (effectiveCharRange->location + effectiveCharRange->length >= plainTextLength - _commentSectionLength)
 		{
 			attributes = nil;
 		}
@@ -347,19 +362,16 @@
 
 - (IBAction)selectAllCommitText:(id)__unused sender
 {
-	[_textView setSelectedRange:NSMakeRange(0, [self commitTextLength])];
+	NSUInteger commitTextLength = [self commitTextLengthWithCommentLength:_commentSectionLength];
+	[_textView setSelectedRange:NSMakeRange(0, commitTextLength)];
 }
 
-- (NSUInteger)commitTextLength
-{
-	return [self commitTextLengthAndGetCommentRange:NULL];
-}
-
-// The content range should extend to before the comments, only allowing one trailing newline in between the comments and content
 // The comment range should begin at the first line that starts with '#' and end to end of the file
 // Make sure to scan from the bottom to top
-- (NSUInteger)commitTextLengthAndGetCommentRange:(NSRange *)commentRange
+- (NSUInteger)commentSectionLength
 {
+	NSUInteger commentSectionLength = 0;
+	
 	NSString *plainText = _textView.textStorage.string;
 	NSUInteger plainTextLength = plainText.length;
 	
@@ -381,11 +393,7 @@
 		{
 			if (foundFirstCommentLine)
 			{
-				if (commentRange != NULL)
-				{
-					*commentRange = NSMakeRange(firstCommentLineIndex, plainTextLength - firstCommentLineIndex);
-				}
-				
+				commentSectionLength = plainTextLength - firstCommentLineIndex;
 				break;
 			}
 		}
@@ -398,8 +406,18 @@
 		characterIndex = lineStartIndex;
 	}
 	
+	return commentSectionLength;
+}
+
+// The content range should extend to before the comments, only allowing one trailing newline in between the comments and content
+// The comment range should begin at the first line that starts with '#' and end to end of the file
+// Make sure to scan from the bottom to top
+- (NSUInteger)commitTextLengthWithCommentLength:(NSUInteger)commentLength
+{
+	NSString *plainText = _textView.textStorage.string;
+	
 	// Find the first real character or anything past the 1st newline before the comment section
-	NSUInteger bestEndCharacterIndex = firstCommentLineIndex;
+	NSUInteger bestEndCharacterIndex = plainText.length - commentLength;
 	BOOL passedNewline = NO;
 	while (bestEndCharacterIndex > 0)
 	{
