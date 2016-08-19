@@ -17,6 +17,13 @@
 #define ZGEditorCommentForegroundColorKey @"ZGEditorCommentForegroundColor"
 #define ZGEditorAutomaticNewlineInsertionAfterSubjectKey @"ZGEditorAutomaticNewlineInsertionAfterSubject"
 
+typedef NS_ENUM(NSUInteger, ZGVersionControlType)
+{
+	ZGVersionControlGit,
+	ZGVersionControlHg,
+	ZGVersionControlSvn
+};
+
 @interface ZGEditorWindowController () <NSTextStorageDelegate, NSLayoutManagerDelegate, NSTextViewDelegate>
 @end
 
@@ -107,14 +114,31 @@
 	
 	// If it's a git repo, set the label to the Project folder name, otherwise just use the filename
 	NSURL *parentURL = _fileURL.URLByDeletingLastPathComponent;
+	ZGVersionControlType versionControlType;
 	NSString *label;
 	if ([parentURL.lastPathComponent isEqualToString:@".git"])
 	{
 		label = parentURL.URLByDeletingLastPathComponent.lastPathComponent;
+		versionControlType = ZGVersionControlGit;
 	}
 	else
 	{
-		label = _fileURL.lastPathComponent;
+		NSString *lastPathComponent = _fileURL.lastPathComponent;
+		
+		if ([lastPathComponent hasPrefix:@"hg-"])
+		{
+			versionControlType = ZGVersionControlHg;
+		}
+		else if ([lastPathComponent hasPrefix:@"svn-"])
+		{
+			versionControlType = ZGVersionControlSvn;
+		}
+		else
+		{
+			versionControlType = ZGVersionControlGit;
+		}
+		
+		label = lastPathComponent;
 	}
 	
 	_commitLabelTextField.stringValue = (label == nil) ? @"" : label;
@@ -175,7 +199,7 @@
 	
 	[_textView.textStorage setAttributedString:plainAttributedString];
 	
-	_commentSectionLength = [self commentSectionLength];
+	_commentSectionLength = [self commentSectionLengthForVersionControlType:versionControlType];
 	
 	NSUInteger commitLength = [self commitTextLengthWithCommentLength:_commentSectionLength];
 	
@@ -366,9 +390,9 @@
 	[_textView setSelectedRange:NSMakeRange(0, commitTextLength)];
 }
 
-// The comment range should begin at the first line that starts with '#' and end to end of the file
+// The comment range should begin at the first line that starts with a comment string and go to the end of the file
 // Make sure to scan from the bottom to top
-- (NSUInteger)commentSectionLength
+- (NSUInteger)commentSectionLengthForVersionControlType:(ZGVersionControlType)versionControlType
 {
 	NSUInteger commentSectionLength = 0;
 	
@@ -379,6 +403,24 @@
 	
 	BOOL foundFirstCommentLine = NO;
 	
+	NSString *prefixCommentString;
+	NSString *suffixCommentString;
+	switch (versionControlType)
+	{
+		case ZGVersionControlGit:
+			prefixCommentString = @"#";
+			suffixCommentString = @"";
+			break;
+		case ZGVersionControlHg:
+			prefixCommentString = @"HG:";
+			suffixCommentString = @"";
+			break;
+		case ZGVersionControlSvn:
+			prefixCommentString = @"--";
+			suffixCommentString = @"--";
+			break;
+	}
+	
 	// Find the first comment line starting from the end of the document to get the comment range to the end of the document
 	NSUInteger characterIndex = plainTextLength;
 	while (characterIndex > 0)
@@ -386,10 +428,15 @@
 		characterIndex--;
 		
 		NSUInteger lineStartIndex = 0;
-		[plainText getLineStart:&lineStartIndex end:NULL contentsEnd:NULL forRange:NSMakeRange(characterIndex, 0)];
+		NSUInteger contentEndIndex = 0;
+		[plainText getLineStart:&lineStartIndex end:NULL contentsEnd:&contentEndIndex forRange:NSMakeRange(characterIndex, 0)];
 		
-		unichar character = [plainText characterAtIndex:lineStartIndex];
-		if (character != '#')
+		NSString *line = [plainText substringWithRange:NSMakeRange(lineStartIndex, contentEndIndex - lineStartIndex)];
+		
+		// See if we don't have a comment
+		// Note a line that is "--" could have the prefix and suffix the same, but we want to make sure it's at least "--...--"
+		// Also empty strings don't yield the expected behavior for hasSuffix:/hasPrefix:
+		if (![line hasPrefix:prefixCommentString] || (line.length < prefixCommentString.length + suffixCommentString.length) ||  (suffixCommentString.length > 0 && ![line hasSuffix:suffixCommentString]))
 		{
 			if (foundFirstCommentLine)
 			{
