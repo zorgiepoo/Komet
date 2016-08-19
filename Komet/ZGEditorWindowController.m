@@ -371,18 +371,20 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 	
 	if (success)
 	{
+		// We should have wrote to the commit file successfully
 		exit(EXIT_SUCCESS);
 	}
 	else
 	{
-		// Empty commits should be treated as a success
-		// Version control software will be able to handle it as an abort
 		if (_initiallyContainedEmptyContent)
 		{
+			// Empty commits should be treated as a success
+			// Version control software will be able to handle it as an abort
 			exit(EXIT_SUCCESS);
 		}
 		else
 		{
+			// If we are amending an existing commit for example, we should fail and not create another change
 			exit(EXIT_FAILURE);
 		}
 	}
