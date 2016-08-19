@@ -14,7 +14,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (instancetype)initWithFileURL:(NSURL *)fileURL;
 
-- (void)saveWindowFrame;
+- (void)exitWithSuccess:(BOOL)success __attribute__((noreturn));
 
 @end
 

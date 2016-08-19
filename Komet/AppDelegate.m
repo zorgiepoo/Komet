@@ -142,11 +142,9 @@
 	[_editorWindowController showWindow:nil];
 }
 
-- (void)applicationWillTerminate:(NSNotification *)__unused notification __attribute__((noreturn))
+- (void)applicationWillTerminate:(NSNotification *)__unused notification
 {
-	[_editorWindowController saveWindowFrame];
-	
-	exit(EXIT_FAILURE);
+	[_editorWindowController exitWithSuccess:NO];
 }
 
 @end

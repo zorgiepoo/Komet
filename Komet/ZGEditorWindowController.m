@@ -33,6 +33,7 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 	IBOutlet ZGCommitTextView *_textView;
 	IBOutlet NSTextField *_commitLabelTextField;
 	BOOL _preventAccidentalNewline;
+	BOOL _initiallyContainedEmptyContent;
 	NSUInteger _commentSectionLength;
 }
 
@@ -203,6 +204,9 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 	
 	NSUInteger commitLength = [self commitTextLengthWithCommentLength:_commentSectionLength];
 	
+	NSString *content = [plainString substringToIndex:commitLength];
+	_initiallyContainedEmptyContent = ([[content stringByTrimmingCharactersInSet:[NSCharacterSet newlineCharacterSet]] length] == 0);
+	
 	[_textView setSelectedRange:NSMakeRange(commitLength, 0)];
 	if (_commentSectionLength != 0)
 	{
@@ -356,15 +360,32 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 	return NO;
 }
 
-- (void)exitWithStatus:(int)status __attribute__((noreturn))
+- (void)exitWithSuccess:(BOOL)success __attribute__((noreturn))
 {
 	[self saveWindowFrame];
-	exit(status);
+	
+	if (success)
+	{
+		exit(EXIT_SUCCESS);
+	}
+	else
+	{
+		// Empty commits should be treated as a success
+		// Version control software will be able to handle it as an abort
+		if (_initiallyContainedEmptyContent)
+		{
+			exit(EXIT_SUCCESS);
+		}
+		else
+		{
+			exit(EXIT_FAILURE);
+		}
+	}
 }
 
 - (void)windowWillClose:(NSNotification *)__unused notification
 {
-	[self exitWithStatus:EXIT_FAILURE];
+	[self exitWithSuccess:NO];
 }
 
 - (IBAction)commit:(id)__unused sender
@@ -372,16 +393,17 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 	NSError *writeError = nil;
 	if (![_textView.textStorage.string writeToURL:_fileURL atomically:YES encoding:NSUTF8StringEncoding error:&writeError])
 	{
+		// Fatal error
 		printf("Failed to write to %s because of: %s\n", _fileURL.path.UTF8String, writeError.localizedDescription.UTF8String);
 		exit(EXIT_FAILURE);
 	}
 	
-	[self exitWithStatus:EXIT_SUCCESS];
+	[self exitWithSuccess:YES];
 }
 
 - (IBAction)cancel:(id)__unused sender
 {
-	[self exitWithStatus:EXIT_FAILURE];
+	[self exitWithSuccess:NO];
 }
 
 - (IBAction)selectAllCommitText:(id)__unused sender
