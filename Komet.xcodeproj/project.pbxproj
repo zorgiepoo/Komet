@@ -1,0 +1,349 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		72B72C971D63EFF90096365F /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 72B72C961D63EFF90096365F /* AppDelegate.m */; };
+		72B72C9A1D63EFF90096365F /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 72B72C991D63EFF90096365F /* main.m */; };
+		72B72C9C1D63EFF90096365F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 72B72C9B1D63EFF90096365F /* Assets.xcassets */; };
+		72B72C9F1D63EFF90096365F /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 72B72C9D1D63EFF90096365F /* MainMenu.xib */; };
+		72B72CA91D63F0870096365F /* ZGEditorWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 72B72CA71D63F0870096365F /* ZGEditorWindowController.m */; };
+		72B72CAA1D63F0870096365F /* Commit Editor.xib in Resources */ = {isa = PBXBuildFile; fileRef = 72B72CA81D63F0870096365F /* Commit Editor.xib */; };
+		72B72CAD1D6412EE0096365F /* ZGCommitTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 72B72CAC1D6412EE0096365F /* ZGCommitTextView.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		72B72C921D63EFF90096365F /* Komet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Komet.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		72B72C961D63EFF90096365F /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		72B72C991D63EFF90096365F /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		72B72C9B1D63EFF90096365F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		72B72C9E1D63EFF90096365F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MainMenu.xib; sourceTree = "<group>"; };
+		72B72CA01D63EFF90096365F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		72B72CA61D63F0870096365F /* ZGEditorWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZGEditorWindowController.h; sourceTree = "<group>"; };
+		72B72CA71D63F0870096365F /* ZGEditorWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZGEditorWindowController.m; sourceTree = "<group>"; };
+		72B72CA81D63F0870096365F /* Commit Editor.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "Commit Editor.xib"; sourceTree = "<group>"; };
+		72B72CAB1D6412EE0096365F /* ZGCommitTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZGCommitTextView.h; sourceTree = "<group>"; };
+		72B72CAC1D6412EE0096365F /* ZGCommitTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZGCommitTextView.m; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		72B72C8F1D63EFF90096365F /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		72B72C891D63EFF90096365F = {
+			isa = PBXGroup;
+			children = (
+				72B72C941D63EFF90096365F /* Komet */,
+				72B72C931D63EFF90096365F /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		72B72C931D63EFF90096365F /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				72B72C921D63EFF90096365F /* Komet.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		72B72C941D63EFF90096365F /* Komet */ = {
+			isa = PBXGroup;
+			children = (
+				72B72C961D63EFF90096365F /* AppDelegate.m */,
+				72B72CAB1D6412EE0096365F /* ZGCommitTextView.h */,
+				72B72CAC1D6412EE0096365F /* ZGCommitTextView.m */,
+				72B72CA61D63F0870096365F /* ZGEditorWindowController.h */,
+				72B72CA71D63F0870096365F /* ZGEditorWindowController.m */,
+				72B72CA81D63F0870096365F /* Commit Editor.xib */,
+				72B72C9B1D63EFF90096365F /* Assets.xcassets */,
+				72B72C9D1D63EFF90096365F /* MainMenu.xib */,
+				72B72CA01D63EFF90096365F /* Info.plist */,
+				72B72C981D63EFF90096365F /* Supporting Files */,
+			);
+			path = Komet;
+			sourceTree = "<group>";
+		};
+		72B72C981D63EFF90096365F /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				72B72C991D63EFF90096365F /* main.m */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		72B72C911D63EFF90096365F /* Komet */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 72B72CA31D63EFF90096365F /* Build configuration list for PBXNativeTarget "Komet" */;
+			buildPhases = (
+				72B72C8E1D63EFF90096365F /* Sources */,
+				72B72C8F1D63EFF90096365F /* Frameworks */,
+				72B72C901D63EFF90096365F /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Komet;
+			productName = Komet;
+			productReference = 72B72C921D63EFF90096365F /* Komet.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		72B72C8A1D63EFF90096365F /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0730;
+				ORGANIZATIONNAME = zgcoder;
+				TargetAttributes = {
+					72B72C911D63EFF90096365F = {
+						CreatedOnToolsVersion = 7.3.1;
+					};
+				};
+			};
+			buildConfigurationList = 72B72C8D1D63EFF90096365F /* Build configuration list for PBXProject "Komet" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 72B72C891D63EFF90096365F;
+			productRefGroup = 72B72C931D63EFF90096365F /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				72B72C911D63EFF90096365F /* Komet */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		72B72C901D63EFF90096365F /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				72B72CAA1D63F0870096365F /* Commit Editor.xib in Resources */,
+				72B72C9C1D63EFF90096365F /* Assets.xcassets in Resources */,
+				72B72C9F1D63EFF90096365F /* MainMenu.xib in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		72B72C8E1D63EFF90096365F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				72B72C9A1D63EFF90096365F /* main.m in Sources */,
+				72B72CA91D63F0870096365F /* ZGEditorWindowController.m in Sources */,
+				72B72C971D63EFF90096365F /* AppDelegate.m in Sources */,
+				72B72CAD1D6412EE0096365F /* ZGCommitTextView.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		72B72C9D1D63EFF90096365F /* MainMenu.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				72B72C9E1D63EFF90096365F /* Base */,
+			);
+			name = MainMenu.xib;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		72B72CA11D63EFF90096365F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_ASSIGN_ENUM = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_IMPLICIT_SIGN_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NULLABLE_TO_NONNULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_ATOMIC_PROPERTIES = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_IMPLICIT_CONVERSION = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_TREAT_IMPLICIT_FUNCTION_DECLARATIONS_AS_ERRORS = YES;
+				GCC_TREAT_INCOMPATIBLE_POINTER_TYPE_WARNINGS_AS_ERRORS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_MISSING_FIELD_INITIALIZERS = YES;
+				GCC_WARN_ABOUT_MISSING_NEWLINE = YES;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_FOUR_CHARACTER_CONSTANTS = YES;
+				GCC_WARN_INITIALIZER_NOT_FULLY_BRACKETED = YES;
+				GCC_WARN_SHADOW = YES;
+				GCC_WARN_SIGN_COMPARE = YES;
+				GCC_WARN_STRICT_SELECTOR_MATCH = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNKNOWN_PRAGMAS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_LABEL = YES;
+				GCC_WARN_UNUSED_PARAMETER = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				SDKROOT = macosx;
+				WARNING_CFLAGS = (
+					"-Weverything",
+					"-Wno-direct-ivar-access",
+				);
+			};
+			name = Debug;
+		};
+		72B72CA21D63EFF90096365F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_ASSIGN_ENUM = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_IMPLICIT_SIGN_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NULLABLE_TO_NONNULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_ATOMIC_PROPERTIES = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_IMPLICIT_CONVERSION = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "Developer ID Application";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_TREAT_IMPLICIT_FUNCTION_DECLARATIONS_AS_ERRORS = YES;
+				GCC_TREAT_INCOMPATIBLE_POINTER_TYPE_WARNINGS_AS_ERRORS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_MISSING_FIELD_INITIALIZERS = YES;
+				GCC_WARN_ABOUT_MISSING_NEWLINE = YES;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_FOUR_CHARACTER_CONSTANTS = YES;
+				GCC_WARN_INITIALIZER_NOT_FULLY_BRACKETED = YES;
+				GCC_WARN_SHADOW = YES;
+				GCC_WARN_SIGN_COMPARE = YES;
+				GCC_WARN_STRICT_SELECTOR_MATCH = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNKNOWN_PRAGMAS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_LABEL = YES;
+				GCC_WARN_UNUSED_PARAMETER = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				SDKROOT = macosx;
+				WARNING_CFLAGS = (
+					"-Weverything",
+					"-Wno-direct-ivar-access",
+				);
+			};
+			name = Release;
+		};
+		72B72CA41D63EFF90096365F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = Komet/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = org.zgcoder.Komet;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		72B72CA51D63EFF90096365F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = Komet/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = org.zgcoder.Komet;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		72B72C8D1D63EFF90096365F /* Build configuration list for PBXProject "Komet" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				72B72CA11D63EFF90096365F /* Debug */,
+				72B72CA21D63EFF90096365F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		72B72CA31D63EFF90096365F /* Build configuration list for PBXNativeTarget "Komet" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				72B72CA41D63EFF90096365F /* Debug */,
+				72B72CA51D63EFF90096365F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 72B72C8A1D63EFF90096365F /* Project object */;
+}
