@@ -129,8 +129,18 @@
 			exit(EXIT_FAILURE);
 		}
 		
+		// Create a git-like directory structure
+		NSError *intermediateDirectoriesError = nil;
+		NSURL *gitDirectoryURL = [[tempDirectoryURL URLByAppendingPathComponent:@"Tutorial"] URLByAppendingPathComponent:@".git"];
+		if (![[NSFileManager defaultManager] createDirectoryAtURL:gitDirectoryURL withIntermediateDirectories:YES attributes:nil error:&intermediateDirectoriesError])
+		{
+			printf("Failed to create temp directory because of error: %s\n", intermediateDirectoriesError.localizedDescription.UTF8String);
+			exit(EXIT_FAILURE);
+		}
+		
+		// Write our commit file
 		NSError *writeError = nil;
-		fileURL = [tempDirectoryURL URLByAppendingPathComponent:@"Tutorial"];
+		fileURL = [gitDirectoryURL URLByAppendingPathComponent:@"COMMIT_EDITMSG"];
 		if (![finalMessage writeToURL:fileURL atomically:NO encoding:NSUTF8StringEncoding error:&writeError])
 		{
 			printf("Failed to create temporary greetings file with error: %s\n", writeError.localizedDescription.UTF8String);

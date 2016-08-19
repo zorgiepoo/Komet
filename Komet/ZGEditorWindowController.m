@@ -117,6 +117,10 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 	NSURL *parentURL = _fileURL.URLByDeletingLastPathComponent;
 	ZGVersionControlType versionControlType;
 	NSString *label;
+	
+	// We don't *have* to detect this because we could look at the current working directory first,
+	// but I want to rely on the current working directory as a last resort.
+	// Plus this is what the tutorial relies on
 	if ([parentURL.lastPathComponent isEqualToString:@".git"])
 	{
 		label = parentURL.URLByDeletingLastPathComponent.lastPathComponent;
@@ -139,7 +143,8 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 			versionControlType = ZGVersionControlGit;
 		}
 		
-		label = lastPathComponent;
+		// git, hg, and svn seem to set current working directory to project directory before launching the editor
+		label = [[[NSFileManager defaultManager] currentDirectoryPath] lastPathComponent];
 	}
 	
 	_commitLabelTextField.stringValue = (label == nil) ? @"" : label;
