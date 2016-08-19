@@ -419,7 +419,7 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 	[_textView setSelectedRange:NSMakeRange(0, commitTextLength)];
 }
 
-// The comment range should begin at the first line that starts with a comment string and go to the end of the file
+// The comment range should begin at the first consecutive line that starts with a comment string (scaning from the bottom first) and extend to the end of the file
 // Make sure to scan from the bottom to top
 - (NSUInteger)commentSectionLengthForVersionControlType:(ZGVersionControlType)versionControlType
 {
@@ -486,7 +486,6 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 }
 
 // The content range should extend to before the comments, only allowing one trailing newline in between the comments and content
-// The comment range should begin at the first line that starts with '#' and end to end of the file
 // Make sure to scan from the bottom to top
 - (NSUInteger)commitTextLengthWithCommentLength:(NSUInteger)commentLength
 {
