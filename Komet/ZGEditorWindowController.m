@@ -357,34 +357,68 @@
 
 // The content range should extend to before the comments, only allowing one trailing newline in between the comments and content
 // The comment range should begin at the first line that starts with '#' and end to end of the file
+// Make sure to scan from the bottom to top
 - (NSUInteger)commitTextLengthAndGetCommentRange:(NSRange *)commentRange
 {
 	NSString *plainText = _textView.textStorage.string;
 	NSUInteger plainTextLength = plainText.length;
 	
-	unichar previousCharacter = 0;
-	NSUInteger bestEndCharacterIndex = 0;
-	for (NSUInteger characterIndex = 0; characterIndex < plainTextLength; characterIndex++)
+	NSUInteger firstCommentLineIndex = 0;
+	
+	BOOL foundFirstCommentLine = NO;
+	
+	// Find the first comment line starting from the end of the document to get the comment range to the end of the document
+	NSUInteger characterIndex = plainTextLength;
+	while (characterIndex > 0)
 	{
-		unichar character = [plainText characterAtIndex:characterIndex];
-		if (characterIndex != 0 && character == '#' && previousCharacter == '\n')
+		characterIndex--;
+		
+		NSUInteger lineStartIndex = 0;
+		[plainText getLineStart:&lineStartIndex end:NULL contentsEnd:NULL forRange:NSMakeRange(characterIndex, 0)];
+		
+		unichar character = [plainText characterAtIndex:lineStartIndex];
+		if (character != '#')
 		{
-			if (commentRange != NULL)
+			if (foundFirstCommentLine)
 			{
-				*commentRange = NSMakeRange(characterIndex, plainTextLength - characterIndex);
+				if (commentRange != NULL)
+				{
+					*commentRange = NSMakeRange(firstCommentLineIndex, plainTextLength - firstCommentLineIndex);
+				}
+				
+				break;
 			}
-			break;
+		}
+		else
+		{
+			foundFirstCommentLine = YES;
+			firstCommentLineIndex = lineStartIndex;
 		}
 		
-		if (character != '\n')
+		characterIndex = lineStartIndex;
+	}
+	
+	// Find the first real character or anything past the 1st newline before the comment section
+	NSUInteger bestEndCharacterIndex = firstCommentLineIndex;
+	BOOL passedNewline = NO;
+	while (bestEndCharacterIndex > 0)
+	{
+		bestEndCharacterIndex--;
+		
+		unichar character = [plainText characterAtIndex:bestEndCharacterIndex];
+		if (character == '\n')
 		{
-			bestEndCharacterIndex = characterIndex + 1;
+			if (passedNewline)
+			{
+				break;
+			}
+			passedNewline = YES;
 		}
-		else if (characterIndex != 0 && previousCharacter == '\n')
+		else
 		{
-			bestEndCharacterIndex = characterIndex - 1;
+			bestEndCharacterIndex++;
+			break;
 		}
-		previousCharacter = character;
 	}
 	
 	return bestEndCharacterIndex;
