@@ -35,8 +35,16 @@
 	
 	NSArray<NSString *> *arguments = [[NSProcessInfo processInfo] arguments];
 	
-	NSURL *fileURL;
-	if (arguments.count < 2)
+	// The system can pass command line arguments unfortunately
+	// So to distinguish between a user starting the app normally and a tool like git launching the app,
+	// we should see detect if the exists
+	NSURL *fileURL = nil;
+	if (arguments.count >= 2)
+	{
+		fileURL = [NSURL fileURLWithPath:arguments[1]];
+	}
+	
+	if (fileURL == nil || ![fileURL checkResourceIsReachableAndReturnError:NULL])
 	{
 		NSString *executablePath = [[NSBundle mainBundle] executablePath];
 		
@@ -128,10 +136,6 @@
 			printf("Failed to create temporary greetings file with error: %s\n", writeError.localizedDescription.UTF8String);
 			exit(EXIT_FAILURE);
 		}
-	}
-	else
-	{
-		fileURL = [NSURL fileURLWithPath:arguments[1]];
 	}
 	
 	_editorWindowController = [[ZGEditorWindowController alloc] initWithFileURL:fileURL];
