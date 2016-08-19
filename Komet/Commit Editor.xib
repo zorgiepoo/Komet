@@ -52,7 +52,7 @@ Gw
                         </connections>
                     </button>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="vV7-fu-K3M">
-                        <rect key="frame" x="3" y="329" width="75" height="14"/>
+                        <rect key="frame" x="3" y="330" width="75" height="14"/>
                         <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Some Project" id="rGL-rv-935">
                             <font key="font" metaFont="smallSystem"/>
                             <color key="textColor" name="disabledControlTextColor" catalog="System" colorSpace="catalog"/>
@@ -96,12 +96,12 @@ Gw
                     <constraint firstItem="SIQ-xl-8MY" firstAttribute="top" secondItem="UXa-uU-h9N" secondAttribute="top" constant="3" id="1NL-QI-Tn2"/>
                     <constraint firstItem="vV7-fu-K3M" firstAttribute="leading" secondItem="UXa-uU-h9N" secondAttribute="leading" constant="5" id="1wk-y6-0iH"/>
                     <constraint firstItem="SIQ-xl-8MY" firstAttribute="leading" secondItem="bxH-iH-acy" secondAttribute="trailing" constant="5" id="CE6-WC-wcZ"/>
-                    <constraint firstItem="vV7-fu-K3M" firstAttribute="top" secondItem="UXa-uU-h9N" secondAttribute="top" constant="5" id="HRI-cH-Q8m"/>
+                    <constraint firstItem="vV7-fu-K3M" firstAttribute="top" secondItem="UXa-uU-h9N" secondAttribute="top" constant="4" id="HRI-cH-Q8m"/>
                     <constraint firstItem="9XC-w7-083" firstAttribute="top" secondItem="bxH-iH-acy" secondAttribute="bottom" constant="1" id="K5W-do-8Zj"/>
                     <constraint firstItem="9XC-w7-083" firstAttribute="top" secondItem="SIQ-xl-8MY" secondAttribute="bottom" constant="2" id="MpF-Bd-pLN"/>
                     <constraint firstAttribute="trailing" secondItem="ZR8-bz-mFA" secondAttribute="trailing" id="P7h-yk-LNz"/>
                     <constraint firstItem="bxH-iH-acy" firstAttribute="width" secondItem="SIQ-xl-8MY" secondAttribute="width" id="UjD-uH-wBG"/>
-                    <constraint firstItem="vV7-fu-K3M" firstAttribute="top" secondItem="9XC-w7-083" secondAttribute="bottom" constant="-17" id="cI7-hU-BMw"/>
+                    <constraint firstItem="vV7-fu-K3M" firstAttribute="top" secondItem="9XC-w7-083" secondAttribute="bottom" constant="-18" id="cI7-hU-BMw"/>
                     <constraint firstItem="9XC-w7-083" firstAttribute="leading" secondItem="UXa-uU-h9N" secondAttribute="leading" id="eem-ug-Xne"/>
                     <constraint firstItem="ZR8-bz-mFA" firstAttribute="leading" secondItem="UXa-uU-h9N" secondAttribute="leading" id="h0K-Py-Kah"/>
                     <constraint firstAttribute="trailing" secondItem="SIQ-xl-8MY" secondAttribute="trailing" constant="4" id="scE-e9-FwR"/>
