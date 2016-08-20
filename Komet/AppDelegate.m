@@ -111,9 +111,9 @@
 		 @"#\n"
 		 @"# git config --global core.editor \"%@\"\n"
 		 @"#\n"
-		 @"# For other software (eg: hg, svn), you may want to set the\n"
-		 @"# HGEDITOR or SVN_EDITOR environment variable. Please consult\n"
-		 @"# their documentation.\n", appName, editorPathToUse];
+		 @"# For hg, you will want to set the HGEDITOR environment variable.\n"
+		 @"# For svn, you will want to set the SVN_EDITOR environment variable.\n"
+		 @"# Please consult their documentation for more information.\n", appName, editorPathToUse];
 		
 		NSString *finalMessage = greeting;
 		if (suggestMovingApp)
