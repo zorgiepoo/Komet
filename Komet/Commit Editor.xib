@@ -101,7 +101,6 @@ Gw
                     <constraint firstItem="9XC-w7-083" firstAttribute="top" secondItem="SIQ-xl-8MY" secondAttribute="bottom" constant="2" id="MpF-Bd-pLN"/>
                     <constraint firstAttribute="trailing" secondItem="ZR8-bz-mFA" secondAttribute="trailing" id="P7h-yk-LNz"/>
                     <constraint firstItem="bxH-iH-acy" firstAttribute="width" secondItem="SIQ-xl-8MY" secondAttribute="width" id="UjD-uH-wBG"/>
-                    <constraint firstItem="vV7-fu-K3M" firstAttribute="top" secondItem="9XC-w7-083" secondAttribute="bottom" constant="-18" id="cI7-hU-BMw"/>
                     <constraint firstItem="9XC-w7-083" firstAttribute="leading" secondItem="UXa-uU-h9N" secondAttribute="leading" id="eem-ug-Xne"/>
                     <constraint firstItem="ZR8-bz-mFA" firstAttribute="leading" secondItem="UXa-uU-h9N" secondAttribute="leading" id="h0K-Py-Kah"/>
                     <constraint firstAttribute="trailing" secondItem="SIQ-xl-8MY" secondAttribute="trailing" constant="4" id="scE-e9-FwR"/>
@@ -109,7 +108,7 @@ Gw
                     <constraint firstItem="ZR8-bz-mFA" firstAttribute="top" secondItem="9XC-w7-083" secondAttribute="bottom" id="vbh-VW-X2b"/>
                 </constraints>
             </view>
-            <point key="canvasLocation" x="137" y="-92.5"/>
+            <point key="canvasLocation" x="137" y="-93"/>
         </window>
     </objects>
 </document>
