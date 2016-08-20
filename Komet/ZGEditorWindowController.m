@@ -350,8 +350,6 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 					
 					if (lineStartIndex == 0 && (contentEndIndex - lineStartIndex > 0) && (lineEndIndex == plainText.length - _commentSectionLength || isspace([plainText characterAtIndex:lineEndIndex])))
 					{
-						// By telling NSTextView we are begin/end editing and changed text,
-						// the text view will have better undo behavior
 						[_textView insertNewline:nil];
 						[_textView insertNewline:nil];
 						
