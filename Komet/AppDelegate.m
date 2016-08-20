@@ -44,8 +44,11 @@
 		fileURL = [NSURL fileURLWithPath:arguments[1]];
 	}
 	
+	BOOL tutorialMode = NO;
 	if (fileURL == nil || ![fileURL checkResourceIsReachableAndReturnError:NULL])
 	{
+		tutorialMode = YES;
+		
 		NSString *executablePath = [[NSBundle mainBundle] executablePath];
 		
 		NSString *appName = [[NSRunningApplication currentApplication] localizedName];
@@ -129,18 +132,9 @@
 			exit(EXIT_FAILURE);
 		}
 		
-		// Create a git-like directory structure
-		NSError *intermediateDirectoriesError = nil;
-		NSURL *gitDirectoryURL = [[tempDirectoryURL URLByAppendingPathComponent:@"Tutorial"] URLByAppendingPathComponent:@".git"];
-		if (![[NSFileManager defaultManager] createDirectoryAtURL:gitDirectoryURL withIntermediateDirectories:YES attributes:nil error:&intermediateDirectoriesError])
-		{
-			printf("Failed to create temp directory because of error: %s\n", intermediateDirectoriesError.localizedDescription.UTF8String);
-			exit(EXIT_FAILURE);
-		}
-		
 		// Write our commit file
 		NSError *writeError = nil;
-		fileURL = [gitDirectoryURL URLByAppendingPathComponent:@"COMMIT_EDITMSG"];
+		fileURL = [tempDirectoryURL URLByAppendingPathComponent:@"Tutorial"];
 		if (![finalMessage writeToURL:fileURL atomically:NO encoding:NSUTF8StringEncoding error:&writeError])
 		{
 			printf("Failed to create temporary greetings file with error: %s\n", writeError.localizedDescription.UTF8String);
@@ -148,7 +142,7 @@
 		}
 	}
 	
-	_editorWindowController = [[ZGEditorWindowController alloc] initWithFileURL:fileURL];
+	_editorWindowController = [[ZGEditorWindowController alloc] initWithFileURL:fileURL tutorialMode:tutorialMode];
 	[_editorWindowController showWindow:nil];
 }
 

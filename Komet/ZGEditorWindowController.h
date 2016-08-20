@@ -12,7 +12,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface ZGEditorWindowController : NSWindowController
 
-- (instancetype)initWithFileURL:(NSURL *)fileURL;
+- (instancetype)initWithFileURL:(NSURL *)fileURL tutorialMode:(BOOL)tutorialMode;
 
 - (void)exitWithSuccess:(BOOL)success __attribute__((noreturn));
 

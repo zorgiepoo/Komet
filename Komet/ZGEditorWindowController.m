@@ -34,6 +34,7 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 	IBOutlet NSTextField *_commitLabelTextField;
 	BOOL _preventAccidentalNewline;
 	BOOL _initiallyContainedEmptyContent;
+	BOOL _tutorialMode;
 	NSUInteger _commentSectionLength;
 }
 
@@ -55,12 +56,13 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 	});
 }
 
-- (instancetype)initWithFileURL:(NSURL *)fileURL
+- (instancetype)initWithFileURL:(NSURL *)fileURL tutorialMode:(BOOL)tutorialMode
 {
 	self = [super init];
 	if (self != nil)
 	{
 		_fileURL = fileURL;
+		_tutorialMode = tutorialMode;
 	}
 	return self;
 }
@@ -118,10 +120,14 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 	ZGVersionControlType versionControlType;
 	NSString *label;
 	
-	// We don't *have* to detect this because we could look at the current working directory first,
+	if (_tutorialMode)
+	{
+		label = _fileURL.lastPathComponent;
+		versionControlType = ZGVersionControlGit;
+	}
+	// We don't *have* to detect this for gits because we could look at the current working directory first,
 	// but I want to rely on the current working directory as a last resort.
-	// Plus this is what the tutorial relies on
-	if ([parentURL.lastPathComponent isEqualToString:@".git"])
+	else if ([parentURL.lastPathComponent isEqualToString:@".git"])
 	{
 		label = parentURL.URLByDeletingLastPathComponent.lastPathComponent;
 		versionControlType = ZGVersionControlGit;
@@ -216,6 +222,48 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 	if (_commentSectionLength != 0)
 	{
 		[_textView.textStorage addAttribute:NSForegroundColorAttributeName value:[self colorFromUserDefaultsKey:ZGEditorCommentForegroundColorKey] range:NSMakeRange(plainString.length - _commentSectionLength, _commentSectionLength)];
+	}
+	
+	if (!_tutorialMode && (versionControlType == ZGVersionControlGit || versionControlType == ZGVersionControlHg))
+	{
+		NSString *pathToVersionControlSoftware = (versionControlType == ZGVersionControlGit) ? @"/usr/bin/git" : @"/usr/local/bin/hg";
+		
+		if ([[NSFileManager defaultManager] fileExistsAtPath:pathToVersionControlSoftware])
+		{
+			dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+				NSTask *branchTask = [[NSTask alloc] init];
+				branchTask.launchPath = pathToVersionControlSoftware;
+				
+				if (versionControlType == ZGVersionControlGit)
+				{
+					branchTask.arguments = @[@"rev-parse", @"--symbolic-full-name", @"--abbrev-ref", @"HEAD"];
+				}
+				else
+				{
+					branchTask.arguments = @[@"branch"];
+				}
+				
+				NSPipe *standardOutputPipe = [NSPipe pipe];
+				[branchTask setStandardOutput:standardOutputPipe];
+				
+				[branchTask launch];
+				[branchTask waitUntilExit];
+				
+				if (branchTask.terminationStatus == EXIT_SUCCESS)
+				{
+					NSData *dataRead = [standardOutputPipe.fileHandleForReading readDataToEndOfFile];
+					NSString *branchName = [[NSString alloc] initWithData:dataRead encoding:NSUTF8StringEncoding];
+					NSString *strippedBranchName = [branchName stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+					if (strippedBranchName != nil && strippedBranchName.length > 0)
+					{
+						dispatch_async(dispatch_get_main_queue(), ^{
+							NSString *newLabel = [self->_commitLabelTextField.stringValue stringByAppendingFormat:@" - %@", strippedBranchName];
+							self->_commitLabelTextField.stringValue = newLabel;
+						});
+					}
+				}
+			});
+		}
 	}
 }
 
@@ -368,6 +416,15 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 - (void)exitWithSuccess:(BOOL)success __attribute__((noreturn))
 {
 	[self saveWindowFrame];
+	
+	if (_tutorialMode)
+	{
+		NSURL *parentURL = _fileURL.URLByDeletingLastPathComponent;
+		if (parentURL != nil)
+		{
+			[[NSFileManager defaultManager] removeItemAtURL:parentURL error:NULL];
+		}
+	}
 	
 	if (success)
 	{
