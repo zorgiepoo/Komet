@@ -257,7 +257,7 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 					if (strippedBranchName != nil && strippedBranchName.length > 0)
 					{
 						dispatch_async(dispatch_get_main_queue(), ^{
-							NSString *newLabel = [self->_commitLabelTextField.stringValue stringByAppendingFormat:@" - %@", strippedBranchName];
+							NSString *newLabel = [self->_commitLabelTextField.stringValue stringByAppendingFormat:@" (%@)", strippedBranchName];
 							self->_commitLabelTextField.stringValue = newLabel;
 						});
 					}
