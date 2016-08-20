@@ -342,10 +342,13 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 					NSRange range = [selectedRanges[0] rangeValue];
 					
 					NSUInteger lineStartIndex = 0;
-					NSString *plainText = _textView.textStorage.string;
-					[plainText getLineStart:&lineStartIndex end:NULL contentsEnd:NULL forRange:range];
+					NSUInteger lineEndIndex = 0;
+					NSUInteger contentEndIndex = 0;
 					
-					if (lineStartIndex == 0)
+					NSString *plainText = _textView.textStorage.string;
+					[plainText getLineStart:&lineStartIndex end:&lineEndIndex contentsEnd:&contentEndIndex forRange:range];
+					
+					if (lineStartIndex == 0 && (contentEndIndex - lineStartIndex > 0) && (lineEndIndex == plainText.length - _commentSectionLength || isspace([plainText characterAtIndex:lineEndIndex])))
 					{
 						// By telling NSTextView we are begin/end editing and changed text,
 						// the text view will have better undo behavior
