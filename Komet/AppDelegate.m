@@ -128,7 +128,7 @@
 		
 		if (tempDirectoryURL == nil)
 		{
-			printf("Failed to create temp directory because of error: %s\n", temporaryError.localizedDescription.UTF8String);
+			fprintf(stderr, "Failed to create temp directory because of error: %s\n", temporaryError.localizedDescription.UTF8String);
 			exit(EXIT_FAILURE);
 		}
 		
@@ -137,7 +137,7 @@
 		fileURL = [tempDirectoryURL URLByAppendingPathComponent:@"Tutorial"];
 		if (![finalMessage writeToURL:fileURL atomically:NO encoding:NSUTF8StringEncoding error:&writeError])
 		{
-			printf("Failed to create temporary greetings file with error: %s\n", writeError.localizedDescription.UTF8String);
+			fprintf(stderr, "Failed to create temporary greetings file with error: %s\n", writeError.localizedDescription.UTF8String);
 			exit(EXIT_FAILURE);
 		}
 	}

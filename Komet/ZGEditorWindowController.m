@@ -111,7 +111,7 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 	NSData *data = [NSData dataWithContentsOfURL:_fileURL];
 	if (data == nil)
 	{
-		printf("Error: Couldn't load data from %s\n", _fileURL.path.UTF8String);
+		fprintf(stderr, "Error: Couldn't load data from %s\n", _fileURL.path.UTF8String);
 		exit(EXIT_FAILURE);
 	}
 	
@@ -203,7 +203,7 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 	NSString *plainString = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
 	if (plainString == nil)
 	{
-		printf("Error: Couldn't load plain-text from %s\n", _fileURL.path.UTF8String);
+		fprintf(stderr, "Error: Couldn't load plain-text from %s\n", _fileURL.path.UTF8String);
 		exit(EXIT_FAILURE);
 	}
 	
@@ -459,7 +459,7 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 	if (![_textView.textStorage.string writeToURL:_fileURL atomically:YES encoding:NSUTF8StringEncoding error:&writeError])
 	{
 		// Fatal error
-		printf("Failed to write to %s because of: %s\n", _fileURL.path.UTF8String, writeError.localizedDescription.UTF8String);
+		fprintf(stderr, "Failed to write to %s because of: %s\n", _fileURL.path.UTF8String, writeError.localizedDescription.UTF8String);
 		exit(EXIT_FAILURE);
 	}
 	
