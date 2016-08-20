@@ -6,9 +6,9 @@ A Cocoa text editor designed for creating commit messages (Work in Progress)
 
 ## Purpose
 
-I'm unhappy with creating commits in other editors. Not to single out any one in particular, but they are either obstructive, slow, or inconvenient for my tastes. Making a commit takes only *one* action in Komet.
+I'm unhappy with creating commits in other editors. Not to single out any one in particular, but they are either obstructive, slow, or inconvenient for my tastes. In Komet, applying a commit takes only *one* action.
 
-I am also more comfortable with a native editor and want features such as spell checking and correction that can be found elsewhere.
+I am also more comfortable with a native editor and want features such as spell checking and automatic correction that are found elsewhere on the system.
 
 ## Contributing
 
