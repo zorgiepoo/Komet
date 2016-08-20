@@ -477,19 +477,9 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 	[_textView setSelectedRange:NSMakeRange(0, commitTextLength)];
 }
 
-// The comment range should begin at the first consecutive line that starts with a comment string (scaning from the bottom first) and extend to the end of the file
-// Make sure to scan from the bottom to top
+// The comment range should begin at the first line that starts with a comment string and extend to the end of the file
 - (NSUInteger)commentSectionLengthForVersionControlType:(ZGVersionControlType)versionControlType
 {
-	NSUInteger commentSectionLength = 0;
-	
-	NSString *plainText = _textView.textStorage.string;
-	NSUInteger plainTextLength = plainText.length;
-	
-	NSUInteger firstCommentLineIndex = 0;
-	
-	BOOL foundFirstCommentLine = NO;
-	
 	NSString *prefixCommentString;
 	NSString *suffixCommentString;
 	switch (versionControlType)
@@ -508,36 +498,33 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 			break;
 	}
 	
-	// Find the first comment line starting from the end of the document to get the comment range to the end of the document
-	NSUInteger characterIndex = plainTextLength;
-	while (characterIndex > 0)
+	NSString *plainText = _textView.textStorage.string;
+	NSUInteger plainTextLength = plainText.length;
+	
+	NSUInteger commentSectionLength = 0;
+	NSUInteger characterIndex = 0;
+	while (characterIndex < plainTextLength)
 	{
-		characterIndex--;
-		
 		NSUInteger lineStartIndex = 0;
+		NSUInteger lineEndIndex = 0;
 		NSUInteger contentEndIndex = 0;
-		[plainText getLineStart:&lineStartIndex end:NULL contentsEnd:&contentEndIndex forRange:NSMakeRange(characterIndex, 0)];
+		[plainText getLineStart:&lineStartIndex end:&lineEndIndex contentsEnd:&contentEndIndex forRange:NSMakeRange(characterIndex, 0)];
 		
 		NSString *line = [plainText substringWithRange:NSMakeRange(lineStartIndex, contentEndIndex - lineStartIndex)];
 		
 		// See if we don't have a comment
 		// Note a line that is "--" could have the prefix and suffix the same, but we want to make sure it's at least "--...--"
-		// Also empty strings don't yield the expected behavior for hasSuffix:/hasPrefix:
+		// Also empty strings don't yield the expected behavior for hasSuffix:/hasPrefix: (i.e, Foundation thinks "" is not a prefix of "foo")
 		if (![line hasPrefix:prefixCommentString] || (line.length < prefixCommentString.length + suffixCommentString.length) ||  (suffixCommentString.length > 0 && ![line hasSuffix:suffixCommentString]))
 		{
-			if (foundFirstCommentLine)
-			{
-				commentSectionLength = plainTextLength - firstCommentLineIndex;
-				break;
-			}
+			characterIndex = lineEndIndex;
 		}
 		else
 		{
-			foundFirstCommentLine = YES;
-			firstCommentLineIndex = lineStartIndex;
+			// We found the first comment line
+			commentSectionLength = plainTextLength - lineStartIndex;
+			break;
 		}
-		
-		characterIndex = lineStartIndex;
 	}
 	
 	return commentSectionLength;
