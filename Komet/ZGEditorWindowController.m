@@ -246,21 +246,28 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 				NSPipe *standardOutputPipe = [NSPipe pipe];
 				[branchTask setStandardOutput:standardOutputPipe];
 				
-				[branchTask launch];
-				[branchTask waitUntilExit];
-				
-				if (branchTask.terminationStatus == EXIT_SUCCESS)
+				@try
 				{
-					NSData *dataRead = [standardOutputPipe.fileHandleForReading readDataToEndOfFile];
-					NSString *branchName = [[NSString alloc] initWithData:dataRead encoding:NSUTF8StringEncoding];
-					NSString *strippedBranchName = [branchName stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-					if (strippedBranchName != nil && strippedBranchName.length > 0)
+					[branchTask launch];
+					[branchTask waitUntilExit];
+					
+					if (branchTask.terminationStatus == EXIT_SUCCESS)
 					{
-						dispatch_async(dispatch_get_main_queue(), ^{
-							NSString *newLabel = [self->_commitLabelTextField.stringValue stringByAppendingFormat:@" (%@)", strippedBranchName];
-							self->_commitLabelTextField.stringValue = newLabel;
-						});
+						NSData *dataRead = [standardOutputPipe.fileHandleForReading readDataToEndOfFile];
+						NSString *branchName = [[NSString alloc] initWithData:dataRead encoding:NSUTF8StringEncoding];
+						NSString *strippedBranchName = [branchName stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+						if (strippedBranchName != nil && strippedBranchName.length > 0)
+						{
+							dispatch_async(dispatch_get_main_queue(), ^{
+								NSString *newLabel = [self->_commitLabelTextField.stringValue stringByAppendingFormat:@" (%@)", strippedBranchName];
+								self->_commitLabelTextField.stringValue = newLabel;
+							});
+						}
 					}
+				}
+				@catch (NSException *exception)
+				{
+					fprintf(stderr, "Error: Failed to fetch branch name: %s\n", exception.reason.UTF8String);
 				}
 			});
 		}
