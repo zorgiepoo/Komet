@@ -17,6 +17,9 @@
 #define ZGEditorCommentForegroundColorKey @"ZGEditorCommentForegroundColor"
 #define ZGEditorAutomaticNewlineInsertionAfterSubjectKey @"ZGEditorAutomaticNewlineInsertionAfterSubject"
 
+#define ZGPathToGitToolKey @"ZGPathToGitTool"
+#define ZGPathToHgToolKey @"ZGPathToHgTool"
+
 typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 {
 	ZGVersionControlGit,
@@ -52,7 +55,19 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 		
 		NSColor *commentColor = [[NSColor darkGrayColor] colorUsingColorSpaceName:NSCalibratedRGBColorSpace];
 		
-		[defaults registerDefaults:@{ZGEditorFontNameKey : @"", ZGEditorFontSizeKey : @(fontSize), ZGEditorRecommendedSubjectLengthLimitKey : @(maxRecommendedSubjectLengthLimit), ZGEditorSubjectOverflowBackgroundColorKey : @"1.0,0.0,0.0,0.3", ZGEditorCommentForegroundColorKey : [NSString stringWithFormat:@"%f,%f,%f,%f", commentColor.redComponent, commentColor.greenComponent, commentColor.blueComponent, commentColor.alphaComponent], ZGEditorAutomaticNewlineInsertionAfterSubjectKey : @YES}];
+		NSDictionary *defaultsDictionary =
+		@{
+		  ZGEditorFontNameKey : @"",
+		  ZGEditorFontSizeKey : @(fontSize),
+		  ZGEditorRecommendedSubjectLengthLimitKey : @(maxRecommendedSubjectLengthLimit),
+		  ZGEditorSubjectOverflowBackgroundColorKey : @"1.0,0.0,0.0,0.3",
+		  ZGEditorCommentForegroundColorKey : [NSString stringWithFormat:@"%f,%f,%f,%f", commentColor.redComponent, commentColor.greenComponent, commentColor.blueComponent, commentColor.alphaComponent],
+		  ZGEditorAutomaticNewlineInsertionAfterSubjectKey : @YES,
+		  ZGPathToGitToolKey : @"/usr/bin/git",
+		  ZGPathToHgToolKey : @"/usr/local/bin/hg"
+		  };
+		
+		[defaults registerDefaults:defaultsDictionary];
 	});
 }
 
@@ -226,9 +241,10 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 	
 	if (!_tutorialMode && (versionControlType == ZGVersionControlGit || versionControlType == ZGVersionControlHg))
 	{
-		NSString *pathToVersionControlSoftware = (versionControlType == ZGVersionControlGit) ? @"/usr/bin/git" : @"/usr/local/bin/hg";
+		NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+		NSString *pathToVersionControlSoftware = (versionControlType == ZGVersionControlGit) ? [defaults stringForKey:ZGPathToGitToolKey] : [defaults stringForKey:ZGPathToHgToolKey];
 		
-		if ([[NSFileManager defaultManager] fileExistsAtPath:pathToVersionControlSoftware])
+		if (pathToVersionControlSoftware != nil && [[NSFileManager defaultManager] fileExistsAtPath:pathToVersionControlSoftware])
 		{
 			dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
 				NSTask *branchTask = [[NSTask alloc] init];
