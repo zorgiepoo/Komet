@@ -58,7 +58,7 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 		  ZGEditorFontNameKey : @"",
 		  ZGEditorFontPointSizeKey : @(0.0),
 		  ZGEditorRecommendedSubjectLengthLimitKey : @(maxRecommendedSubjectLengthLimit),
-		  ZGEditorSubjectOverflowBackgroundColorKey : @"1.0,0.0,0.0,0.3",
+		  ZGEditorSubjectOverflowBackgroundColorKey : @"1.0,1.0,0.0,0.3",
 		  ZGEditorCommentForegroundColorKey : [NSString stringWithFormat:@"%f,%f,%f,%f", commentColor.redComponent, commentColor.greenComponent, commentColor.blueComponent, commentColor.alphaComponent],
 		  ZGEditorAutomaticNewlineInsertionAfterSubjectKey : @YES,
 		  ZGPathToGitToolKey : @"/usr/bin/git",
