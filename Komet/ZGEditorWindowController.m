@@ -96,7 +96,7 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 {
 	NSFont *defaultFont;
 	// 10.12 may have SF Mono system wide
-	NSFont *sfMonoFont = [NSFont fontWithName:@"SF Mono" size:size];
+	NSFont *sfMonoFont = [NSFont fontWithName:@"SF Mono Regular" size:size];
 	// Revert to older font face on older systems
 	if (sfMonoFont != nil)
 	{
