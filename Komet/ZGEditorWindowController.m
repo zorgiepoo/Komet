@@ -442,11 +442,6 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 	}
 }
 
-- (void)windowWillClose:(NSNotification *)__unused notification
-{
-	[self exitWithSuccess:NO];
-}
-
 - (IBAction)commit:(id)__unused sender
 {
 	NSError *writeError = nil;
@@ -460,7 +455,7 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 	[self exitWithSuccess:YES];
 }
 
-- (IBAction)cancel:(id)__unused sender
+- (IBAction)cancelCommit:(id)__unused sender
 {
 	[self exitWithSuccess:NO];
 }

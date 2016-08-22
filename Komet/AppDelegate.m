@@ -87,8 +87,8 @@
 		 @"# Welcome to the Cocoa commit editor for macOS.\n"
 		 @"#\n"
 		 @"# Useful shortcuts:\n"
-		 @"#    Commit (command + return)\n"
-		 @"#    Cancel (escape or quit)\n", appName];
+		 @"#    Commit: ⌘ + return\n"
+		 @"#    Cancel: ⌘Q\n", appName];
 		
 		NSString *moveToApplicationsSuggestion =
 		[NSString stringWithFormat:
