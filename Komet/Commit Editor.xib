@@ -108,6 +108,9 @@ Gw
                     <constraint firstItem="ZR8-bz-mFA" firstAttribute="top" secondItem="9XC-w7-083" secondAttribute="bottom" id="vbh-VW-X2b"/>
                 </constraints>
             </view>
+            <connections>
+                <outlet property="initialFirstResponder" destination="AXg-Fl-XGk" id="prb-ZL-4i4"/>
+            </connections>
             <point key="canvasLocation" x="137" y="-93"/>
         </window>
     </objects>
