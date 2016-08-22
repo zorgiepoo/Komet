@@ -11,7 +11,7 @@
 
 #define ZGEditorWindowFrameNameKey @"ZGEditorWindowFrame"
 #define ZGEditorFontNameKey @"ZGEditorFontName"
-#define ZGEditorFontSizeKey @"ZGEditorFontSize"
+#define ZGEditorFontPointSizeKey @"ZGEditorFontPointSize"
 #define ZGEditorRecommendedSubjectLengthLimitKey @"ZGEditorRecommendedSubjectLengthLimit"
 #define ZGEditorSubjectOverflowBackgroundColorKey @"ZGEditorSubjectOverflowBackgroundColor"
 #define ZGEditorCommentForegroundColorKey @"ZGEditorCommentForegroundColor"
@@ -47,8 +47,6 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 	dispatch_once(&onceToken, ^{
 		NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 		
-		const CGFloat fontSize = 11.0;
-		
 		// This is the max subject length GitHub uses before the subject overflows
 		// Not using 50 because I think it may be too irritating of a default for Mac users
 		const NSUInteger maxRecommendedSubjectLengthLimit = 69;
@@ -58,7 +56,7 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 		NSDictionary *defaultsDictionary =
 		@{
 		  ZGEditorFontNameKey : @"",
-		  ZGEditorFontSizeKey : @(fontSize),
+		  ZGEditorFontPointSizeKey : @(0.0),
 		  ZGEditorRecommendedSubjectLengthLimitKey : @(maxRecommendedSubjectLengthLimit),
 		  ZGEditorSubjectOverflowBackgroundColorKey : @"1.0,0.0,0.0,0.3",
 		  ZGEditorCommentForegroundColorKey : [NSString stringWithFormat:@"%f,%f,%f,%f", commentColor.redComponent, commentColor.greenComponent, commentColor.blueComponent, commentColor.alphaComponent],
@@ -90,33 +88,6 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 - (void)saveWindowFrame
 {
 	[self.window saveFrameUsingName:ZGEditorWindowFrameNameKey];
-}
-
-- (NSFont *)defaultFontOfSize:(CGFloat)size
-{
-	NSFont *defaultFont;
-	// 10.12 may have SF Mono system wide
-	NSFont *sfMonoFont = [NSFont fontWithName:@"SF Mono Regular" size:size];
-	// Revert to older font face on older systems
-	if (sfMonoFont != nil)
-	{
-		defaultFont = sfMonoFont;
-	}
-	else
-	{
-		// Default font Xcode 7 uses
-		NSFont *menloFont = [NSFont fontWithName:@"Menlo" size:size];
-		if (menloFont != nil)
-		{
-			defaultFont = menloFont;
-		}
-		else
-		{
-			// If we get here, we are especially desperate
-			defaultFont = [NSFont userFontOfSize:size];
-		}
-	}
-	return defaultFont;
 }
 
 - (void)windowDidLoad
@@ -195,12 +166,12 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 	_textView.delegate = self;
 	
 	NSString *fontName = [[NSUserDefaults standardUserDefaults] stringForKey:ZGEditorFontNameKey];
-	CGFloat fontSize = [[NSUserDefaults standardUserDefaults] doubleForKey:ZGEditorFontNameKey];
+	CGFloat fontSize = [[NSUserDefaults standardUserDefaults] doubleForKey:ZGEditorFontPointSizeKey];
 	
 	NSFont *font;
 	if (fontName.length == 0)
 	{
-		font = [self defaultFontOfSize:fontSize];
+		font = [NSFont userFixedPitchFontOfSize:fontSize];
 	}
 	else
 	{
@@ -211,7 +182,7 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 		}
 		else
 		{
-			font = [self defaultFontOfSize:fontSize];
+			font = [NSFont userFixedPitchFontOfSize:fontSize];
 		}
 	}
 	
