@@ -113,7 +113,7 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 		else
 		{
 			// If we get here, we are especially desperate
-			defaultFont = [NSFont systemFontOfSize:size];
+			defaultFont = [NSFont userFontOfSize:size];
 		}
 	}
 	return defaultFont;
