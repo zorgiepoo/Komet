@@ -17,9 +17,6 @@
 #define ZGEditorCommentForegroundColorKey @"ZGEditorCommentForegroundColor"
 #define ZGEditorAutomaticNewlineInsertionAfterSubjectKey @"ZGEditorAutomaticNewlineInsertionAfterSubject"
 
-#define ZGPathToGitToolKey @"ZGPathToGitTool"
-#define ZGPathToHgToolKey @"ZGPathToHgTool"
-
 typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 {
 	ZGVersionControlGit,
@@ -60,9 +57,7 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 		  ZGEditorRecommendedSubjectLengthLimitKey : @(maxRecommendedSubjectLengthLimit),
 		  ZGEditorSubjectOverflowBackgroundColorKey : @"1.0,1.0,0.0,0.3",
 		  ZGEditorCommentForegroundColorKey : [NSString stringWithFormat:@"%f,%f,%f,%f", commentColor.redComponent, commentColor.greenComponent, commentColor.blueComponent, commentColor.alphaComponent],
-		  ZGEditorAutomaticNewlineInsertionAfterSubjectKey : @YES,
-		  ZGPathToGitToolKey : @"/usr/bin/git",
-		  ZGPathToHgToolKey : @"/usr/local/bin/hg"
+		  ZGEditorAutomaticNewlineInsertionAfterSubjectKey : @YES
 		  };
 		
 		[defaults registerDefaults:defaultsDictionary];
@@ -212,8 +207,22 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 	
 	if (!_tutorialMode && (versionControlType == ZGVersionControlGit || versionControlType == ZGVersionControlHg))
 	{
-		NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-		NSString *pathToVersionControlSoftware = (versionControlType == ZGVersionControlGit) ? [defaults stringForKey:ZGPathToGitToolKey] : [defaults stringForKey:ZGPathToHgToolKey];
+		NSFileManager *fileManager = [[NSFileManager alloc] init];
+		
+		NSString *toolName = (versionControlType == ZGVersionControlGit) ? @"git" : @"hg";
+		NSArray<NSString *> *toolArguments = (versionControlType == ZGVersionControlGit) ? @[@"rev-parse", @"--symbolic-full-name", @"--abbrev-ref", @"HEAD"] : @[@"branch"];
+		
+		NSString *pathToVersionControlSoftware = nil;
+		for (NSString *parentDirectoryPath in [[[[NSProcessInfo processInfo] environment] objectForKey:@"PATH"] componentsSeparatedByString:@":"])
+		{
+			NSString *pathToTool = [parentDirectoryPath stringByAppendingPathComponent:toolName];
+			BOOL isDirectory;
+			if ([fileManager fileExistsAtPath:pathToTool isDirectory:&isDirectory] && !isDirectory)
+			{
+				pathToVersionControlSoftware = pathToTool;
+				break;
+			}
+		}
 		
 		if (pathToVersionControlSoftware != nil && [[NSFileManager defaultManager] fileExistsAtPath:pathToVersionControlSoftware])
 		{
@@ -223,11 +232,11 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 				
 				if (versionControlType == ZGVersionControlGit)
 				{
-					branchTask.arguments = @[@"rev-parse", @"--symbolic-full-name", @"--abbrev-ref", @"HEAD"];
+					branchTask.arguments = toolArguments;
 				}
 				else
 				{
-					branchTask.arguments = @[@"branch"];
+					branchTask.arguments = toolArguments;
 				}
 				
 				NSPipe *standardOutputPipe = [NSPipe pipe];
