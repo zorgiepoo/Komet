@@ -224,7 +224,7 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 			}
 		}
 		
-		if (pathToVersionControlSoftware != nil && [[NSFileManager defaultManager] fileExistsAtPath:pathToVersionControlSoftware])
+		if (pathToVersionControlSoftware != nil)
 		{
 			dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
 				NSTask *branchTask = [[NSTask alloc] init];
