@@ -188,18 +188,19 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 		exit(EXIT_FAILURE);
 	}
 	
-	NSAttributedString *plainAttributedString = [[NSAttributedString alloc] initWithString:plainString attributes:@{NSFontAttributeName : font}];
+	_commentSectionLength = [self commentSectionLengthFromPlainText:plainString versionControlType:versionControlType];
 	
-	[_textView.textStorage setAttributedString:plainAttributedString];
-	
-	_commentSectionLength = [self commentSectionLengthForVersionControlType:versionControlType];
-	
-	NSUInteger commitLength = [self commitTextLengthWithCommentLength:_commentSectionLength];
+	NSUInteger commitLength = [self commitTextLengthFromPlainText:plainString commentLength:_commentSectionLength];
 	
 	NSString *content = [plainString substringToIndex:commitLength];
 	_initiallyContainedEmptyContent = ([[content stringByTrimmingCharactersInSet:[NSCharacterSet newlineCharacterSet]] length] == 0);
 	
+	NSAttributedString *plainAttributedString = [[NSAttributedString alloc] initWithString:plainString attributes:@{NSFontAttributeName : font}];
+	
+	[_textView.textStorage setAttributedString:plainAttributedString];
+	
 	[_textView setSelectedRange:NSMakeRange(commitLength, 0)];
+	
 	if (_commentSectionLength != 0)
 	{
 		[_textView.textStorage addAttribute:NSForegroundColorAttributeName value:[self colorFromUserDefaultsKey:ZGEditorCommentForegroundColorKey] range:NSMakeRange(plainString.length - _commentSectionLength, _commentSectionLength)];
@@ -340,6 +341,7 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 					
 					// Highlight the overflow background
 					NSColor *overflowColor = [self colorFromUserDefaultsKey:ZGEditorSubjectOverflowBackgroundColorKey];
+					
 					[_textView.textStorage addAttribute:NSBackgroundColorAttributeName value:overflowColor range:overflowRange];
 				}
 			}
@@ -471,12 +473,14 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 
 - (IBAction)selectAllCommitText:(id)__unused sender
 {
-	NSUInteger commitTextLength = [self commitTextLengthWithCommentLength:_commentSectionLength];
+	NSString *plainText = _textView.textStorage.string;
+	NSUInteger commitTextLength = [self commitTextLengthFromPlainText:plainText commentLength:_commentSectionLength];
 	[_textView setSelectedRange:NSMakeRange(0, commitTextLength)];
 }
 
 // The comment range should begin at the first line that starts with a comment string and extend to the end of the file
-- (NSUInteger)commentSectionLengthForVersionControlType:(ZGVersionControlType)versionControlType
+// This should only be computed once, before the user gets a chance to edit the content
+- (NSUInteger)commentSectionLengthFromPlainText:(NSString *)plainText versionControlType:(ZGVersionControlType)versionControlType
 {
 	NSString *prefixCommentString;
 	NSString *suffixCommentString;
@@ -496,7 +500,6 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 			break;
 	}
 	
-	NSString *plainText = _textView.textStorage.string;
 	NSUInteger plainTextLength = plainText.length;
 	
 	NSUInteger commentSectionLength = 0;
@@ -530,10 +533,8 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 
 // The content range should extend to before the comments, only allowing one trailing newline in between the comments and content
 // Make sure to scan from the bottom to top
-- (NSUInteger)commitTextLengthWithCommentLength:(NSUInteger)commentLength
+- (NSUInteger)commitTextLengthFromPlainText:(NSString *)plainText commentLength:(NSUInteger)commentLength
 {
-	NSString *plainText = _textView.textStorage.string;
-	
 	// Find the first real character or anything past the 1st newline before the comment section
 	NSUInteger bestEndCharacterIndex = plainText.length - commentLength;
 	BOOL passedNewline = NO;
