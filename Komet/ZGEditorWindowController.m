@@ -195,16 +195,18 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 	NSString *content = [plainString substringToIndex:commitLength];
 	_initiallyContainedEmptyContent = ([[content stringByTrimmingCharactersInSet:[NSCharacterSet newlineCharacterSet]] length] == 0);
 	
-	NSAttributedString *plainAttributedString = [[NSAttributedString alloc] initWithString:plainString attributes:@{NSFontAttributeName : font}];
-	
-	[_textView.textStorage setAttributedString:plainAttributedString];
-	
-	[_textView setSelectedRange:NSMakeRange(commitLength, 0)];
+	NSMutableAttributedString *plainAttributedString = [[NSMutableAttributedString alloc] initWithString:plainString attributes:@{NSFontAttributeName : font}];
 	
 	if (_commentSectionLength != 0)
 	{
-		[_textView.textStorage addAttribute:NSForegroundColorAttributeName value:[self colorFromUserDefaultsKey:ZGEditorCommentForegroundColorKey] range:NSMakeRange(plainString.length - _commentSectionLength, _commentSectionLength)];
+		[plainAttributedString addAttribute:NSForegroundColorAttributeName value:[self colorFromUserDefaultsKey:ZGEditorCommentForegroundColorKey] range:NSMakeRange(plainString.length - _commentSectionLength, _commentSectionLength)];
 	}
+	
+	// I don't think we want to invoke beginEditing/endEditing, etc, events because we are setting the textview content for the first time,
+	// and we don't want anything to register as user-editable yet or have undo activated yet
+	[_textView.textStorage replaceCharactersInRange:NSMakeRange(0, 0) withAttributedString:plainAttributedString];
+	
+	[_textView setSelectedRange:NSMakeRange(commitLength, 0)];
 	
 	if (!_tutorialMode && (versionControlType == ZGVersionControlGit || versionControlType == ZGVersionControlHg))
 	{
@@ -403,14 +405,24 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 					
 					if (lineStartIndex == 0 && (contentEndIndex - lineStartIndex > 0) && (lineEndIndex == plainText.length - _commentSectionLength || isspace([plainText characterAtIndex:lineEndIndex])))
 					{
-						[_textView insertNewline:nil];
-						[_textView insertNewline:nil];
-						
-						_preventAccidentalNewline = YES;
-						dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-							self->_preventAccidentalNewline = NO;
-						});
-						return YES;
+						// We need to invoke these methods to get proper undo support
+						// http://lists.apple.com/archives/cocoa-dev/2004/Jan/msg01925.html
+						NSString *replacement = @"\n\n";
+						if ([_textView shouldChangeTextInRange:range replacementString:replacement])
+						{
+							[_textView.textStorage beginEditing];
+							
+							[_textView.textStorage replaceCharactersInRange:range withString:replacement];
+							
+							[_textView.textStorage endEditing];
+							[_textView didChangeText];
+							
+							_preventAccidentalNewline = YES;
+							dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+								self->_preventAccidentalNewline = NO;
+							});
+							return YES;
+						}
 					}
 				}
 			}
