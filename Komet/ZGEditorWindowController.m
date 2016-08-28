@@ -11,8 +11,6 @@
 #import "ZGUserDefaults.h"
 
 #define ZGEditorWindowFrameNameKey @"ZGEditorWindowFrame"
-#define ZGEditorSubjectOverflowBackgroundColorKey @"ZGEditorSubjectOverflowBackgroundColor"
-#define ZGEditorCommentForegroundColorKey @"ZGEditorCommentForegroundColor"
 
 typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 {
@@ -33,24 +31,13 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 	BOOL _initiallyContainedEmptyContent;
 	BOOL _tutorialMode;
 	NSUInteger _commentSectionLength;
+	NSColor *_warnOverflowColor;
 }
 
 + (void)initialize
 {
 	static dispatch_once_t onceToken;
 	dispatch_once(&onceToken, ^{
-		NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-		
-		NSColor *commentColor = [[NSColor darkGrayColor] colorUsingColorSpaceName:NSCalibratedRGBColorSpace];
-		
-		NSDictionary *defaultsDictionary =
-		@{
-		  ZGEditorSubjectOverflowBackgroundColorKey : @"1.0,1.0,0.0,0.3",
-		  ZGEditorCommentForegroundColorKey : [NSString stringWithFormat:@"%f,%f,%f,%f", commentColor.redComponent, commentColor.greenComponent, commentColor.blueComponent, commentColor.alphaComponent]
-		  };
-		
-		[defaults registerDefaults:defaultsDictionary];
-		
 		ZGRegisterDefaultMessageFont();
 		ZGRegisterDefaultCommentsFont();
 		ZGRegisterDefaultRecommendedSubjectLengthLimitEnabled();
@@ -173,8 +160,11 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 	
 	if (_commentSectionLength != 0)
 	{
-		[plainAttributedString addAttribute:NSForegroundColorAttributeName value:[self colorFromUserDefaultsKey:ZGEditorCommentForegroundColorKey] range:NSMakeRange(plainString.length - _commentSectionLength, _commentSectionLength)];
+		NSColor *commentColor = [[NSColor darkGrayColor] colorUsingColorSpaceName:NSCalibratedRGBColorSpace];
+		[plainAttributedString addAttribute:NSForegroundColorAttributeName value:commentColor range:NSMakeRange(plainString.length - _commentSectionLength, _commentSectionLength)];
 	}
+	
+	_warnOverflowColor = [NSColor colorWithRed:1.0 green:1.0 blue:0.0 alpha:0.3];
 	
 	// I don't think we want to invoke beginEditing/endEditing, etc, events because we are setting the textview content for the first time,
 	// and we don't want anything to register as user-editable yet or have undo activated yet
@@ -289,31 +279,6 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 	return (ZGReadDefaultRecommendedSubjectLengthLimitEnabled() && maxRecommendedSubjectLengthLimit > 0 && maxRecommendedSubjectLengthLimit <= 1000);
 }
 
-- (NSColor *)colorFromUserDefaultsKey:(NSString *)userDefaultsKey
-{
-	NSColor *color = nil;
-	NSString *colorString = [[NSUserDefaults standardUserDefaults] stringForKey:userDefaultsKey];
-	if (colorString != nil)
-	{
-		NSArray<NSString *> *colorComponents = [colorString componentsSeparatedByCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@" ,"]];
-		
-		if (colorComponents.count == 3)
-		{
-			color = [NSColor colorWithRed:colorComponents[0].doubleValue green:colorComponents[1].doubleValue blue:colorComponents[2].doubleValue alpha:1.0];
-		}
-		else if (colorComponents.count == 4)
-		{
-			color = [NSColor colorWithRed:colorComponents[0].doubleValue green:colorComponents[1].doubleValue blue:colorComponents[2].doubleValue alpha:colorComponents[3].doubleValue];
-		}
-	}
-	
-	if (color == nil)
-	{
-		color = [NSColor colorWithRed:1.0 green:1.0 blue:1.0 alpha:1.0];
-	}
-	return color;
-}
-
 - (void)updateHighlightingForLineLimitsWithRecommendedSubjectLengthLimit:(NSUInteger)maxRecommendedSubjectLengthLimit
 {
 	// I am trying to highlight text on the first line if it exceeds certain number of characters (similar to a Twitter mesage overflowing).
@@ -337,9 +302,7 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 			NSRange overflowRange = NSMakeRange(maxRecommendedSubjectLengthLimit, lineContentRange.length - maxRecommendedSubjectLengthLimit);
 			
 			// Highlight the overflow background
-			NSColor *overflowColor = [self colorFromUserDefaultsKey:ZGEditorSubjectOverflowBackgroundColorKey];
-			
-			[_textView.textStorage addAttribute:NSBackgroundColorAttributeName value:overflowColor range:overflowRange];
+			[_textView.textStorage addAttribute:NSBackgroundColorAttributeName value:_warnOverflowColor range:overflowRange];
 		}
 	}
 }
