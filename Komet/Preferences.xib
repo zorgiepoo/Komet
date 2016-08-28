@@ -72,11 +72,11 @@
             <point key="canvasLocation" x="270" y="-80.5"/>
         </window>
         <customView id="h9g-vJ-Iwb" userLabel="Fonts View">
-            <rect key="frame" x="0.0" y="0.0" width="268" height="135"/>
+            <rect key="frame" x="0.0" y="0.0" width="268" height="139"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <subviews>
                 <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="P9V-1A-nFH">
-                    <rect key="frame" x="20" y="75" width="143" height="22"/>
+                    <rect key="frame" x="20" y="79" width="143" height="22"/>
                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" title="Menlo Regular - 11.0" drawsBackground="YES" id="S5K-Sz-QaX">
                         <font key="font" metaFont="system"/>
                         <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
@@ -84,7 +84,7 @@
                     </textFieldCell>
                 </textField>
                 <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="pzu-Uy-F1z">
-                    <rect key="frame" x="165" y="68" width="89" height="32"/>
+                    <rect key="frame" x="165" y="72" width="89" height="32"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="77" id="PLB-f9-Glb"/>
                     </constraints>
@@ -113,7 +113,7 @@
                     </textFieldCell>
                 </textField>
                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="9vQ-Qv-IvQ">
-                    <rect key="frame" x="18" y="105" width="62" height="17"/>
+                    <rect key="frame" x="18" y="109" width="62" height="17"/>
                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Message" id="xwO-UY-was">
                         <font key="font" size="13" name=".AppleSystemUIFontBold"/>
                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -146,7 +146,7 @@
                 <constraint firstItem="f8W-g8-7pY" firstAttribute="leading" secondItem="h9g-vJ-Iwb" secondAttribute="leading" constant="20" id="VNa-Sy-sRw"/>
                 <constraint firstItem="pzu-Uy-F1z" firstAttribute="baseline" secondItem="P9V-1A-nFH" secondAttribute="baseline" id="cFX-0E-cAW"/>
                 <constraint firstItem="viz-io-HRY" firstAttribute="baseline" secondItem="f8W-g8-7pY" secondAttribute="baseline" id="fbo-jp-96m"/>
-                <constraint firstItem="Ffs-GR-vmH" firstAttribute="top" secondItem="P9V-1A-nFH" secondAttribute="bottom" constant="8" id="gCa-sn-uF5"/>
+                <constraint firstItem="Ffs-GR-vmH" firstAttribute="top" secondItem="P9V-1A-nFH" secondAttribute="bottom" constant="12" id="gCa-sn-uF5"/>
                 <constraint firstItem="f8W-g8-7pY" firstAttribute="top" secondItem="Ffs-GR-vmH" secondAttribute="bottom" constant="8" id="qCh-vm-fJd"/>
                 <constraint firstAttribute="bottom" secondItem="f8W-g8-7pY" secondAttribute="bottom" constant="20" id="stX-Vc-iok"/>
                 <constraint firstItem="9vQ-Qv-IvQ" firstAttribute="leading" secondItem="h9g-vJ-Iwb" secondAttribute="leading" constant="20" id="u4f-dM-D8E"/>
