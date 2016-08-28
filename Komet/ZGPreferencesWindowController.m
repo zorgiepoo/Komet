@@ -67,6 +67,9 @@ typedef NS_ENUM(NSInteger, ZGSelectedFontType)
 	self.window.contentView = _fontsView;
 	[self.window.toolbar setSelectedItemIdentifier:ZGToolbarFontsIdentifier];
 	
+	_messageFontTextField.selectable = NO;
+	_commentsFontTextField.selectable = NO;
+	
 	NSFont *messageFont = ZGReadDefaultMessageFont();
 	NSFont *commentsFont = ZGReadDefaultCommentsFont();
 	
