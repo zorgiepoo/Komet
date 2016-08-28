@@ -26,6 +26,14 @@ void ZGRegisterDefaultRecommendedSubjectLengthLimitEnabled(void);
 BOOL ZGReadDefaultRecommendedSubjectLengthLimitEnabled(void);
 void ZGWriteDefaultRecommendedSubjectLengthLimitEnabled(BOOL enabled);
 
+void ZGRegisterDefaultRecommendedBodyLineLengthLimit(void);
+NSUInteger ZGReadDefaultRecommendedBodyLineLengthLimit(void);
+void ZGWriteDefaultRecommendedBodyLineLengthLimit(NSUInteger recommendedBodyLineLengthLimit);
+
+void ZGRegisterDefaultRecommendedBodyLineLengthLimitEnabled(void);
+BOOL ZGReadDefaultRecommendedBodyLineLengthLimitEnabled(void);
+void ZGWriteDefaultRecommendedBodyLineLengthLimitEnabled(BOOL enabled);
+
 void ZGRegisterDefaultAutomaticNewlineInsertionAfterSubjectLine(void);
 BOOL ZGReadDefaultAutomaticNewlineInsertionAfterSubjectLine(void);
 void ZGWriteDefaultAutomaticNewlineInsertionAfterSubjectLine(BOOL automaticNewlineInsertionAfterSubjectLine);

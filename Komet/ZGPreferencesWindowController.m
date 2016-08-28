@@ -36,6 +36,9 @@ typedef NS_ENUM(NSInteger, ZGSelectedFontType)
 	IBOutlet NSTextField *_recommendedSubjectLengthLimitTextField;
 	IBOutlet NSButton *_recommendedSubjectLengthLimitEnabledCheckbox;
 	
+	IBOutlet NSTextField *_recommendedBodyLineLengthLimitTextField;
+	IBOutlet NSButton *_recommendedBodyLineLengthLimitEnabledCheckbox;
+	
 	IBOutlet NSButton *_automaticNewlineInsertionAfterSubjectLineCheckbox;
 }
 
@@ -137,6 +140,10 @@ typedef NS_ENUM(NSInteger, ZGSelectedFontType)
 	BOOL enabledSubjectLengthLimit = ZGReadDefaultRecommendedSubjectLengthLimitEnabled();
 	_recommendedSubjectLengthLimitEnabledCheckbox.state = (enabledSubjectLengthLimit ? NSOnState : NSOffState);
 	_recommendedSubjectLengthLimitTextField.enabled = enabledSubjectLengthLimit;
+	
+	BOOL enabledBodyLineLengthLimit = ZGReadDefaultRecommendedBodyLineLengthLimitEnabled();
+	_recommendedBodyLineLengthLimitEnabledCheckbox.state = (enabledBodyLineLengthLimit ? NSOnState : NSOffState);
+	_recommendedBodyLineLengthLimitTextField.enabled = enabledBodyLineLengthLimit;
 }
 
 - (IBAction)changeRecommendedSubjectLengthLimitEnabled:(id)__unused sender
@@ -146,13 +153,29 @@ typedef NS_ENUM(NSInteger, ZGSelectedFontType)
 	ZGWriteDefaultRecommendedSubjectLengthLimitEnabled(enabled);
 	_recommendedSubjectLengthLimitTextField.enabled = enabled;
 	
-	[_delegate userDefaultsChangedRecommendedSubjectLengthLimit];
+	[_delegate userDefaultsChangedRecommendedLineLengthLimits];
 }
 
 - (IBAction)changeRecommendedSubjectLengthLimit:(id)__unused sender
 {
 	ZGWriteDefaultRecommendedSubjectLengthLimit((NSUInteger)_recommendedSubjectLengthLimitTextField.integerValue);
-	[_delegate userDefaultsChangedRecommendedSubjectLengthLimit];
+	[_delegate userDefaultsChangedRecommendedLineLengthLimits];
+}
+
+- (IBAction)changeRecommendedBodyLineLengthLimitEnabled:(id)__unused sender
+{
+	BOOL enabled = (_recommendedBodyLineLengthLimitEnabledCheckbox.state == NSOnState);
+	
+	ZGWriteDefaultRecommendedBodyLineLengthLimitEnabled(enabled);
+	_recommendedBodyLineLengthLimitTextField.enabled = enabled;
+	
+	[_delegate userDefaultsChangedRecommendedLineLengthLimits];
+}
+
+- (IBAction)changeRecommendedBodyLineLengthLimit:(id)__unused sender
+{
+	ZGWriteDefaultRecommendedBodyLineLengthLimit((NSUInteger)_recommendedBodyLineLengthLimitTextField.integerValue);
+	[_delegate userDefaultsChangedRecommendedLineLengthLimits];
 }
 
 - (IBAction)showAdvanced:(id)__unused sender

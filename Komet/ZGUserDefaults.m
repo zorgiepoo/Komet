@@ -15,8 +15,10 @@
 #define ZGCommentsFontPointSizeKey @"ZGCommentsFontPointSize"
 
 #define ZGEditorRecommendedSubjectLengthLimitKey @"ZGEditorRecommendedSubjectLengthLimit"
-
 #define ZGEditorRecommendedSubjectLengthLimitEnabledKey @"ZGEditorRecommendedSubjectLengthLimitEnabled"
+
+#define ZGEditorRecommendedBodyLineLengthLimitKey @"ZGEditorRecommendedBodyLineLengthLimit"
+#define ZGEditorRecommendedBodyLineLengthLimitEnabledKey @"ZGEditorRecommendedBodyLineLengthLimitEnabled"
 
 #define ZGEditorAutomaticNewlineInsertionAfterSubjectKey @"ZGEditorAutomaticNewlineInsertionAfterSubject"
 
@@ -111,6 +113,38 @@ BOOL ZGReadDefaultRecommendedSubjectLengthLimitEnabled(void)
 void ZGWriteDefaultRecommendedSubjectLengthLimitEnabled(BOOL enabled)
 {
 	[[NSUserDefaults standardUserDefaults] setBool:enabled forKey:ZGEditorRecommendedSubjectLengthLimitEnabledKey];
+}
+
+void ZGRegisterDefaultRecommendedBodyLineLengthLimit(void)
+{
+	// 72 seems to be the standard recommended body line length limit for git
+	[[NSUserDefaults standardUserDefaults] registerDefaults:@{ZGEditorRecommendedBodyLineLengthLimitKey : @(72)}];
+}
+
+NSUInteger ZGReadDefaultRecommendedBodyLineLengthLimit(void)
+{
+	return (NSUInteger)[[NSUserDefaults standardUserDefaults] integerForKey:ZGEditorRecommendedBodyLineLengthLimitKey];
+}
+
+void ZGWriteDefaultRecommendedBodyLineLengthLimit(NSUInteger recommendedBodyLineLengthLimit)
+{
+	[[NSUserDefaults standardUserDefaults] setInteger:(NSInteger)recommendedBodyLineLengthLimit forKey:ZGEditorRecommendedBodyLineLengthLimitKey];
+}
+
+void ZGRegisterDefaultRecommendedBodyLineLengthLimitEnabled(void)
+{
+	// Having a recommendation limit for body lines could be irritating as a default, so we disable it by default
+	[[NSUserDefaults standardUserDefaults] registerDefaults:@{ZGEditorRecommendedBodyLineLengthLimitEnabledKey : @(NO)}];
+}
+
+BOOL ZGReadDefaultRecommendedBodyLineLengthLimitEnabled(void)
+{
+	return [[NSUserDefaults standardUserDefaults] boolForKey:ZGEditorRecommendedBodyLineLengthLimitEnabledKey];
+}
+
+void ZGWriteDefaultRecommendedBodyLineLengthLimitEnabled(BOOL enabled)
+{
+	[[NSUserDefaults standardUserDefaults] setBool:enabled forKey:ZGEditorRecommendedBodyLineLengthLimitEnabledKey];
 }
 
 void ZGRegisterDefaultAutomaticNewlineInsertionAfterSubjectLine(void)

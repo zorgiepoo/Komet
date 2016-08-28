@@ -42,6 +42,8 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 		ZGRegisterDefaultCommentsFont();
 		ZGRegisterDefaultRecommendedSubjectLengthLimitEnabled();
 		ZGRegisterDefaultRecommendedSubjectLengthLimit();
+		ZGRegisterDefaultRecommendedBodyLineLengthLimitEnabled();
+		ZGRegisterDefaultRecommendedBodyLineLengthLimit();
 		ZGRegisterDefaultAutomaticNewlineInsertionAfterSubjectLine();
 	});
 }
@@ -260,50 +262,80 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 	[self updateEditorCommentsFont];
 }
 
-- (void)userDefaultsChangedRecommendedSubjectLengthLimit
+- (void)userDefaultsChangedRecommendedLineLengthLimits
 {
-	NSUInteger maxRecommendedSubjectLength = ZGReadDefaultRecommendedSubjectLengthLimit();
-	if ([self shouldUpdateLineLimitHighlightingWithRecommendedSubjectLengthLimit:maxRecommendedSubjectLength])
-	{
-		[self updateHighlightingForLineLimitsWithRecommendedSubjectLengthLimit:maxRecommendedSubjectLength];
-	}
-	else
+	BOOL hasSubjectLimit = ZGReadDefaultRecommendedSubjectLengthLimitEnabled();
+	BOOL hasBodyLineLimit = ZGReadDefaultRecommendedBodyLineLengthLimitEnabled();
+	
+	if (!hasSubjectLimit && !hasBodyLineLimit)
 	{
 		// Remove all background color highlighting in case any text is currently highlighted
 		[_textView.textStorage removeAttribute:NSBackgroundColorAttributeName range:NSMakeRange(0, _textView.textStorage.length)];
 	}
-}
-
-- (BOOL)shouldUpdateLineLimitHighlightingWithRecommendedSubjectLengthLimit:(NSUInteger)maxRecommendedSubjectLengthLimit
-{
-	return (ZGReadDefaultRecommendedSubjectLengthLimitEnabled() && maxRecommendedSubjectLengthLimit > 0 && maxRecommendedSubjectLengthLimit <= 1000);
-}
-
-- (void)updateHighlightingForLineLimitsWithRecommendedSubjectLengthLimit:(NSUInteger)maxRecommendedSubjectLengthLimit
-{
-	// I am trying to highlight text on the first line if it exceeds certain number of characters (similar to a Twitter mesage overflowing).
-	NSString *plainText = _textView.textStorage.string;
-	if (plainText.length > 0)
+	else
 	{
-		// Remove the attribute everywhere. Might be "inefficient" but it's the easiest most reliable approach I know how to do
-		[_textView.textStorage removeAttribute:NSBackgroundColorAttributeName range:NSMakeRange(0, plainText.length)];
-		
-		// Then get the content line range
-		NSUInteger startLineIndex = 0;
+		[self
+		 updateHighlightingForLineLimitsAllowingSubjectLimit:hasSubjectLimit
+		 subjectLengthLimit:ZGReadDefaultRecommendedSubjectLengthLimit()
+		 allowingingBodyLimit:hasBodyLineLimit
+		 bodyLengthLimit:ZGReadDefaultRecommendedBodyLineLengthLimit()];
+	}
+}
+
+- (void)updateHighlightingForLineLimitsAllowingSubjectLimit:(BOOL)allowingSubjectLimit subjectLengthLimit:(NSUInteger)subjectLengthLimit allowingingBodyLimit:(BOOL)allowingBodyLimit bodyLengthLimit:(NSUInteger)bodyLengthLimit
+{
+	if (!allowingSubjectLimit && !allowingBodyLimit)
+	{
+		return;
+	}
+	
+	NSString *plainText = _textView.textStorage.string;
+	if (plainText.length == 0)
+	{
+		return;
+	}
+	
+	// Remove the attribute everywhere. Might be "inefficient" but it's the easiest most reliable approach I know how to do
+	[_textView.textStorage removeAttribute:NSBackgroundColorAttributeName range:NSMakeRange(0, plainText.length)];
+	
+	NSUInteger messageTextLength = plainText.length - _commentSectionLength;
+	NSUInteger characterIndex = 0;
+	while (characterIndex < messageTextLength)
+	{
+		NSUInteger lineStartIndex = 0;
+		NSUInteger lineEndIndex = 0;
 		NSUInteger contentEndIndex = 0;
+		[plainText getLineStart:&lineStartIndex end:&lineEndIndex contentsEnd:&contentEndIndex forRange:NSMakeRange(characterIndex, 0)];
 		
-		[plainText getLineStart:&startLineIndex end:NULL contentsEnd:&contentEndIndex forRange:NSMakeRange(0, 1)];
+		NSRange lineRange = NSMakeRange(lineStartIndex, contentEndIndex - lineStartIndex);
 		
-		NSRange lineContentRange = NSMakeRange(startLineIndex, contentEndIndex - startLineIndex);
-		
-		// Then get the overflow range
-		if (lineContentRange.length > maxRecommendedSubjectLengthLimit)
+		if (characterIndex == 0)
 		{
-			NSRange overflowRange = NSMakeRange(maxRecommendedSubjectLengthLimit, lineContentRange.length - maxRecommendedSubjectLengthLimit);
+			if (allowingSubjectLimit)
+			{
+				[self highlightOverflowingTextInTextStorage:_textView.textStorage lineRange:lineRange limit:subjectLengthLimit];
+			}
 			
-			// Highlight the overflow background
-			[_textView.textStorage addAttribute:NSBackgroundColorAttributeName value:_warnOverflowColor range:overflowRange];
+			if (!allowingBodyLimit)
+			{
+				break;
+			}
 		}
+		else
+		{
+			[self highlightOverflowingTextInTextStorage:_textView.textStorage lineRange:lineRange limit:bodyLengthLimit];
+		}
+		
+		characterIndex = lineEndIndex;
+	}
+}
+
+- (void)highlightOverflowingTextInTextStorage:(NSTextStorage *)textStorage lineRange:(NSRange)lineRange limit:(NSUInteger)limit
+{
+	if (lineRange.length > limit)
+	{
+		NSRange overflowRange = NSMakeRange(lineRange.location + limit, lineRange.length - limit);
+		[textStorage addAttribute:NSBackgroundColorAttributeName value:_warnOverflowColor range:overflowRange];
 	}
 }
 
@@ -326,11 +358,11 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 {
 	if ((editedMask & NSTextStorageEditedCharacters) != 0)
 	{
-		NSUInteger maxRecommendedSubjectLength = ZGReadDefaultRecommendedSubjectLengthLimit();
-		if ([self shouldUpdateLineLimitHighlightingWithRecommendedSubjectLengthLimit:maxRecommendedSubjectLength])
-		{
-			[self updateHighlightingForLineLimitsWithRecommendedSubjectLengthLimit:maxRecommendedSubjectLength];
-		}
+		[self
+		 updateHighlightingForLineLimitsAllowingSubjectLimit:ZGReadDefaultRecommendedSubjectLengthLimitEnabled()
+		 subjectLengthLimit:ZGReadDefaultRecommendedSubjectLengthLimit()
+		 allowingingBodyLimit:ZGReadDefaultRecommendedBodyLineLengthLimitEnabled()
+		 bodyLengthLimit:ZGReadDefaultRecommendedBodyLineLengthLimit()];
 	}
 }
 

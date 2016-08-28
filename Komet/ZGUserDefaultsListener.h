@@ -16,7 +16,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)userDefaultsChangedCommentsFont;
 
-- (void)userDefaultsChangedRecommendedSubjectLengthLimit;
+- (void)userDefaultsChangedRecommendedLineLengthLimits;
 
 @end
 

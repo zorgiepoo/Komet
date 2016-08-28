@@ -11,6 +11,8 @@
                 <outlet property="_commentsFontTextField" destination="f8W-g8-7pY" id="LHp-1J-V4v"/>
                 <outlet property="_fontsView" destination="h9g-vJ-Iwb" id="ihx-72-r3V"/>
                 <outlet property="_messageFontTextField" destination="P9V-1A-nFH" id="8jL-JC-ABT"/>
+                <outlet property="_recommendedBodyLineLengthLimitEnabledCheckbox" destination="UKJ-Je-zfL" id="T7r-cq-rVF"/>
+                <outlet property="_recommendedBodyLineLengthLimitTextField" destination="J5L-oh-zfQ" id="u6P-DC-A5V"/>
                 <outlet property="_recommendedSubjectLengthLimitEnabledCheckbox" destination="qFV-l9-9pw" id="Huu-dl-RrD"/>
                 <outlet property="_recommendedSubjectLengthLimitTextField" destination="Xcy-hC-F81" id="L6A-GD-yWt"/>
                 <outlet property="_warningsView" destination="I8B-Aq-rvW" id="IZd-AL-CEj"/>
@@ -213,6 +215,9 @@
                         <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
+                    <connections>
+                        <action selector="changeRecommendedBodyLineLengthLimit:" target="-2" id="pFi-8u-Gkz"/>
+                    </connections>
                 </textField>
                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="SFd-F9-BRj">
                     <rect key="frame" x="90" y="19" width="209" height="17"/>
@@ -228,6 +233,9 @@
                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                         <font key="font" metaFont="system"/>
                     </buttonCell>
+                    <connections>
+                        <action selector="changeRecommendedBodyLineLengthLimitEnabled:" target="-2" id="sFV-6t-bAq"/>
+                    </connections>
                 </button>
             </subviews>
             <constraints>
