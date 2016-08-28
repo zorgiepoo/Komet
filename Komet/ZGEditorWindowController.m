@@ -374,6 +374,22 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 	return attributes;
 }
 
+- (NSInteger)textView:(NSTextView *)textView shouldSetSpellingState:(NSInteger)value range:(NSRange)affectedCharRange
+{
+	NSUInteger plainTextLength = textView.textStorage.string.length;
+	NSInteger newValue;
+	// Don't check for anything spelling related if the range is in the comment section
+	if (affectedCharRange.location + affectedCharRange.length >= plainTextLength - _commentSectionLength)
+	{
+		newValue = 0;
+	}
+	else
+	{
+		newValue = value;
+	}
+	return newValue;
+}
+
 - (BOOL)textView:(NSTextView *)__unused textView doCommandBySelector:(SEL)selector
 {
 	if (selector == @selector(insertNewline:))
