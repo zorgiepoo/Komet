@@ -10,6 +10,7 @@
 @import Darwin.sys.mount;
 
 #import "ZGEditorWindowController.h"
+#import "ZGPreferencesWindowController.h"
 
 @interface AppDelegate : NSObject <NSApplicationDelegate>
 @end
@@ -17,6 +18,7 @@
 @implementation AppDelegate
 {
 	ZGEditorWindowController *_editorWindowController;
+	ZGPreferencesWindowController *_preferencesWondowController;
 }
 
 - (BOOL)pathComponents:(NSArray<NSString *> *)pathComponents isSubsetOfPathComponents:(NSArray<NSString *> *)parentPathComponents
@@ -149,6 +151,14 @@
 - (void)applicationWillTerminate:(NSNotification *)__unused notification
 {
 	[_editorWindowController exitWithSuccess:NO];
+}
+
+- (IBAction)showPreferences:(id)__unused sender
+{
+	if (_preferencesWondowController == nil) {
+		_preferencesWondowController = [[ZGPreferencesWindowController alloc] initWithDelegate:_editorWindowController];
+	}
+	[_preferencesWondowController showWindow:nil];
 }
 
 @end

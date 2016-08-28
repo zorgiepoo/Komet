@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7240062F1D7359E4001042CF /* ZGUserDefaults.m in Sources */ = {isa = PBXBuildFile; fileRef = 7240062E1D7359E4001042CF /* ZGUserDefaults.m */; };
 		72B72C971D63EFF90096365F /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 72B72C961D63EFF90096365F /* AppDelegate.m */; };
 		72B72C9A1D63EFF90096365F /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 72B72C991D63EFF90096365F /* main.m */; };
 		72B72C9C1D63EFF90096365F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 72B72C9B1D63EFF90096365F /* Assets.xcassets */; };
@@ -14,9 +15,14 @@
 		72B72CA91D63F0870096365F /* ZGEditorWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 72B72CA71D63F0870096365F /* ZGEditorWindowController.m */; };
 		72B72CAA1D63F0870096365F /* Commit Editor.xib in Resources */ = {isa = PBXBuildFile; fileRef = 72B72CA81D63F0870096365F /* Commit Editor.xib */; };
 		72B72CAD1D6412EE0096365F /* ZGCommitTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 72B72CAC1D6412EE0096365F /* ZGCommitTextView.m */; };
+		72D10C571D7334CA00ED32BC /* ZGPreferencesWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 72D10C561D7334CA00ED32BC /* ZGPreferencesWindowController.m */; };
+		72D10C591D7334D400ED32BC /* Preferences.xib in Resources */ = {isa = PBXBuildFile; fileRef = 72D10C581D7334D400ED32BC /* Preferences.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		7240062D1D7359E4001042CF /* ZGUserDefaults.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZGUserDefaults.h; sourceTree = "<group>"; };
+		7240062E1D7359E4001042CF /* ZGUserDefaults.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZGUserDefaults.m; sourceTree = "<group>"; };
+		724006301D736E83001042CF /* ZGUserDefaultsListener.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZGUserDefaultsListener.h; sourceTree = "<group>"; };
 		72B72C921D63EFF90096365F /* Komet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Komet.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		72B72C961D63EFF90096365F /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		72B72C991D63EFF90096365F /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -28,6 +34,9 @@
 		72B72CA81D63F0870096365F /* Commit Editor.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "Commit Editor.xib"; sourceTree = "<group>"; };
 		72B72CAB1D6412EE0096365F /* ZGCommitTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZGCommitTextView.h; sourceTree = "<group>"; };
 		72B72CAC1D6412EE0096365F /* ZGCommitTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZGCommitTextView.m; sourceTree = "<group>"; };
+		72D10C551D7334CA00ED32BC /* ZGPreferencesWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZGPreferencesWindowController.h; sourceTree = "<group>"; };
+		72D10C561D7334CA00ED32BC /* ZGPreferencesWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZGPreferencesWindowController.m; sourceTree = "<group>"; };
+		72D10C581D7334D400ED32BC /* Preferences.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = Preferences.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -65,7 +74,13 @@
 				72B72CAC1D6412EE0096365F /* ZGCommitTextView.m */,
 				72B72CA61D63F0870096365F /* ZGEditorWindowController.h */,
 				72B72CA71D63F0870096365F /* ZGEditorWindowController.m */,
+				7240062D1D7359E4001042CF /* ZGUserDefaults.h */,
+				7240062E1D7359E4001042CF /* ZGUserDefaults.m */,
+				72D10C551D7334CA00ED32BC /* ZGPreferencesWindowController.h */,
+				72D10C561D7334CA00ED32BC /* ZGPreferencesWindowController.m */,
+				724006301D736E83001042CF /* ZGUserDefaultsListener.h */,
 				72B72CA81D63F0870096365F /* Commit Editor.xib */,
+				72D10C581D7334D400ED32BC /* Preferences.xib */,
 				72B72C9B1D63EFF90096365F /* Assets.xcassets */,
 				72B72C9D1D63EFF90096365F /* MainMenu.xib */,
 				72B72CA01D63EFF90096365F /* Info.plist */,
@@ -141,6 +156,7 @@
 			files = (
 				72B72CAA1D63F0870096365F /* Commit Editor.xib in Resources */,
 				72B72C9C1D63EFF90096365F /* Assets.xcassets in Resources */,
+				72D10C591D7334D400ED32BC /* Preferences.xib in Resources */,
 				72B72C9F1D63EFF90096365F /* MainMenu.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -152,10 +168,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				72D10C571D7334CA00ED32BC /* ZGPreferencesWindowController.m in Sources */,
 				72B72C9A1D63EFF90096365F /* main.m in Sources */,
 				72B72CA91D63F0870096365F /* ZGEditorWindowController.m in Sources */,
 				72B72C971D63EFF90096365F /* AppDelegate.m in Sources */,
 				72B72CAD1D6412EE0096365F /* ZGCommitTextView.m in Sources */,
+				7240062F1D7359E4001042CF /* ZGUserDefaults.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

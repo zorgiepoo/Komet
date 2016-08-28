@@ -8,14 +8,11 @@
 
 #import "ZGEditorWindowController.h"
 #import "ZGCommitTextView.h"
+#import "ZGUserDefaults.h"
 
 #define ZGEditorWindowFrameNameKey @"ZGEditorWindowFrame"
-#define ZGEditorFontNameKey @"ZGEditorFontName"
-#define ZGEditorFontPointSizeKey @"ZGEditorFontPointSize"
-#define ZGEditorRecommendedSubjectLengthLimitKey @"ZGEditorRecommendedSubjectLengthLimit"
 #define ZGEditorSubjectOverflowBackgroundColorKey @"ZGEditorSubjectOverflowBackgroundColor"
 #define ZGEditorCommentForegroundColorKey @"ZGEditorCommentForegroundColor"
-#define ZGEditorAutomaticNewlineInsertionAfterSubjectKey @"ZGEditorAutomaticNewlineInsertionAfterSubject"
 
 typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 {
@@ -44,23 +41,21 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 	dispatch_once(&onceToken, ^{
 		NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 		
-		// This is the max subject length GitHub uses before the subject overflows
-		// Not using 50 because I think it may be too irritating of a default for Mac users
-		const NSUInteger maxRecommendedSubjectLengthLimit = 69;
-		
 		NSColor *commentColor = [[NSColor darkGrayColor] colorUsingColorSpaceName:NSCalibratedRGBColorSpace];
 		
 		NSDictionary *defaultsDictionary =
 		@{
-		  ZGEditorFontNameKey : @"",
-		  ZGEditorFontPointSizeKey : @(0.0),
-		  ZGEditorRecommendedSubjectLengthLimitKey : @(maxRecommendedSubjectLengthLimit),
 		  ZGEditorSubjectOverflowBackgroundColorKey : @"1.0,1.0,0.0,0.3",
-		  ZGEditorCommentForegroundColorKey : [NSString stringWithFormat:@"%f,%f,%f,%f", commentColor.redComponent, commentColor.greenComponent, commentColor.blueComponent, commentColor.alphaComponent],
-		  ZGEditorAutomaticNewlineInsertionAfterSubjectKey : @YES
+		  ZGEditorCommentForegroundColorKey : [NSString stringWithFormat:@"%f,%f,%f,%f", commentColor.redComponent, commentColor.greenComponent, commentColor.blueComponent, commentColor.alphaComponent]
 		  };
 		
 		[defaults registerDefaults:defaultsDictionary];
+		
+		ZGRegisterDefaultMessageFont();
+		ZGRegisterDefaultCommentsFont();
+		ZGRegisterDefaultRecommendedSubjectLengthLimitEnabled();
+		ZGRegisterDefaultRecommendedSubjectLengthLimit();
+		ZGRegisterDefaultAutomaticNewlineInsertionAfterSubjectLine();
 	});
 }
 
@@ -160,27 +155,6 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 	_textView.layoutManager.delegate = self;
 	_textView.delegate = self;
 	
-	NSString *fontName = [[NSUserDefaults standardUserDefaults] stringForKey:ZGEditorFontNameKey];
-	CGFloat fontSize = [[NSUserDefaults standardUserDefaults] doubleForKey:ZGEditorFontPointSizeKey];
-	
-	NSFont *font;
-	if (fontName.length == 0)
-	{
-		font = [NSFont userFixedPitchFontOfSize:fontSize];
-	}
-	else
-	{
-		NSFont *userFont = [NSFont fontWithName:fontName size:fontSize];
-		if (userFont != nil)
-		{
-			font = userFont;
-		}
-		else
-		{
-			font = [NSFont userFixedPitchFontOfSize:fontSize];
-		}
-	}
-	
 	NSString *plainString = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
 	if (plainString == nil)
 	{
@@ -195,7 +169,7 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 	NSString *content = [plainString substringToIndex:commitLength];
 	_initiallyContainedEmptyContent = ([[content stringByTrimmingCharactersInSet:[NSCharacterSet newlineCharacterSet]] length] == 0);
 	
-	NSMutableAttributedString *plainAttributedString = [[NSMutableAttributedString alloc] initWithString:plainString attributes:@{NSFontAttributeName : font}];
+	NSMutableAttributedString *plainAttributedString = [[NSMutableAttributedString alloc] initWithString:plainString attributes:@{}];
 	
 	if (_commentSectionLength != 0)
 	{
@@ -205,6 +179,9 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 	// I don't think we want to invoke beginEditing/endEditing, etc, events because we are setting the textview content for the first time,
 	// and we don't want anything to register as user-editable yet or have undo activated yet
 	[_textView.textStorage replaceCharactersInRange:NSMakeRange(0, 0) withAttributedString:plainAttributedString];
+	
+	[self updateEditorMessageFont];
+	[self updateEditorCommentsFont];
 	
 	[_textView setSelectedRange:NSMakeRange(commitLength, 0)];
 	
@@ -273,6 +250,45 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 	}
 }
 
+- (void)updateEditorMessageFont
+{
+	[_textView.textStorage addAttribute:NSFontAttributeName value:ZGReadDefaultMessageFont() range:NSMakeRange(0, _textView.textStorage.length - _commentSectionLength)];
+}
+
+- (void)updateEditorCommentsFont
+{
+	[_textView.textStorage addAttribute:NSFontAttributeName value:ZGReadDefaultCommentsFont() range:NSMakeRange(_textView.textStorage.length - _commentSectionLength, _commentSectionLength)];
+}
+
+- (void)userDefaultsChangedMessageFont
+{
+	[self updateEditorMessageFont];
+}
+
+- (void)userDefaultsChangedCommentsFont
+{
+	[self updateEditorCommentsFont];
+}
+
+- (void)userDefaultsChangedRecommendedSubjectLengthLimit
+{
+	NSUInteger maxRecommendedSubjectLength = ZGReadDefaultRecommendedSubjectLengthLimit();
+	if ([self shouldUpdateLineLimitHighlightingWithRecommendedSubjectLengthLimit:maxRecommendedSubjectLength])
+	{
+		[self updateHighlightingForLineLimitsWithRecommendedSubjectLengthLimit:maxRecommendedSubjectLength];
+	}
+	else
+	{
+		// Remove all background color highlighting in case any text is currently highlighted
+		[_textView.textStorage removeAttribute:NSBackgroundColorAttributeName range:NSMakeRange(0, _textView.textStorage.length)];
+	}
+}
+
+- (BOOL)shouldUpdateLineLimitHighlightingWithRecommendedSubjectLengthLimit:(NSUInteger)maxRecommendedSubjectLengthLimit
+{
+	return (ZGReadDefaultRecommendedSubjectLengthLimitEnabled() && maxRecommendedSubjectLengthLimit > 0 && maxRecommendedSubjectLengthLimit <= 1000);
+}
+
 - (NSColor *)colorFromUserDefaultsKey:(NSString *)userDefaultsKey
 {
 	NSColor *color = nil;
@@ -298,6 +314,36 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 	return color;
 }
 
+- (void)updateHighlightingForLineLimitsWithRecommendedSubjectLengthLimit:(NSUInteger)maxRecommendedSubjectLengthLimit
+{
+	// I am trying to highlight text on the first line if it exceeds certain number of characters (similar to a Twitter mesage overflowing).
+	NSString *plainText = _textView.textStorage.string;
+	if (plainText.length > 0)
+	{
+		// Remove the attribute everywhere. Might be "inefficient" but it's the easiest most reliable approach I know how to do
+		[_textView.textStorage removeAttribute:NSBackgroundColorAttributeName range:NSMakeRange(0, plainText.length)];
+		
+		// Then get the content line range
+		NSUInteger startLineIndex = 0;
+		NSUInteger contentEndIndex = 0;
+		
+		[plainText getLineStart:&startLineIndex end:NULL contentsEnd:&contentEndIndex forRange:NSMakeRange(0, 1)];
+		
+		NSRange lineContentRange = NSMakeRange(startLineIndex, contentEndIndex - startLineIndex);
+		
+		// Then get the overflow range
+		if (lineContentRange.length > maxRecommendedSubjectLengthLimit)
+		{
+			NSRange overflowRange = NSMakeRange(maxRecommendedSubjectLengthLimit, lineContentRange.length - maxRecommendedSubjectLengthLimit);
+			
+			// Highlight the overflow background
+			NSColor *overflowColor = [self colorFromUserDefaultsKey:ZGEditorSubjectOverflowBackgroundColorKey];
+			
+			[_textView.textStorage addAttribute:NSBackgroundColorAttributeName value:overflowColor range:overflowRange];
+		}
+	}
+}
+
 // Don't allow editing the comment section
 - (BOOL)textView:(NSTextView *)textView shouldChangeTextInRanges:(NSArray<NSValue *> *)affectedRanges replacementStrings:(NSArray<NSString *> *)__unused replacementStrings
 {
@@ -313,40 +359,14 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 	return YES;
 }
 
-- (void)textStorage:(NSTextStorage *)textStorage didProcessEditing:(NSTextStorageEditActions)editedMask range:(NSRange)__unused editedRange changeInLength:(NSInteger)__unused delta
+- (void)textStorage:(NSTextStorage *)__unused textStorage didProcessEditing:(NSTextStorageEditActions)editedMask range:(NSRange)__unused editedRange changeInLength:(NSInteger)__unused delta
 {
 	if ((editedMask & NSTextStorageEditedCharacters) != 0)
 	{
-		NSUInteger maxRecommendedSubjectLength = (NSUInteger)[[NSUserDefaults standardUserDefaults] integerForKey:ZGEditorRecommendedSubjectLengthLimitKey];
-		
-		if (maxRecommendedSubjectLength > 0)
+		NSUInteger maxRecommendedSubjectLength = ZGReadDefaultRecommendedSubjectLengthLimit();
+		if ([self shouldUpdateLineLimitHighlightingWithRecommendedSubjectLengthLimit:maxRecommendedSubjectLength])
 		{
-			// I am trying to highlight text on the first line if it exceeds certain number of characters (similar to a Twitter mesage overflowing).
-			NSString *plainText = textStorage.string;
-			if (plainText.length > 0)
-			{
-				// Remove the attribute everywhere. Might be "inefficient" but it's the easiest most reliable approach I know how to do
-				[_textView.textStorage removeAttribute:NSBackgroundColorAttributeName range:NSMakeRange(0, plainText.length)];
-				
-				// Then get the content line range
-				NSUInteger startLineIndex = 0;
-				NSUInteger contentEndIndex = 0;
-				
-				[plainText getLineStart:&startLineIndex end:NULL contentsEnd:&contentEndIndex forRange:NSMakeRange(0, 1)];
-				
-				NSRange lineContentRange = NSMakeRange(startLineIndex, contentEndIndex - startLineIndex);
-				
-				// Then get the overflow range
-				if (lineContentRange.length > maxRecommendedSubjectLength)
-				{
-					NSRange overflowRange = NSMakeRange(maxRecommendedSubjectLength, lineContentRange.length - maxRecommendedSubjectLength);
-					
-					// Highlight the overflow background
-					NSColor *overflowColor = [self colorFromUserDefaultsKey:ZGEditorSubjectOverflowBackgroundColorKey];
-					
-					[_textView.textStorage addAttribute:NSBackgroundColorAttributeName value:overflowColor range:overflowRange];
-				}
-			}
+			[self updateHighlightingForLineLimitsWithRecommendedSubjectLengthLimit:maxRecommendedSubjectLength];
 		}
 	}
 }
@@ -397,8 +417,7 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 		// After the user enters a new line in the first line, we want to insert another newline due to commit'ing conventions
 		// for leaving a blank line right after the subject (first) line
 		// We will also have some prevention if the user performs a new line more than once consecutively
-		BOOL insertsAutomaticNewline = [[NSUserDefaults standardUserDefaults] boolForKey:ZGEditorAutomaticNewlineInsertionAfterSubjectKey];
-		
+		BOOL insertsAutomaticNewline = ZGReadDefaultAutomaticNewlineInsertionAfterSubjectLine();
 		if (insertsAutomaticNewline)
 		{
 			if (_preventAccidentalNewline)
