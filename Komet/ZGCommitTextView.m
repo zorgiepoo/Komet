@@ -20,7 +20,7 @@
 	dispatch_once(&onceToken, ^{
 		NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 		
-		[defaults registerDefaults:@{ZGCommitTextViewContinuousSpellCheckingKey : @YES, ZGCommitTextViewAutomaticSpellingCorrectionKey : @NO, ZGCommitTextViewAutomaticTextReplacementKey : @YES}];
+		[defaults registerDefaults:@{ZGCommitTextViewContinuousSpellCheckingKey : @YES, ZGCommitTextViewAutomaticSpellingCorrectionKey : @([NSSpellChecker isAutomaticSpellingCorrectionEnabled]), ZGCommitTextViewAutomaticTextReplacementKey : @([NSSpellChecker isAutomaticTextReplacementEnabled])}];
 	});
 }
 
