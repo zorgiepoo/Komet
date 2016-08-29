@@ -193,7 +193,15 @@ typedef NS_ENUM(NSInteger, ZGSelectedFontType)
 	_automaticNewlineInsertionAfterSubjectLineCheckbox.state = (automaticInsertion ? NSOnState : NSOffState);
 	
 	SPUUpdaterSettings *updaterSettings = [[SPUUpdaterSettings alloc] initWithHostBundle:[NSBundle mainBundle]];
-	_automaticallyInstallUpdatesCheckbox.state = (updaterSettings.automaticallyChecksForUpdates ? NSOnState : NSOffState);
+	NSFileManager *fileManager = [[NSFileManager alloc] init];
+	NSString *bundlePath = [[NSBundle mainBundle] bundlePath];
+	
+	// This isn't a perfect check to see if we can update our app without any user interaction, but it's good enough for our purposes
+	// (Sparkle has a better check, but it's not as simple/efficient. Even if we are wrong here, Sparkle still won't be able to install updates automatically).
+	BOOL canWriteToApp = ([fileManager isWritableFileAtPath:bundlePath] && [fileManager isWritableFileAtPath:bundlePath.stringByDeletingLastPathComponent]);
+	
+	_automaticallyInstallUpdatesCheckbox.state = ((canWriteToApp && updaterSettings.automaticallyChecksForUpdates) ? NSOnState : NSOffState);
+	_automaticallyInstallUpdatesCheckbox.enabled = canWriteToApp;
 }
 
 - (IBAction)changeAutomaticNewlineInsertionAfterSubjectLine:(id)__unused sender
