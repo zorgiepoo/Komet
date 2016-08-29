@@ -86,7 +86,7 @@
 		[NSString stringWithFormat:
 		 @"Add tutorial to %@\n"
 		 @"\n"
-		 @"Todo: Add UI for Preferences, and make other improvements.\n"
+		 @"Todo: Make some more improvements.\n"
 		 @"\n"
 		 @"# Welcome to the Cocoa commit editor for macOS.\n"
 		 @"#\n"
