@@ -92,7 +92,8 @@ void ZGRegisterDefaultRecommendedSubjectLengthLimit(void)
 
 NSUInteger ZGReadDefaultRecommendedSubjectLengthLimit(void)
 {
-	return (NSUInteger)[[NSUserDefaults standardUserDefaults] integerForKey:ZGEditorRecommendedSubjectLengthLimitKey];
+	NSUInteger limitRead = (NSUInteger)[[NSUserDefaults standardUserDefaults] integerForKey:ZGEditorRecommendedSubjectLengthLimitKey];
+	return MIN(limitRead, 1000LU);
 }
 
 void ZGWriteDefaultRecommendedSubjectLengthLimit(NSUInteger recommendedSubjectLengthLimit)
@@ -123,7 +124,8 @@ void ZGRegisterDefaultRecommendedBodyLineLengthLimit(void)
 
 NSUInteger ZGReadDefaultRecommendedBodyLineLengthLimit(void)
 {
-	return (NSUInteger)[[NSUserDefaults standardUserDefaults] integerForKey:ZGEditorRecommendedBodyLineLengthLimitKey];
+	NSUInteger limitRead = (NSUInteger)[[NSUserDefaults standardUserDefaults] integerForKey:ZGEditorRecommendedBodyLineLengthLimitKey];
+	return MIN(limitRead, 1000LU);
 }
 
 void ZGWriteDefaultRecommendedBodyLineLengthLimit(NSUInteger recommendedBodyLineLengthLimit)

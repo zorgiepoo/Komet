@@ -371,6 +371,7 @@
 					"-Weverything",
 					"-Wno-direct-ivar-access",
 					"-Wno-objc-missing-property-synthesis",
+					"-Wno-gnu-statement-expression",
 				);
 			};
 			name = Debug;
@@ -392,6 +393,7 @@
 					"-Weverything",
 					"-Wno-direct-ivar-access",
 					"-Wno-objc-missing-property-synthesis",
+					"-Wno-gnu-statement-expression",
 				);
 			};
 			name = Release;
