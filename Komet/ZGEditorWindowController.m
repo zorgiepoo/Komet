@@ -354,15 +354,39 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 	return YES;
 }
 
+- (void)updateLineHighlighting
+{
+	[self
+	 updateHighlightingForLineLimitsAllowingSubjectLimit:ZGReadDefaultRecommendedSubjectLengthLimitEnabled()
+	 subjectLengthLimit:ZGReadDefaultRecommendedSubjectLengthLimit()
+	 allowingingBodyLimit:ZGReadDefaultRecommendedBodyLineLengthLimitEnabled()
+	 bodyLengthLimit:ZGReadDefaultRecommendedBodyLineLengthLimit()];
+}
+
+// I'm not using the passed editRange and delta because I've found them to be quite misleading...
+// This happens to be a new API (macOS 10.11) so maybe it's not really battle tested or I don't know what I'm doing
+// Either way I'd like to support older systems so for portability sake it's easier to not use these parameters
 - (void)textStorage:(NSTextStorage *)__unused textStorage didProcessEditing:(NSTextStorageEditActions)editedMask range:(NSRange)__unused editedRange changeInLength:(NSInteger)__unused delta
 {
 	if ((editedMask & NSTextStorageEditedCharacters) != 0)
 	{
-		[self
-		 updateHighlightingForLineLimitsAllowingSubjectLimit:ZGReadDefaultRecommendedSubjectLengthLimitEnabled()
-		 subjectLengthLimit:ZGReadDefaultRecommendedSubjectLengthLimit()
-		 allowingingBodyLimit:ZGReadDefaultRecommendedBodyLineLengthLimitEnabled()
-		 bodyLengthLimit:ZGReadDefaultRecommendedBodyLineLengthLimit()];
+		[self updateLineHighlighting];
+	}
+}
+
+// Old deprecated API for the alternative above
+// Necessary to implement for systems older than macOS 10.11
+- (void)textStorageDidProcessEditing:(NSNotification *)__unused notification
+{
+	static BOOL isOnOldSystem;
+	static dispatch_once_t onceToken;
+	dispatch_once(&onceToken, ^{
+		isOnOldSystem = ![[NSProcessInfo processInfo] isOperatingSystemAtLeastVersion:(NSOperatingSystemVersion){10, 11, 0}];
+	});
+	
+	if (isOnOldSystem)
+	{
+		[self updateLineHighlighting];
 	}
 }
 
