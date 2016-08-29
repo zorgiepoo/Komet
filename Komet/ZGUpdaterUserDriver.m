@@ -11,7 +11,6 @@
 @implementation ZGUpdaterUserDriver
 {
 	SPUUserDriverCoreComponent *_coreComponent;
-	BOOL _userInitiatedUpdateCheck;
 }
 
 - (instancetype)init
@@ -37,7 +36,6 @@
 
 - (void)showUserInitiatedUpdateCheckWithCompletion:(void (^)(SPUUserInitiatedCheckStatus))updateCheckStatusCompletion
 {
-	_userInitiatedUpdateCheck = YES;
 	[_coreComponent registerUpdateCheckStatusHandler:updateCheckStatusCompletion];
 }
 
@@ -46,36 +44,55 @@
 	[_coreComponent completeUpdateCheckStatus];
 }
 
-- (void)showUpdateFoundWithAppcastItem:(SUAppcastItem *)appcastItem reply:(void (^)(SPUUpdateAlertChoice))reply
+- (void)promptUserInitiatedCheck:(BOOL)userInitiatedCheck withInformativeText:(NSString *)informativeText response:(void (^)(SPUUpdateAlertChoice))response
 {
-	NSAlert *alert = [[NSAlert alloc] init];
-	alert.alertStyle = NSInformationalAlertStyle;
-	alert.informativeText = [NSString stringWithFormat:@"A new update (%@) is available. Would you like to download and install it after quitting Komet?", appcastItem.displayVersionString];
-	alert.messageText = @"New Update";
-	[alert addButtonWithTitle:@"Install on Quit"];
-	[alert addButtonWithTitle:@"Cancel"];
-	
-	switch ([alert runModal])
+	// Only bug the user if they were the ones that intiated an update check
+	if (userInitiatedCheck)
 	{
-		case NSAlertFirstButtonReturn:
-			reply(SPUInstallUpdateChoice);
-			break;
-		default:
-			reply(SPUInstallLaterChoice);
-			break;
+		NSAlert *alert = [[NSAlert alloc] init];
+		alert.alertStyle = NSInformationalAlertStyle;
+		alert.informativeText = informativeText;
+		alert.messageText = @"New Update";
+		[alert addButtonWithTitle:@"Install on Quit"];
+		[alert addButtonWithTitle:@"Cancel"];
+		
+		switch ([alert runModal])
+		{
+			case NSAlertFirstButtonReturn:
+				response(SPUInstallUpdateChoice);
+				break;
+			default:
+				response(SPUInstallLaterChoice);
+				break;
+		}
+	}
+	else
+	{
+		response(SPUInstallLaterChoice);
 	}
 }
 
-- (void)showDownloadedUpdateFoundWithAppcastItem:(SUAppcastItem *)__unused appcastItem reply:(void (^)(SPUUpdateAlertChoice))__unused reply
+- (void)showUpdateFoundWithAppcastItem:(SUAppcastItem *)appcastItem userInitiated:(BOOL)userInitiated reply:(void (^)(SPUUpdateAlertChoice))reply
 {
-	// Nothing here for us to do; don't bug the user
-	// We really should not get here because we disallow installer interaction though
+	NSString *informativeText = [NSString stringWithFormat:@"A new update (%@) is available. Would you like to download and install it after quitting Komet?", appcastItem.displayVersionString];
+	
+	[self promptUserInitiatedCheck:userInitiated withInformativeText:informativeText response:reply];
 }
 
-- (void)showResumableUpdateFoundWithAppcastItem:(SUAppcastItem *)appcastItem reply:(void (^)(SPUInstallUpdateStatus))reply
+- (void)showDownloadedUpdateFoundWithAppcastItem:(SUAppcastItem *)appcastItem userInitiated:(BOOL)userInitiated reply:(void (^)(SPUUpdateAlertChoice))reply
+{
+	// It should be very unlikely that we reach this method but we may as well handle it
+	// (because the update would have to be downloaded in the background, and not able to have permission to start the installer, but we disallow updating if such interaction is necessary..)
+	
+	NSString *informativeText = [NSString stringWithFormat:@"A new update (%@) has been downloaded. Would you like to install it after quitting Komet?", appcastItem.displayVersionString];
+	
+	[self promptUserInitiatedCheck:userInitiated withInformativeText:informativeText response:reply];
+}
+
+- (void)showResumableUpdateFoundWithAppcastItem:(SUAppcastItem *)appcastItem userInitiated:(BOOL)userInitiated reply:(void (^)(SPUInstallUpdateStatus))reply
 {
 	// Only bug the user if they were the ones that intiated an update check
-	if (_userInitiatedUpdateCheck)
+	if (userInitiated)
 	{
 		NSAlert *alert = [[NSAlert alloc] init];
 		alert.alertStyle = NSInformationalAlertStyle;
@@ -157,7 +174,6 @@
 
 - (void)dismissUpdateInstallation
 {
-	_userInitiatedUpdateCheck = NO;
 }
 
 @end
