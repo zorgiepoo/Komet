@@ -116,7 +116,7 @@
 {
 	NSAlert *alert = [[NSAlert alloc] init];
 	alert.alertStyle = NSInformationalAlertStyle;
-	alert.informativeText = [NSString stringWithFormat:@"You're up to date."];
+	alert.informativeText = [NSString stringWithFormat:@"You have the latest version installed."];
 	alert.messageText = @"No Update Available";
 	[alert addButtonWithTitle:@"OK"];
 	[alert runModal];
