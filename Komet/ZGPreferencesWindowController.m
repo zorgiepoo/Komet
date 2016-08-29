@@ -39,9 +39,11 @@ typedef NS_ENUM(NSInteger, ZGSelectedFontType)
 	
 	IBOutlet NSTextField *_recommendedSubjectLengthLimitTextField;
 	IBOutlet NSButton *_recommendedSubjectLengthLimitEnabledCheckbox;
+	IBOutlet NSTextField *_recommendedSubjectLengthLimitDescriptionTextField;
 	
 	IBOutlet NSTextField *_recommendedBodyLineLengthLimitTextField;
 	IBOutlet NSButton *_recommendedBodyLineLengthLimitEnabledCheckbox;
+	IBOutlet NSTextField *_recommendedBodyLineLengthLimitDescriptionTextField;
 	
 	IBOutlet NSButton *_automaticNewlineInsertionAfterSubjectLineCheckbox;
 	IBOutlet NSButton *_automaticallyInstallUpdatesCheckbox;
@@ -146,10 +148,24 @@ typedef NS_ENUM(NSInteger, ZGSelectedFontType)
 	BOOL enabledSubjectLengthLimit = ZGReadDefaultRecommendedSubjectLengthLimitEnabled();
 	_recommendedSubjectLengthLimitEnabledCheckbox.state = (enabledSubjectLengthLimit ? NSOnState : NSOffState);
 	_recommendedSubjectLengthLimitTextField.enabled = enabledSubjectLengthLimit;
+	[self setTextField:_recommendedSubjectLengthLimitDescriptionTextField enabled:enabledSubjectLengthLimit];
 	
 	BOOL enabledBodyLineLengthLimit = ZGReadDefaultRecommendedBodyLineLengthLimitEnabled();
 	_recommendedBodyLineLengthLimitEnabledCheckbox.state = (enabledBodyLineLengthLimit ? NSOnState : NSOffState);
 	_recommendedBodyLineLengthLimitTextField.enabled = enabledBodyLineLengthLimit;
+	[self setTextField:_recommendedBodyLineLengthLimitDescriptionTextField enabled:enabledBodyLineLengthLimit];
+}
+
+- (void)setTextField:(NSTextField *)textField enabled:(BOOL)enabled
+{
+	if (enabled)
+	{
+		textField.textColor = [NSColor controlTextColor];
+	}
+	else
+	{
+		textField.textColor = [NSColor disabledControlTextColor];
+	}
 }
 
 - (IBAction)changeRecommendedSubjectLengthLimitEnabled:(id)__unused sender
@@ -158,6 +174,7 @@ typedef NS_ENUM(NSInteger, ZGSelectedFontType)
 	
 	ZGWriteDefaultRecommendedSubjectLengthLimitEnabled(enabled);
 	_recommendedSubjectLengthLimitTextField.enabled = enabled;
+	[self setTextField:_recommendedSubjectLengthLimitDescriptionTextField enabled:enabled];
 	
 	[_editorListener userDefaultsChangedRecommendedLineLengthLimits];
 }
@@ -174,6 +191,7 @@ typedef NS_ENUM(NSInteger, ZGSelectedFontType)
 	
 	ZGWriteDefaultRecommendedBodyLineLengthLimitEnabled(enabled);
 	_recommendedBodyLineLengthLimitTextField.enabled = enabled;
+	[self setTextField:_recommendedBodyLineLengthLimitDescriptionTextField enabled:enabled];
 	
 	[_editorListener userDefaultsChangedRecommendedLineLengthLimits];
 }
