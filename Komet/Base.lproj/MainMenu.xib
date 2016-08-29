@@ -30,6 +30,12 @@
                                     <action selector="showPreferences:" target="Voe-Tx-rLC" id="gR5-mY-z95"/>
                                 </connections>
                             </menuItem>
+                            <menuItem title="Check for Updates…" id="Qx5-TC-r0y">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="checkForUpdates:" target="-1" id="ctP-eA-bUz"/>
+                                </connections>
+                            </menuItem>
                             <menuItem isSeparatorItem="YES" id="wFC-TO-SCJ"/>
                             <menuItem title="Services" id="NMo-om-nkz">
                                 <modifierMask key="keyEquivalentModifierMask"/>

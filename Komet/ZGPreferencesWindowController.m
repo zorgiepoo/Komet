@@ -8,7 +8,10 @@
 
 #import "ZGPreferencesWindowController.h"
 #import "ZGUserDefaults.h"
-#import "ZGUserDefaultsListener.h"
+#import "ZGUserDefaultsEditorListener.h"
+#import "ZGUpdaterSettingsListener.h"
+
+@import SparkleCore;
 
 #define ZGToolbarFontsIdentifier @"fonts"
 #define ZGToolbarWarningsIdentifier @"warnings"
@@ -22,7 +25,8 @@ typedef NS_ENUM(NSInteger, ZGSelectedFontType)
 
 @implementation ZGPreferencesWindowController
 {
-	__weak id<ZGUserDefaultsListener> _delegate;
+	__weak id<ZGUserDefaultsEditorListener> _editorListener;
+	__weak id<ZGUpdaterSettingsListener> _updaterListener;
 	
 	IBOutlet NSView *_fontsView;
 	IBOutlet NSView *_warningsView;
@@ -40,14 +44,16 @@ typedef NS_ENUM(NSInteger, ZGSelectedFontType)
 	IBOutlet NSButton *_recommendedBodyLineLengthLimitEnabledCheckbox;
 	
 	IBOutlet NSButton *_automaticNewlineInsertionAfterSubjectLineCheckbox;
+	IBOutlet NSButton *_automaticallyInstallUpdatesCheckbox;
 }
 
-- (instancetype)initWithDelegate:(id<ZGUserDefaultsListener>)delegate
+- (instancetype)initWithEditorListener:(id<ZGUserDefaultsEditorListener>)editorListener updaterListener:(id<ZGUpdaterSettingsListener>)updaterListener
 {
 	self = [super init];
 	if (self != nil)
 	{
-		_delegate = delegate;
+		_editorListener = editorListener;
+		_updaterListener = updaterListener;
 	}
 	return self;
 }
@@ -118,12 +124,12 @@ typedef NS_ENUM(NSInteger, ZGSelectedFontType)
 		{
 			case ZGSelectedFontTypeMessage:
 				ZGWriteDefaultMessageFont(convertedFont);
-				[_delegate userDefaultsChangedMessageFont];
+				[_editorListener userDefaultsChangedMessageFont];
 				[self updateFont:convertedFont atTextField:_messageFontTextField];
 				break;
 			case ZGSelectedFontTypeComments:
 				ZGWriteDefaultCommentsFont(convertedFont);
-				[_delegate userDefaultsChangedCommentsFont];
+				[_editorListener userDefaultsChangedCommentsFont];
 				[self updateFont:convertedFont atTextField:_commentsFontTextField];
 				break;
 		}
@@ -153,13 +159,13 @@ typedef NS_ENUM(NSInteger, ZGSelectedFontType)
 	ZGWriteDefaultRecommendedSubjectLengthLimitEnabled(enabled);
 	_recommendedSubjectLengthLimitTextField.enabled = enabled;
 	
-	[_delegate userDefaultsChangedRecommendedLineLengthLimits];
+	[_editorListener userDefaultsChangedRecommendedLineLengthLimits];
 }
 
 - (IBAction)changeRecommendedSubjectLengthLimit:(id)__unused sender
 {
 	ZGWriteDefaultRecommendedSubjectLengthLimit((NSUInteger)_recommendedSubjectLengthLimitTextField.integerValue);
-	[_delegate userDefaultsChangedRecommendedLineLengthLimits];
+	[_editorListener userDefaultsChangedRecommendedLineLengthLimits];
 }
 
 - (IBAction)changeRecommendedBodyLineLengthLimitEnabled:(id)__unused sender
@@ -169,13 +175,13 @@ typedef NS_ENUM(NSInteger, ZGSelectedFontType)
 	ZGWriteDefaultRecommendedBodyLineLengthLimitEnabled(enabled);
 	_recommendedBodyLineLengthLimitTextField.enabled = enabled;
 	
-	[_delegate userDefaultsChangedRecommendedLineLengthLimits];
+	[_editorListener userDefaultsChangedRecommendedLineLengthLimits];
 }
 
 - (IBAction)changeRecommendedBodyLineLengthLimit:(id)__unused sender
 {
 	ZGWriteDefaultRecommendedBodyLineLengthLimit((NSUInteger)_recommendedBodyLineLengthLimitTextField.integerValue);
-	[_delegate userDefaultsChangedRecommendedLineLengthLimits];
+	[_editorListener userDefaultsChangedRecommendedLineLengthLimits];
 }
 
 - (IBAction)showAdvanced:(id)__unused sender
@@ -185,11 +191,19 @@ typedef NS_ENUM(NSInteger, ZGSelectedFontType)
 	
 	BOOL automaticInsertion = ZGReadDefaultAutomaticNewlineInsertionAfterSubjectLine();
 	_automaticNewlineInsertionAfterSubjectLineCheckbox.state = (automaticInsertion ? NSOnState : NSOffState);
+	
+	SPUUpdaterSettings *updaterSettings = [[SPUUpdaterSettings alloc] initWithHostBundle:[NSBundle mainBundle]];
+	_automaticallyInstallUpdatesCheckbox.state = (updaterSettings.automaticallyChecksForUpdates ? NSOnState : NSOffState);
 }
 
 - (IBAction)changeAutomaticNewlineInsertionAfterSubjectLine:(id)__unused sender
 {
 	ZGWriteDefaultAutomaticNewlineInsertionAfterSubjectLine(_automaticNewlineInsertionAfterSubjectLineCheckbox.state == NSOnState);
+}
+
+- (IBAction)changeAutomaticallyInstallUpdates:(id)__unused sender
+{
+	[_updaterListener updaterSettingsChangedAutomaticallyInstallingUpdates:(_automaticallyInstallUpdatesCheckbox.state == NSOnState)];
 }
 
 @end

@@ -1,5 +1,5 @@
 //
-//  ZGUserDefaultsListener.h
+//  ZGUserDefaultsEditorListener.h
 //  Komet
 //
 //  Created by Mayur Pawashe on 8/28/16.
@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@protocol ZGUserDefaultsListener <NSObject>
+@protocol ZGUserDefaultsEditorListener <NSObject>
 
 - (void)userDefaultsChangedMessageFont;
 

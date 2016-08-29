@@ -8,13 +8,14 @@
 
 @import Cocoa;
 
-@protocol ZGUserDefaultsListener;
+@protocol ZGUserDefaultsEditorListener;
+@protocol ZGUpdaterSettingsListener;
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface ZGPreferencesWindowController : NSWindowController
 
-- (instancetype)initWithDelegate:(id<ZGUserDefaultsListener>)delegate;
+- (instancetype)initWithEditorListener:(id<ZGUserDefaultsEditorListener>)editorListener updaterListener:(id<ZGUpdaterSettingsListener>)updaterListener;
 
 @end
 

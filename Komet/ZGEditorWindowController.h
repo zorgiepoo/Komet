@@ -8,11 +8,11 @@
 
 @import Cocoa;
 
-#import "ZGUserDefaultsListener.h"
+#import "ZGUserDefaultsEditorListener.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface ZGEditorWindowController : NSWindowController <ZGUserDefaultsListener>
+@interface ZGEditorWindowController : NSWindowController <ZGUserDefaultsEditorListener>
 
 - (instancetype)initWithFileURL:(NSURL *)fileURL tutorialMode:(BOOL)tutorialMode;
 

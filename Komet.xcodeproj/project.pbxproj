@@ -8,6 +8,11 @@
 
 /* Begin PBXBuildFile section */
 		7240062F1D7359E4001042CF /* ZGUserDefaults.m in Sources */ = {isa = PBXBuildFile; fileRef = 7240062E1D7359E4001042CF /* ZGUserDefaults.m */; };
+		724006331D73B2CA001042CF /* ZGUpdaterController.m in Sources */ = {isa = PBXBuildFile; fileRef = 724006321D73B2CA001042CF /* ZGUpdaterController.m */; };
+		724006351D73B431001042CF /* SparkleCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 724006341D73B431001042CF /* SparkleCore.framework */; };
+		724006371D73B453001042CF /* SparkleCore.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 724006341D73B431001042CF /* SparkleCore.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		724006391D73BCF6001042CF /* dsa_pub.pem in Resources */ = {isa = PBXBuildFile; fileRef = 724006381D73BCF6001042CF /* dsa_pub.pem */; };
+		7240063C1D73BE84001042CF /* ZGUpdaterUserDriver.m in Sources */ = {isa = PBXBuildFile; fileRef = 7240063B1D73BE84001042CF /* ZGUpdaterUserDriver.m */; };
 		72B72C971D63EFF90096365F /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 72B72C961D63EFF90096365F /* AppDelegate.m */; };
 		72B72C9A1D63EFF90096365F /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 72B72C991D63EFF90096365F /* main.m */; };
 		72B72C9C1D63EFF90096365F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 72B72C9B1D63EFF90096365F /* Assets.xcassets */; };
@@ -19,10 +24,31 @@
 		72D10C591D7334D400ED32BC /* Preferences.xib in Resources */ = {isa = PBXBuildFile; fileRef = 72D10C581D7334D400ED32BC /* Preferences.xib */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		724006361D73B446001042CF /* Copy Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				724006371D73B453001042CF /* SparkleCore.framework in Copy Frameworks */,
+			);
+			name = "Copy Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		7240062D1D7359E4001042CF /* ZGUserDefaults.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZGUserDefaults.h; sourceTree = "<group>"; };
 		7240062E1D7359E4001042CF /* ZGUserDefaults.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZGUserDefaults.m; sourceTree = "<group>"; };
-		724006301D736E83001042CF /* ZGUserDefaultsListener.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZGUserDefaultsListener.h; sourceTree = "<group>"; };
+		724006301D736E83001042CF /* ZGUserDefaultsEditorListener.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZGUserDefaultsEditorListener.h; sourceTree = "<group>"; };
+		724006311D73B2CA001042CF /* ZGUpdaterController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZGUpdaterController.h; sourceTree = "<group>"; };
+		724006321D73B2CA001042CF /* ZGUpdaterController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZGUpdaterController.m; sourceTree = "<group>"; };
+		724006341D73B431001042CF /* SparkleCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SparkleCore.framework; path = vendor/SparkleCore.framework; sourceTree = SOURCE_ROOT; };
+		724006381D73BCF6001042CF /* dsa_pub.pem */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = dsa_pub.pem; sourceTree = "<group>"; };
+		7240063A1D73BE84001042CF /* ZGUpdaterUserDriver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZGUpdaterUserDriver.h; sourceTree = "<group>"; };
+		7240063B1D73BE84001042CF /* ZGUpdaterUserDriver.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZGUpdaterUserDriver.m; sourceTree = "<group>"; };
+		7240063D1D73E17B001042CF /* ZGUpdaterSettingsListener.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZGUpdaterSettingsListener.h; sourceTree = "<group>"; };
 		72B72C921D63EFF90096365F /* Komet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Komet.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		72B72C961D63EFF90096365F /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		72B72C991D63EFF90096365F /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -44,6 +70,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				724006351D73B431001042CF /* SparkleCore.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -78,7 +105,12 @@
 				7240062E1D7359E4001042CF /* ZGUserDefaults.m */,
 				72D10C551D7334CA00ED32BC /* ZGPreferencesWindowController.h */,
 				72D10C561D7334CA00ED32BC /* ZGPreferencesWindowController.m */,
-				724006301D736E83001042CF /* ZGUserDefaultsListener.h */,
+				724006301D736E83001042CF /* ZGUserDefaultsEditorListener.h */,
+				7240063D1D73E17B001042CF /* ZGUpdaterSettingsListener.h */,
+				724006311D73B2CA001042CF /* ZGUpdaterController.h */,
+				724006321D73B2CA001042CF /* ZGUpdaterController.m */,
+				7240063A1D73BE84001042CF /* ZGUpdaterUserDriver.h */,
+				7240063B1D73BE84001042CF /* ZGUpdaterUserDriver.m */,
 				72B72CA81D63F0870096365F /* Commit Editor.xib */,
 				72D10C581D7334D400ED32BC /* Preferences.xib */,
 				72B72C9B1D63EFF90096365F /* Assets.xcassets */,
@@ -92,6 +124,8 @@
 		72B72C981D63EFF90096365F /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				724006381D73BCF6001042CF /* dsa_pub.pem */,
+				724006341D73B431001042CF /* SparkleCore.framework */,
 				72B72C991D63EFF90096365F /* main.m */,
 			);
 			name = "Supporting Files";
@@ -107,6 +141,7 @@
 				72B72C8E1D63EFF90096365F /* Sources */,
 				72B72C8F1D63EFF90096365F /* Frameworks */,
 				72B72C901D63EFF90096365F /* Resources */,
+				724006361D73B446001042CF /* Copy Frameworks */,
 			);
 			buildRules = (
 			);
@@ -154,6 +189,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				724006391D73BCF6001042CF /* dsa_pub.pem in Resources */,
 				72B72CAA1D63F0870096365F /* Commit Editor.xib in Resources */,
 				72B72C9C1D63EFF90096365F /* Assets.xcassets in Resources */,
 				72D10C591D7334D400ED32BC /* Preferences.xib in Resources */,
@@ -169,6 +205,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				72D10C571D7334CA00ED32BC /* ZGPreferencesWindowController.m in Sources */,
+				7240063C1D73BE84001042CF /* ZGUpdaterUserDriver.m in Sources */,
+				724006331D73B2CA001042CF /* ZGUpdaterController.m in Sources */,
 				72B72C9A1D63EFF90096365F /* main.m in Sources */,
 				72B72CA91D63F0870096365F /* ZGEditorWindowController.m in Sources */,
 				72B72C971D63EFF90096365F /* AppDelegate.m in Sources */,
@@ -321,10 +359,19 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				COMBINE_HIDPI_IMAGES = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/vendor",
+				);
 				INFOPLIST_FILE = Komet/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = org.zgcoder.Komet;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				WARNING_CFLAGS = (
+					"-Weverything",
+					"-Wno-direct-ivar-access",
+					"-Wno-objc-missing-property-synthesis",
+				);
 			};
 			name = Debug;
 		};
@@ -333,10 +380,19 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				COMBINE_HIDPI_IMAGES = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/vendor",
+				);
 				INFOPLIST_FILE = Komet/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = org.zgcoder.Komet;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				WARNING_CFLAGS = (
+					"-Weverything",
+					"-Wno-direct-ivar-access",
+					"-Wno-objc-missing-property-synthesis",
+				);
 			};
 			name = Release;
 		};

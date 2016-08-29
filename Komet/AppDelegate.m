@@ -11,6 +11,7 @@
 
 #import "ZGEditorWindowController.h"
 #import "ZGPreferencesWindowController.h"
+#import "ZGUpdaterController.h"
 
 @interface AppDelegate : NSObject <NSApplicationDelegate>
 @end
@@ -19,6 +20,7 @@
 {
 	ZGEditorWindowController *_editorWindowController;
 	ZGPreferencesWindowController *_preferencesWondowController;
+	ZGUpdaterController *_updaterController;
 }
 
 - (BOOL)pathComponents:(NSArray<NSString *> *)pathComponents isSubsetOfPathComponents:(NSArray<NSString *> *)parentPathComponents
@@ -146,6 +148,8 @@
 	
 	_editorWindowController = [[ZGEditorWindowController alloc] initWithFileURL:fileURL tutorialMode:tutorialMode];
 	[_editorWindowController showWindow:nil];
+	
+	_updaterController = [[ZGUpdaterController alloc] init];
 }
 
 - (void)applicationWillTerminate:(NSNotification *)__unused notification
@@ -156,9 +160,23 @@
 - (IBAction)showPreferences:(id)__unused sender
 {
 	if (_preferencesWondowController == nil) {
-		_preferencesWondowController = [[ZGPreferencesWindowController alloc] initWithDelegate:_editorWindowController];
+		_preferencesWondowController = [[ZGPreferencesWindowController alloc] initWithEditorListener:_editorWindowController updaterListener:_updaterController];
 	}
 	[_preferencesWondowController showWindow:nil];
+}
+
+- (IBAction)checkForUpdates:(id)__unused sender
+{
+	[_updaterController checkForUpdates];
+}
+
+- (BOOL)validateMenuItem:(NSMenuItem *)menuItem
+{
+	if (menuItem.action == @selector(checkForUpdates:))
+	{
+		return _updaterController.canCheckForUpdates;
+	}
+	return YES;
 }
 
 @end

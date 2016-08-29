@@ -8,6 +8,7 @@
             <connections>
                 <outlet property="_advancedView" destination="E8X-F5-Lbv" id="Zbu-Oa-649"/>
                 <outlet property="_automaticNewlineInsertionAfterSubjectLineCheckbox" destination="c3p-Oz-hOG" id="1qd-KI-GC8"/>
+                <outlet property="_automaticallyInstallUpdatesCheckbox" destination="4aw-Oh-wqh" id="EuJ-bx-qBG"/>
                 <outlet property="_commentsFontTextField" destination="f8W-g8-7pY" id="LHp-1J-V4v"/>
                 <outlet property="_fontsView" destination="h9g-vJ-Iwb" id="ihx-72-r3V"/>
                 <outlet property="_messageFontTextField" destination="P9V-1A-nFH" id="8jL-JC-ABT"/>
@@ -292,6 +293,9 @@
                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                         <font key="font" metaFont="system"/>
                     </buttonCell>
+                    <connections>
+                        <action selector="changeAutomaticallyInstallUpdates:" target="-2" id="rK1-NU-jso"/>
+                    </connections>
                 </button>
             </subviews>
             <constraints>
