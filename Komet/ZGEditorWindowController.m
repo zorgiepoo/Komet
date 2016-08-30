@@ -144,11 +144,23 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 	_textView.layoutManager.delegate = self;
 	_textView.delegate = self;
 	
-	NSString *plainString = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-	if (plainString == nil)
+	NSString *plainStringCandidate = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+	if (plainStringCandidate == nil)
 	{
 		fprintf(stderr, "Error: Couldn't load plain-text from %s\n", _fileURL.path.UTF8String);
 		exit(EXIT_FAILURE);
+	}
+	
+	// It's unlikely we'll get content that has no line break, but if we do, just insert a newline character because Komet won't be able to deal with the content otherwise
+	NSString *plainString;
+	NSUInteger lineCount = [[plainStringCandidate componentsSeparatedByCharactersInSet:[NSCharacterSet newlineCharacterSet]] count];
+	if (lineCount <= 1)
+	{
+		plainString = @"\n";
+	}
+	else
+	{
+		plainString = plainStringCandidate;
 	}
 	
 	_commentSectionLength = [self commentSectionLengthFromPlainText:plainString versionControlType:versionControlType];
