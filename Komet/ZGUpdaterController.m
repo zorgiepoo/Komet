@@ -43,6 +43,11 @@
 	return NO;
 }
 
+- (BOOL)updaterShouldDownloadReleaseNotes:(SPUUpdater *)__unused updater
+{
+	return NO;
+}
+
 - (BOOL)canCheckForUpdates
 {
 	return (_startedUpdater && _userDriver.canCheckForUpdates);
