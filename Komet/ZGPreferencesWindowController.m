@@ -13,6 +13,10 @@
 
 @import SparkleCore;
 
+// We could have three different nibs and swap between them with view controllers
+// But I kind of wanted to avoid unnecessary nib files (extra disk space, more runtime loading...)
+// Currently our preference logic is not that complex
+
 #define ZGToolbarFontsIdentifier @"fonts"
 #define ZGToolbarWarningsIdentifier @"warnings"
 #define ZGToolbarAdvancedIdentifier @"advanced"
