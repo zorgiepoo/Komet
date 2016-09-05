@@ -33,6 +33,7 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 	NSUInteger _commentSectionLength;
 	NSColor *_warnOverflowColor;
 	ZGVersionControlType _versionControlType;
+	NSColor *_commentColor;
 }
 
 + (void)initialize
@@ -175,9 +176,11 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 	
 	NSMutableAttributedString *plainAttributedString = [[NSMutableAttributedString alloc] initWithString:plainString attributes:@{}];
 	
+	NSColor *commentColor = [[NSColor darkGrayColor] colorUsingColorSpaceName:NSCalibratedRGBColorSpace];
+	_commentColor = commentColor;
+	
 	if (_commentSectionLength != 0)
 	{
-		NSColor *commentColor = [[NSColor darkGrayColor] colorUsingColorSpaceName:NSCalibratedRGBColorSpace];
 		[plainAttributedString addAttribute:NSForegroundColorAttributeName value:commentColor range:NSMakeRange(plainString.length - _commentSectionLength, _commentSectionLength)];
 	}
 	
@@ -285,35 +288,26 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 	if (!hasSubjectLimit && !hasBodyLineLimit)
 	{
 		// Remove all background color highlighting in case any text is currently highlighted
-		[_textView.textStorage removeAttribute:NSBackgroundColorAttributeName range:NSMakeRange(0, _textView.textStorage.length)];
+		[self removeBackgroundColorsForTextStorage:_textView.textStorage];
 	}
 	else
 	{
-		[self
-		 updateHighlightingForLineLimitsAllowingSubjectLimit:hasSubjectLimit
-		 subjectLengthLimit:ZGReadDefaultRecommendedSubjectLengthLimit()
-		 allowingingBodyLimit:hasBodyLineLimit
-		 bodyLengthLimit:ZGReadDefaultRecommendedBodyLineLengthLimit()];
+		[self updateTextProcessingForTextStorage:_textView.textStorage];
 	}
 }
 
-- (void)updateHighlightingForLineLimitsAllowingSubjectLimit:(BOOL)allowingSubjectLimit subjectLengthLimit:(NSUInteger)subjectLengthLimit allowingingBodyLimit:(BOOL)allowingBodyLimit bodyLengthLimit:(NSUInteger)bodyLengthLimit
+- (NSArray<NSValue *> *)contentLineRangesForTextStorage:(NSTextStorage *)textStorage
 {
-	if (!allowingSubjectLimit && !allowingBodyLimit)
-	{
-		return;
-	}
-	
-	NSString *plainText = _textView.textStorage.string;
-	if (plainText.length == 0)
-	{
-		return;
-	}
-	
-	// Remove the attribute everywhere. Might be "inefficient" but it's the easiest most reliable approach I know how to do
-	[_textView.textStorage removeAttribute:NSBackgroundColorAttributeName range:NSMakeRange(0, plainText.length)];
-	
+	NSString *plainText = textStorage.string;
 	NSUInteger messageTextLength = plainText.length - _commentSectionLength;
+	
+	if (messageTextLength == 0)
+	{
+		return @[];
+	}
+	
+	NSMutableArray<NSValue *> *lineRanges = [[NSMutableArray alloc] init];
+	
 	NSUInteger characterIndex = 0;
 	while (characterIndex < messageTextLength)
 	{
@@ -324,11 +318,77 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 		
 		NSRange lineRange = NSMakeRange(lineStartIndex, contentEndIndex - lineStartIndex);
 		
-		if (characterIndex == 0)
+		[lineRanges addObject:[NSValue valueWithRange:lineRange]];
+		
+		characterIndex = lineEndIndex;
+	}
+	
+	return [lineRanges copy];
+}
+
+- (void)updateCommentAttributesForTextStorage:(NSTextStorage *)textStorage withContentLineRanges:(NSArray<NSValue *> *)contentLineRanges
+{
+	// For svn we assume there's only a single comment line that extends to end of file
+	if (_versionControlType == ZGVersionControlSvn)
+	{
+		return;
+	}
+	
+	NSString *plainText = textStorage.string;
+	NSFont *commentFont = nil;
+	
+	// First assume all content has no comment lines
+	[textStorage addAttribute:NSFontAttributeName value:ZGReadDefaultMessageFont() range:NSMakeRange(0, plainText.length - _commentSectionLength)];
+	
+	for (NSValue *contentLineRangeValue in contentLineRanges)
+	{
+		NSRange contentLineRange = contentLineRangeValue.rangeValue;
+		if (contentLineRange.length > 0 && [self isCommentLine:[plainText substringWithRange:contentLineRange] forVersionControlType:_versionControlType])
+		{
+			// Add comment font attribute for lines that are comments
+			[textStorage addAttribute:NSForegroundColorAttributeName value:_commentColor range:contentLineRange];
+			
+			if (commentFont == nil)
+			{
+				commentFont = ZGReadDefaultCommentsFont();
+			}
+			[textStorage addAttribute:NSFontAttributeName value:commentFont range:contentLineRange];
+		}
+		else
+		{
+			[textStorage removeAttribute:NSForegroundColorAttributeName range:contentLineRange];
+		}
+	}
+}
+
+- (void)removeBackgroundColorsForTextStorage:(NSTextStorage *)textStorage
+{
+	[textStorage removeAttribute:NSBackgroundColorAttributeName range:NSMakeRange(0, textStorage.length)];
+}
+
+- (void)updateHighlightingForTextStorage:(NSTextStorage *)textStorage withContentLineRanges:(NSArray<NSValue *> *)contentLineRanges forLineLimitsAllowingSubjectLimit:(BOOL)allowingSubjectLimit subjectLengthLimit:(NSUInteger)subjectLengthLimit allowingingBodyLimit:(BOOL)allowingBodyLimit bodyLengthLimit:(NSUInteger)bodyLengthLimit
+{
+	if (!allowingSubjectLimit && !allowingBodyLimit)
+	{
+		return;
+	}
+	
+	if (contentLineRanges.count == 0)
+	{
+		return;
+	}
+	
+	// Remove the attribute everywhere. Might be "inefficient" but it's the easiest most reliable approach I know how to do
+	[self removeBackgroundColorsForTextStorage:textStorage];
+	
+	for (NSValue *contentLineRangeValue in contentLineRanges)
+	{
+		NSRange lineRange = contentLineRangeValue.rangeValue;
+		if (lineRange.location == 0)
 		{
 			if (allowingSubjectLimit)
 			{
-				[self highlightOverflowingTextInTextStorage:_textView.textStorage lineRange:lineRange limit:subjectLengthLimit];
+				[self highlightOverflowingTextInTextStorage:textStorage lineRange:lineRange limit:subjectLengthLimit];
 			}
 			
 			if (!allowingBodyLimit)
@@ -338,10 +398,8 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 		}
 		else
 		{
-			[self highlightOverflowingTextInTextStorage:_textView.textStorage lineRange:lineRange limit:bodyLengthLimit];
+			[self highlightOverflowingTextInTextStorage:textStorage lineRange:lineRange limit:bodyLengthLimit];
 		}
-		
-		characterIndex = lineEndIndex;
 	}
 }
 
@@ -369,23 +427,29 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 	return YES;
 }
 
-- (void)updateLineHighlighting
+- (void)updateTextProcessingForTextStorage:(NSTextStorage *)textStorage
 {
+	NSArray<NSValue *> *contentLineRanges = [self contentLineRangesForTextStorage:textStorage];
+	
 	[self
-	 updateHighlightingForLineLimitsAllowingSubjectLimit:ZGReadDefaultRecommendedSubjectLengthLimitEnabled()
+	 updateHighlightingForTextStorage:textStorage
+	 withContentLineRanges:contentLineRanges
+	 forLineLimitsAllowingSubjectLimit:ZGReadDefaultRecommendedSubjectLengthLimitEnabled()
 	 subjectLengthLimit:ZGReadDefaultRecommendedSubjectLengthLimit()
 	 allowingingBodyLimit:ZGReadDefaultRecommendedBodyLineLengthLimitEnabled()
 	 bodyLengthLimit:ZGReadDefaultRecommendedBodyLineLengthLimit()];
+	
+	[self updateCommentAttributesForTextStorage:textStorage withContentLineRanges:contentLineRanges];
 }
 
 // I'm not using the passed editRange and delta because I've found them to be quite misleading...
 // This happens to be a new API (macOS 10.11) so maybe it's not really battle tested or I don't know what I'm doing
 // Either way I'd like to support older systems so for portability sake it's easier to not use these parameters
-- (void)textStorage:(NSTextStorage *)__unused textStorage didProcessEditing:(NSTextStorageEditActions)editedMask range:(NSRange)__unused editedRange changeInLength:(NSInteger)__unused delta
+- (void)textStorage:(NSTextStorage *)textStorage didProcessEditing:(NSTextStorageEditActions)editedMask range:(NSRange)__unused editedRange changeInLength:(NSInteger)__unused delta
 {
 	if ((editedMask & NSTextStorageEditedCharacters) != 0)
 	{
-		[self updateLineHighlighting];
+		[self updateTextProcessingForTextStorage:textStorage];
 	}
 }
 
@@ -401,7 +465,7 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 	
 	if (isOnOldSystem)
 	{
-		[self updateLineHighlighting];
+		[self updateTextProcessingForTextStorage:_textView.textStorage];
 	}
 }
 
