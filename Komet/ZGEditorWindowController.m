@@ -596,7 +596,8 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 }
 
 // The comment range should begin at the line that starts with a comment string and extend to the end of the file.
-// Additionally, there should be no content lines (i.e, non comment lines) within this section.
+// Additionally, there should be no content lines (i.e, non comment lines) within this section
+// (exception: unless we're dealing with svn which only has a starting point for comments)
 // This should only be computed once, before the user gets a chance to edit the content
 - (NSUInteger)commentSectionLengthFromPlainText:(NSString *)plainText versionControlType:(ZGVersionControlType)versionControlType
 {
@@ -624,6 +625,12 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 		{
 			foundCommentSection = YES;
 			commentSectionCharacterIndex = characterIndex;
+			
+			// -- Svn only has one line like this and the lines below it are considered to be part of the comment section --
+			if (versionControlType == ZGVersionControlSvn)
+			{
+				break;
+			}
 		}
 		
 		characterIndex = lineEndIndex;
