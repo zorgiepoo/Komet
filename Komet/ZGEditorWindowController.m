@@ -556,9 +556,7 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 	[_textView setSelectedRange:NSMakeRange(0, commitTextLength)];
 }
 
-// The comment range should begin at the first line that starts with a comment string and extend to the end of the file
-// This should only be computed once, before the user gets a chance to edit the content
-- (NSUInteger)commentSectionLengthFromPlainText:(NSString *)plainText versionControlType:(ZGVersionControlType)versionControlType
+- (BOOL)isCommentLine:(NSString *)line forVersionControlType:(ZGVersionControlType)versionControlType
 {
 	NSString *prefixCommentString;
 	NSString *suffixCommentString;
@@ -578,6 +576,15 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 			break;
 	}
 	
+	// Note a line that is "--" could have the prefix and suffix the same, but we want to make sure it's at least "--...--" length long
+	// Also empty strings don't yield the expected behavior for hasSuffix:/hasPrefix: (i.e, Foundation thinks "" is not a prefix or suffix of "foo")
+	return ([line hasPrefix:prefixCommentString] && (line.length >= prefixCommentString.length + suffixCommentString.length) && (suffixCommentString.length == 0 || [line hasSuffix:suffixCommentString]));
+}
+
+// The comment range should begin at the first line that starts with a comment string and extend to the end of the file
+// This should only be computed once, before the user gets a chance to edit the content
+- (NSUInteger)commentSectionLengthFromPlainText:(NSString *)plainText versionControlType:(ZGVersionControlType)versionControlType
+{
 	NSUInteger plainTextLength = plainText.length;
 	
 	NSUInteger commentSectionLength = 0;
@@ -591,10 +598,7 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 		
 		NSString *line = [plainText substringWithRange:NSMakeRange(lineStartIndex, contentEndIndex - lineStartIndex)];
 		
-		// See if we don't have a comment
-		// Note a line that is "--" could have the prefix and suffix the same, but we want to make sure it's at least "--...--"
-		// Also empty strings don't yield the expected behavior for hasSuffix:/hasPrefix: (i.e, Foundation thinks "" is not a prefix of "foo")
-		if (![line hasPrefix:prefixCommentString] || (line.length < prefixCommentString.length + suffixCommentString.length) ||  (suffixCommentString.length > 0 && ![line hasSuffix:suffixCommentString]))
+		if (![self isCommentLine:line forVersionControlType:versionControlType])
 		{
 			characterIndex = lineEndIndex;
 		}
