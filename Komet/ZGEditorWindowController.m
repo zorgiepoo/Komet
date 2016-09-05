@@ -581,14 +581,16 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 	return ([line hasPrefix:prefixCommentString] && (line.length >= prefixCommentString.length + suffixCommentString.length) && (suffixCommentString.length == 0 || [line hasSuffix:suffixCommentString]));
 }
 
-// The comment range should begin at the first line that starts with a comment string and extend to the end of the file
+// The comment range should begin at the line that starts with a comment string and extend to the end of the file.
+// Additionally, there should be no content lines (i.e, non comment lines) within this section.
 // This should only be computed once, before the user gets a chance to edit the content
 - (NSUInteger)commentSectionLengthFromPlainText:(NSString *)plainText versionControlType:(ZGVersionControlType)versionControlType
 {
 	NSUInteger plainTextLength = plainText.length;
 	
-	NSUInteger commentSectionLength = 0;
 	NSUInteger characterIndex = 0;
+	NSUInteger commentSectionCharacterIndex = 0;
+	BOOL foundCommentSection = NO;
 	while (characterIndex < plainTextLength)
 	{
 		NSUInteger lineStartIndex = 0;
@@ -598,18 +600,22 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 		
 		NSString *line = [plainText substringWithRange:NSMakeRange(lineStartIndex, contentEndIndex - lineStartIndex)];
 		
-		if (![self isCommentLine:line forVersionControlType:versionControlType])
+		BOOL commentLine = [self isCommentLine:line forVersionControlType:versionControlType];
+		if (!commentLine && foundCommentSection && [[line stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] length] > 0)
 		{
-			characterIndex = lineEndIndex;
+			// If we found a content line that is not empty, then we have to find a better starting point for the comment section
+			foundCommentSection = NO;
 		}
-		else
+		else if (commentLine && !foundCommentSection)
 		{
-			// We found the first comment line
-			commentSectionLength = plainTextLength - lineStartIndex;
-			break;
+			foundCommentSection = YES;
+			commentSectionCharacterIndex = characterIndex;
 		}
+		
+		characterIndex = lineEndIndex;
 	}
 	
+	NSUInteger commentSectionLength = foundCommentSection ? (plainTextLength - commentSectionCharacterIndex) : 0;
 	return commentSectionLength;
 }
 
