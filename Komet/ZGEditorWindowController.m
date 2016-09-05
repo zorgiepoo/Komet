@@ -32,6 +32,7 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 	BOOL _tutorialMode;
 	NSUInteger _commentSectionLength;
 	NSColor *_warnOverflowColor;
+	ZGVersionControlType _versionControlType;
 }
 
 + (void)initialize
@@ -117,6 +118,8 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 		// git, hg, and svn seem to set current working directory to project directory before launching the editor
 		label = [[[NSFileManager defaultManager] currentDirectoryPath] lastPathComponent];
 	}
+	
+	_versionControlType = versionControlType;
 	
 	_commitLabelTextField.stringValue = (label == nil) ? @"" : label;
 	
@@ -402,7 +405,7 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 	}
 }
 
-- (NSDictionary<NSString *,id> *)layoutManager:(NSLayoutManager *)__unused layoutManager shouldUseTemporaryAttributes:(NSDictionary<NSString *, id> *)attrs forDrawingToScreen:(BOOL)toScreen atCharacterIndex:(NSUInteger)__unused charIndex effectiveRange:(NSRangePointer)effectiveCharRange
+- (NSDictionary<NSString *,id> *)layoutManager:(NSLayoutManager *)__unused layoutManager shouldUseTemporaryAttributes:(NSDictionary<NSString *, id> *)attrs forDrawingToScreen:(BOOL)toScreen atCharacterIndex:(NSUInteger)characterIndex effectiveRange:(NSRangePointer)__unused effectiveCharRange
 {
 	NSDictionary<NSString *,id> * attributes;
 	if (!toScreen)
@@ -411,9 +414,14 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 	}
 	else
 	{
-		// Disable temporary attributes like spell checking if they are in the comment section
-		NSUInteger plainTextLength = _textView.textStorage.string.length;
-		if (effectiveCharRange->location + effectiveCharRange->length >= plainTextLength - _commentSectionLength)
+		NSString *plainText = _textView.textStorage.string;
+		
+		NSUInteger lineStartIndex = 0;
+		NSUInteger contentEndIndex = 0;
+		[plainText getLineStart:&lineStartIndex end:NULL contentsEnd:&contentEndIndex forRange:NSMakeRange(characterIndex, 0)];
+		
+		// Disable temporary attributes like spell checking if they are in a comment line
+		if ([self isCommentLine:[plainText substringWithRange:NSMakeRange(lineStartIndex, contentEndIndex - lineStartIndex)] forVersionControlType:_versionControlType])
 		{
 			attributes = nil;
 		}
@@ -427,10 +435,15 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 
 - (NSInteger)textView:(NSTextView *)textView shouldSetSpellingState:(NSInteger)value range:(NSRange)affectedCharRange
 {
-	NSUInteger plainTextLength = textView.textStorage.string.length;
+	NSString *plainText = textView.textStorage.string;
+	
+	NSUInteger lineStartIndex = 0;
+	NSUInteger contentEndIndex = 0;
+	[plainText getLineStart:&lineStartIndex end:NULL contentsEnd:&contentEndIndex forRange:affectedCharRange];
+	
+	// Don't check for anything spelling related if the range is in a comment line
 	NSInteger newValue;
-	// Don't check for anything spelling related if the range is in the comment section
-	if (affectedCharRange.location + affectedCharRange.length >= plainTextLength - _commentSectionLength)
+	if ([self isCommentLine:[plainText substringWithRange:NSMakeRange(lineStartIndex, contentEndIndex - lineStartIndex)] forVersionControlType:_versionControlType])
 	{
 		newValue = 0;
 	}
@@ -438,6 +451,7 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 	{
 		newValue = value;
 	}
+	
 	return newValue;
 }
 
