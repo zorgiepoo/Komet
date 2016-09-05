@@ -326,10 +326,24 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 	return [lineRanges copy];
 }
 
+// -- Svn has a single comment line marker like this --
+// but other VCSs like hg and git need a prefix for every line that is considered to be a comment
+- (BOOL)hasSingleCommentLineMarkerForVersionControlType:(ZGVersionControlType)versionControlType
+{
+	switch (versionControlType)
+	{
+		case ZGVersionControlGit:
+		case ZGVersionControlHg:
+			return NO;
+		case ZGVersionControlSvn:
+			return YES;
+	}
+}
+
 - (void)updateCommentAttributesForTextStorage:(NSTextStorage *)textStorage withContentLineRanges:(NSArray<NSValue *> *)contentLineRanges
 {
-	// For svn we assume there's only a single comment line that extends to end of file
-	if (_versionControlType == ZGVersionControlSvn)
+	// If there's only one comment line marker, we need not worry about attributing comments
+	if ([self hasSingleCommentLineMarkerForVersionControlType:_versionControlType])
 	{
 		return;
 	}
@@ -690,8 +704,8 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 			foundCommentSection = YES;
 			commentSectionCharacterIndex = characterIndex;
 			
-			// -- Svn only has one line like this and the lines below it are considered to be part of the comment section --
-			if (versionControlType == ZGVersionControlSvn)
+			// If there's only a single comment line marker, then we're done
+			if ([self hasSingleCommentLineMarkerForVersionControlType:versionControlType])
 			{
 				break;
 			}
