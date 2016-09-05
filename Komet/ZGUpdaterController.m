@@ -38,9 +38,15 @@
 	return self;
 }
 
-- (BOOL)updaterShouldAllowInstallerInteractionForScheduledChecks:(SPUUpdater *)__unused updater
+- (BOOL)updater:(SPUUpdater *)__unused updater shouldAllowInstallerInteractionForUpdateCheck:(SPUUpdateCheck)updateCheck
 {
-	return NO;
+	switch (updateCheck)
+	{
+		case SPUUpdateCheckUserInitiated:
+			return YES;
+		case SPUUpdateCheckBackgroundScheduled:
+			return NO;
+	}
 }
 
 - (BOOL)updaterShouldDownloadReleaseNotes:(SPUUpdater *)__unused updater
