@@ -8,7 +8,7 @@ A Cocoa text editor designed for creating commit messages.
 
 I do version control from the command line but I want a fast and non-obstructive editor designed for creating commit messages. Not being stuck in a save-and-close model, applying a commit takes only *one* action in Komet.
 
-Komet features:
+### Features
 
 * Single action for applying or discarding a commit.
 * Double newline insertion after the first line.
