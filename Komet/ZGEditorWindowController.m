@@ -10,6 +10,7 @@
 #import "ZGCommitTextView.h"
 #import "ZGUserDefaults.h"
 #import "ZGWindowStyle.h"
+#import "ZGColoredView.h"
 
 #define ZGEditorWindowFrameNameKey @"ZGEditorWindowFrame"
 
@@ -26,7 +27,9 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 @implementation ZGEditorWindowController
 {
 	NSURL *_fileURL;
+    IBOutlet ZGColoredView *_topBar;
 	IBOutlet ZGCommitTextView *_textView;
+    IBOutlet ZGColoredView *_contentView;
 	IBOutlet NSTextField *_commitLabelTextField;
     IBOutlet NSButtonCell *_cancelButton;
     IBOutlet NSButton *_commitButton;
@@ -35,9 +38,7 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 	BOOL _initiallyContainedEmptyContent;
 	BOOL _tutorialMode;
 	NSUInteger _commentSectionLength;
-	NSColor *_warnOverflowColor;
 	ZGVersionControlType _versionControlType;
-	NSColor *_commentColor;
     ZGWindowStyle *_style;
 }
 
@@ -52,6 +53,7 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 		ZGRegisterDefaultRecommendedBodyLineLengthLimitEnabled();
 		ZGRegisterDefaultRecommendedBodyLineLengthLimit();
 		ZGRegisterDefaultAutomaticNewlineInsertionAfterSubjectLine();
+        ZGRegisterDefaultWindowStyle();
 	});
 }
 
@@ -80,23 +82,7 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 {
 	[self.window setFrameUsingName:ZGEditorWindowFrameNameKey];
     
-    // Apply window style
-    _style = [ZGWindowStyle
-                            withBar:[NSColor colorWithDeviceRed:0.0 green:0.0 blue:0.0 alpha:0.9]
-                            barText:[NSColor colorWithDeviceRed:1.0 green:1.0 blue:1.0 alpha:1.0]
-                            background:[NSColor colorWithDeviceRed:0.9 green:0.9 blue:0.9 alpha:0.75]
-                            text:[NSColor colorWithDeviceRed:1.0 green:1.0 blue:1.0 alpha:1.0]
-                            comment:[NSColor colorWithDeviceRed:1.0 green:1.0 blue:1.0 alpha:0.8]
-                            overflow:[NSColor colorWithDeviceRed:1.0 green:0.8 blue:0.8 alpha:1.0]];
-    
-//    _style = [ZGWindowStyle
-//              withBar:[NSColor colorWithDeviceRed:0.9 green:0.9 blue:1.0 alpha:0.5]
-//              barText:[NSColor colorWithDeviceRed:0.0 green:0.0 blue:0.5 alpha:1.0]
-//              background:[NSColor colorWithDeviceRed:0.9 green:0.9 blue:1.0 alpha:0.75]
-//              text:[NSColor colorWithDeviceRed:0.0 green:0.0 blue:0.5 alpha:1.0]
-//              comment:[NSColor colorWithDeviceRed:0.0 green:0.0 blue:0.5 alpha:0.8]
-//              overflow:[NSColor colorWithDeviceRed:1.0 green:0.8 blue:0.8 alpha:1.0]];
-    
+    _style = [ZGWindowStyle withName:ZGReadDefaultWindowStyle()];
     [self updateWindowStyle];
 	
 	NSData *data = [NSData dataWithContentsOfURL:_fileURL];
@@ -200,15 +186,10 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 	
 	NSMutableAttributedString *plainAttributedString = [[NSMutableAttributedString alloc] initWithString:plainString attributes:@{}];
 	
-	NSColor *commentColor = [_style.commentColor colorUsingColorSpaceName:NSCalibratedRGBColorSpace];
-	_commentColor = commentColor;
-	
 	if (_commentSectionLength != 0)
 	{
-		[plainAttributedString addAttribute:NSForegroundColorAttributeName value:commentColor range:NSMakeRange(plainString.length - _commentSectionLength, _commentSectionLength)];
+		[plainAttributedString addAttribute:NSForegroundColorAttributeName value:_style.commentColor range:NSMakeRange(plainString.length - _commentSectionLength, _commentSectionLength)];
 	}
-	
-    _warnOverflowColor = _style.overflowColor;
 	
 	// I don't think we want to invoke beginEditing/endEditing, etc, events because we are setting the textview content for the first time,
 	// and we don't want anything to register as user-editable yet or have undo activated yet
@@ -285,9 +266,14 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 }
 
 - (void)updateWindowStyle {
-    // Style top bar
+    // Disable window background drawing, so we can style the top bar and
+    // text view separately
     [self.window setOpaque:NO];
-    [self.window setBackgroundColor:_style.barColor];
+    [self.window setBackgroundColor:[NSColor colorWithWhite:1.0 alpha:0.01]];
+    
+    // Style top bar
+    _topBar.wantsLayer = YES;
+    _topBar.backgroundColor = _style.barColor;
     
     // Style top bar buttons
     _commitLabelTextField.textColor = _style.barTextColor;
@@ -303,7 +289,9 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
     // Style text
     _textView.wantsLayer = YES;
     _textView.drawsBackground = NO;
-    _textView.backgroundColor = _style.backgroundColor;
+    
+    // Style content area
+    _contentView.backgroundColor = _style.backgroundColor;
 }
 
 - (void)updateEditorMessageFont
@@ -340,6 +328,19 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 	{
 		[self updateTextProcessingForTextStorage:_textView.textStorage];
 	}
+}
+
+- (void)userDefaultsChangedWindowStyle
+{
+    _style = [ZGWindowStyle withName:ZGReadDefaultWindowStyle()];
+    [self updateWindowStyle];
+    [self updateTextProcessingForTextStorage:_textView.textStorage];
+    [_topBar setNeedsDisplay:YES];
+    [_contentView setNeedsDisplay:YES];
+    
+    // The comment section isn't updated by setting the editor style elsewhere, since it's not editable.
+    [_textView.textStorage removeAttribute:NSForegroundColorAttributeName range:NSMakeRange([_textView.textStorage.string length] - _commentSectionLength, _commentSectionLength)];
+    [_textView.textStorage addAttribute:NSForegroundColorAttributeName value:_style.commentColor range:NSMakeRange([_textView.textStorage.string length] - _commentSectionLength, _commentSectionLength)];
 }
 
 - (NSArray<NSValue *> *)contentLineRangesForTextStorage:(NSTextStorage *)textStorage
@@ -406,7 +407,7 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 		if (contentLineRange.length > 0 && [self isCommentLine:[plainText substringWithRange:contentLineRange] forVersionControlType:_versionControlType])
 		{
 			// Add comment font attribute for lines that are comments
-			[textStorage addAttribute:NSForegroundColorAttributeName value:_commentColor range:contentLineRange];
+			[textStorage addAttribute:NSForegroundColorAttributeName value:_style.commentColor range:contentLineRange];
 			
 			if (commentFont == nil)
 			{
@@ -487,7 +488,7 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 	if (lineRange.length > limit)
 	{
 		NSRange overflowRange = NSMakeRange(lineRange.location + limit, lineRange.length - limit);
-		[textStorage addAttribute:NSBackgroundColorAttributeName value:_warnOverflowColor range:overflowRange];
+		[textStorage addAttribute:NSBackgroundColorAttributeName value:_style.overflowColor range:overflowRange];
 	}
 }
 

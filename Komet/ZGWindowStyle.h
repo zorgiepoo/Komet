@@ -8,6 +8,12 @@
 
 @import AppKit;
 
+#define ZGWindowStyleDefault @"default"
+#define ZGWindowStyleDark @"dark"
+#define ZGWindowStylePapyrus @"papyrus"
+#define ZGWindowStyleBlue @"blue"
+#define ZGWindowStyleGreen @"green"
+
 @interface ZGWindowStyle : NSObject
 
 @property (nonatomic, nonnull) NSColor* barColor;
@@ -18,5 +24,6 @@
 @property (nonatomic, nonnull) NSColor* overflowColor;
 
 + (ZGWindowStyle * _Nonnull)withBar: (NSColor * _Nonnull)barColor barText:(NSColor * _Nonnull)barTextColor background: (NSColor * _Nonnull)backgroundColor text: (NSColor * _Nonnull)textColor comment: (NSColor * _Nonnull)commentColor overflow: (NSColor * _Nonnull)overflowColor;
++ (ZGWindowStyle * _Nonnull)withName: (NSString * _Nonnull)styleName;
 
 @end

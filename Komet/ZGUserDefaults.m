@@ -7,6 +7,7 @@
 //
 
 #import "ZGUserDefaults.h"
+#import "ZGWindowStyle.h"
 
 #define ZGMessageFontNameKey @"ZGEditorFontName"
 #define ZGMessageFontPointSizeKey @"ZGEditorFontPointSize"
@@ -21,6 +22,8 @@
 #define ZGEditorRecommendedBodyLineLengthLimitEnabledKey @"ZGEditorRecommendedBodyLineLengthLimitEnabled"
 
 #define ZGEditorAutomaticNewlineInsertionAfterSubjectKey @"ZGEditorAutomaticNewlineInsertionAfterSubject"
+
+#define ZGWindowStyleKey @"ZGWindowStyleName"
 
 static NSFont *ZGReadDefaultFont(NSString *fontNameDefaultsKey, NSString *fontSizeDefaultsKey)
 {
@@ -162,4 +165,17 @@ BOOL ZGReadDefaultAutomaticNewlineInsertionAfterSubjectLine(void)
 void ZGWriteDefaultAutomaticNewlineInsertionAfterSubjectLine(BOOL automaticNewlineInsertionAfterSubjectLine)
 {
 	[[NSUserDefaults standardUserDefaults] setBool:automaticNewlineInsertionAfterSubjectLine forKey:ZGEditorAutomaticNewlineInsertionAfterSubjectKey];
+}
+
+void ZGRegisterDefaultWindowStyle(void) {
+    [[NSUserDefaults standardUserDefaults] registerDefaults:@{ZGWindowStyleKey : ZGWindowStyleDefault}];
+}
+
+NSString *ZGReadDefaultWindowStyle(void) {
+    NSString *style = (NSString * _Nonnull)[[NSUserDefaults standardUserDefaults] stringForKey:ZGWindowStyleKey];
+    return style;
+}
+
+void ZGWriteDefaultStyle(NSString *styleKey) {
+    [[NSUserDefaults standardUserDefaults] setValue:styleKey forKey:ZGWindowStyleKey];
 }

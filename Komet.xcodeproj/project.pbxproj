@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		3A05CB0E1D7EA56B005106E9 /* ZGWindowStyle.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A05CB0D1D7EA56B005106E9 /* ZGWindowStyle.m */; };
 		3A05CB111D7EB236005106E9 /* ZGHorizontalLine.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A05CB101D7EB236005106E9 /* ZGHorizontalLine.m */; };
+		3A05CB141D7EBBEC005106E9 /* ZGStylePreviewView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A05CB131D7EBBEC005106E9 /* ZGStylePreviewView.m */; };
+		3A05CB1A1D7EEC2B005106E9 /* ZGColoredView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A05CB191D7EEC2B005106E9 /* ZGColoredView.m */; };
 		7240062F1D7359E4001042CF /* ZGUserDefaults.m in Sources */ = {isa = PBXBuildFile; fileRef = 7240062E1D7359E4001042CF /* ZGUserDefaults.m */; };
 		724006331D73B2CA001042CF /* ZGUpdaterController.m in Sources */ = {isa = PBXBuildFile; fileRef = 724006321D73B2CA001042CF /* ZGUpdaterController.m */; };
 		724006351D73B431001042CF /* SparkleCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 724006341D73B431001042CF /* SparkleCore.framework */; };
@@ -45,6 +47,10 @@
 		3A05CB0D1D7EA56B005106E9 /* ZGWindowStyle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZGWindowStyle.m; sourceTree = "<group>"; };
 		3A05CB0F1D7EB236005106E9 /* ZGHorizontalLine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZGHorizontalLine.h; sourceTree = "<group>"; };
 		3A05CB101D7EB236005106E9 /* ZGHorizontalLine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZGHorizontalLine.m; sourceTree = "<group>"; };
+		3A05CB121D7EBBEC005106E9 /* ZGStylePreviewView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZGStylePreviewView.h; sourceTree = "<group>"; };
+		3A05CB131D7EBBEC005106E9 /* ZGStylePreviewView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZGStylePreviewView.m; sourceTree = "<group>"; };
+		3A05CB181D7EEC2B005106E9 /* ZGColoredView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZGColoredView.h; sourceTree = "<group>"; };
+		3A05CB191D7EEC2B005106E9 /* ZGColoredView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZGColoredView.m; sourceTree = "<group>"; };
 		7240062D1D7359E4001042CF /* ZGUserDefaults.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZGUserDefaults.h; sourceTree = "<group>"; };
 		7240062E1D7359E4001042CF /* ZGUserDefaults.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZGUserDefaults.m; sourceTree = "<group>"; };
 		724006301D736E83001042CF /* ZGUserDefaultsEditorListener.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZGUserDefaultsEditorListener.h; sourceTree = "<group>"; };
@@ -127,6 +133,10 @@
 				3A05CB0D1D7EA56B005106E9 /* ZGWindowStyle.m */,
 				3A05CB0F1D7EB236005106E9 /* ZGHorizontalLine.h */,
 				3A05CB101D7EB236005106E9 /* ZGHorizontalLine.m */,
+				3A05CB121D7EBBEC005106E9 /* ZGStylePreviewView.h */,
+				3A05CB131D7EBBEC005106E9 /* ZGStylePreviewView.m */,
+				3A05CB181D7EEC2B005106E9 /* ZGColoredView.h */,
+				3A05CB191D7EEC2B005106E9 /* ZGColoredView.m */,
 			);
 			path = Komet;
 			sourceTree = "<group>";
@@ -215,7 +225,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				72D10C571D7334CA00ED32BC /* ZGPreferencesWindowController.m in Sources */,
+				3A05CB1A1D7EEC2B005106E9 /* ZGColoredView.m in Sources */,
 				7240063C1D73BE84001042CF /* ZGUpdaterUserDriver.m in Sources */,
+				3A05CB141D7EBBEC005106E9 /* ZGStylePreviewView.m in Sources */,
 				3A05CB111D7EB236005106E9 /* ZGHorizontalLine.m in Sources */,
 				3A05CB0E1D7EA56B005106E9 /* ZGWindowStyle.m in Sources */,
 				724006331D73B2CA001042CF /* ZGUpdaterController.m in Sources */,

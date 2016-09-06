@@ -38,4 +38,8 @@ void ZGRegisterDefaultAutomaticNewlineInsertionAfterSubjectLine(void);
 BOOL ZGReadDefaultAutomaticNewlineInsertionAfterSubjectLine(void);
 void ZGWriteDefaultAutomaticNewlineInsertionAfterSubjectLine(BOOL automaticNewlineInsertionAfterSubjectLine);
 
+void ZGRegisterDefaultWindowStyle(void);
+NSString *ZGReadDefaultWindowStyle(void);
+void ZGWriteDefaultStyle(NSString *styleKey);
+
 NS_ASSUME_NONNULL_END
