@@ -9,6 +9,7 @@
 #import "ZGEditorWindowController.h"
 #import "ZGCommitTextView.h"
 #import "ZGUserDefaults.h"
+#import "ZGWindowStyle.h"
 
 #define ZGEditorWindowFrameNameKey @"ZGEditorWindowFrame"
 
@@ -27,6 +28,9 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 	NSURL *_fileURL;
 	IBOutlet ZGCommitTextView *_textView;
 	IBOutlet NSTextField *_commitLabelTextField;
+    IBOutlet NSButtonCell *_cancelButton;
+    IBOutlet NSButton *_commitButton;
+    IBOutlet NSBox *_horizontalLine;
 	BOOL _preventAccidentalNewline;
 	BOOL _initiallyContainedEmptyContent;
 	BOOL _tutorialMode;
@@ -34,6 +38,7 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 	NSColor *_warnOverflowColor;
 	ZGVersionControlType _versionControlType;
 	NSColor *_commentColor;
+    ZGWindowStyle *_style;
 }
 
 + (void)initialize
@@ -74,6 +79,25 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 - (void)windowDidLoad
 {
 	[self.window setFrameUsingName:ZGEditorWindowFrameNameKey];
+    
+    // Apply window style
+    _style = [ZGWindowStyle
+                            withBar:[NSColor colorWithDeviceRed:0.0 green:0.0 blue:0.0 alpha:0.9]
+                            barText:[NSColor colorWithDeviceRed:1.0 green:1.0 blue:1.0 alpha:1.0]
+                            background:[NSColor colorWithDeviceRed:0.9 green:0.9 blue:0.9 alpha:0.75]
+                            text:[NSColor colorWithDeviceRed:1.0 green:1.0 blue:1.0 alpha:1.0]
+                            comment:[NSColor colorWithDeviceRed:1.0 green:1.0 blue:1.0 alpha:0.8]
+                            overflow:[NSColor colorWithDeviceRed:1.0 green:0.8 blue:0.8 alpha:1.0]];
+    
+//    _style = [ZGWindowStyle
+//              withBar:[NSColor colorWithDeviceRed:0.9 green:0.9 blue:1.0 alpha:0.5]
+//              barText:[NSColor colorWithDeviceRed:0.0 green:0.0 blue:0.5 alpha:1.0]
+//              background:[NSColor colorWithDeviceRed:0.9 green:0.9 blue:1.0 alpha:0.75]
+//              text:[NSColor colorWithDeviceRed:0.0 green:0.0 blue:0.5 alpha:1.0]
+//              comment:[NSColor colorWithDeviceRed:0.0 green:0.0 blue:0.5 alpha:0.8]
+//              overflow:[NSColor colorWithDeviceRed:1.0 green:0.8 blue:0.8 alpha:1.0]];
+    
+    [self updateWindowStyle];
 	
 	NSData *data = [NSData dataWithContentsOfURL:_fileURL];
 	if (data == nil)
@@ -176,7 +200,7 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 	
 	NSMutableAttributedString *plainAttributedString = [[NSMutableAttributedString alloc] initWithString:plainString attributes:@{}];
 	
-	NSColor *commentColor = [[NSColor darkGrayColor] colorUsingColorSpaceName:NSCalibratedRGBColorSpace];
+	NSColor *commentColor = [_style.commentColor colorUsingColorSpaceName:NSCalibratedRGBColorSpace];
 	_commentColor = commentColor;
 	
 	if (_commentSectionLength != 0)
@@ -184,7 +208,7 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 		[plainAttributedString addAttribute:NSForegroundColorAttributeName value:commentColor range:NSMakeRange(plainString.length - _commentSectionLength, _commentSectionLength)];
 	}
 	
-	_warnOverflowColor = [NSColor colorWithRed:1.0 green:1.0 blue:0.0 alpha:0.3];
+    _warnOverflowColor = _style.overflowColor;
 	
 	// I don't think we want to invoke beginEditing/endEditing, etc, events because we are setting the textview content for the first time,
 	// and we don't want anything to register as user-editable yet or have undo activated yet
@@ -258,6 +282,28 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 			});
 		}
 	}
+}
+
+- (void)updateWindowStyle {
+    // Style top bar
+    [self.window setOpaque:NO];
+    [self.window setBackgroundColor:_style.barColor];
+    
+    // Style top bar buttons
+    _commitLabelTextField.textColor = _style.barTextColor;
+    NSMutableAttributedString *commitTitle = [[NSMutableAttributedString alloc] initWithAttributedString:_commitButton.attributedTitle];
+    [commitTitle addAttribute:NSForegroundColorAttributeName value:_style.barTextColor range:NSMakeRange(0, [_commitButton.title length])];
+    [_commitButton setAttributedTitle:commitTitle];
+    NSMutableAttributedString *cancelTitle = [[NSMutableAttributedString alloc] initWithAttributedString:_cancelButton.attributedTitle];
+    [cancelTitle addAttribute:NSForegroundColorAttributeName value:_style.barTextColor range:NSMakeRange(0, [_cancelButton.title length])];
+    [_cancelButton setAttributedTitle:cancelTitle];
+    
+    _horizontalLine.borderColor = [NSColor colorWithRed:_style.barTextColor.redComponent green:_style.barTextColor.greenComponent blue:_style.barTextColor.blueComponent alpha:(_style.barTextColor.alphaComponent > 0.4 ? _style.barTextColor.alphaComponent - 0.4 : 0.4)];
+    
+    // Style text
+    _textView.wantsLayer = YES;
+    _textView.drawsBackground = NO;
+    _textView.backgroundColor = _style.backgroundColor;
 }
 
 - (void)updateEditorMessageFont
@@ -397,7 +443,7 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 	
 	for (NSValue *contentLineRangeValue in contentLineRanges)
 	{
-		NSRange lineRange = contentLineRangeValue.rangeValue;
+        NSRange lineRange = contentLineRangeValue.rangeValue;
 		if (lineRange.location == 0)
 		{
 			if (allowingSubjectLimit)
@@ -415,6 +461,25 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 			[self highlightOverflowingTextInTextStorage:textStorage lineRange:lineRange limit:bodyLengthLimit];
 		}
 	}
+}
+
+- (void)updateContentStyleForTextStorage:(NSTextStorage *)textStorage withContentLineRanges:(NSArray<NSValue *> *)contentLineRanges
+{
+    if (contentLineRanges.count == 0)
+    {
+        return;
+    }
+    
+    NSString *plainText = textStorage.string;
+    
+    for (NSValue *contentLineRangeValue in contentLineRanges)
+    {
+        NSRange lineRange = contentLineRangeValue.rangeValue;
+        if (lineRange.length > 0 && ![self isCommentLine:[plainText substringWithRange:lineRange] forVersionControlType:_versionControlType]) {
+            [textStorage removeAttribute:NSForegroundColorAttributeName range:lineRange];
+            [textStorage addAttribute:NSForegroundColorAttributeName value:_style.textColor range:lineRange];
+        }
+    }
 }
 
 - (void)highlightOverflowingTextInTextStorage:(NSTextStorage *)textStorage lineRange:(NSRange)lineRange limit:(NSUInteger)limit
@@ -454,6 +519,8 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 	 bodyLengthLimit:ZGReadDefaultRecommendedBodyLineLengthLimit()];
 	
 	[self updateCommentAttributesForTextStorage:textStorage withContentLineRanges:contentLineRanges];
+    
+    [self updateContentStyleForTextStorage:textStorage withContentLineRanges:contentLineRanges];
 }
 
 // I'm not using the passed editRange and delta because I've found them to be quite misleading...

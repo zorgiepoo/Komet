@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3A05CB0E1D7EA56B005106E9 /* ZGWindowStyle.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A05CB0D1D7EA56B005106E9 /* ZGWindowStyle.m */; };
+		3A05CB111D7EB236005106E9 /* ZGHorizontalLine.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A05CB101D7EB236005106E9 /* ZGHorizontalLine.m */; };
 		7240062F1D7359E4001042CF /* ZGUserDefaults.m in Sources */ = {isa = PBXBuildFile; fileRef = 7240062E1D7359E4001042CF /* ZGUserDefaults.m */; };
 		724006331D73B2CA001042CF /* ZGUpdaterController.m in Sources */ = {isa = PBXBuildFile; fileRef = 724006321D73B2CA001042CF /* ZGUpdaterController.m */; };
 		724006351D73B431001042CF /* SparkleCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 724006341D73B431001042CF /* SparkleCore.framework */; };
@@ -39,6 +41,10 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		3A05CB0C1D7EA56B005106E9 /* ZGWindowStyle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZGWindowStyle.h; sourceTree = "<group>"; };
+		3A05CB0D1D7EA56B005106E9 /* ZGWindowStyle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZGWindowStyle.m; sourceTree = "<group>"; };
+		3A05CB0F1D7EB236005106E9 /* ZGHorizontalLine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZGHorizontalLine.h; sourceTree = "<group>"; };
+		3A05CB101D7EB236005106E9 /* ZGHorizontalLine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZGHorizontalLine.m; sourceTree = "<group>"; };
 		7240062D1D7359E4001042CF /* ZGUserDefaults.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZGUserDefaults.h; sourceTree = "<group>"; };
 		7240062E1D7359E4001042CF /* ZGUserDefaults.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZGUserDefaults.m; sourceTree = "<group>"; };
 		724006301D736E83001042CF /* ZGUserDefaultsEditorListener.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZGUserDefaultsEditorListener.h; sourceTree = "<group>"; };
@@ -117,6 +123,10 @@
 				72B72C9D1D63EFF90096365F /* MainMenu.xib */,
 				72B72CA01D63EFF90096365F /* Info.plist */,
 				72B72C981D63EFF90096365F /* Supporting Files */,
+				3A05CB0C1D7EA56B005106E9 /* ZGWindowStyle.h */,
+				3A05CB0D1D7EA56B005106E9 /* ZGWindowStyle.m */,
+				3A05CB0F1D7EB236005106E9 /* ZGHorizontalLine.h */,
+				3A05CB101D7EB236005106E9 /* ZGHorizontalLine.m */,
 			);
 			path = Komet;
 			sourceTree = "<group>";
@@ -206,6 +216,8 @@
 			files = (
 				72D10C571D7334CA00ED32BC /* ZGPreferencesWindowController.m in Sources */,
 				7240063C1D73BE84001042CF /* ZGUpdaterUserDriver.m in Sources */,
+				3A05CB111D7EB236005106E9 /* ZGHorizontalLine.m in Sources */,
+				3A05CB0E1D7EA56B005106E9 /* ZGWindowStyle.m in Sources */,
 				724006331D73B2CA001042CF /* ZGUpdaterController.m in Sources */,
 				72B72C9A1D63EFF90096365F /* main.m in Sources */,
 				72B72CA91D63F0870096365F /* ZGEditorWindowController.m in Sources */,
