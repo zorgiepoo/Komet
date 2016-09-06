@@ -393,55 +393,6 @@
             </constraints>
             <point key="canvasLocation" x="263" y="682.5"/>
         </customView>
-        <customView identifier="stylepreview" id="6kt-kY-gsl" customClass="ZGStylePreviewView">
-            <rect key="frame" x="0.0" y="0.0" width="98" height="69"/>
-            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-            <subviews>
-                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="QSt-Yj-DHb">
-                    <rect key="frame" x="8" y="20" width="62" height="17"/>
-                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Message" id="Haf-Xa-n1j">
-                        <font key="font" size="10" name="Monaco"/>
-                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                    </textFieldCell>
-                </textField>
-                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="x4N-Tj-R2s">
-                    <rect key="frame" x="8" y="2" width="62" height="17"/>
-                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="# Comment" id="Tp6-NS-pFy">
-                        <font key="font" size="10" name="Monaco"/>
-                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                    </textFieldCell>
-                </textField>
-                <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="BA3-1T-h0M">
-                    <rect key="frame" x="0.0" y="44" width="98" height="25"/>
-                    <subviews>
-                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="F2Z-mQ-vpa">
-                            <rect key="frame" x="8" y="2" width="62" height="17"/>
-                            <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Branch" id="aeS-zs-04H">
-                                <font key="font" size="10" name="Monaco"/>
-                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                            </textFieldCell>
-                        </textField>
-                    </subviews>
-                </customView>
-                <box verticalHuggingPriority="750" fixedFrame="YES" title="Box" boxType="separator" titlePosition="noTitle" translatesAutoresizingMaskIntoConstraints="NO" id="5Xo-Zl-GdJ" customClass="ZGHorizontalLine">
-                    <rect key="frame" x="7" y="42" width="124" height="5"/>
-                    <color key="borderColor" white="0.0" alpha="0.41999999999999998" colorSpace="calibratedWhite"/>
-                    <color key="fillColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                    <font key="titleFont" metaFont="system"/>
-                </box>
-            </subviews>
-            <connections>
-                <outlet property="barTextLabel" destination="aeS-zs-04H" id="VWO-th-Llc"/>
-                <outlet property="barView" destination="BA3-1T-h0M" id="Sgx-D5-OLq"/>
-                <outlet property="commentText" destination="x4N-Tj-R2s" id="o4f-zK-QOg"/>
-                <outlet property="lineBox" destination="5Xo-Zl-GdJ" id="lKg-Gm-CeM"/>
-                <outlet property="messageText" destination="QSt-Yj-DHb" id="sXt-mt-eBM"/>
-            </connections>
-            <point key="canvasLocation" x="536" y="635.5"/>
-        </customView>
     </objects>
     <resources>
         <image name="NSAdvanced" width="32" height="32"/>

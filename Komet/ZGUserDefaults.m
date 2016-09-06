@@ -168,14 +168,13 @@ void ZGWriteDefaultAutomaticNewlineInsertionAfterSubjectLine(BOOL automaticNewli
 }
 
 void ZGRegisterDefaultWindowStyle(void) {
-    [[NSUserDefaults standardUserDefaults] registerDefaults:@{ZGWindowStyleKey : ZGWindowStyleDefault}];
+	[[NSUserDefaults standardUserDefaults] registerDefaults:@{ZGWindowStyleKey : ZGWindowStyleDefault}];
 }
 
 NSString *ZGReadDefaultWindowStyle(void) {
-    NSString *style = (NSString * _Nonnull)[[NSUserDefaults standardUserDefaults] stringForKey:ZGWindowStyleKey];
-    return style;
+	return (NSString * _Nonnull)[[NSUserDefaults standardUserDefaults] stringForKey:ZGWindowStyleKey];
 }
 
 void ZGWriteDefaultStyle(NSString *styleKey) {
-    [[NSUserDefaults standardUserDefaults] setValue:styleKey forKey:ZGWindowStyleKey];
+	[[NSUserDefaults standardUserDefaults] setValue:styleKey forKey:ZGWindowStyleKey];
 }

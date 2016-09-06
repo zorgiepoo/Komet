@@ -11,9 +11,9 @@
 @implementation ZGHorizontalLine
 
 - (void)drawRect:(NSRect)dirtyRect {
-    [self.borderColor set];
-    NSRectFill(NSMakeRect(0, 1, NSWidth(dirtyRect), 1));
-    [super drawRect:dirtyRect];
+	[self.borderColor set];
+	NSRectFill(NSMakeRect(0, 1, NSWidth(dirtyRect), 1));
+	[super drawRect:dirtyRect];
 }
 
 @end

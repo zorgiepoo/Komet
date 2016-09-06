@@ -13,10 +13,10 @@
 @synthesize backgroundColor;
 
 - (void)drawRect:(NSRect)dirtyRect {
-    [self.backgroundColor set];
-    NSRectFill(dirtyRect);
-    
-    [super drawRect:dirtyRect];
+	[self.backgroundColor set];
+	NSRectFill(dirtyRect);
+	
+	[super drawRect:dirtyRect];
 }
 
 @end
