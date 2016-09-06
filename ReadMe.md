@@ -18,6 +18,14 @@ I do version control from the command line but I want a fast and non-obstructive
 * Intelligent discarding of commits (i.e, exits on failure if commit file has pre-existing content).
 * Ideal caret position on launch after the initial content.
 
+### Themes
+
+![Default](themes/default.png)
+![Dark](themes/dark.png)
+![Collegiate](themes/collegiate.png)
+![Kyoto](themes/kyoto.png)
+![Papyrus](themes/papyrus.png)
+
 ## Requirements
 
 **System Version**: macOS 10.10 or later
