@@ -23,6 +23,7 @@
                 <outlet property="_recommendedSubjectLengthLimitDescriptionTextField" destination="T4H-cy-4ps" id="2uC-Zw-If8"/>
                 <outlet property="_recommendedSubjectLengthLimitEnabledCheckbox" destination="qFV-l9-9pw" id="Huu-dl-RrD"/>
                 <outlet property="_recommendedSubjectLengthLimitTextField" destination="Xcy-hC-F81" id="L6A-GD-yWt"/>
+                <outlet property="_redStyleButton" destination="ERU-Xo-Ml9" id="l8H-Tj-o0h"/>
                 <outlet property="_styleView" destination="Aik-bZ-0c7" id="GBx-jr-IjG"/>
                 <outlet property="_warningsView" destination="I8B-Aq-rvW" id="IZd-AL-CEj"/>
                 <outlet property="window" destination="X9f-Ms-esr" id="day-H5-Cqe"/>
@@ -34,7 +35,7 @@
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="855" y="378" width="317" height="191"/>
-            <rect key="screenRect" x="0.0" y="0.0" width="1440" height="877"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="2560" height="1417"/>
             <view key="contentView" id="bQ0-fo-hiP">
                 <rect key="frame" x="0.0" y="0.0" width="317" height="191"/>
                 <autoresizingMask key="autoresizingMask"/>
@@ -325,11 +326,11 @@
             <point key="canvasLocation" x="258" y="488"/>
         </customView>
         <customView id="Aik-bZ-0c7" userLabel="Style View">
-            <rect key="frame" x="0.0" y="0.0" width="306" height="163"/>
+            <rect key="frame" x="0.0" y="0.0" width="306" height="174"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <subviews>
                 <button ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ia5-TV-CXd">
-                    <rect key="frame" x="19" y="118" width="86" height="18"/>
+                    <rect key="frame" x="19" y="129" width="86" height="18"/>
                     <buttonCell key="cell" type="radio" title="Default" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="B6T-oV-61O">
                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                         <font key="font" metaFont="system"/>
@@ -339,7 +340,7 @@
                     </connections>
                 </button>
                 <button ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="D2v-xV-dni">
-                    <rect key="frame" x="19" y="96" width="86" height="18"/>
+                    <rect key="frame" x="19" y="107" width="86" height="18"/>
                     <buttonCell key="cell" type="radio" title="Dark" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="lz1-Jn-LwV">
                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                         <font key="font" metaFont="system"/>
@@ -349,7 +350,7 @@
                     </connections>
                 </button>
                 <button ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="E9d-C5-Jia">
-                    <rect key="frame" x="19" y="74" width="86" height="18"/>
+                    <rect key="frame" x="19" y="85" width="86" height="18"/>
                     <buttonCell key="cell" type="radio" title="Papyrus" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="Woh-Ox-z4d">
                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                         <font key="font" metaFont="system"/>
@@ -359,7 +360,7 @@
                     </connections>
                 </button>
                 <button ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="H7b-10-or7">
-                    <rect key="frame" x="19" y="52" width="86" height="18"/>
+                    <rect key="frame" x="19" y="63" width="86" height="18"/>
                     <buttonCell key="cell" type="radio" title="Collegiate" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="uCW-WD-xxl">
                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                         <font key="font" metaFont="system"/>
@@ -369,7 +370,7 @@
                     </connections>
                 </button>
                 <button ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="GES-1c-EBH">
-                    <rect key="frame" x="19" y="30" width="86" height="18"/>
+                    <rect key="frame" x="19" y="41" width="86" height="18"/>
                     <buttonCell key="cell" type="radio" title="Kyoto" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="6i5-eI-B6e">
                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                         <font key="font" metaFont="system"/>
@@ -378,20 +379,32 @@
                         <action selector="setStyle:" target="-2" id="inJ-Lk-hug"/>
                     </connections>
                 </button>
+                <button ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ERU-Xo-Ml9">
+                    <rect key="frame" x="19" y="19" width="86" height="18"/>
+                    <buttonCell key="cell" type="radio" title="Mordor" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="oMq-Zr-X29">
+                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                        <font key="font" metaFont="system"/>
+                    </buttonCell>
+                    <connections>
+                        <action selector="setStyle:" target="-2" id="MjL-dT-BPk"/>
+                    </connections>
+                </button>
             </subviews>
             <constraints>
-                <constraint firstAttribute="bottom" secondItem="GES-1c-EBH" secondAttribute="bottom" constant="20" id="2NY-lc-qcO"/>
                 <constraint firstItem="H7b-10-or7" firstAttribute="leading" secondItem="ia5-TV-CXd" secondAttribute="leading" id="5gV-Mq-aaW"/>
+                <constraint firstItem="ERU-Xo-Ml9" firstAttribute="top" secondItem="GES-1c-EBH" secondAttribute="bottom" constant="6" id="8CR-J2-qVh"/>
                 <constraint firstItem="D2v-xV-dni" firstAttribute="leading" secondItem="ia5-TV-CXd" secondAttribute="leading" id="9Y8-9y-KfW"/>
                 <constraint firstItem="D2v-xV-dni" firstAttribute="top" secondItem="ia5-TV-CXd" secondAttribute="bottom" constant="6" id="LiB-fz-iKZ"/>
+                <constraint firstAttribute="bottom" secondItem="ERU-Xo-Ml9" secondAttribute="bottom" constant="20" id="RbP-lg-K2R"/>
                 <constraint firstItem="GES-1c-EBH" firstAttribute="top" secondItem="H7b-10-or7" secondAttribute="bottom" constant="6" id="Wp2-fx-KAT"/>
                 <constraint firstItem="E9d-C5-Jia" firstAttribute="leading" secondItem="ia5-TV-CXd" secondAttribute="leading" id="ZF9-DB-iWG"/>
                 <constraint firstItem="H7b-10-or7" firstAttribute="top" secondItem="E9d-C5-Jia" secondAttribute="bottom" constant="6" id="a8N-IX-gYK"/>
                 <constraint firstItem="ia5-TV-CXd" firstAttribute="top" secondItem="Aik-bZ-0c7" secondAttribute="top" constant="20" id="cJ4-g7-D31"/>
                 <constraint firstItem="ia5-TV-CXd" firstAttribute="leading" secondItem="Aik-bZ-0c7" secondAttribute="leading" constant="20" id="hla-Q3-ZtK"/>
                 <constraint firstItem="E9d-C5-Jia" firstAttribute="top" secondItem="D2v-xV-dni" secondAttribute="bottom" constant="6" id="mgR-VP-Tmm"/>
+                <constraint firstItem="GES-1c-EBH" firstAttribute="leading" secondItem="ia5-TV-CXd" secondAttribute="leading" id="rTh-Fy-EAq"/>
             </constraints>
-            <point key="canvasLocation" x="263" y="682.5"/>
+            <point key="canvasLocation" x="263" y="688"/>
         </customView>
     </objects>
     <resources>

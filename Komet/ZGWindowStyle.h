@@ -13,6 +13,7 @@
 #define ZGWindowStylePapyrus @"papyrus"
 #define ZGWindowStyleBlue @"blue"
 #define ZGWindowStyleGreen @"green"
+#define ZGWindowStyleRed @"red"
 
 @interface ZGWindowStyle : NSObject
 

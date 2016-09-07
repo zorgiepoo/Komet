@@ -54,12 +54,13 @@ typedef NS_ENUM(NSInteger, ZGSelectedFontType)
 	
 	IBOutlet NSButton *_automaticNewlineInsertionAfterSubjectLineCheckbox;
 	IBOutlet NSButton *_automaticallyInstallUpdatesCheckbox;
-    
+	
 	IBOutlet NSButton *_defaultStyleButton;
 	IBOutlet NSButton *_darkStyleButton;
 	IBOutlet NSButton *_papyrusStyleButton;
 	IBOutlet NSButton *_blueStyleButton;
 	IBOutlet NSButton *_greenStyleButton;
+	IBOutlet NSButton *_redStyleButton;
 }
 
 - (instancetype)initWithEditorListener:(id<ZGUserDefaultsEditorListener>)editorListener updaterListener:(id<ZGUpdaterSettingsListener>)updaterListener
@@ -260,6 +261,8 @@ typedef NS_ENUM(NSInteger, ZGSelectedFontType)
 		_blueStyleButton.state = NSOnState;
 	} else if ([activeStyle isEqualToString:ZGWindowStyleGreen]) {
 		_greenStyleButton.state = NSOnState;
+	} else if ([activeStyle isEqualToString:ZGWindowStyleRed]) {
+		_redStyleButton.state = NSOnState;
 	}
 }
 
@@ -269,6 +272,7 @@ typedef NS_ENUM(NSInteger, ZGSelectedFontType)
 	_papyrusStyleButton.state = NSOffState;
 	_blueStyleButton.state = NSOffState;
 	_greenStyleButton.state = NSOffState;
+	_redStyleButton.state = NSOffState;
 	sender.state = NSOnState;
     
 	if (sender == _defaultStyleButton) {
@@ -281,6 +285,8 @@ typedef NS_ENUM(NSInteger, ZGSelectedFontType)
 		ZGWriteDefaultStyle(ZGWindowStyleBlue);
 	} else if (sender == _greenStyleButton) {
 		ZGWriteDefaultStyle(ZGWindowStyleGreen);
+	} else if (sender == _redStyleButton) {
+		ZGWriteDefaultStyle(ZGWindowStyleRed);
 	}
     
 	[_editorListener userDefaultsChangedWindowStyle];

@@ -71,6 +71,17 @@
 			  fallbackColor:[NSColor colorWithDeviceRed:0.847 green:0.792 blue:0.659 alpha:0.9]
 			  scroll:NSScrollerKnobStyleDark
 		  ];
+	} else if ([styleName isEqualToString:ZGWindowStyleRed]) {
+		return [ZGWindowStyle
+			  withBar:[NSColor colorWithDeviceRed:0.863 green:0.208 blue:0.133 alpha:1]
+			  barText:[NSColor colorWithDeviceRed:0.118 green:0.118 blue:0.125 alpha:1]
+			  material:NSVisualEffectMaterialUltraDark
+			  text:[NSColor colorWithDeviceRed:0.963 green:0.308 blue:0.233 alpha:1]
+			  comment:[NSColor colorWithDeviceRed:0.863 green:0.208 blue:0.133 alpha:1]
+			  overflow:[NSColor colorWithDeviceRed:0.216 green:0.255 blue:0.251 alpha:1]
+			  fallbackColor:[NSColor colorWithDeviceRed:0.165 green:0.173 blue:0.169 alpha:0.95]
+			  scroll:NSScrollerKnobStyleLight
+			  ];
 	} else {
 		// Default style
 		return [ZGWindowStyle
