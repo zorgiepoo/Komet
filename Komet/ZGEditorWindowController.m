@@ -29,7 +29,7 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 	NSURL *_fileURL;
 	IBOutlet ZGColoredView *_topBar;
 	IBOutlet ZGCommitTextView *_textView;
-	IBOutlet ZGColoredView *_contentView;
+	IBOutlet NSVisualEffectView *_contentView;
 	IBOutlet NSTextField *_commitLabelTextField;
 	IBOutlet NSButtonCell *_cancelButton;
 	IBOutlet NSButton *_commitButton;
@@ -291,7 +291,14 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 	_textView.drawsBackground = NO;
 	
 	// Style content area
-	_contentView.backgroundColor = _style.backgroundColor;
+	if ([_contentView respondsToSelector:@selector(setMaterial:)]) {
+		// Good, we're running on 10.10 or greater, so use vibrancy
+		_contentView.material = _style.material;
+	} else {
+		// Fall back to a simple coloured view
+		[(ZGColoredView *)_contentView setBackgroundColor:_style.fallbackBackgroundColor];
+	}
+	
 }
 
 - (void)updateEditorMessageFont

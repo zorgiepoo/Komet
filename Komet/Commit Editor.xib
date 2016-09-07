@@ -21,24 +21,24 @@
         <window allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" restorable="NO" oneShot="NO" releasedWhenClosed="NO" showsToolbarButton="NO" visibleAtLaunch="NO" frameAutosaveName="" animationBehavior="default" id="4Y4-O8-fQs">
             <windowStyleMask key="styleMask" titled="YES" resizable="YES" fullSizeContentView="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
-            <rect key="contentRect" x="205" y="188" width="500" height="321"/>
+            <rect key="contentRect" x="205" y="188" width="500" height="329"/>
             <rect key="screenRect" x="0.0" y="0.0" width="2560" height="1417"/>
             <value key="minSize" type="size" width="300" height="200"/>
             <view key="contentView" id="UXa-uU-h9N">
-                <rect key="frame" x="0.0" y="0.0" width="500" height="321"/>
+                <rect key="frame" x="0.0" y="0.0" width="500" height="329"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <box horizontalHuggingPriority="248" verticalHuggingPriority="750" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="9XC-w7-083" customClass="ZGHorizontalLine">
-                        <rect key="frame" x="0.0" y="297" width="500" height="5"/>
+                        <rect key="frame" x="0.0" y="303" width="500" height="5"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="1" id="MSz-v9-c9M"/>
                         </constraints>
                     </box>
                     <customView translatesAutoresizingMaskIntoConstraints="NO" id="iuq-58-oil" userLabel="Top Bar" customClass="ZGColoredView">
-                        <rect key="frame" x="0.0" y="300" width="500" height="21"/>
+                        <rect key="frame" x="0.0" y="306" width="500" height="23"/>
                         <subviews>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="vV7-fu-K3M">
-                                <rect key="frame" x="6" y="3" width="75" height="14"/>
+                                <rect key="frame" x="6" y="5" width="75" height="14"/>
                                 <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Some Project" id="rGL-rv-935">
                                     <font key="font" metaFont="smallSystem"/>
                                     <color key="textColor" name="disabledControlTextColor" catalog="System" colorSpace="catalog"/>
@@ -46,7 +46,7 @@
                                 </textFieldCell>
                             </textField>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="SIQ-xl-8MY">
-                                <rect key="frame" x="437" y="1" width="55" height="17"/>
+                                <rect key="frame" x="437" y="3" width="55" height="17"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="55" id="AiN-eL-Kf8"/>
                                 </constraints>
@@ -63,7 +63,7 @@ DQ
                                 </connections>
                             </button>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="bxH-iH-acy">
-                                <rect key="frame" x="389" y="1" width="40" height="17"/>
+                                <rect key="frame" x="389" y="3" width="40" height="17"/>
                                 <buttonCell key="cell" type="roundRect" title="Cancel" bezelStyle="roundedRect" alignment="center" controlSize="small" lineBreakMode="truncatingTail" state="on" imageScaling="proportionallyDown" inset="2" id="eoZ-dv-vM8">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="smallSystem"/>
@@ -78,29 +78,29 @@ DQ
                             <constraint firstItem="vV7-fu-K3M" firstAttribute="top" secondItem="iuq-58-oil" secondAttribute="top" constant="4" id="M4R-xS-gaA"/>
                             <constraint firstItem="vV7-fu-K3M" firstAttribute="leading" secondItem="iuq-58-oil" secondAttribute="leading" constant="8" id="MdF-kS-11o"/>
                             <constraint firstItem="SIQ-xl-8MY" firstAttribute="leading" secondItem="bxH-iH-acy" secondAttribute="trailing" constant="8" id="m6Z-bI-oOF"/>
-                            <constraint firstAttribute="height" constant="21" id="rOk-2H-52N"/>
+                            <constraint firstAttribute="height" constant="23" id="rOk-2H-52N"/>
                             <constraint firstItem="SIQ-xl-8MY" firstAttribute="top" secondItem="iuq-58-oil" secondAttribute="top" constant="3" id="wwO-fz-HIK"/>
                             <constraint firstItem="bxH-iH-acy" firstAttribute="top" secondItem="iuq-58-oil" secondAttribute="top" constant="3" id="zlE-qN-ZEz"/>
                         </constraints>
                     </customView>
                     <customView translatesAutoresizingMaskIntoConstraints="NO" id="5Ms-NX-CHZ" userLabel="Content" customClass="NSVisualEffectView">
-                        <rect key="frame" x="0.0" y="0.0" width="500" height="301"/>
+                        <rect key="frame" x="0.0" y="0.0" width="500" height="307"/>
                         <subviews>
                             <scrollView borderType="none" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZR8-bz-mFA">
-                                <rect key="frame" x="4" y="0.0" width="492" height="293"/>
+                                <rect key="frame" x="4" y="0.0" width="492" height="299"/>
                                 <clipView key="contentView" drawsBackground="NO" copiesOnScroll="NO" id="SkQ-6A-FOt">
-                                    <rect key="frame" x="0.0" y="0.0" width="492" height="293"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="492" height="299"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <textView drawsBackground="NO" importsGraphics="NO" richText="NO" findStyle="panel" continuousSpellChecking="YES" allowsUndo="YES" usesRuler="YES" usesFontPanel="YES" verticallyResizable="YES" allowsNonContiguousLayout="YES" smartInsertDelete="YES" id="AXg-Fl-XGk" customClass="ZGCommitTextView">
-                                            <rect key="frame" x="0.0" y="0.0" width="492" height="293"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="492" height="299"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                             <color key="backgroundColor" white="1" alpha="0.0" colorSpace="calibratedWhite"/>
-                                            <size key="minSize" width="492" height="293"/>
+                                            <size key="minSize" width="492" height="299"/>
                                             <size key="maxSize" width="532" height="10000000"/>
                                             <color key="insertionPointColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                            <size key="minSize" width="492" height="293"/>
+                                            <size key="minSize" width="492" height="299"/>
                                             <size key="maxSize" width="532" height="10000000"/>
                                         </textView>
                                     </subviews>
@@ -111,7 +111,7 @@ DQ
                                     <autoresizingMask key="autoresizingMask"/>
                                 </scroller>
                                 <scroller key="verticalScroller" verticalHuggingPriority="750" horizontal="NO" id="UZb-Ee-qf6">
-                                    <rect key="frame" x="476" y="0.0" width="16" height="293"/>
+                                    <rect key="frame" x="476" y="0.0" width="16" height="299"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </scroller>
                             </scrollView>

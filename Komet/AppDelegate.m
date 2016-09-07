@@ -8,10 +8,12 @@
 
 @import Cocoa;
 @import Darwin.sys.mount;
+@import ObjectiveC.runtime;
 
 #import "ZGEditorWindowController.h"
 #import "ZGPreferencesWindowController.h"
 #import "ZGUpdaterController.h"
+#import "ZGColoredView.h"
 
 @interface AppDelegate : NSObject <NSApplicationDelegate>
 @end
@@ -144,6 +146,12 @@
 			fprintf(stderr, "Failed to create temporary greetings file with error: %s\n", writeError.localizedDescription.UTF8String);
 			exit(EXIT_FAILURE);
 		}
+	}
+	
+	// If we're running on 10.9 or earlier, we don't have NSVisualEffectView. Fallback gracefully to a coloured view.
+	if (![NSVisualEffectView class]) {
+		Class NSVisualEffectViewClass = objc_allocateClassPair([ZGColoredView class], "NSVisualEffectView", 0);
+		objc_registerClassPair(NSVisualEffectViewClass);
 	}
 	
 	_editorWindowController = [[ZGEditorWindowController alloc] initWithFileURL:fileURL tutorialMode:tutorialMode];
