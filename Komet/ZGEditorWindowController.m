@@ -27,19 +27,19 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 @implementation ZGEditorWindowController
 {
 	NSURL *_fileURL;
-    IBOutlet ZGColoredView *_topBar;
+	IBOutlet ZGColoredView *_topBar;
 	IBOutlet ZGCommitTextView *_textView;
-    IBOutlet ZGColoredView *_contentView;
+	IBOutlet ZGColoredView *_contentView;
 	IBOutlet NSTextField *_commitLabelTextField;
-    IBOutlet NSButtonCell *_cancelButton;
-    IBOutlet NSButton *_commitButton;
-    IBOutlet NSBox *_horizontalLine;
+	IBOutlet NSButtonCell *_cancelButton;
+	IBOutlet NSButton *_commitButton;
+	IBOutlet NSBox *_horizontalLine;
 	BOOL _preventAccidentalNewline;
 	BOOL _initiallyContainedEmptyContent;
 	BOOL _tutorialMode;
 	NSUInteger _commentSectionLength;
 	ZGVersionControlType _versionControlType;
-    ZGWindowStyle *_style;
+	ZGWindowStyle *_style;
 }
 
 + (void)initialize
@@ -82,8 +82,8 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 {
 	[self.window setFrameUsingName:ZGEditorWindowFrameNameKey];
     
-    _style = [ZGWindowStyle withName:ZGReadDefaultWindowStyle()];
-    [self updateWindowStyle];
+	_style = [ZGWindowStyle withName:ZGReadDefaultWindowStyle()];
+	[self updateWindowStyle];
 	
 	NSData *data = [NSData dataWithContentsOfURL:_fileURL];
 	if (data == nil)
@@ -266,32 +266,32 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 }
 
 - (void)updateWindowStyle {
-    // Disable window background drawing, so we can style the top bar and
-    // text view separately
-    [self.window setOpaque:NO];
-    [self.window setBackgroundColor:[NSColor colorWithWhite:1.0 alpha:0.01]];
+	// Disable window background drawing, so we can style the top bar and
+	// text view separately
+	[self.window setOpaque:NO];
+	[self.window setBackgroundColor:[NSColor colorWithWhite:1.0 alpha:0.01]];
+	
+	// Style top bar
+	_topBar.wantsLayer = YES;
+	_topBar.backgroundColor = _style.barColor;
     
-    // Style top bar
-    _topBar.wantsLayer = YES;
-    _topBar.backgroundColor = _style.barColor;
-    
-    // Style top bar buttons
-    _commitLabelTextField.textColor = _style.barTextColor;
-    NSMutableAttributedString *commitTitle = [[NSMutableAttributedString alloc] initWithAttributedString:_commitButton.attributedTitle];
-    [commitTitle addAttribute:NSForegroundColorAttributeName value:_style.barTextColor range:NSMakeRange(0, [_commitButton.title length])];
-    [_commitButton setAttributedTitle:commitTitle];
-    NSMutableAttributedString *cancelTitle = [[NSMutableAttributedString alloc] initWithAttributedString:_cancelButton.attributedTitle];
-    [cancelTitle addAttribute:NSForegroundColorAttributeName value:_style.barTextColor range:NSMakeRange(0, [_cancelButton.title length])];
-    [_cancelButton setAttributedTitle:cancelTitle];
-    
-    _horizontalLine.borderColor = [NSColor colorWithRed:_style.barTextColor.redComponent green:_style.barTextColor.greenComponent blue:_style.barTextColor.blueComponent alpha:(_style.barTextColor.alphaComponent > 0.4 ? _style.barTextColor.alphaComponent - 0.4 : 0.4)];
-    
-    // Style text
-    _textView.wantsLayer = YES;
-    _textView.drawsBackground = NO;
-    
-    // Style content area
-    _contentView.backgroundColor = _style.backgroundColor;
+	// Style top bar buttons
+	_commitLabelTextField.textColor = _style.barTextColor;
+	NSMutableAttributedString *commitTitle = [[NSMutableAttributedString alloc] initWithAttributedString:_commitButton.attributedTitle];
+	[commitTitle addAttribute:NSForegroundColorAttributeName value:_style.barTextColor range:NSMakeRange(0, [_commitButton.title length])];
+	[_commitButton setAttributedTitle:commitTitle];
+	NSMutableAttributedString *cancelTitle = [[NSMutableAttributedString alloc] initWithAttributedString:_cancelButton.attributedTitle];
+	[cancelTitle addAttribute:NSForegroundColorAttributeName value:_style.barTextColor range:NSMakeRange(0, [_cancelButton.title length])];
+	[_cancelButton setAttributedTitle:cancelTitle];
+	
+	_horizontalLine.borderColor = [NSColor colorWithRed:_style.barTextColor.redComponent green:_style.barTextColor.greenComponent blue:_style.barTextColor.blueComponent alpha:(_style.barTextColor.alphaComponent > 0.4 ? _style.barTextColor.alphaComponent - 0.4 : 0.4)];
+	
+	// Style text
+	_textView.wantsLayer = YES;
+	_textView.drawsBackground = NO;
+	
+	// Style content area
+	_contentView.backgroundColor = _style.backgroundColor;
 }
 
 - (void)updateEditorMessageFont
@@ -332,15 +332,15 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 
 - (void)userDefaultsChangedWindowStyle
 {
-    _style = [ZGWindowStyle withName:ZGReadDefaultWindowStyle()];
-    [self updateWindowStyle];
-    [self updateTextProcessingForTextStorage:_textView.textStorage];
-    [_topBar setNeedsDisplay:YES];
-    [_contentView setNeedsDisplay:YES];
-    
-    // The comment section isn't updated by setting the editor style elsewhere, since it's not editable.
-    [_textView.textStorage removeAttribute:NSForegroundColorAttributeName range:NSMakeRange([_textView.textStorage.string length] - _commentSectionLength, _commentSectionLength)];
-    [_textView.textStorage addAttribute:NSForegroundColorAttributeName value:_style.commentColor range:NSMakeRange([_textView.textStorage.string length] - _commentSectionLength, _commentSectionLength)];
+	_style = [ZGWindowStyle withName:ZGReadDefaultWindowStyle()];
+	[self updateWindowStyle];
+	[self updateTextProcessingForTextStorage:_textView.textStorage];
+	[_topBar setNeedsDisplay:YES];
+	[_contentView setNeedsDisplay:YES];
+	
+	// The comment section isn't updated by setting the editor style elsewhere, since it's not editable.
+	[_textView.textStorage removeAttribute:NSForegroundColorAttributeName range:NSMakeRange([_textView.textStorage.string length] - _commentSectionLength, _commentSectionLength)];
+	[_textView.textStorage addAttribute:NSForegroundColorAttributeName value:_style.commentColor range:NSMakeRange([_textView.textStorage.string length] - _commentSectionLength, _commentSectionLength)];
 }
 
 - (NSArray<NSValue *> *)contentLineRangesForTextStorage:(NSTextStorage *)textStorage
@@ -466,21 +466,21 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 
 - (void)updateContentStyleForTextStorage:(NSTextStorage *)textStorage withContentLineRanges:(NSArray<NSValue *> *)contentLineRanges
 {
-    if (contentLineRanges.count == 0)
-    {
-        return;
-    }
+	if (contentLineRanges.count == 0)
+	{
+		return;
+	}
     
-    NSString *plainText = textStorage.string;
+	NSString *plainText = textStorage.string;
     
-    for (NSValue *contentLineRangeValue in contentLineRanges)
-    {
-        NSRange lineRange = contentLineRangeValue.rangeValue;
-        if (lineRange.length > 0 && ![self isCommentLine:[plainText substringWithRange:lineRange] forVersionControlType:_versionControlType]) {
-            [textStorage removeAttribute:NSForegroundColorAttributeName range:lineRange];
-            [textStorage addAttribute:NSForegroundColorAttributeName value:_style.textColor range:lineRange];
-        }
-    }
+	for (NSValue *contentLineRangeValue in contentLineRanges)
+	{
+		NSRange lineRange = contentLineRangeValue.rangeValue;
+		if (lineRange.length > 0 && ![self isCommentLine:[plainText substringWithRange:lineRange] forVersionControlType:_versionControlType]) {
+			[textStorage removeAttribute:NSForegroundColorAttributeName range:lineRange];
+			[textStorage addAttribute:NSForegroundColorAttributeName value:_style.textColor range:lineRange];
+		}
+	}
 }
 
 - (void)highlightOverflowingTextInTextStorage:(NSTextStorage *)textStorage lineRange:(NSRange)lineRange limit:(NSUInteger)limit
@@ -521,7 +521,7 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 	
 	[self updateCommentAttributesForTextStorage:textStorage withContentLineRanges:contentLineRanges];
     
-    [self updateContentStyleForTextStorage:textStorage withContentLineRanges:contentLineRanges];
+	[self updateContentStyleForTextStorage:textStorage withContentLineRanges:contentLineRanges];
 }
 
 // I'm not using the passed editRange and delta because I've found them to be quite misleading...
