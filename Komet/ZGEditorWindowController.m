@@ -289,6 +289,7 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 	// Style text
 	_textView.wantsLayer = YES;
 	_textView.drawsBackground = NO;
+	_textView.insertionPointColor = _style.textColor;
 	
 	// Style content area
 	if ([_contentView respondsToSelector:@selector(setMaterial:)]) {
