@@ -11,6 +11,7 @@
                 <outlet property="_commitLabelTextField" destination="vV7-fu-K3M" id="jXI-Po-BbJ"/>
                 <outlet property="_contentView" destination="5Ms-NX-CHZ" id="pgk-UA-0ri"/>
                 <outlet property="_horizontalLine" destination="9XC-w7-083" id="3Aj-Cs-YyT"/>
+                <outlet property="_scrollView" destination="ZR8-bz-mFA" id="gnm-JR-QTh"/>
                 <outlet property="_textView" destination="AXg-Fl-XGk" id="bHs-ph-oOV"/>
                 <outlet property="_topBar" destination="iuq-58-oil" id="ptU-zp-Hrn"/>
                 <outlet property="window" destination="4Y4-O8-fQs" id="9cp-uO-prZ"/>
@@ -86,7 +87,7 @@ DQ
                     <customView translatesAutoresizingMaskIntoConstraints="NO" id="5Ms-NX-CHZ" userLabel="Content" customClass="NSVisualEffectView">
                         <rect key="frame" x="0.0" y="0.0" width="500" height="307"/>
                         <subviews>
-                            <scrollView borderType="none" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZR8-bz-mFA">
+                            <scrollView borderType="none" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" scrollerKnobStyle="light" translatesAutoresizingMaskIntoConstraints="NO" id="ZR8-bz-mFA">
                                 <rect key="frame" x="4" y="0.0" width="492" height="299"/>
                                 <clipView key="contentView" drawsBackground="NO" copiesOnScroll="NO" id="SkQ-6A-FOt">
                                     <rect key="frame" x="0.0" y="0.0" width="492" height="299"/>

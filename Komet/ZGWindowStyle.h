@@ -23,8 +23,9 @@
 @property (nonatomic, nonnull) NSColor* commentColor;
 @property (nonatomic, nonnull) NSColor* overflowColor;
 @property (nonatomic, nonnull) NSColor* fallbackBackgroundColor;
+@property (atomic) NSScrollerKnobStyle scroll;
 
-+ (ZGWindowStyle * _Nonnull)withBar: (NSColor * _Nonnull)barColor barText:(NSColor * _Nonnull)barTextColor material: (NSVisualEffectMaterial)material text: (NSColor * _Nonnull)textColor comment: (NSColor * _Nonnull)commentColor overflow: (NSColor * _Nonnull)overflowColor fallbackColor: (NSColor * _Nonnull)fallbackColor;
++ (ZGWindowStyle * _Nonnull)withBar: (NSColor * _Nonnull)barColor barText: (NSColor * _Nonnull)barTextColor material: (NSVisualEffectMaterial)material text: (NSColor * _Nonnull)textColor comment: (NSColor * _Nonnull)commentColor overflow: (NSColor * _Nonnull)overflowColor fallbackColor: (NSColor * _Nonnull)fallbackColor scroll: (NSScrollerKnobStyle)scroll;
 + (ZGWindowStyle * _Nonnull)withName: (NSString * _Nonnull)styleName;
 
 @end

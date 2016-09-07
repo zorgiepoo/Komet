@@ -10,9 +10,9 @@
 
 @implementation ZGWindowStyle
 
-@synthesize barColor, barTextColor, material, textColor, commentColor, overflowColor, fallbackBackgroundColor;
+@synthesize barColor, barTextColor, material, textColor, commentColor, overflowColor, fallbackBackgroundColor, scroll;
 
-+ (ZGWindowStyle * _Nonnull)withBar: (NSColor * _Nonnull)barColor barText: (NSColor * _Nonnull)barTextColor material: (NSVisualEffectMaterial)material text: (NSColor * _Nonnull)textColor comment: (NSColor * _Nonnull)commentColor overflow: (NSColor * _Nonnull)overflowColor fallbackColor: (NSColor * _Nonnull)fallbackColor {
++ (ZGWindowStyle * _Nonnull)withBar: (NSColor * _Nonnull)barColor barText: (NSColor * _Nonnull)barTextColor material: (NSVisualEffectMaterial)material text: (NSColor * _Nonnull)textColor comment: (NSColor * _Nonnull)commentColor overflow: (NSColor * _Nonnull)overflowColor fallbackColor: (NSColor * _Nonnull)fallbackColor scroll: (NSScrollerKnobStyle)scroll {
 	ZGWindowStyle *style = [[ZGWindowStyle alloc] init];
 	[style setBarColor:barColor];
 	[style setBarTextColor:barTextColor];
@@ -21,6 +21,7 @@
 	[style setCommentColor:commentColor];
 	[style setOverflowColor:overflowColor];
 	[style setFallbackBackgroundColor:fallbackColor];
+	[style setScroll:scroll];
     
 	return style;
 }
@@ -35,6 +36,7 @@
 			  comment:[NSColor colorWithDeviceWhite:1.0 alpha:0.7]
 			  overflow:[NSColor colorWithDeviceRed:1.0 green:0.8 blue:0.8 alpha:1.0]
 			  fallbackColor:[NSColor colorWithDeviceRed:0.0 green:0.0 blue:0.0 alpha:0.9]
+			  scroll:NSScrollerKnobStyleLight
 		  ];
 	} else if ([styleName isEqualToString:ZGWindowStylePapyrus]) {
 		return [ZGWindowStyle
@@ -45,6 +47,7 @@
 			  comment:[NSColor colorWithDeviceRed:0.714 green:0.286 blue:0.149 alpha:1]
 			  overflow:[NSColor colorWithDeviceRed:1 green:0.690 blue:0.231 alpha:1]
 			  fallbackColor:[NSColor colorWithDeviceRed:1 green:0.941 blue:0.647 alpha:0.9]
+			  scroll:NSScrollerKnobStyleDark
 		  ];
 	} else if ([styleName isEqualToString:ZGWindowStyleBlue]) {
 		return [ZGWindowStyle
@@ -55,6 +58,7 @@
 			  comment:[NSColor colorWithDeviceRed:0.161 green:0.502 blue:0.725 alpha:1]
 			  overflow:[NSColor colorWithDeviceRed:0.906 green:0.298 blue:0.235 alpha:1]
 			  fallbackColor:[NSColor colorWithDeviceRed:0.925 green:0.941 blue:0.945 alpha:0.9]
+			  scroll:NSScrollerKnobStyleDark
 		  ];
 	} else if ([styleName isEqualToString:ZGWindowStyleGreen]) {
 		return [ZGWindowStyle
@@ -65,6 +69,7 @@
 			  comment:[NSColor colorWithDeviceRed:0.361 green:0.514 blue:0.184 alpha:1]
 			  overflow:[NSColor colorWithDeviceRed:0.212 green:0.224 blue:0.259 alpha:0.5]
 			  fallbackColor:[NSColor colorWithDeviceRed:0.847 green:0.792 blue:0.659 alpha:0.9]
+			  scroll:NSScrollerKnobStyleDark
 		  ];
 	} else {
 		// Default style
@@ -76,6 +81,7 @@
 			  comment:[NSColor colorWithDeviceRed:0.0 green:0.0 blue:0.0 alpha:0.7]
 			  overflow:[NSColor colorWithDeviceRed:1.0 green:0.0 blue:0.0 alpha:0.3]
 			  fallbackColor:[NSColor colorWithDeviceRed:1.0 green:1.0 blue:1.0 alpha:0.95]
+			  scroll:NSScrollerKnobStyleDark
 		  ];
 	}
 }

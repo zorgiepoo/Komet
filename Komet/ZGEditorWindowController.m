@@ -29,6 +29,7 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 	NSURL *_fileURL;
 	IBOutlet ZGColoredView *_topBar;
 	IBOutlet ZGCommitTextView *_textView;
+	IBOutlet NSScrollView *_scrollView;
 	IBOutlet NSVisualEffectView *_contentView;
 	IBOutlet NSTextField *_commitLabelTextField;
 	IBOutlet NSButtonCell *_cancelButton;
@@ -300,6 +301,8 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 		[(ZGColoredView *)_contentView setBackgroundColor:_style.fallbackBackgroundColor];
 	}
 	
+	// Style scroll view
+	_scrollView.scrollerKnobStyle = _style.scroll;
 }
 
 - (void)updateEditorMessageFont
