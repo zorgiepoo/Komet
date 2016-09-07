@@ -2,7 +2,7 @@
 
 A Cocoa text editor designed for creating commit messages.
 
-![Image of Komet](Screenshot.png)
+![Image of Komet](themes/default.png)
 
 ## Purpose
 
@@ -20,11 +20,11 @@ I do version control from the command line but I want a fast and non-obstructive
 
 ### Themes
 
-![Default](themes/default.png)
 ![Dark](themes/dark.png)
 ![Collegiate](themes/collegiate.png)
 ![Kyoto](themes/kyoto.png)
 ![Papyrus](themes/papyrus.png)
+![Mordor](themes/mordor.png)
 
 ## Requirements
 
