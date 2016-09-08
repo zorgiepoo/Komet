@@ -285,13 +285,7 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 	_textView.insertionPointColor = _style.textColor;
 	
 	// Style content area
-	if ([_contentView respondsToSelector:@selector(setMaterial:)]) {
-		// Good, we're running on 10.10 or greater, so use vibrancy
-		_contentView.material = _style.material;
-	} else {
-		// Fall back to a simple coloured view
-		[(ZGColoredView *)_contentView setBackgroundColor:_style.fallbackBackgroundColor];
-	}
+    _contentView.material = _style.material;
 	
 	// Style scroll view
 	_scrollView.scrollerKnobStyle = _style.scroll;
