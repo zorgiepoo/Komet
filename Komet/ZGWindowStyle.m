@@ -85,7 +85,7 @@
 	} else {
 		// Default style
 		return [ZGWindowStyle
-			  withBar:[NSColor colorWithDeviceRed:1.0 green:1.0 blue:1.0 alpha:1.0]
+			  withBar:[NSColor colorWithDeviceWhite:0.9 alpha:1.0]
 			  barText:[NSColor colorWithDeviceRed:0.0 green:0.0 blue:0.0 alpha:1.0]
 			  material:NSVisualEffectMaterialLight
 			  text:[NSColor colorWithDeviceRed:0.0 green:0.0 blue:0.0 alpha:1.0]
