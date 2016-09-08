@@ -34,7 +34,6 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 	IBOutlet NSTextField *_commitLabelTextField;
 	IBOutlet NSButtonCell *_cancelButton;
 	IBOutlet NSButton *_commitButton;
-	IBOutlet NSBox *_horizontalLine;
 	BOOL _preventAccidentalNewline;
 	BOOL _initiallyContainedEmptyContent;
 	BOOL _tutorialMode;
@@ -267,11 +266,6 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 }
 
 - (void)updateWindowStyle {
-	// Disable window background drawing, so we can style the top bar and
-	// text view separately
-	[self.window setOpaque:NO];
-	[self.window setBackgroundColor:[NSColor colorWithWhite:1.0 alpha:0.01]];
-	
 	// Style top bar
 	_topBar.wantsLayer = YES;
 	_topBar.backgroundColor = _style.barColor;
@@ -284,8 +278,6 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 	NSMutableAttributedString *cancelTitle = [[NSMutableAttributedString alloc] initWithAttributedString:_cancelButton.attributedTitle];
 	[cancelTitle addAttribute:NSForegroundColorAttributeName value:_style.barTextColor range:NSMakeRange(0, [_cancelButton.title length])];
 	[_cancelButton setAttributedTitle:cancelTitle];
-	
-	_horizontalLine.borderColor = [NSColor colorWithRed:_style.barTextColor.redComponent green:_style.barTextColor.greenComponent blue:_style.barTextColor.blueComponent alpha:(_style.barTextColor.alphaComponent > 0.4 ? _style.barTextColor.alphaComponent - 0.4 : 0.4)];
 	
 	// Style text
 	_textView.wantsLayer = YES;

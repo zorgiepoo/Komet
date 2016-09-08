@@ -10,7 +10,6 @@
                 <outlet property="_commitButton" destination="SIQ-xl-8MY" id="G77-Pg-TwW"/>
                 <outlet property="_commitLabelTextField" destination="vV7-fu-K3M" id="jXI-Po-BbJ"/>
                 <outlet property="_contentView" destination="5Ms-NX-CHZ" id="pgk-UA-0ri"/>
-                <outlet property="_horizontalLine" destination="9XC-w7-083" id="3Aj-Cs-YyT"/>
                 <outlet property="_scrollView" destination="ZR8-bz-mFA" id="gnm-JR-QTh"/>
                 <outlet property="_textView" destination="AXg-Fl-XGk" id="bHs-ph-oOV"/>
                 <outlet property="_topBar" destination="iuq-58-oil" id="ptU-zp-Hrn"/>
@@ -29,12 +28,6 @@
                 <rect key="frame" x="0.0" y="0.0" width="500" height="329"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <box horizontalHuggingPriority="248" verticalHuggingPriority="750" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="9XC-w7-083" customClass="ZGHorizontalLine">
-                        <rect key="frame" x="0.0" y="303" width="500" height="5"/>
-                        <constraints>
-                            <constraint firstAttribute="height" constant="1" id="MSz-v9-c9M"/>
-                        </constraints>
-                    </box>
                     <customView translatesAutoresizingMaskIntoConstraints="NO" id="iuq-58-oil" userLabel="Top Bar" customClass="ZGColoredView">
                         <rect key="frame" x="0.0" y="306" width="500" height="23"/>
                         <subviews>
@@ -87,7 +80,7 @@ DQ
                     <customView translatesAutoresizingMaskIntoConstraints="NO" id="5Ms-NX-CHZ" userLabel="Content" customClass="NSVisualEffectView">
                         <rect key="frame" x="0.0" y="0.0" width="500" height="307"/>
                         <subviews>
-                            <scrollView borderType="none" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" scrollerKnobStyle="light" translatesAutoresizingMaskIntoConstraints="NO" id="ZR8-bz-mFA">
+                            <scrollView misplaced="YES" borderType="none" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" scrollerKnobStyle="light" translatesAutoresizingMaskIntoConstraints="NO" id="ZR8-bz-mFA">
                                 <rect key="frame" x="4" y="0.0" width="496" height="306"/>
                                 <clipView key="contentView" drawsBackground="NO" copiesOnScroll="NO" id="SkQ-6A-FOt">
                                     <rect key="frame" x="0.0" y="0.0" width="496" height="306"/>
@@ -121,7 +114,7 @@ DQ
                             <constraint firstItem="ZR8-bz-mFA" firstAttribute="leading" secondItem="5Ms-NX-CHZ" secondAttribute="leading" constant="4" id="Ifk-CI-0Or"/>
                             <constraint firstAttribute="bottom" secondItem="ZR8-bz-mFA" secondAttribute="bottom" id="KAa-3U-Jzu"/>
                             <constraint firstAttribute="trailing" secondItem="ZR8-bz-mFA" secondAttribute="trailing" id="eFe-Bd-69a"/>
-                            <constraint firstItem="ZR8-bz-mFA" firstAttribute="top" secondItem="5Ms-NX-CHZ" secondAttribute="top" constant="1" id="wOf-v8-Ofz"/>
+                            <constraint firstItem="ZR8-bz-mFA" firstAttribute="top" secondItem="5Ms-NX-CHZ" secondAttribute="top" id="wOf-v8-Ofz"/>
                             <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="300" id="zfz-rS-Fcw"/>
                         </constraints>
                     </customView>
@@ -130,13 +123,10 @@ DQ
                     <constraint firstAttribute="trailing" secondItem="5Ms-NX-CHZ" secondAttribute="trailing" id="9OK-gU-PPN"/>
                     <constraint firstAttribute="bottom" secondItem="5Ms-NX-CHZ" secondAttribute="bottom" id="KFf-3F-pnF"/>
                     <constraint firstAttribute="trailing" secondItem="iuq-58-oil" secondAttribute="trailing" id="Xvh-XO-J9E"/>
-                    <constraint firstItem="9XC-w7-083" firstAttribute="top" secondItem="iuq-58-oil" secondAttribute="bottom" id="ZMT-Ea-JpN"/>
                     <constraint firstItem="iuq-58-oil" firstAttribute="leading" secondItem="UXa-uU-h9N" secondAttribute="leading" id="bB6-6f-jHC"/>
-                    <constraint firstItem="9XC-w7-083" firstAttribute="leading" secondItem="UXa-uU-h9N" secondAttribute="leading" id="eem-ug-Xne"/>
                     <constraint firstItem="5Ms-NX-CHZ" firstAttribute="leading" secondItem="UXa-uU-h9N" secondAttribute="leading" id="jYA-wZ-ELG"/>
-                    <constraint firstItem="5Ms-NX-CHZ" firstAttribute="top" secondItem="9XC-w7-083" secondAttribute="bottom" constant="-2" id="lMd-Y1-nPk"/>
                     <constraint firstItem="iuq-58-oil" firstAttribute="top" secondItem="UXa-uU-h9N" secondAttribute="top" id="pFE-wr-iC0"/>
-                    <constraint firstAttribute="trailing" secondItem="9XC-w7-083" secondAttribute="trailing" id="twh-aE-yLh"/>
+                    <constraint firstItem="5Ms-NX-CHZ" firstAttribute="top" secondItem="UXa-uU-h9N" secondAttribute="top" constant="22" id="szM-oz-msK"/>
                 </constraints>
             </view>
             <connections>
