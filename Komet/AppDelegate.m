@@ -89,7 +89,6 @@
 		 @"Add tutorial to %@\n"
 		 @"\n"
 		 @"Todo: Make some more improvements.\n"
-         @"A really long line that wraps and overflows into the error space so that we can see the highlighting.\n"
 		 @"\n"
 		 @"# Welcome to the Cocoa commit editor for macOS.\n"
 		 @"#\n"
