@@ -148,12 +148,6 @@
 		}
 	}
 	
-	// If we're running on 10.9 or earlier, we don't have NSVisualEffectView. Fallback gracefully to a coloured view.
-	if (![NSVisualEffectView class]) {
-		Class NSVisualEffectViewClass = objc_allocateClassPair([ZGColoredView class], "NSVisualEffectView", 0);
-		objc_registerClassPair(NSVisualEffectViewClass);
-	}
-	
 	_editorWindowController = [[ZGEditorWindowController alloc] initWithFileURL:fileURL tutorialMode:tutorialMode];
 	[_editorWindowController showWindow:nil];
 	
