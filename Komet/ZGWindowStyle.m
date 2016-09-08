@@ -10,8 +10,6 @@
 
 @implementation ZGWindowStyle
 
-@synthesize barColor, barTextColor, material, textColor, commentColor, overflowColor, fallbackBackgroundColor, scroll;
-
 + (ZGWindowStyle * _Nonnull)withBar: (NSColor * _Nonnull)barColor barText: (NSColor * _Nonnull)barTextColor material: (NSVisualEffectMaterial)material text: (NSColor * _Nonnull)textColor comment: (NSColor * _Nonnull)commentColor overflow: (NSColor * _Nonnull)overflowColor fallbackColor: (NSColor * _Nonnull)fallbackColor scroll: (NSScrollerKnobStyle)scroll {
 	ZGWindowStyle *style = [[ZGWindowStyle alloc] init];
 	[style setBarColor:barColor];

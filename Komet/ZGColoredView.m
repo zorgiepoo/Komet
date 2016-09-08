@@ -10,8 +10,6 @@
 
 @implementation ZGColoredView
 
-@synthesize backgroundColor;
-
 - (void)drawRect:(NSRect)dirtyRect {
 	[self.backgroundColor set];
 	NSRectFill(dirtyRect);
