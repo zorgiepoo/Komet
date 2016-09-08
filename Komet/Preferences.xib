@@ -65,13 +65,13 @@
                             <action selector="showWarnings:" target="-2" id="GX5-9y-7lK"/>
                         </connections>
                     </toolbarItem>
-                    <toolbarItem implicitItemIdentifier="54106575-5C4C-4A34-AEDE-9E90FEFB68CC" explicitItemIdentifier="advanced" label="Advanced" paletteLabel="Advanced" tag="2" image="NSAdvanced" selectable="YES" id="2Wj-Ck-alH">
+                    <toolbarItem implicitItemIdentifier="54106575-5C4C-4A34-AEDE-9E90FEFB68CC" explicitItemIdentifier="advanced" label="Advanced" paletteLabel="Advanced" tag="3" image="NSAdvanced" selectable="YES" id="2Wj-Ck-alH">
                         <nil key="toolTip"/>
                         <connections>
                             <action selector="showAdvanced:" target="-2" id="MqJ-c9-Kk4"/>
                         </connections>
                     </toolbarItem>
-                    <toolbarItem implicitItemIdentifier="2BCB2C73-0C51-44A5-A8B5-84C6A6C04BA3" explicitItemIdentifier="style" label="Style" paletteLabel="Style" tag="3" image="NSColorPanel" selectable="YES" id="xUe-cD-sra">
+                    <toolbarItem implicitItemIdentifier="2BCB2C73-0C51-44A5-A8B5-84C6A6C04BA3" explicitItemIdentifier="style" label="Style" paletteLabel="Style" tag="2" image="NSColorPanel" selectable="YES" id="xUe-cD-sra">
                         <connections>
                             <action selector="showStyles:" target="-2" id="tjI-ej-SNV"/>
                         </connections>
@@ -80,8 +80,8 @@
                 <defaultToolbarItems>
                     <toolbarItem reference="ZSv-XI-2jR"/>
                     <toolbarItem reference="YxA-vf-ITa"/>
-                    <toolbarItem reference="2Wj-Ck-alH"/>
                     <toolbarItem reference="xUe-cD-sra"/>
+                    <toolbarItem reference="2Wj-Ck-alH"/>
                 </defaultToolbarItems>
             </toolbar>
             <connections>
