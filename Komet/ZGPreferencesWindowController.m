@@ -61,6 +61,7 @@ typedef NS_ENUM(NSInteger, ZGSelectedFontType)
 	IBOutlet NSButton *_blueStyleButton;
 	IBOutlet NSButton *_greenStyleButton;
 	IBOutlet NSButton *_redStyleButton;
+    IBOutlet NSButton *_vibrancySwitch;
 }
 
 - (instancetype)initWithEditorListener:(id<ZGUserDefaultsEditorListener>)editorListener updaterListener:(id<ZGUpdaterSettingsListener>)updaterListener
@@ -249,6 +250,8 @@ typedef NS_ENUM(NSInteger, ZGSelectedFontType)
 - (IBAction)showStyles:(id)__unused sender {
 	self.window.contentView = _styleView;
 	[self.window.toolbar setSelectedItemIdentifier:ZGToolbarStyleIdentifier];
+    
+    _vibrancySwitch.state = (ZGReadDefaultWindowVibrancy() ? 1 : 0);
 	
 	NSString *activeStyle = ZGReadDefaultWindowStyle();
 	if ([activeStyle isEqualToString:ZGWindowStyleDefault]) {
@@ -290,6 +293,12 @@ typedef NS_ENUM(NSInteger, ZGSelectedFontType)
 	}
     
 	[_editorListener userDefaultsChangedWindowStyle];
+}
+
+- (IBAction)setVibrancy:(NSButton *)sender {
+    ZGWriteDefaultWindowVibrancy([sender state] == 1);
+    
+    [_editorListener userDefaultsChangedWindowVibrancy];
 }
 
 @end

@@ -20,6 +20,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)userDefaultsChangedWindowStyle;
 
+- (void)userDefaultsChangedWindowVibrancy;
+
 @end
 
 NS_ASSUME_NONNULL_END

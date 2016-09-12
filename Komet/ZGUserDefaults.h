@@ -42,4 +42,8 @@ void ZGRegisterDefaultWindowStyle(void);
 NSString *ZGReadDefaultWindowStyle(void);
 void ZGWriteDefaultStyle(NSString *styleKey);
 
+void ZGRegisterDefaultWindowVibrancy(void);
+BOOL ZGReadDefaultWindowVibrancy(void);
+void ZGWriteDefaultWindowVibrancy(BOOL windowVibrancy);
+
 NS_ASSUME_NONNULL_END

@@ -24,6 +24,7 @@
 #define ZGEditorAutomaticNewlineInsertionAfterSubjectKey @"ZGEditorAutomaticNewlineInsertionAfterSubject"
 
 #define ZGWindowStyleKey @"ZGWindowStyleName"
+#define ZGWindowVibrancyKey @"ZGWindowVibrancy"
 
 static NSFont *ZGReadDefaultFont(NSString *fontNameDefaultsKey, NSString *fontSizeDefaultsKey)
 {
@@ -177,4 +178,19 @@ NSString *ZGReadDefaultWindowStyle(void) {
 
 void ZGWriteDefaultStyle(NSString *styleKey) {
 	[[NSUserDefaults standardUserDefaults] setValue:styleKey forKey:ZGWindowStyleKey];
+}
+
+void ZGRegisterDefaultWindowVibrancy(void)
+{
+    [[NSUserDefaults standardUserDefaults] registerDefaults:@{ZGWindowVibrancyKey : @(YES)}];
+}
+
+BOOL ZGReadDefaultWindowVibrancy(void)
+{
+    return [[NSUserDefaults standardUserDefaults] boolForKey:ZGWindowVibrancyKey];
+}
+
+void ZGWriteDefaultWindowVibrancy(BOOL windowVibrancy)
+{
+    [[NSUserDefaults standardUserDefaults] setBool:windowVibrancy forKey:ZGWindowVibrancyKey];
 }

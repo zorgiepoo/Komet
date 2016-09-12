@@ -268,7 +268,7 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 - (void)updateWindowStyle {
 	// Style top bar
 	_topBar.wantsLayer = YES;
-	_topBar.backgroundColor = _style.barColor;
+    _topBar.backgroundColor = _style.barColor;
     
 	// Style top bar buttons
 	_commitLabelTextField.textColor = _style.barTextColor;
@@ -284,7 +284,8 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 	_textView.drawsBackground = NO;
 	_textView.insertionPointColor = _style.textColor;
 	
-	// Style content area
+    // Style content area
+    _contentView.state = (ZGReadDefaultWindowVibrancy() ? NSVisualEffectStateFollowsWindowActiveState : NSVisualEffectStateInactive);
     _contentView.material = _style.material;
 	
 	// Style scroll view
@@ -338,6 +339,10 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 	// The comment section isn't updated by setting the editor style elsewhere, since it's not editable.
 	[_textView.textStorage removeAttribute:NSForegroundColorAttributeName range:NSMakeRange([_textView.textStorage.string length] - _commentSectionLength, _commentSectionLength)];
 	[_textView.textStorage addAttribute:NSForegroundColorAttributeName value:_style.commentColor range:NSMakeRange([_textView.textStorage.string length] - _commentSectionLength, _commentSectionLength)];
+}
+
+- (void)userDefaultsChangedWindowVibrancy {
+    [self updateWindowStyle];
 }
 
 - (NSArray<NSValue *> *)contentLineRangesForTextStorage:(NSTextStorage *)textStorage

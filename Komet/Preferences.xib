@@ -25,6 +25,7 @@
                 <outlet property="_recommendedSubjectLengthLimitTextField" destination="Xcy-hC-F81" id="L6A-GD-yWt"/>
                 <outlet property="_redStyleButton" destination="ERU-Xo-Ml9" id="l8H-Tj-o0h"/>
                 <outlet property="_styleView" destination="Aik-bZ-0c7" id="GBx-jr-IjG"/>
+                <outlet property="_vibrancySwitch" destination="R51-U5-FbT" id="QNq-vD-wN3"/>
                 <outlet property="_warningsView" destination="I8B-Aq-rvW" id="IZd-AL-CEj"/>
                 <outlet property="window" destination="X9f-Ms-esr" id="day-H5-Cqe"/>
             </connections>
@@ -389,12 +390,24 @@
                         <action selector="setStyle:" target="-2" id="MjL-dT-BPk"/>
                     </connections>
                 </button>
+                <button ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="R51-U5-FbT">
+                    <rect key="frame" x="118" y="20" width="170" height="18"/>
+                    <buttonCell key="cell" type="check" title="Translucent Background" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="Msh-xg-J3I">
+                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                        <font key="font" metaFont="system"/>
+                    </buttonCell>
+                    <connections>
+                        <action selector="setVibrancy:" target="-2" id="cYc-nu-kvQ"/>
+                    </connections>
+                </button>
             </subviews>
             <constraints>
                 <constraint firstItem="H7b-10-or7" firstAttribute="leading" secondItem="ia5-TV-CXd" secondAttribute="leading" id="5gV-Mq-aaW"/>
                 <constraint firstItem="ERU-Xo-Ml9" firstAttribute="top" secondItem="GES-1c-EBH" secondAttribute="bottom" constant="6" id="8CR-J2-qVh"/>
                 <constraint firstItem="D2v-xV-dni" firstAttribute="leading" secondItem="ia5-TV-CXd" secondAttribute="leading" id="9Y8-9y-KfW"/>
+                <constraint firstAttribute="trailing" secondItem="R51-U5-FbT" secondAttribute="trailing" constant="20" id="AAF-jr-msn"/>
                 <constraint firstItem="D2v-xV-dni" firstAttribute="top" secondItem="ia5-TV-CXd" secondAttribute="bottom" constant="6" id="LiB-fz-iKZ"/>
+                <constraint firstItem="R51-U5-FbT" firstAttribute="top" secondItem="ERU-Xo-Ml9" secondAttribute="top" id="MI5-vZ-H7c"/>
                 <constraint firstAttribute="bottom" secondItem="ERU-Xo-Ml9" secondAttribute="bottom" constant="20" id="RbP-lg-K2R"/>
                 <constraint firstItem="GES-1c-EBH" firstAttribute="top" secondItem="H7b-10-or7" secondAttribute="bottom" constant="6" id="Wp2-fx-KAT"/>
                 <constraint firstItem="E9d-C5-Jia" firstAttribute="leading" secondItem="ia5-TV-CXd" secondAttribute="leading" id="ZF9-DB-iWG"/>
