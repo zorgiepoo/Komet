@@ -10,7 +10,6 @@
 #import "ZGCommitTextView.h"
 #import "ZGUserDefaults.h"
 #import "ZGWindowStyle.h"
-#import "ZGColoredView.h"
 
 #define ZGEditorWindowFrameNameKey @"ZGEditorWindowFrame"
 
@@ -27,7 +26,7 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 @implementation ZGEditorWindowController
 {
 	NSURL *_fileURL;
-	IBOutlet ZGColoredView *_topBar;
+	IBOutlet NSView *_topBar;
 	IBOutlet ZGCommitTextView *_textView;
 	IBOutlet NSScrollView *_scrollView;
 	IBOutlet NSVisualEffectView *_contentView;
@@ -268,7 +267,7 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 - (void)updateWindowStyle {
 	// Style top bar
 	_topBar.wantsLayer = YES;
-    _topBar.backgroundColor = _style.barColor;
+    _topBar.layer.backgroundColor = _style.barColor.CGColor;
     
 	// Style top bar buttons
 	_commitLabelTextField.textColor = _style.barTextColor;

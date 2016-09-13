@@ -13,7 +13,6 @@
 #import "ZGEditorWindowController.h"
 #import "ZGPreferencesWindowController.h"
 #import "ZGUpdaterController.h"
-#import "ZGColoredView.h"
 
 @interface AppDelegate : NSObject <NSApplicationDelegate>
 @end
