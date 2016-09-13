@@ -80,21 +80,21 @@ DQ
                     <customView translatesAutoresizingMaskIntoConstraints="NO" id="5Ms-NX-CHZ" userLabel="Content" customClass="NSVisualEffectView">
                         <rect key="frame" x="0.0" y="0.0" width="500" height="307"/>
                         <subviews>
-                            <scrollView misplaced="YES" borderType="none" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" scrollerKnobStyle="light" translatesAutoresizingMaskIntoConstraints="NO" id="ZR8-bz-mFA">
-                                <rect key="frame" x="4" y="0.0" width="496" height="306"/>
+                            <scrollView borderType="none" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" scrollerKnobStyle="light" translatesAutoresizingMaskIntoConstraints="NO" id="ZR8-bz-mFA">
+                                <rect key="frame" x="0.0" y="0.0" width="500" height="307"/>
                                 <clipView key="contentView" drawsBackground="NO" copiesOnScroll="NO" id="SkQ-6A-FOt">
-                                    <rect key="frame" x="0.0" y="0.0" width="496" height="306"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="500" height="307"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <textView drawsBackground="NO" importsGraphics="NO" richText="NO" findStyle="panel" continuousSpellChecking="YES" allowsUndo="YES" usesRuler="YES" usesFontPanel="YES" verticallyResizable="YES" allowsNonContiguousLayout="YES" smartInsertDelete="YES" id="AXg-Fl-XGk" customClass="ZGCommitTextView">
-                                            <rect key="frame" x="0.0" y="0.0" width="496" height="306"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="500" height="307"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                             <color key="backgroundColor" white="1" alpha="0.0" colorSpace="calibratedWhite"/>
-                                            <size key="minSize" width="496" height="306"/>
+                                            <size key="minSize" width="500" height="307"/>
                                             <size key="maxSize" width="532" height="10000000"/>
                                             <color key="insertionPointColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                            <size key="minSize" width="496" height="306"/>
+                                            <size key="minSize" width="500" height="307"/>
                                             <size key="maxSize" width="532" height="10000000"/>
                                         </textView>
                                     </subviews>
@@ -105,13 +105,13 @@ DQ
                                     <autoresizingMask key="autoresizingMask"/>
                                 </scroller>
                                 <scroller key="verticalScroller" verticalHuggingPriority="750" horizontal="NO" id="UZb-Ee-qf6">
-                                    <rect key="frame" x="480" y="0.0" width="16" height="306"/>
+                                    <rect key="frame" x="484" y="0.0" width="16" height="307"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </scroller>
                             </scrollView>
                         </subviews>
                         <constraints>
-                            <constraint firstItem="ZR8-bz-mFA" firstAttribute="leading" secondItem="5Ms-NX-CHZ" secondAttribute="leading" constant="4" id="Ifk-CI-0Or"/>
+                            <constraint firstItem="ZR8-bz-mFA" firstAttribute="leading" secondItem="5Ms-NX-CHZ" secondAttribute="leading" id="Ifk-CI-0Or"/>
                             <constraint firstAttribute="bottom" secondItem="ZR8-bz-mFA" secondAttribute="bottom" id="KAa-3U-Jzu"/>
                             <constraint firstAttribute="trailing" secondItem="ZR8-bz-mFA" secondAttribute="trailing" id="eFe-Bd-69a"/>
                             <constraint firstItem="ZR8-bz-mFA" firstAttribute="top" secondItem="5Ms-NX-CHZ" secondAttribute="top" id="wOf-v8-Ofz"/>
