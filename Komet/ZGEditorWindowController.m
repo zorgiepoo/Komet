@@ -283,12 +283,19 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 	_textView.drawsBackground = NO;
 	_textView.insertionPointColor = _style.textColor;
 	
-    // Style content area
-    _contentView.state = (ZGReadDefaultWindowVibrancy() ? NSVisualEffectStateFollowsWindowActiveState : NSVisualEffectStateInactive);
-    _contentView.material = _style.material;
-	
+	// Style content view
+	BOOL vibrant = ZGReadDefaultWindowVibrancy();
+	_contentView.state = (vibrant ? NSVisualEffectStateFollowsWindowActiveState : NSVisualEffectStateInactive);
+	_contentView.material = _style.material;
+
 	// Style scroll view
 	_scrollView.scrollerKnobStyle = _style.scroll;
+	if (vibrant) {
+		_scrollView.drawsBackground = NO;
+	} else {
+		_scrollView.drawsBackground = YES;
+		_scrollView.backgroundColor = _style.fallbackBackgroundColor;
+	}
 }
 
 - (void)updateEditorMessageFont
