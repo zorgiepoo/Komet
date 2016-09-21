@@ -282,6 +282,11 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 	_textView.wantsLayer = YES;
 	_textView.drawsBackground = NO;
 	_textView.insertionPointColor = _style.textColor;
+	[_textView setSelectedTextAttributes:
+		[NSDictionary dictionaryWithObjectsAndKeys:
+			_style.barColor, NSBackgroundColorAttributeName,
+			_style.barTextColor, NSForegroundColorAttributeName,
+			nil]];
 	
 	// Style content view
 	BOOL vibrant = ZGReadDefaultWindowVibrancy();
