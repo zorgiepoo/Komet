@@ -164,6 +164,7 @@
 				TargetAttributes = {
 					72B72C911D63EFF90096365F = {
 						CreatedOnToolsVersion = 7.3.1;
+						DevelopmentTeam = ZCK58M894E;
 					};
 				};
 			};
@@ -323,6 +324,7 @@
 				CODE_SIGN_IDENTITY = "Developer ID Application";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = ZCK58M894E;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
