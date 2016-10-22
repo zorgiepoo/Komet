@@ -260,14 +260,22 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 	}
 }
 
+- (void)updateFont:(NSFont *)newFont range:(NSRange)range
+{
+	[_textView.textStorage addAttribute:NSFontAttributeName value:newFont range:range];
+	
+	// If we don't fix the font attributes, then attachments (like emoji) may become invisible and not show up
+	[_textView.textStorage fixFontAttributeInRange:range];
+}
+
 - (void)updateEditorMessageFont
 {
-	[_textView.textStorage addAttribute:NSFontAttributeName value:ZGReadDefaultMessageFont() range:NSMakeRange(0, _textView.textStorage.length - _commentSectionLength)];
+	[self updateFont:ZGReadDefaultMessageFont() range:NSMakeRange(0, _textView.textStorage.length - _commentSectionLength)];
 }
 
 - (void)updateEditorCommentsFont
 {
-	[_textView.textStorage addAttribute:NSFontAttributeName value:ZGReadDefaultCommentsFont() range:NSMakeRange(_textView.textStorage.length - _commentSectionLength, _commentSectionLength)];
+	[self updateFont:ZGReadDefaultCommentsFont() range:NSMakeRange(_textView.textStorage.length - _commentSectionLength, _commentSectionLength)];
 }
 
 - (void)userDefaultsChangedMessageFont
@@ -352,7 +360,7 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 	NSFont *commentFont = nil;
 	
 	// First assume all content has no comment lines
-	[textStorage addAttribute:NSFontAttributeName value:ZGReadDefaultMessageFont() range:NSMakeRange(0, plainText.length - _commentSectionLength)];
+	[self updateFont:ZGReadDefaultMessageFont() range:NSMakeRange(0, plainText.length - _commentSectionLength)];
 	
 	for (NSValue *contentLineRangeValue in contentLineRanges)
 	{
@@ -366,7 +374,7 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 			{
 				commentFont = ZGReadDefaultCommentsFont();
 			}
-			[textStorage addAttribute:NSFontAttributeName value:commentFont range:contentLineRange];
+			[self updateFont:commentFont range:contentLineRange];
 		}
 		else
 		{
