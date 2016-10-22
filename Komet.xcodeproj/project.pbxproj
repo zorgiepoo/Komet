@@ -84,6 +84,7 @@
 				72B72C931D63EFF90096365F /* Products */,
 			);
 			sourceTree = "<group>";
+			usesTabs = 1;
 		};
 		72B72C931D63EFF90096365F /* Products */ = {
 			isa = PBXGroup;
