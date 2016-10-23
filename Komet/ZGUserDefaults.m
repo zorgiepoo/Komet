@@ -168,29 +168,32 @@ void ZGWriteDefaultAutomaticNewlineInsertionAfterSubjectLine(BOOL automaticNewli
 	[[NSUserDefaults standardUserDefaults] setBool:automaticNewlineInsertionAfterSubjectLine forKey:ZGEditorAutomaticNewlineInsertionAfterSubjectKey];
 }
 
-void ZGRegisterDefaultWindowStyle(void) {
+void ZGRegisterDefaultWindowStyle(void)
+{
 	[[NSUserDefaults standardUserDefaults] registerDefaults:@{ZGWindowStyleKey : ZGWindowStyleDefault}];
 }
 
-NSString *ZGReadDefaultWindowStyle(void) {
-	return (NSString * _Nonnull)[[NSUserDefaults standardUserDefaults] stringForKey:ZGWindowStyleKey];
+NSString *ZGReadDefaultWindowStyle(void)
+{
+	return [[NSUserDefaults standardUserDefaults] stringForKey:ZGWindowStyleKey];
 }
 
-void ZGWriteDefaultStyle(NSString *styleKey) {
+void ZGWriteDefaultStyle(NSString *styleKey)
+{
 	[[NSUserDefaults standardUserDefaults] setValue:styleKey forKey:ZGWindowStyleKey];
 }
 
 void ZGRegisterDefaultWindowVibrancy(void)
 {
-    [[NSUserDefaults standardUserDefaults] registerDefaults:@{ZGWindowVibrancyKey : @(YES)}];
+	[[NSUserDefaults standardUserDefaults] registerDefaults:@{ZGWindowVibrancyKey : @(YES)}];
 }
 
 BOOL ZGReadDefaultWindowVibrancy(void)
 {
-    return [[NSUserDefaults standardUserDefaults] boolForKey:ZGWindowVibrancyKey];
+	return [[NSUserDefaults standardUserDefaults] boolForKey:ZGWindowVibrancyKey];
 }
 
 void ZGWriteDefaultWindowVibrancy(BOOL windowVibrancy)
 {
-    [[NSUserDefaults standardUserDefaults] setBool:windowVibrancy forKey:ZGWindowVibrancyKey];
+	[[NSUserDefaults standardUserDefaults] setBool:windowVibrancy forKey:ZGWindowVibrancyKey];
 }

@@ -52,7 +52,7 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 		ZGRegisterDefaultRecommendedBodyLineLengthLimitEnabled();
 		ZGRegisterDefaultRecommendedBodyLineLengthLimit();
 		ZGRegisterDefaultAutomaticNewlineInsertionAfterSubjectLine();
-        ZGRegisterDefaultWindowStyle();
+		ZGRegisterDefaultWindowStyle();
 	});
 }
 
@@ -81,7 +81,7 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 {
 	[self.window setFrameUsingName:ZGEditorWindowFrameNameKey];
     
-	_style = [ZGWindowStyle withName:ZGReadDefaultWindowStyle()];
+	_style = [ZGWindowStyle windowStyleWithStyleName:ZGReadDefaultWindowStyle()];
 	[self updateWindowStyle];
 	
 	NSData *data = [NSData dataWithContentsOfURL:_fileURL];
@@ -264,10 +264,11 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 	}
 }
 
-- (void)updateWindowStyle {
+- (void)updateWindowStyle
+{
 	// Style top bar
 	_topBar.wantsLayer = YES;
-    _topBar.layer.backgroundColor = _style.barColor.CGColor;
+	_topBar.layer.backgroundColor = _style.barColor.CGColor;
     
 	// Style top bar buttons
 	_commitLabelTextField.textColor = _style.barTextColor;
@@ -282,11 +283,7 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 	_textView.wantsLayer = YES;
 	_textView.drawsBackground = NO;
 	_textView.insertionPointColor = _style.textColor;
-	[_textView setSelectedTextAttributes:
-		[NSDictionary dictionaryWithObjectsAndKeys:
-			_style.barColor, NSBackgroundColorAttributeName,
-			_style.barTextColor, NSForegroundColorAttributeName,
-			nil]];
+	[_textView setSelectedTextAttributes:@{NSBackgroundColorAttributeName: _style.barColor, NSForegroundColorAttributeName: _style.barTextColor}];
 	
 	// Style content view
 	BOOL vibrant = ZGReadDefaultWindowVibrancy();
@@ -294,10 +291,13 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 	_contentView.material = _style.material;
 
 	// Style scroll view
-	_scrollView.scrollerKnobStyle = _style.scroll;
-	if (vibrant) {
+	_scrollView.scrollerKnobStyle = _style.scrollerKnobStyle;
+	if (vibrant)
+	{
 		_scrollView.drawsBackground = NO;
-	} else {
+	}
+	else
+	{
 		_scrollView.drawsBackground = YES;
 		_scrollView.backgroundColor = _style.fallbackBackgroundColor;
 	}
@@ -349,7 +349,7 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 
 - (void)userDefaultsChangedWindowStyle
 {
-	_style = [ZGWindowStyle withName:ZGReadDefaultWindowStyle()];
+	_style = [ZGWindowStyle windowStyleWithStyleName:ZGReadDefaultWindowStyle()];
 	[self updateWindowStyle];
 	[self updateTextProcessingForTextStorage:_textView.textStorage];
 	[_topBar setNeedsDisplay:YES];
@@ -360,8 +360,9 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 	[_textView.textStorage addAttribute:NSForegroundColorAttributeName value:_style.commentColor range:NSMakeRange([_textView.textStorage.string length] - _commentSectionLength, _commentSectionLength)];
 }
 
-- (void)userDefaultsChangedWindowVibrancy {
-    [self updateWindowStyle];
+- (void)userDefaultsChangedWindowVibrancy
+{
+	[self updateWindowStyle];
 }
 
 - (NSArray<NSValue *> *)contentLineRangesForTextStorage:(NSTextStorage *)textStorage
@@ -465,7 +466,7 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 	
 	for (NSValue *contentLineRangeValue in contentLineRanges)
 	{
-        NSRange lineRange = contentLineRangeValue.rangeValue;
+		NSRange lineRange = contentLineRangeValue.rangeValue;
 		if (lineRange.location == 0)
 		{
 			if (allowingSubjectLimit)
@@ -497,7 +498,8 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 	for (NSValue *contentLineRangeValue in contentLineRanges)
 	{
 		NSRange lineRange = contentLineRangeValue.rangeValue;
-		if (lineRange.length > 0 && ![self isCommentLine:[plainText substringWithRange:lineRange] forVersionControlType:_versionControlType]) {
+		if (lineRange.length > 0 && ![self isCommentLine:[plainText substringWithRange:lineRange] forVersionControlType:_versionControlType])
+		{
 			[textStorage removeAttribute:NSForegroundColorAttributeName range:lineRange];
 			[textStorage addAttribute:NSForegroundColorAttributeName value:_style.textColor range:lineRange];
 		}

@@ -61,7 +61,7 @@ typedef NS_ENUM(NSInteger, ZGSelectedFontType)
 	IBOutlet NSButton *_blueStyleButton;
 	IBOutlet NSButton *_greenStyleButton;
 	IBOutlet NSButton *_redStyleButton;
-    IBOutlet NSButton *_vibrancySwitch;
+	IBOutlet NSButton *_vibrancySwitch;
 }
 
 - (instancetype)initWithEditorListener:(id<ZGUserDefaultsEditorListener>)editorListener updaterListener:(id<ZGUpdaterSettingsListener>)updaterListener
@@ -247,29 +247,42 @@ typedef NS_ENUM(NSInteger, ZGSelectedFontType)
 	[_updaterListener updaterSettingsChangedAutomaticallyInstallingUpdates:(_automaticallyInstallUpdatesCheckbox.state == NSOnState)];
 }
 
-- (IBAction)showStyles:(id)__unused sender {
+- (IBAction)showStyles:(id)__unused sender
+{
 	self.window.contentView = _styleView;
 	[self.window.toolbar setSelectedItemIdentifier:ZGToolbarStyleIdentifier];
-    
-    _vibrancySwitch.state = (ZGReadDefaultWindowVibrancy() ? 1 : 0);
+
+	_vibrancySwitch.state = (ZGReadDefaultWindowVibrancy() ? 1 : 0);
 	
 	NSString *activeStyle = ZGReadDefaultWindowStyle();
-	if ([activeStyle isEqualToString:ZGWindowStyleDefault]) {
+	if ([activeStyle isEqualToString:ZGWindowStyleDefault])
+	{
 		_defaultStyleButton.state = NSOnState;
-	} else if ([activeStyle isEqualToString:ZGWindowStyleDark]) {
+	}
+	else if ([activeStyle isEqualToString:ZGWindowStyleDark])
+	{
 		_darkStyleButton.state = NSOnState;
-	} else if ([activeStyle isEqualToString:ZGWindowStylePapyrus]) {
+	}
+	else if ([activeStyle isEqualToString:ZGWindowStylePapyrus])
+	{
 		_papyrusStyleButton.state = NSOnState;
-	} else if ([activeStyle isEqualToString:ZGWindowStyleBlue]) {
+	}
+	else if ([activeStyle isEqualToString:ZGWindowStyleBlue])
+	{
 		_blueStyleButton.state = NSOnState;
-	} else if ([activeStyle isEqualToString:ZGWindowStyleGreen]) {
+	}
+	else if ([activeStyle isEqualToString:ZGWindowStyleGreen])
+	{
 		_greenStyleButton.state = NSOnState;
-	} else if ([activeStyle isEqualToString:ZGWindowStyleRed]) {
+	}
+	else if ([activeStyle isEqualToString:ZGWindowStyleRed])
+	{
 		_redStyleButton.state = NSOnState;
 	}
 }
 
-- (IBAction)setStyle:(NSButton *)sender {
+- (IBAction)setStyle:(NSButton *)sender
+{
 	_defaultStyleButton.state = NSOffState;
 	_darkStyleButton.state = NSOffState;
 	_papyrusStyleButton.state = NSOffState;
@@ -278,27 +291,38 @@ typedef NS_ENUM(NSInteger, ZGSelectedFontType)
 	_redStyleButton.state = NSOffState;
 	sender.state = NSOnState;
     
-	if (sender == _defaultStyleButton) {
+	if (sender == _defaultStyleButton)
+	{
 		ZGWriteDefaultStyle(ZGWindowStyleDefault);
-	} else if (sender == _darkStyleButton) {
+	}
+	else if (sender == _darkStyleButton)
+	{
 		ZGWriteDefaultStyle(ZGWindowStyleDark);
-	} else if (sender == _papyrusStyleButton) {
+	}
+	else if (sender == _papyrusStyleButton)
+	{
 		ZGWriteDefaultStyle(ZGWindowStylePapyrus);
-	} else if (sender == _blueStyleButton) {
+	}
+	else if (sender == _blueStyleButton)
+	{
 		ZGWriteDefaultStyle(ZGWindowStyleBlue);
-	} else if (sender == _greenStyleButton) {
+	}
+	else if (sender == _greenStyleButton)
+	{
 		ZGWriteDefaultStyle(ZGWindowStyleGreen);
-	} else if (sender == _redStyleButton) {
+	}
+	else if (sender == _redStyleButton)
+	{
 		ZGWriteDefaultStyle(ZGWindowStyleRed);
 	}
     
 	[_editorListener userDefaultsChangedWindowStyle];
 }
 
-- (IBAction)setVibrancy:(NSButton *)sender {
-    ZGWriteDefaultWindowVibrancy([sender state] == 1);
-    
-    [_editorListener userDefaultsChangedWindowVibrancy];
+- (IBAction)setVibrancy:(NSButton *)sender
+{
+	ZGWriteDefaultWindowVibrancy([sender state] == 1);
+	[_editorListener userDefaultsChangedWindowVibrancy];
 }
 
 @end

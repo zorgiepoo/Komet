@@ -15,18 +15,21 @@
 #define ZGWindowStyleGreen @"green"
 #define ZGWindowStyleRed @"red"
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface ZGWindowStyle : NSObject
 
-@property (nonatomic, nonnull) NSColor* barColor;
-@property (nonatomic, nonnull) NSColor* barTextColor;
-@property (atomic) NSVisualEffectMaterial material;
-@property (nonatomic, nonnull) NSColor* textColor;
-@property (nonatomic, nonnull) NSColor* commentColor;
-@property (nonatomic, nonnull) NSColor* overflowColor;
-@property (nonatomic, nonnull) NSColor* fallbackBackgroundColor;
-@property (atomic) NSScrollerKnobStyle scroll;
+@property (nonatomic, readonly) NSColor *barColor;
+@property (nonatomic, readonly) NSColor *barTextColor;
+@property (nonatomic, readonly) NSVisualEffectMaterial material;
+@property (nonatomic, readonly) NSColor *textColor;
+@property (nonatomic, readonly) NSColor *commentColor;
+@property (nonatomic, readonly) NSColor *overflowColor;
+@property (nonatomic, readonly) NSColor *fallbackBackgroundColor;
+@property (nonatomic, readonly) NSScrollerKnobStyle scrollerKnobStyle;
 
-+ (ZGWindowStyle * _Nonnull)withBar: (NSColor * _Nonnull)barColor barText: (NSColor * _Nonnull)barTextColor material: (NSVisualEffectMaterial)material text: (NSColor * _Nonnull)textColor comment: (NSColor * _Nonnull)commentColor overflow: (NSColor * _Nonnull)overflowColor fallbackColor: (NSColor * _Nonnull)fallbackColor scroll: (NSScrollerKnobStyle)scroll;
-+ (ZGWindowStyle * _Nonnull)withName: (NSString * _Nonnull)styleName;
++ (ZGWindowStyle *)windowStyleWithStyleName:(NSString *)styleName;
 
 @end
+
+NS_ASSUME_NONNULL_END

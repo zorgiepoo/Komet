@@ -160,7 +160,8 @@
 
 - (IBAction)showPreferences:(id)__unused sender
 {
-	if (_preferencesWondowController == nil) {
+	if (_preferencesWondowController == nil)
+	{
 		_preferencesWondowController = [[ZGPreferencesWindowController alloc] initWithEditorListener:_editorWindowController updaterListener:_updaterController];
 	}
 	[_preferencesWondowController showWindow:nil];
