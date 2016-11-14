@@ -135,7 +135,7 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 	
 	// Give a little vertical padding between the text and the top of the text view container
 	NSSize textContainerInset = _textView.textContainerInset;
-	_textView.textContainerInset = NSMakeSize(textContainerInset.width + 4, textContainerInset.height + 7);
+	_textView.textContainerInset = NSMakeSize(textContainerInset.width, textContainerInset.height + 2);
 	
 	self.window.titlebarAppearsTransparent = YES;
 	
