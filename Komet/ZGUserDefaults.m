@@ -23,7 +23,7 @@
 
 #define ZGEditorAutomaticNewlineInsertionAfterSubjectKey @"ZGEditorAutomaticNewlineInsertionAfterSubject"
 
-#define ZGWindowStyleKey @"ZGWindowStyleName"
+#define ZGWindowStyleThemeKey @"ZGWindowStyleTheme"
 #define ZGWindowVibrancyKey @"ZGWindowVibrancy"
 
 static NSFont *ZGReadDefaultFont(NSString *fontNameDefaultsKey, NSString *fontSizeDefaultsKey)
@@ -168,19 +168,20 @@ void ZGWriteDefaultAutomaticNewlineInsertionAfterSubjectLine(BOOL automaticNewli
 	[[NSUserDefaults standardUserDefaults] setBool:automaticNewlineInsertionAfterSubjectLine forKey:ZGEditorAutomaticNewlineInsertionAfterSubjectKey];
 }
 
-void ZGRegisterDefaultWindowStyle(void)
+void ZGRegisterDefaultWindowStyleTheme(void)
 {
-	[[NSUserDefaults standardUserDefaults] registerDefaults:@{ZGWindowStyleKey : ZGWindowStyleDefault}];
+	[[NSUserDefaults standardUserDefaults] registerDefaults:@{ZGWindowStyleThemeKey : @(ZGWindowStyleThemeDefault)}];
 }
 
-NSString *ZGReadDefaultWindowStyle(void)
+ZGWindowStyleTheme ZGReadDefaultWindowStyleTheme(void)
 {
-	return [[NSUserDefaults standardUserDefaults] stringForKey:ZGWindowStyleKey];
+	ZGWindowStyleTheme theme = (ZGWindowStyleTheme)[[NSUserDefaults standardUserDefaults] integerForKey:ZGWindowStyleThemeKey];
+	return (theme > ZGWindowStyleMaxTheme) ? ZGWindowStyleThemeDefault : theme;
 }
 
-void ZGWriteDefaultStyle(NSString *styleKey)
+void ZGWriteDefaultStyleTheme(ZGWindowStyleTheme theme)
 {
-	[[NSUserDefaults standardUserDefaults] setValue:styleKey forKey:ZGWindowStyleKey];
+	[[NSUserDefaults standardUserDefaults] setObject:@(theme) forKey:ZGWindowStyleThemeKey];
 }
 
 void ZGRegisterDefaultWindowVibrancy(void)

@@ -8,6 +8,8 @@
 
 @import Cocoa;
 
+#import "ZGWindowStyleTheme.h"
+
 NS_ASSUME_NONNULL_BEGIN
 
 void ZGRegisterDefaultMessageFont(void);
@@ -38,9 +40,9 @@ void ZGRegisterDefaultAutomaticNewlineInsertionAfterSubjectLine(void);
 BOOL ZGReadDefaultAutomaticNewlineInsertionAfterSubjectLine(void);
 void ZGWriteDefaultAutomaticNewlineInsertionAfterSubjectLine(BOOL automaticNewlineInsertionAfterSubjectLine);
 
-void ZGRegisterDefaultWindowStyle(void);
-NSString *ZGReadDefaultWindowStyle(void);
-void ZGWriteDefaultStyle(NSString *styleKey);
+void ZGRegisterDefaultWindowStyleTheme(void);
+ZGWindowStyleTheme ZGReadDefaultWindowStyleTheme(void);
+void ZGWriteDefaultStyleTheme(ZGWindowStyleTheme theme);
 
 void ZGRegisterDefaultWindowVibrancy(void);
 BOOL ZGReadDefaultWindowVibrancy(void);

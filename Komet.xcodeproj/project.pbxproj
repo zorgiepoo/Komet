@@ -42,6 +42,7 @@
 /* Begin PBXFileReference section */
 		3A05CB0C1D7EA56B005106E9 /* ZGWindowStyle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZGWindowStyle.h; sourceTree = "<group>"; };
 		3A05CB0D1D7EA56B005106E9 /* ZGWindowStyle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZGWindowStyle.m; sourceTree = "<group>"; };
+		722FB81E1DD9568F001D40CE /* ZGWindowStyleTheme.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZGWindowStyleTheme.h; sourceTree = "<group>"; };
 		7240062D1D7359E4001042CF /* ZGUserDefaults.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZGUserDefaults.h; sourceTree = "<group>"; };
 		7240062E1D7359E4001042CF /* ZGUserDefaults.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZGUserDefaults.m; sourceTree = "<group>"; };
 		724006301D736E83001042CF /* ZGUserDefaultsEditorListener.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZGUserDefaultsEditorListener.h; sourceTree = "<group>"; };
@@ -105,6 +106,9 @@
 				72B72CAC1D6412EE0096365F /* ZGCommitTextView.m */,
 				72B72CA61D63F0870096365F /* ZGEditorWindowController.h */,
 				72B72CA71D63F0870096365F /* ZGEditorWindowController.m */,
+				3A05CB0C1D7EA56B005106E9 /* ZGWindowStyle.h */,
+				3A05CB0D1D7EA56B005106E9 /* ZGWindowStyle.m */,
+				722FB81E1DD9568F001D40CE /* ZGWindowStyleTheme.h */,
 				7240062D1D7359E4001042CF /* ZGUserDefaults.h */,
 				7240062E1D7359E4001042CF /* ZGUserDefaults.m */,
 				72D10C551D7334CA00ED32BC /* ZGPreferencesWindowController.h */,
@@ -121,8 +125,6 @@
 				72B72C9D1D63EFF90096365F /* MainMenu.xib */,
 				72B72CA01D63EFF90096365F /* Info.plist */,
 				72B72C981D63EFF90096365F /* Supporting Files */,
-				3A05CB0C1D7EA56B005106E9 /* ZGWindowStyle.h */,
-				3A05CB0D1D7EA56B005106E9 /* ZGWindowStyle.m */,
 			);
 			path = Komet;
 			sourceTree = "<group>";

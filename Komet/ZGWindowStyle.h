@@ -8,12 +8,7 @@
 
 @import AppKit;
 
-#define ZGWindowStyleDefault @"default"
-#define ZGWindowStyleDark @"dark"
-#define ZGWindowStylePapyrus @"papyrus"
-#define ZGWindowStyleBlue @"blue"
-#define ZGWindowStyleGreen @"green"
-#define ZGWindowStyleRed @"red"
+#import "ZGWindowStyleTheme.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -28,7 +23,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, readonly) NSColor *fallbackBackgroundColor;
 @property (nonatomic, readonly) NSScrollerKnobStyle scrollerKnobStyle;
 
-+ (ZGWindowStyle *)windowStyleWithStyleName:(NSString *)styleName;
++ (ZGWindowStyle *)windowStyleWithTheme:(ZGWindowStyleTheme)theme;
 
 @end
 

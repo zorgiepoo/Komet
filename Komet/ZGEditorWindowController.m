@@ -52,7 +52,7 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 		ZGRegisterDefaultRecommendedBodyLineLengthLimitEnabled();
 		ZGRegisterDefaultRecommendedBodyLineLengthLimit();
 		ZGRegisterDefaultAutomaticNewlineInsertionAfterSubjectLine();
-		ZGRegisterDefaultWindowStyle();
+		ZGRegisterDefaultWindowStyleTheme();
 	});
 }
 
@@ -81,7 +81,7 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 {
 	[self.window setFrameUsingName:ZGEditorWindowFrameNameKey];
     
-	_style = [ZGWindowStyle windowStyleWithStyleName:ZGReadDefaultWindowStyle()];
+	_style = [ZGWindowStyle windowStyleWithTheme:ZGReadDefaultWindowStyleTheme()];
 	[self updateWindowStyle];
 	
 	NSData *data = [NSData dataWithContentsOfURL:_fileURL];
@@ -349,7 +349,7 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 
 - (void)userDefaultsChangedWindowStyle
 {
-	_style = [ZGWindowStyle windowStyleWithStyleName:ZGReadDefaultWindowStyle()];
+	_style = [ZGWindowStyle windowStyleWithTheme:ZGReadDefaultWindowStyleTheme()];
 	[self updateWindowStyle];
 	[self updateTextProcessingForTextStorage:_textView.textStorage];
 	[_topBar setNeedsDisplay:YES];

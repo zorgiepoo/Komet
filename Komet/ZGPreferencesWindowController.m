@@ -254,31 +254,31 @@ typedef NS_ENUM(NSInteger, ZGSelectedFontType)
 
 	_vibrancySwitch.state = (ZGReadDefaultWindowVibrancy() ? 1 : 0);
 	
-	NSString *activeStyle = ZGReadDefaultWindowStyle();
-	if ([activeStyle isEqualToString:ZGWindowStyleDefault])
+	ZGWindowStyleTheme activeTheme = ZGReadDefaultWindowStyleTheme();
+	
+	NSButton *styleButton;
+	switch (activeTheme)
 	{
-		_defaultStyleButton.state = NSOnState;
+		case ZGWindowStyleThemeDefault:
+			styleButton = _defaultStyleButton;
+			break;
+		case ZGWindowStyleThemeDark:
+			styleButton = _darkStyleButton;
+			break;
+		case ZGWindowStyleThemePapyrus:
+			styleButton = _papyrusStyleButton;
+			break;
+		case ZGWindowStyleThemeBlue:
+			styleButton = _blueStyleButton;
+			break;
+		case ZGWindowStyleThemeGreen:
+			styleButton = _greenStyleButton;
+			break;
+		case ZGWindowStyleThemeRed:
+			styleButton = _redStyleButton;
+			break;
 	}
-	else if ([activeStyle isEqualToString:ZGWindowStyleDark])
-	{
-		_darkStyleButton.state = NSOnState;
-	}
-	else if ([activeStyle isEqualToString:ZGWindowStylePapyrus])
-	{
-		_papyrusStyleButton.state = NSOnState;
-	}
-	else if ([activeStyle isEqualToString:ZGWindowStyleBlue])
-	{
-		_blueStyleButton.state = NSOnState;
-	}
-	else if ([activeStyle isEqualToString:ZGWindowStyleGreen])
-	{
-		_greenStyleButton.state = NSOnState;
-	}
-	else if ([activeStyle isEqualToString:ZGWindowStyleRed])
-	{
-		_redStyleButton.state = NSOnState;
-	}
+	styleButton.state = NSOnState;
 }
 
 - (IBAction)setStyle:(NSButton *)sender
@@ -289,33 +289,14 @@ typedef NS_ENUM(NSInteger, ZGSelectedFontType)
 	_blueStyleButton.state = NSOffState;
 	_greenStyleButton.state = NSOffState;
 	_redStyleButton.state = NSOffState;
+	
 	sender.state = NSOnState;
-    
-	if (sender == _defaultStyleButton)
-	{
-		ZGWriteDefaultStyle(ZGWindowStyleDefault);
-	}
-	else if (sender == _darkStyleButton)
-	{
-		ZGWriteDefaultStyle(ZGWindowStyleDark);
-	}
-	else if (sender == _papyrusStyleButton)
-	{
-		ZGWriteDefaultStyle(ZGWindowStylePapyrus);
-	}
-	else if (sender == _blueStyleButton)
-	{
-		ZGWriteDefaultStyle(ZGWindowStyleBlue);
-	}
-	else if (sender == _greenStyleButton)
-	{
-		ZGWriteDefaultStyle(ZGWindowStyleGreen);
-	}
-	else if (sender == _redStyleButton)
-	{
-		ZGWriteDefaultStyle(ZGWindowStyleRed);
-	}
-    
+	
+	ZGWindowStyleTheme theme = (ZGWindowStyleTheme)[sender tag];
+	assert(theme <= ZGWindowStyleMaxTheme);
+	
+	ZGWriteDefaultStyleTheme(theme);
+	
 	[_editorListener userDefaultsChangedWindowStyle];
 }
 
