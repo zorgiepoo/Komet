@@ -65,7 +65,7 @@
 			 textColor:[NSColor colorWithDeviceRed:0.557 green:0.157 blue:0 alpha:1]
 			 textHighlightColor:nil
 			 commentColor:[NSColor colorWithDeviceRed:0.714 green:0.286 blue:0.149 alpha:1]
-			 overflowColor:[NSColor colorWithDeviceRed:1 green:0.690 blue:0.231 alpha:0.3]
+			 overflowColor:[NSColor colorWithDeviceRed:1 green:0.690 blue:0.231 alpha:0.5]
 			 fallbackBackgroundColor:[NSColor colorWithDeviceRed:1 green:0.941 blue:0.647 alpha:0.9]
 			 scrollerKnobStyle:NSScrollerKnobStyleDark];
 		case ZGWindowStyleThemeBlue:
@@ -94,7 +94,7 @@
 			 textColor:[NSColor colorWithDeviceRed:0.157 green:0.286 blue:0.027 alpha:1]
 			 textHighlightColor:barAndTextHighlightColor
 			 commentColor:[NSColor colorWithDeviceRed:0.361 green:0.514 blue:0.184 alpha:1]
-			 overflowColor:[NSColor colorWithDeviceRed:0.831 green:0.753 blue:0.169 alpha:0.3]
+			 overflowColor:[NSColor colorWithDeviceRed:0.831 green:0.753 blue:0.169 alpha:0.5]
 			 fallbackBackgroundColor:[NSColor colorWithDeviceRed:0.847 green:0.792 blue:0.659 alpha:0.9]
 			 scrollerKnobStyle:NSScrollerKnobStyleDark];
 		}
@@ -109,7 +109,7 @@
 			 textColor:[NSColor colorWithDeviceRed:0.963 green:0.308 blue:0.233 alpha:1]
 			 textHighlightColor:barAndTextHighlightColor
 			 commentColor:[NSColor colorWithDeviceRed:0.863 green:0.208 blue:0.133 alpha:1]
-			 overflowColor:[NSColor colorWithDeviceRed:0.863 green:0.208 blue:0.133 alpha:0.3]
+			 overflowColor:[NSColor colorWithDeviceRed:1 green:0.690 blue:0.231 alpha:0.3]
 			 fallbackBackgroundColor:[NSColor colorWithDeviceRed:0.165 green:0.173 blue:0.169 alpha:0.95]
 			 scrollerKnobStyle:NSScrollerKnobStyleLight];
 		}
