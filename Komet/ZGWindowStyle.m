@@ -40,7 +40,7 @@
 			 material:NSVisualEffectMaterialLight
 			 textColor:[NSColor colorWithDeviceRed:0.0 green:0.0 blue:0.0 alpha:1.0]
 			 textHighlightColor:nil
-			 commentColor:[NSColor colorWithDeviceRed:0.0 green:0.0 blue:0.0 alpha:0.7]
+			 commentColor:[NSColor darkGrayColor]
 			 overflowColor:[NSColor colorWithDeviceRed:1 green:0.690 blue:0.231 alpha:0.5]
 			 fallbackBackgroundColor:[NSColor colorWithDeviceRed:1.0 green:1.0 blue:1.0 alpha:0.95]
 			 scrollerKnobStyle:NSScrollerKnobStyleDark];
