@@ -10,9 +10,18 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+@protocol ZGCommitViewDelegate <NSTextViewDelegate>
+
+- (void)zgCommitViewSelectAll;
+
+@end
+
 @interface ZGCommitTextView : NSTextView
 
 - (void)zgLoadDefaults;
+
+// Not using a weak reference because I'm not sure it's safe for NSTextView to be using
+@property (nonatomic, assign, nullable) id<ZGCommitViewDelegate> zgCommitViewDelegate;
 
 @end
 

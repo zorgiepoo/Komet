@@ -20,7 +20,7 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 	ZGVersionControlSvn
 };
 
-@interface ZGEditorWindowController () <NSTextStorageDelegate, NSLayoutManagerDelegate, NSTextViewDelegate>
+@interface ZGEditorWindowController () <NSTextStorageDelegate, NSLayoutManagerDelegate, NSTextViewDelegate, ZGCommitViewDelegate>
 @end
 
 @implementation ZGEditorWindowController
@@ -157,6 +157,7 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 	_textView.textStorage.delegate = self;
 	_textView.layoutManager.delegate = self;
 	_textView.delegate = self;
+	_textView.zgCommitViewDelegate = self;
 	
 	NSString *plainStringCandidate = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
 	if (plainStringCandidate == nil)
@@ -738,7 +739,8 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 	[self exitWithSuccess:NO];
 }
 
-- (IBAction)selectAllCommitText:(id)__unused sender
+// Invoked from our custom ZGCommitTextView delegate
+- (void)zgCommitViewSelectAll
 {
 	NSString *plainText = _textView.textStorage.string;
 	NSUInteger commitTextLength = [self commitTextLengthFromPlainText:plainText commentLength:_commentSectionLength];
