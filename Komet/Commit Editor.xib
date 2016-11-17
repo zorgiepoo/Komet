@@ -2,6 +2,7 @@
 <document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="11542" systemVersion="16B2657" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="11542"/>
+        <capability name="box content view" minToolsVersion="7.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -11,6 +12,7 @@
                 <outlet property="_commitButton" destination="SIQ-xl-8MY" id="G77-Pg-TwW"/>
                 <outlet property="_commitLabelTextField" destination="vV7-fu-K3M" id="jXI-Po-BbJ"/>
                 <outlet property="_contentView" destination="5Ms-NX-CHZ" id="pgk-UA-0ri"/>
+                <outlet property="_horizontalBarDivider" destination="iBM-Yy-b1k" id="i8i-i7-ukG"/>
                 <outlet property="_scrollView" destination="ZR8-bz-mFA" id="gnm-JR-QTh"/>
                 <outlet property="_textView" destination="AXg-Fl-XGk" id="bHs-ph-oOV"/>
                 <outlet property="_topBar" destination="iuq-58-oil" id="ptU-zp-Hrn"/>
@@ -83,17 +85,17 @@ DQ
                         <rect key="frame" x="0.0" y="0.0" width="500" height="307"/>
                         <subviews>
                             <scrollView borderType="none" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" scrollerKnobStyle="light" translatesAutoresizingMaskIntoConstraints="NO" id="ZR8-bz-mFA">
-                                <rect key="frame" x="0.0" y="0.0" width="500" height="307"/>
+                                <rect key="frame" x="0.0" y="0.0" width="500" height="306"/>
                                 <clipView key="contentView" drawsBackground="NO" copiesOnScroll="NO" id="SkQ-6A-FOt">
-                                    <rect key="frame" x="0.0" y="0.0" width="500" height="307"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="500" height="306"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <textView drawsBackground="NO" importsGraphics="NO" richText="NO" usesFontPanel="YES" findStyle="panel" continuousSpellChecking="YES" allowsUndo="YES" usesRuler="YES" allowsNonContiguousLayout="YES" smartInsertDelete="YES" id="AXg-Fl-XGk" customClass="ZGCommitTextView">
-                                            <rect key="frame" x="0.0" y="0.0" width="500" height="307"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="500" height="306"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                             <color key="backgroundColor" white="1" alpha="0.0" colorSpace="calibratedWhite"/>
-                                            <size key="minSize" width="500" height="307"/>
+                                            <size key="minSize" width="500" height="306"/>
                                             <size key="maxSize" width="532" height="10000000"/>
                                             <color key="insertionPointColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                         </textView>
@@ -105,16 +107,29 @@ DQ
                                     <autoresizingMask key="autoresizingMask"/>
                                 </scroller>
                                 <scroller key="verticalScroller" verticalHuggingPriority="750" horizontal="NO" id="UZb-Ee-qf6">
-                                    <rect key="frame" x="484" y="0.0" width="16" height="307"/>
+                                    <rect key="frame" x="484" y="0.0" width="16" height="306"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </scroller>
                             </scrollView>
+                            <box boxType="custom" borderType="line" borderWidth="0.0" titlePosition="noTitle" translatesAutoresizingMaskIntoConstraints="NO" id="iBM-Yy-b1k" userLabel="Horizontal line box">
+                                <rect key="frame" x="0.0" y="306" width="500" height="1"/>
+                                <view key="contentView" focusRingType="none" id="96R-M0-ubo">
+                                    <rect key="frame" x="0.0" y="0.0" width="500" height="1"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                </view>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="1" id="czF-x6-q6B"/>
+                                </constraints>
+                                <color key="fillColor" red="0.83529411764705885" green="0.83529411764705885" blue="0.83529411764705885" alpha="1" colorSpace="calibratedRGB"/>
+                            </box>
                         </subviews>
                         <constraints>
                             <constraint firstItem="ZR8-bz-mFA" firstAttribute="leading" secondItem="5Ms-NX-CHZ" secondAttribute="leading" id="Ifk-CI-0Or"/>
                             <constraint firstAttribute="bottom" secondItem="ZR8-bz-mFA" secondAttribute="bottom" id="KAa-3U-Jzu"/>
+                            <constraint firstAttribute="trailing" secondItem="iBM-Yy-b1k" secondAttribute="trailing" id="WLf-xu-CEj"/>
                             <constraint firstAttribute="trailing" secondItem="ZR8-bz-mFA" secondAttribute="trailing" id="eFe-Bd-69a"/>
-                            <constraint firstItem="ZR8-bz-mFA" firstAttribute="top" secondItem="5Ms-NX-CHZ" secondAttribute="top" id="wOf-v8-Ofz"/>
+                            <constraint firstItem="ZR8-bz-mFA" firstAttribute="top" secondItem="iBM-Yy-b1k" secondAttribute="bottom" id="myJ-zR-RtS"/>
+                            <constraint firstItem="iBM-Yy-b1k" firstAttribute="leading" secondItem="5Ms-NX-CHZ" secondAttribute="leading" id="xeu-UR-M2U"/>
                             <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="300" id="zfz-rS-Fcw"/>
                         </constraints>
                     </customView>
@@ -125,6 +140,7 @@ DQ
                     <constraint firstAttribute="trailing" secondItem="iuq-58-oil" secondAttribute="trailing" id="Xvh-XO-J9E"/>
                     <constraint firstItem="iuq-58-oil" firstAttribute="leading" secondItem="UXa-uU-h9N" secondAttribute="leading" id="bB6-6f-jHC"/>
                     <constraint firstItem="5Ms-NX-CHZ" firstAttribute="leading" secondItem="UXa-uU-h9N" secondAttribute="leading" id="jYA-wZ-ELG"/>
+                    <constraint firstItem="iBM-Yy-b1k" firstAttribute="top" secondItem="iuq-58-oil" secondAttribute="bottom" constant="-1" id="mXj-JT-aR1"/>
                     <constraint firstItem="iuq-58-oil" firstAttribute="top" secondItem="UXa-uU-h9N" secondAttribute="top" id="pFE-wr-iC0"/>
                     <constraint firstItem="5Ms-NX-CHZ" firstAttribute="top" secondItem="UXa-uU-h9N" secondAttribute="top" constant="22" id="szM-oz-msK"/>
                 </constraints>

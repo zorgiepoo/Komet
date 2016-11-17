@@ -16,6 +16,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, readonly) NSColor *barColor;
 @property (nonatomic, readonly) NSColor *barTextColor;
+@property (nonatomic, readonly) NSColor *dividerLineColor;
 @property (nonatomic, readonly) NSVisualEffectMaterial material;
 @property (nonatomic, readonly) NSColor *textColor;
 @property (nonatomic, readonly, nullable) NSColor *textHighlightColor;

@@ -27,6 +27,7 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 {
 	NSURL *_fileURL;
 	IBOutlet NSView *_topBar;
+	IBOutlet NSBox *_horizontalBarDivider;
 	IBOutlet ZGCommitTextView *_textView;
 	IBOutlet NSScrollView *_scrollView;
 	IBOutlet NSVisualEffectView *_contentView;
@@ -278,6 +279,9 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 	NSMutableAttributedString *cancelTitle = [[NSMutableAttributedString alloc] initWithAttributedString:_cancelButton.attributedTitle];
 	[cancelTitle addAttribute:NSForegroundColorAttributeName value:_style.barTextColor range:NSMakeRange(0, [_cancelButton.title length])];
 	[_cancelButton setAttributedTitle:cancelTitle];
+	
+	// Horizontal line bar divider
+	_horizontalBarDivider.fillColor = _style.dividerLineColor;
 	
 	// Style text
 	_textView.wantsLayer = YES;
