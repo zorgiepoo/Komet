@@ -54,4 +54,16 @@
 	[super setAutomaticTextReplacementEnabled:automaticTextReplacementEnabled];
 }
 
+- (IBAction)selectAll:(id)sender
+{
+	if (self.zgCommitViewDelegate != nil)
+	{
+		[self.zgCommitViewDelegate zgCommitViewSelectAll];
+	}
+	else
+	{
+		[super selectAll:sender];
+	}
+}
+
 @end
