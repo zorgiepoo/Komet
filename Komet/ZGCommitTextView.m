@@ -12,6 +12,10 @@
 #define ZGCommitTextViewAutomaticSpellingCorrectionKey @"ZGCommitTextViewAutomaticSpellingCorrection"
 #define ZGCommitTextViewAutomaticTextReplacementKey @"ZGCommitTextViewAutomaticTextReplacement"
 
+#define ZGTouchBarIdentifier @"org.zgcoder.Komet.67e9f8738561"
+#define ZGTouchBarIdentifierCancel @"zgCancelIdentifier"
+#define ZGTouchBarIdentifierCommit @"zgCommitIdentifier"
+
 @implementation ZGCommitTextView
 
 + (void)initialize
@@ -65,5 +69,46 @@
 		[super selectAll:sender];
 	}
 }
+
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wpartial-availability"
+
+static NSCustomTouchBarItem *ZGCreateCustomTouchBarButton(NSString *identifier, NSString *title, id target, SEL action)
+{
+	NSCustomTouchBarItem *touchBarItem = [[NSCustomTouchBarItem alloc] initWithIdentifier:identifier];
+	touchBarItem.view = [NSButton buttonWithTitle:title target:target action:action];
+	touchBarItem.customizationLabel = title;
+	return touchBarItem;
+}
+
+- (nullable NSTouchBarItem *)touchBar:(NSTouchBar *)touchBar makeItemForIdentifier:(NSTouchBarItemIdentifier)identifier
+{
+	NSTouchBarItem *touchBarItem;
+	if ([identifier isEqualToString:ZGTouchBarIdentifierCancel])
+	{
+		touchBarItem = ZGCreateCustomTouchBarButton(identifier, @"Cancel", self.zgCommitViewDelegate, @selector(zgCommitViewTouchCancel:));
+	}
+	else if ([identifier isEqualToString:ZGTouchBarIdentifierCommit])
+	{
+		touchBarItem = ZGCreateCustomTouchBarButton(identifier, @"Commit", self.zgCommitViewDelegate, @selector(zgCommitViewTouchCommit:));
+	}
+	else
+	{
+		touchBarItem = [super touchBar:touchBar makeItemForIdentifier:identifier];
+	}
+	return touchBarItem;
+}
+
+- (NSTouchBar *)makeTouchBar
+{
+	NSTouchBar *touchBar = [[NSTouchBar alloc] init];
+	touchBar.customizationIdentifier = ZGTouchBarIdentifier;
+	touchBar.delegate = self;
+	touchBar.defaultItemIdentifiers = @[NSTouchBarItemIdentifierCharacterPicker, ZGTouchBarIdentifierCommit, NSTouchBarItemIdentifierCandidateList];
+	touchBar.customizationAllowedItemIdentifiers = @[NSTouchBarItemIdentifierCharacterPicker, ZGTouchBarIdentifierCancel, ZGTouchBarIdentifierCommit, NSTouchBarItemIdentifierFlexibleSpace, NSTouchBarItemIdentifierCandidateList];
+	return touchBar;
+}
+
+#pragma clang diagnostic pop
 
 @end
