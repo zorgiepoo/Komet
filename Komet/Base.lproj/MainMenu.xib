@@ -572,6 +572,57 @@ DQ
                                     <action selector="runToolbarCustomizationPalette:" target="-1" id="pQI-g3-MTW"/>
                                 </connections>
                             </menuItem>
+                            <menuItem isSeparatorItem="YES" id="kp5-3t-OMC"/>
+                            <menuItem title="Theme" id="Ly5-0B-E8U">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <menu key="submenu" title="Theme" id="KtO-ko-Ysv">
+                                    <items>
+                                        <menuItem title="Plain" state="on" id="PLT-gC-iSY">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="changeEditorTheme:" target="-1" id="mcv-IT-Zei"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="Dark" tag="1" id="Rrk-tP-I7Y">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="changeEditorTheme:" target="-1" id="V1O-yu-NSZ"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="Papyrus" tag="2" id="JeO-en-ItO">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="changeEditorTheme:" target="-1" id="T42-00-mgG"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="Collegiate" tag="3" id="n5q-Eg-MN3">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="changeEditorTheme:" target="-1" id="7b7-6h-dKX"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="Kyoto" tag="4" id="olY-ey-hDm">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="changeEditorTheme:" target="-1" id="k3b-7d-Fws"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="Mordor" tag="5" id="gP1-FA-KGf">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="changeEditorTheme:" target="-1" id="T12-Cf-yzv"/>
+                                            </connections>
+                                        </menuItem>
+                                    </items>
+                                </menu>
+                            </menuItem>
+                            <menuItem title="Translucency" id="4PE-Iw-ZLV">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="changeVibrancy:" target="-1" id="wxN-BN-DzT"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem isSeparatorItem="YES" id="8ZN-a9-0oC"/>
                         </items>
                     </menu>
                 </menuItem>
@@ -619,5 +670,11 @@ DQ
                 </menuItem>
             </items>
         </menu>
+        <menuItem title="Papyrus" id="VSD-Mv-zJi">
+            <modifierMask key="keyEquivalentModifierMask"/>
+        </menuItem>
+        <menuItem title="Papyrus" id="Q2j-YR-IDG">
+            <modifierMask key="keyEquivalentModifierMask"/>
+        </menuItem>
     </objects>
 </document>

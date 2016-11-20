@@ -372,6 +372,39 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 	[self updateWindowStyle];
 }
 
+- (IBAction)changeEditorTheme:(NSMenuItem *)sender
+{
+	ZGWindowStyleTheme newTheme = (ZGWindowStyleTheme)[sender tag];
+	assert(newTheme <= ZGWindowStyleMaxTheme);
+	
+	ZGWindowStyleTheme currentTheme = ZGReadDefaultWindowStyleTheme();
+	if (currentTheme != newTheme)
+	{
+		ZGWriteDefaultStyleTheme(newTheme);
+		[self userDefaultsChangedWindowStyle];
+	}
+}
+
+- (IBAction)changeVibrancy:(id)__unused sender
+{
+	ZGWriteDefaultWindowVibrancy(!ZGReadDefaultWindowVibrancy());
+	[self userDefaultsChangedWindowVibrancy];
+}
+
+- (BOOL)validateMenuItem:(NSMenuItem *)menuItem
+{
+	if (menuItem.action == @selector(changeEditorTheme:))
+	{
+		ZGWindowStyleTheme currentTheme = ZGReadDefaultWindowStyleTheme();
+		menuItem.state = (currentTheme == menuItem.tag) ? NSOnState : NSOffState;
+	}
+	else if (menuItem.action == @selector(changeVibrancy:))
+	{
+		menuItem.state = ZGReadDefaultWindowVibrancy() ? NSOnState : NSOffState;
+	}
+	return YES;
+}
+
 - (NSArray<NSValue *> *)contentLineRangesForTextStorage:(NSTextStorage *)textStorage
 {
 	NSString *plainText = textStorage.string;
