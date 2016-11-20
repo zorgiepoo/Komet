@@ -18,10 +18,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)userDefaultsChangedRecommendedLineLengthLimits;
 
-- (void)userDefaultsChangedWindowStyle;
-
-- (void)userDefaultsChangedWindowVibrancy;
-
 @end
 
 NS_ASSUME_NONNULL_END

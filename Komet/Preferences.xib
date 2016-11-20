@@ -10,23 +10,15 @@
                 <outlet property="_advancedView" destination="E8X-F5-Lbv" id="Zbu-Oa-649"/>
                 <outlet property="_automaticNewlineInsertionAfterSubjectLineCheckbox" destination="c3p-Oz-hOG" id="1qd-KI-GC8"/>
                 <outlet property="_automaticallyInstallUpdatesCheckbox" destination="4aw-Oh-wqh" id="EuJ-bx-qBG"/>
-                <outlet property="_blueStyleButton" destination="H7b-10-or7" id="h6G-dh-59E"/>
                 <outlet property="_commentsFontTextField" destination="f8W-g8-7pY" id="LHp-1J-V4v"/>
-                <outlet property="_darkStyleButton" destination="D2v-xV-dni" id="sXR-mc-fNh"/>
-                <outlet property="_defaultStyleButton" destination="ia5-TV-CXd" id="fVF-sm-f2S"/>
                 <outlet property="_fontsView" destination="h9g-vJ-Iwb" id="ihx-72-r3V"/>
-                <outlet property="_greenStyleButton" destination="GES-1c-EBH" id="b0M-r5-XR2"/>
                 <outlet property="_messageFontTextField" destination="P9V-1A-nFH" id="8jL-JC-ABT"/>
-                <outlet property="_papyrusStyleButton" destination="E9d-C5-Jia" id="Efu-r2-nVx"/>
                 <outlet property="_recommendedBodyLineLengthLimitDescriptionTextField" destination="SFd-F9-BRj" id="4mB-fF-m5J"/>
                 <outlet property="_recommendedBodyLineLengthLimitEnabledCheckbox" destination="UKJ-Je-zfL" id="T7r-cq-rVF"/>
                 <outlet property="_recommendedBodyLineLengthLimitTextField" destination="J5L-oh-zfQ" id="u6P-DC-A5V"/>
                 <outlet property="_recommendedSubjectLengthLimitDescriptionTextField" destination="T4H-cy-4ps" id="2uC-Zw-If8"/>
                 <outlet property="_recommendedSubjectLengthLimitEnabledCheckbox" destination="qFV-l9-9pw" id="Huu-dl-RrD"/>
                 <outlet property="_recommendedSubjectLengthLimitTextField" destination="Xcy-hC-F81" id="L6A-GD-yWt"/>
-                <outlet property="_redStyleButton" destination="ERU-Xo-Ml9" id="l8H-Tj-o0h"/>
-                <outlet property="_styleView" destination="Aik-bZ-0c7" id="GBx-jr-IjG"/>
-                <outlet property="_vibrancySwitch" destination="R51-U5-FbT" id="QNq-vD-wN3"/>
                 <outlet property="_warningsView" destination="I8B-Aq-rvW" id="IZd-AL-CEj"/>
                 <outlet property="window" destination="X9f-Ms-esr" id="day-H5-Cqe"/>
             </connections>
@@ -73,16 +65,10 @@
                             <action selector="showAdvanced:" target="-2" id="MqJ-c9-Kk4"/>
                         </connections>
                     </toolbarItem>
-                    <toolbarItem implicitItemIdentifier="2BCB2C73-0C51-44A5-A8B5-84C6A6C04BA3" explicitItemIdentifier="style" label="Style" paletteLabel="Style" tag="2" image="NSColorPanel" selectable="YES" id="xUe-cD-sra">
-                        <connections>
-                            <action selector="showStyles:" target="-2" id="tjI-ej-SNV"/>
-                        </connections>
-                    </toolbarItem>
                 </allowedToolbarItems>
                 <defaultToolbarItems>
                     <toolbarItem reference="ZSv-XI-2jR"/>
                     <toolbarItem reference="YxA-vf-ITa"/>
-                    <toolbarItem reference="xUe-cD-sra"/>
                     <toolbarItem reference="2Wj-Ck-alH"/>
                 </defaultToolbarItems>
             </toolbar>
@@ -327,115 +313,10 @@
             </constraints>
             <point key="canvasLocation" x="258" y="488"/>
         </customView>
-        <customView id="Aik-bZ-0c7" userLabel="Style View">
-            <rect key="frame" x="0.0" y="0.0" width="306" height="166"/>
-            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-            <subviews>
-                <button translatesAutoresizingMaskIntoConstraints="NO" id="ia5-TV-CXd">
-                    <rect key="frame" x="19" y="129" width="83" height="18"/>
-                    <buttonCell key="cell" type="radio" title="Default" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="B6T-oV-61O">
-                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                        <font key="font" metaFont="system"/>
-                    </buttonCell>
-                    <connections>
-                        <action selector="setStyle:" target="-2" id="mPd-w9-O75"/>
-                    </connections>
-                </button>
-                <button tag="1" translatesAutoresizingMaskIntoConstraints="NO" id="D2v-xV-dni">
-                    <rect key="frame" x="19" y="107" width="83" height="18"/>
-                    <buttonCell key="cell" type="radio" title="Dark" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="lz1-Jn-LwV">
-                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                        <font key="font" metaFont="system"/>
-                    </buttonCell>
-                    <connections>
-                        <action selector="setStyle:" target="-2" id="6o1-b1-5et"/>
-                    </connections>
-                </button>
-                <button tag="2" translatesAutoresizingMaskIntoConstraints="NO" id="E9d-C5-Jia">
-                    <rect key="frame" x="19" y="85" width="83" height="18"/>
-                    <buttonCell key="cell" type="radio" title="Papyrus" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="Woh-Ox-z4d">
-                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                        <font key="font" metaFont="system"/>
-                    </buttonCell>
-                    <connections>
-                        <action selector="setStyle:" target="-2" id="FQT-HM-gQQ"/>
-                    </connections>
-                </button>
-                <button tag="3" translatesAutoresizingMaskIntoConstraints="NO" id="H7b-10-or7">
-                    <rect key="frame" x="19" y="63" width="83" height="18"/>
-                    <buttonCell key="cell" type="radio" title="Collegiate" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="uCW-WD-xxl">
-                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                        <font key="font" metaFont="system"/>
-                    </buttonCell>
-                    <connections>
-                        <action selector="setStyle:" target="-2" id="wTT-0t-jxE"/>
-                    </connections>
-                </button>
-                <button tag="4" translatesAutoresizingMaskIntoConstraints="NO" id="GES-1c-EBH">
-                    <rect key="frame" x="19" y="41" width="83" height="18"/>
-                    <buttonCell key="cell" type="radio" title="Kyoto" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="6i5-eI-B6e">
-                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                        <font key="font" metaFont="system"/>
-                    </buttonCell>
-                    <connections>
-                        <action selector="setStyle:" target="-2" id="inJ-Lk-hug"/>
-                    </connections>
-                </button>
-                <button tag="5" translatesAutoresizingMaskIntoConstraints="NO" id="ERU-Xo-Ml9">
-                    <rect key="frame" x="19" y="19" width="83" height="18"/>
-                    <buttonCell key="cell" type="radio" title="Mordor" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="oMq-Zr-X29">
-                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                        <font key="font" metaFont="system"/>
-                    </buttonCell>
-                    <connections>
-                        <action selector="setStyle:" target="-2" id="MjL-dT-BPk"/>
-                    </connections>
-                </button>
-                <button translatesAutoresizingMaskIntoConstraints="NO" id="R51-U5-FbT">
-                    <rect key="frame" x="118" y="18" width="170" height="18"/>
-                    <buttonCell key="cell" type="check" title="Translucent Background" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="Msh-xg-J3I">
-                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                        <font key="font" metaFont="system"/>
-                    </buttonCell>
-                    <connections>
-                        <action selector="setVibrancy:" target="-2" id="cYc-nu-kvQ"/>
-                    </connections>
-                </button>
-            </subviews>
-            <constraints>
-                <constraint firstItem="H7b-10-or7" firstAttribute="leading" secondItem="ia5-TV-CXd" secondAttribute="leading" id="5gV-Mq-aaW"/>
-                <constraint firstItem="E9d-C5-Jia" firstAttribute="leading" secondItem="Aik-bZ-0c7" secondAttribute="leading" constant="20" id="5yf-in-qsE"/>
-                <constraint firstItem="ERU-Xo-Ml9" firstAttribute="top" secondItem="GES-1c-EBH" secondAttribute="bottom" constant="6" id="8CR-J2-qVh"/>
-                <constraint firstItem="GES-1c-EBH" firstAttribute="leading" secondItem="Aik-bZ-0c7" secondAttribute="leading" constant="20" id="9VQ-GS-yBY"/>
-                <constraint firstItem="D2v-xV-dni" firstAttribute="leading" secondItem="ia5-TV-CXd" secondAttribute="leading" id="9Y8-9y-KfW"/>
-                <constraint firstAttribute="trailing" secondItem="R51-U5-FbT" secondAttribute="trailing" constant="20" id="AAF-jr-msn"/>
-                <constraint firstItem="GES-1c-EBH" firstAttribute="width" secondItem="ERU-Xo-Ml9" secondAttribute="width" id="B1B-WR-SfM"/>
-                <constraint firstItem="ia5-TV-CXd" firstAttribute="width" secondItem="D2v-xV-dni" secondAttribute="width" id="Fai-CO-n6s"/>
-                <constraint firstItem="ERU-Xo-Ml9" firstAttribute="leading" secondItem="Aik-bZ-0c7" secondAttribute="leading" constant="20" id="IqQ-3Y-dAy"/>
-                <constraint firstItem="D2v-xV-dni" firstAttribute="top" secondItem="ia5-TV-CXd" secondAttribute="bottom" constant="6" id="LiB-fz-iKZ"/>
-                <constraint firstItem="R51-U5-FbT" firstAttribute="top" secondItem="ERU-Xo-Ml9" secondAttribute="top" constant="2" id="MI5-vZ-H7c"/>
-                <constraint firstAttribute="bottom" secondItem="R51-U5-FbT" secondAttribute="bottom" constant="20" id="NUH-Tf-Ouj"/>
-                <constraint firstItem="E9d-C5-Jia" firstAttribute="width" secondItem="H7b-10-or7" secondAttribute="width" id="QdX-bw-CZr"/>
-                <constraint firstAttribute="bottom" secondItem="ERU-Xo-Ml9" secondAttribute="bottom" constant="20" id="RbP-lg-K2R"/>
-                <constraint firstItem="GES-1c-EBH" firstAttribute="top" secondItem="H7b-10-or7" secondAttribute="bottom" constant="6" id="Wp2-fx-KAT"/>
-                <constraint firstItem="E9d-C5-Jia" firstAttribute="leading" secondItem="ia5-TV-CXd" secondAttribute="leading" id="ZF9-DB-iWG"/>
-                <constraint firstItem="H7b-10-or7" firstAttribute="top" secondItem="E9d-C5-Jia" secondAttribute="bottom" constant="6" id="a8N-IX-gYK"/>
-                <constraint firstItem="ia5-TV-CXd" firstAttribute="top" secondItem="Aik-bZ-0c7" secondAttribute="top" constant="20" id="cJ4-g7-D31"/>
-                <constraint firstItem="H7b-10-or7" firstAttribute="width" secondItem="GES-1c-EBH" secondAttribute="width" id="exT-np-x8J"/>
-                <constraint firstItem="ia5-TV-CXd" firstAttribute="leading" secondItem="Aik-bZ-0c7" secondAttribute="leading" constant="20" id="hla-Q3-ZtK"/>
-                <constraint firstItem="D2v-xV-dni" firstAttribute="width" secondItem="E9d-C5-Jia" secondAttribute="width" id="iXo-x3-jok"/>
-                <constraint firstItem="E9d-C5-Jia" firstAttribute="top" secondItem="D2v-xV-dni" secondAttribute="bottom" constant="6" id="mgR-VP-Tmm"/>
-                <constraint firstItem="D2v-xV-dni" firstAttribute="leading" secondItem="Aik-bZ-0c7" secondAttribute="leading" constant="20" id="p1C-cO-mAb"/>
-                <constraint firstItem="GES-1c-EBH" firstAttribute="leading" secondItem="ia5-TV-CXd" secondAttribute="leading" id="rTh-Fy-EAq"/>
-                <constraint firstItem="H7b-10-or7" firstAttribute="leading" secondItem="Aik-bZ-0c7" secondAttribute="leading" constant="20" id="ssh-oU-2OP"/>
-            </constraints>
-            <point key="canvasLocation" x="263" y="683.5"/>
-        </customView>
     </objects>
     <resources>
         <image name="NSAdvanced" width="32" height="32"/>
         <image name="NSCaution" width="32" height="32"/>
-        <image name="NSColorPanel" width="32" height="32"/>
         <image name="NSFontPanel" width="32" height="32"/>
     </resources>
 </document>

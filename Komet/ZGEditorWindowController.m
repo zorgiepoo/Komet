@@ -354,24 +354,6 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 	}
 }
 
-- (void)userDefaultsChangedWindowStyle
-{
-	_style = [ZGWindowStyle windowStyleWithTheme:ZGReadDefaultWindowStyleTheme()];
-	[self updateWindowStyle];
-	[self updateTextProcessingForTextStorage:_textView.textStorage];
-	[_topBar setNeedsDisplay:YES];
-	[_contentView setNeedsDisplay:YES];
-	
-	// The comment section isn't updated by setting the editor style elsewhere, since it's not editable.
-	[_textView.textStorage removeAttribute:NSForegroundColorAttributeName range:NSMakeRange([_textView.textStorage.string length] - _commentSectionLength, _commentSectionLength)];
-	[_textView.textStorage addAttribute:NSForegroundColorAttributeName value:_style.commentColor range:NSMakeRange([_textView.textStorage.string length] - _commentSectionLength, _commentSectionLength)];
-}
-
-- (void)userDefaultsChangedWindowVibrancy
-{
-	[self updateWindowStyle];
-}
-
 - (IBAction)changeEditorTheme:(NSMenuItem *)sender
 {
 	ZGWindowStyleTheme newTheme = (ZGWindowStyleTheme)[sender tag];
@@ -381,14 +363,23 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 	if (currentTheme != newTheme)
 	{
 		ZGWriteDefaultStyleTheme(newTheme);
-		[self userDefaultsChangedWindowStyle];
+		
+		_style = [ZGWindowStyle windowStyleWithTheme:newTheme];
+		[self updateWindowStyle];
+		[self updateTextProcessingForTextStorage:_textView.textStorage];
+		[_topBar setNeedsDisplay:YES];
+		[_contentView setNeedsDisplay:YES];
+		
+		// The comment section isn't updated by setting the editor style elsewhere, since it's not editable.
+		[_textView.textStorage removeAttribute:NSForegroundColorAttributeName range:NSMakeRange([_textView.textStorage.string length] - _commentSectionLength, _commentSectionLength)];
+		[_textView.textStorage addAttribute:NSForegroundColorAttributeName value:_style.commentColor range:NSMakeRange([_textView.textStorage.string length] - _commentSectionLength, _commentSectionLength)];
 	}
 }
 
 - (IBAction)changeVibrancy:(id)__unused sender
 {
 	ZGWriteDefaultWindowVibrancy(!ZGReadDefaultWindowVibrancy());
-	[self userDefaultsChangedWindowVibrancy];
+	[self updateWindowStyle];
 }
 
 - (BOOL)validateMenuItem:(NSMenuItem *)menuItem

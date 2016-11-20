@@ -21,7 +21,6 @@
 #define ZGToolbarFontsIdentifier @"fonts"
 #define ZGToolbarWarningsIdentifier @"warnings"
 #define ZGToolbarAdvancedIdentifier @"advanced"
-#define ZGToolbarStyleIdentifier @"style"
 
 typedef NS_ENUM(NSInteger, ZGSelectedFontType)
 {
@@ -37,7 +36,6 @@ typedef NS_ENUM(NSInteger, ZGSelectedFontType)
 	IBOutlet NSView *_fontsView;
 	IBOutlet NSView *_warningsView;
 	IBOutlet NSView *_advancedView;
-	IBOutlet NSView *_styleView;
 	
 	IBOutlet NSTextField *_messageFontTextField;
 	IBOutlet NSTextField *_commentsFontTextField;
@@ -54,14 +52,6 @@ typedef NS_ENUM(NSInteger, ZGSelectedFontType)
 	
 	IBOutlet NSButton *_automaticNewlineInsertionAfterSubjectLineCheckbox;
 	IBOutlet NSButton *_automaticallyInstallUpdatesCheckbox;
-	
-	IBOutlet NSButton *_defaultStyleButton;
-	IBOutlet NSButton *_darkStyleButton;
-	IBOutlet NSButton *_papyrusStyleButton;
-	IBOutlet NSButton *_blueStyleButton;
-	IBOutlet NSButton *_greenStyleButton;
-	IBOutlet NSButton *_redStyleButton;
-	IBOutlet NSButton *_vibrancySwitch;
 }
 
 - (instancetype)initWithEditorListener:(id<ZGUserDefaultsEditorListener>)editorListener updaterListener:(id<ZGUpdaterSettingsListener>)updaterListener
@@ -245,65 +235,6 @@ typedef NS_ENUM(NSInteger, ZGSelectedFontType)
 - (IBAction)changeAutomaticallyInstallUpdates:(id)__unused sender
 {
 	[_updaterListener updaterSettingsChangedAutomaticallyInstallingUpdates:(_automaticallyInstallUpdatesCheckbox.state == NSOnState)];
-}
-
-- (IBAction)showStyles:(id)__unused sender
-{
-	self.window.contentView = _styleView;
-	[self.window.toolbar setSelectedItemIdentifier:ZGToolbarStyleIdentifier];
-
-	_vibrancySwitch.state = (ZGReadDefaultWindowVibrancy() ? 1 : 0);
-	
-	ZGWindowStyleTheme activeTheme = ZGReadDefaultWindowStyleTheme();
-	
-	NSButton *styleButton;
-	switch (activeTheme)
-	{
-		case ZGWindowStyleThemeDefault:
-			styleButton = _defaultStyleButton;
-			break;
-		case ZGWindowStyleThemeDark:
-			styleButton = _darkStyleButton;
-			break;
-		case ZGWindowStyleThemePapyrus:
-			styleButton = _papyrusStyleButton;
-			break;
-		case ZGWindowStyleThemeBlue:
-			styleButton = _blueStyleButton;
-			break;
-		case ZGWindowStyleThemeGreen:
-			styleButton = _greenStyleButton;
-			break;
-		case ZGWindowStyleThemeRed:
-			styleButton = _redStyleButton;
-			break;
-	}
-	styleButton.state = NSOnState;
-}
-
-- (IBAction)setStyle:(NSButton *)sender
-{
-	_defaultStyleButton.state = NSOffState;
-	_darkStyleButton.state = NSOffState;
-	_papyrusStyleButton.state = NSOffState;
-	_blueStyleButton.state = NSOffState;
-	_greenStyleButton.state = NSOffState;
-	_redStyleButton.state = NSOffState;
-	
-	sender.state = NSOnState;
-	
-	ZGWindowStyleTheme theme = (ZGWindowStyleTheme)[sender tag];
-	assert(theme <= ZGWindowStyleMaxTheme);
-	
-	ZGWriteDefaultStyleTheme(theme);
-	
-	[_editorListener userDefaultsChangedWindowStyle];
-}
-
-- (IBAction)setVibrancy:(NSButton *)sender
-{
-	ZGWriteDefaultWindowVibrancy([sender state] == 1);
-	[_editorListener userDefaultsChangedWindowVibrancy];
 }
 
 @end
