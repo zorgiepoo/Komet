@@ -645,17 +645,29 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 	[self exitWithSuccess:YES];
 }
 
+// Do not name this method as "cancel:" because it will automatically respond to esc being invoked
 - (IBAction)cancelCommit:(id)__unused sender
 {
 	[self exitWithSuccess:NO];
 }
 
 // Invoked from our custom ZGCommitTextView delegate
+
 - (void)zgCommitViewSelectAll
 {
 	NSString *plainText = _textView.textStorage.string;
 	NSUInteger commitTextLength = [self commitTextLengthFromPlainText:plainText commentLength:_commentSectionLength];
 	[_textView setSelectedRange:NSMakeRange(0, commitTextLength)];
+}
+
+- (void)zgCommitViewTouchCommit:(id)__unused sender
+{
+	[self commit:nil];
+}
+
+- (void)zgCommitViewTouchCancel:(id)__unused sender
+{
+	[self cancelCommit:nil];
 }
 
 - (BOOL)isCommentLine:(NSString *)line forVersionControlType:(ZGVersionControlType)versionControlType

@@ -37,6 +37,17 @@
 {
 	[[NSApplication sharedApplication] activateIgnoringOtherApps:YES];
 	
+	// This is the Apple recommended way of checking if touch bar functionality is available
+	// because there are two different 10.12.1 builds that were publicly released; one of them
+	// has touch bar functionality, and the other one doesn't
+	if (NSClassFromString(@"NSTouchBar") != nil)
+	{
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wpartial-availability"
+		[[NSApplication sharedApplication] setAutomaticCustomizeTouchBarMenuItemEnabled:YES];
+#pragma clang diagnostic pop
+	}
+	
 	NSArray<NSString *> *arguments = [[NSProcessInfo processInfo] arguments];
 	
 	// The system can pass command line arguments unfortunately

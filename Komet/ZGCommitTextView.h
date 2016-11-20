@@ -10,9 +10,11 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@protocol ZGCommitViewDelegate <NSTextViewDelegate>
+@protocol ZGCommitViewDelegate <NSTextViewDelegate, NSTouchBarDelegate>
 
 - (void)zgCommitViewSelectAll;
+- (void)zgCommitViewTouchCommit:(id)sender;
+- (void)zgCommitViewTouchCancel:(id)sender;
 
 @end
 
