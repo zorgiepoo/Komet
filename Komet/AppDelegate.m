@@ -96,9 +96,7 @@
 		
 		NSString *greeting =
 		[NSString stringWithFormat:
-		 @"Add tutorial to %@\n"
-		 @"\n"
-		 @"Todo: Make some more improvements.\n"
+		 @"Add tutorial to %@ (see below)\n"
 		 @"\n"
 		 @"# Welcome to the Cocoa commit editor for macOS.\n"
 		 @"#\n"
@@ -129,7 +127,11 @@
 		 @"#\n"
 		 @"# For hg, you will want to set the HGEDITOR environment variable.\n"
 		 @"# For svn, you will want to set the SVN_EDITOR environment variable.\n"
-		 @"# Please consult their documentation for more information.\n", appName, editorPathToUse];
+		 @"# Please consult their documentation for more information.\n"
+		 @"#\n"
+		 @"# More themes can be found under View → Theme\n"
+		 @"# Automatic updates can be toggled in Komet → Preferences\n"
+		 , appName, editorPathToUse];
 		
 		NSString *finalMessage = greeting;
 		if (suggestMovingApp)
