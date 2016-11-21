@@ -2,7 +2,7 @@
 
 A Cocoa text editor designed for creating commit messages.
 
-![Image of Komet](themes/default.png)
+![Image of Komet](Screenshot.png)
 
 ## Purpose
 
