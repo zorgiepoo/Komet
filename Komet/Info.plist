@@ -36,5 +36,7 @@
 	<string>dsa_pub.pem</string>
 	<key>SUPromptUserOnFirstLaunch</key>
 	<true/>
+	<key>SUScheduledCheckInterval</key>
+	<integer>259200</integer>
 </dict>
 </plist>
