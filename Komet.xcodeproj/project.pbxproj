@@ -14,6 +14,7 @@
 		724006371D73B453001042CF /* SparkleCore.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 724006341D73B431001042CF /* SparkleCore.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		724006391D73BCF6001042CF /* dsa_pub.pem in Resources */ = {isa = PBXBuildFile; fileRef = 724006381D73BCF6001042CF /* dsa_pub.pem */; };
 		7240063C1D73BE84001042CF /* ZGUpdaterUserDriver.m in Sources */ = {isa = PBXBuildFile; fileRef = 7240063B1D73BE84001042CF /* ZGUpdaterUserDriver.m */; };
+		726F32F71DE27AB7004FB4AF /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 726F32F51DE27AB7004FB4AF /* Credits.rtf */; };
 		72B72C971D63EFF90096365F /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 72B72C961D63EFF90096365F /* AppDelegate.m */; };
 		72B72C9A1D63EFF90096365F /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 72B72C991D63EFF90096365F /* main.m */; };
 		72B72C9C1D63EFF90096365F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 72B72C9B1D63EFF90096365F /* Assets.xcassets */; };
@@ -53,6 +54,7 @@
 		7240063A1D73BE84001042CF /* ZGUpdaterUserDriver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZGUpdaterUserDriver.h; sourceTree = "<group>"; };
 		7240063B1D73BE84001042CF /* ZGUpdaterUserDriver.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZGUpdaterUserDriver.m; sourceTree = "<group>"; };
 		7240063D1D73E17B001042CF /* ZGUpdaterSettingsListener.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZGUpdaterSettingsListener.h; sourceTree = "<group>"; };
+		726F32F61DE27AB7004FB4AF /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = Base; path = Base.lproj/Credits.rtf; sourceTree = "<group>"; };
 		72B72C921D63EFF90096365F /* Komet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Komet.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		72B72C961D63EFF90096365F /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		72B72C991D63EFF90096365F /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -124,6 +126,7 @@
 				72B72C9B1D63EFF90096365F /* Assets.xcassets */,
 				72B72C9D1D63EFF90096365F /* MainMenu.xib */,
 				72B72CA01D63EFF90096365F /* Info.plist */,
+				726F32F51DE27AB7004FB4AF /* Credits.rtf */,
 				72B72C981D63EFF90096365F /* Supporting Files */,
 			);
 			path = Komet;
@@ -199,6 +202,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				724006391D73BCF6001042CF /* dsa_pub.pem in Resources */,
+				726F32F71DE27AB7004FB4AF /* Credits.rtf in Resources */,
 				72B72CAA1D63F0870096365F /* Commit Editor.xib in Resources */,
 				72B72C9C1D63EFF90096365F /* Assets.xcassets in Resources */,
 				72D10C591D7334D400ED32BC /* Preferences.xib in Resources */,
@@ -228,6 +232,14 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
+		726F32F51DE27AB7004FB4AF /* Credits.rtf */ = {
+			isa = PBXVariantGroup;
+			children = (
+				726F32F61DE27AB7004FB4AF /* Base */,
+			);
+			name = Credits.rtf;
+			sourceTree = "<group>";
+		};
 		72B72C9D1D63EFF90096365F /* MainMenu.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
