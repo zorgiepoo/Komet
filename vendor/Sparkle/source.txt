@@ -1,0 +1,3 @@
+Git: https://github.com/zorgiepoo/Sparkle.git
+Commit: 9ea4cf1bf6b25e31e05d03ebfd36b5f1f3bf3326
+Branch: ui-separation-and-xpc

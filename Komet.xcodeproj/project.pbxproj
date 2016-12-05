@@ -10,10 +10,10 @@
 		3A05CB0E1D7EA56B005106E9 /* ZGWindowStyle.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A05CB0D1D7EA56B005106E9 /* ZGWindowStyle.m */; };
 		7240062F1D7359E4001042CF /* ZGUserDefaults.m in Sources */ = {isa = PBXBuildFile; fileRef = 7240062E1D7359E4001042CF /* ZGUserDefaults.m */; };
 		724006331D73B2CA001042CF /* ZGUpdaterController.m in Sources */ = {isa = PBXBuildFile; fileRef = 724006321D73B2CA001042CF /* ZGUpdaterController.m */; };
-		724006351D73B431001042CF /* SparkleCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 724006341D73B431001042CF /* SparkleCore.framework */; };
-		724006371D73B453001042CF /* SparkleCore.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 724006341D73B431001042CF /* SparkleCore.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		724006391D73BCF6001042CF /* dsa_pub.pem in Resources */ = {isa = PBXBuildFile; fileRef = 724006381D73BCF6001042CF /* dsa_pub.pem */; };
 		7240063C1D73BE84001042CF /* ZGUpdaterUserDriver.m in Sources */ = {isa = PBXBuildFile; fileRef = 7240063B1D73BE84001042CF /* ZGUpdaterUserDriver.m */; };
+		7244AD8C1DF5329A004780EF /* SparkleCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7244AD8B1DF5329A004780EF /* SparkleCore.framework */; };
+		7244AD8D1DF5356D004780EF /* SparkleCore.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 7244AD8B1DF5329A004780EF /* SparkleCore.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		726F32F71DE27AB7004FB4AF /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 726F32F51DE27AB7004FB4AF /* Credits.rtf */; };
 		72B72C971D63EFF90096365F /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 72B72C961D63EFF90096365F /* AppDelegate.m */; };
 		72B72C9A1D63EFF90096365F /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 72B72C991D63EFF90096365F /* main.m */; };
@@ -33,7 +33,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				724006371D73B453001042CF /* SparkleCore.framework in Copy Frameworks */,
+				7244AD8D1DF5356D004780EF /* SparkleCore.framework in Copy Frameworks */,
 			);
 			name = "Copy Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -49,11 +49,11 @@
 		724006301D736E83001042CF /* ZGUserDefaultsEditorListener.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZGUserDefaultsEditorListener.h; sourceTree = "<group>"; };
 		724006311D73B2CA001042CF /* ZGUpdaterController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZGUpdaterController.h; sourceTree = "<group>"; };
 		724006321D73B2CA001042CF /* ZGUpdaterController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZGUpdaterController.m; sourceTree = "<group>"; };
-		724006341D73B431001042CF /* SparkleCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SparkleCore.framework; path = vendor/SparkleCore.framework; sourceTree = SOURCE_ROOT; };
 		724006381D73BCF6001042CF /* dsa_pub.pem */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = dsa_pub.pem; sourceTree = "<group>"; };
 		7240063A1D73BE84001042CF /* ZGUpdaterUserDriver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZGUpdaterUserDriver.h; sourceTree = "<group>"; };
 		7240063B1D73BE84001042CF /* ZGUpdaterUserDriver.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZGUpdaterUserDriver.m; sourceTree = "<group>"; };
 		7240063D1D73E17B001042CF /* ZGUpdaterSettingsListener.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZGUpdaterSettingsListener.h; sourceTree = "<group>"; };
+		7244AD8B1DF5329A004780EF /* SparkleCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SparkleCore.framework; path = vendor/Sparkle/SparkleCore.framework; sourceTree = SOURCE_ROOT; };
 		726F32F61DE27AB7004FB4AF /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = Base; path = Base.lproj/Credits.rtf; sourceTree = "<group>"; };
 		72B72C921D63EFF90096365F /* Komet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Komet.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		72B72C961D63EFF90096365F /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -76,7 +76,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				724006351D73B431001042CF /* SparkleCore.framework in Frameworks */,
+				7244AD8C1DF5329A004780EF /* SparkleCore.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -135,8 +135,8 @@
 		72B72C981D63EFF90096365F /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				7244AD8B1DF5329A004780EF /* SparkleCore.framework */,
 				724006381D73BCF6001042CF /* dsa_pub.pem */,
-				724006341D73B431001042CF /* SparkleCore.framework */,
 				72B72C991D63EFF90096365F /* main.m */,
 			);
 			name = "Supporting Files";
@@ -389,6 +389,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/vendor",
+					"$(PROJECT_DIR)/vendor/Sparkle",
 				);
 				INFOPLIST_FILE = Komet/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
@@ -412,6 +413,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/vendor",
+					"$(PROJECT_DIR)/vendor/Sparkle",
 				);
 				INFOPLIST_FILE = Komet/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
