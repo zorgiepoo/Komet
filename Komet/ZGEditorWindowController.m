@@ -81,7 +81,7 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 - (void)windowDidLoad
 {
 	[self.window setFrameUsingName:ZGEditorWindowFrameNameKey];
-    
+	
 	_style = [ZGWindowStyle windowStyleWithTheme:ZGReadDefaultWindowStyleTheme()];
 	[self updateWindowStyle];
 	
@@ -199,6 +199,9 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 	[self updateEditorMessageFont];
 	[self updateEditorCommentsFont];
 	
+	// Necessary to update text processing otherwise colors may not be right
+	[self updateTextProcessing];
+	
 	[_textView setSelectedRange:NSMakeRange(commitLength, 0)];
 	
 	if (!_tutorialMode && (versionControlType == ZGVersionControlGit || versionControlType == ZGVersionControlHg))
@@ -271,7 +274,7 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 	// Style top bar
 	_topBar.wantsLayer = YES;
 	_topBar.layer.backgroundColor = _style.barColor.CGColor;
-    
+	
 	// Style top bar buttons
 	_commitLabelTextField.textColor = _style.barTextColor;
 	NSMutableAttributedString *commitTitle = [[NSMutableAttributedString alloc] initWithAttributedString:_commitButton.attributedTitle];
@@ -296,7 +299,7 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 	BOOL vibrant = ZGReadDefaultWindowVibrancy();
 	_contentView.state = (vibrant ? NSVisualEffectStateFollowsWindowActiveState : NSVisualEffectStateInactive);
 	_contentView.material = _style.material;
-
+	
 	// Style scroll view
 	_scrollView.scrollerKnobStyle = _style.scrollerKnobStyle;
 	if (vibrant)
@@ -346,11 +349,11 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 	if (!hasSubjectLimit && !hasBodyLineLimit)
 	{
 		// Remove all background color highlighting in case any text is currently highlighted
-		[self removeBackgroundColorsForTextStorage:_textView.textStorage];
+		[self removeBackgroundColors];
 	}
 	else
 	{
-		[self updateTextProcessingForTextStorage:_textView.textStorage];
+		[self updateTextProcessing];
 	}
 }
 
@@ -366,7 +369,7 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 		
 		_style = [ZGWindowStyle windowStyleWithTheme:newTheme];
 		[self updateWindowStyle];
-		[self updateTextProcessingForTextStorage:_textView.textStorage];
+		[self updateTextProcessing];
 		[_topBar setNeedsDisplay:YES];
 		[_contentView setNeedsDisplay:YES];
 		
@@ -440,7 +443,7 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 	}
 }
 
-- (void)updateCommentAttributesForTextStorage:(NSTextStorage *)textStorage withContentLineRanges:(NSArray<NSValue *> *)contentLineRanges
+- (void)updateCommentAttributesWithContentLineRanges:(NSArray<NSValue *> *)contentLineRanges
 {
 	// If there's only one comment line marker, we need not worry about attributing comments
 	if ([self hasSingleCommentLineMarkerForVersionControlType:_versionControlType])
@@ -448,6 +451,7 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 		return;
 	}
 	
+	NSTextStorage *textStorage = _textView.textStorage;
 	NSString *plainText = textStorage.string;
 	NSFont *commentFont = nil;
 	
@@ -475,12 +479,12 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 	}
 }
 
-- (void)removeBackgroundColorsForTextStorage:(NSTextStorage *)textStorage
+- (void)removeBackgroundColors
 {
-	[textStorage removeAttribute:NSBackgroundColorAttributeName range:NSMakeRange(0, textStorage.length)];
+	[_textView.layoutManager removeTemporaryAttribute:NSBackgroundColorAttributeName forCharacterRange:NSMakeRange(0, _textView.textStorage.length)];
 }
 
-- (void)updateHighlightingForTextStorage:(NSTextStorage *)textStorage withContentLineRanges:(NSArray<NSValue *> *)contentLineRanges forLineLimitsAllowingSubjectLimit:(BOOL)allowingSubjectLimit subjectLengthLimit:(NSUInteger)subjectLengthLimit allowingingBodyLimit:(BOOL)allowingBodyLimit bodyLengthLimit:(NSUInteger)bodyLengthLimit
+- (void)updateHighlightingWithContentLineRanges:(NSArray<NSValue *> *)contentLineRanges forLineLimitsAllowingSubjectLimit:(BOOL)allowingSubjectLimit subjectLengthLimit:(NSUInteger)subjectLengthLimit allowingingBodyLimit:(BOOL)allowingBodyLimit bodyLengthLimit:(NSUInteger)bodyLengthLimit
 {
 	if (!allowingSubjectLimit && !allowingBodyLimit)
 	{
@@ -493,7 +497,7 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 	}
 	
 	// Remove the attribute everywhere. Might be "inefficient" but it's the easiest most reliable approach I know how to do
-	[self removeBackgroundColorsForTextStorage:textStorage];
+	[self removeBackgroundColors];
 	
 	for (NSValue *contentLineRangeValue in contentLineRanges)
 	{
@@ -502,7 +506,7 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 		{
 			if (allowingSubjectLimit)
 			{
-				[self highlightOverflowingTextInTextStorage:textStorage lineRange:lineRange limit:subjectLengthLimit];
+				[self highlightOverflowingTextWithLineRange:lineRange limit:subjectLengthLimit];
 			}
 			
 			if (!allowingBodyLimit)
@@ -512,20 +516,21 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 		}
 		else
 		{
-			[self highlightOverflowingTextInTextStorage:textStorage lineRange:lineRange limit:bodyLengthLimit];
+			[self highlightOverflowingTextWithLineRange:lineRange limit:bodyLengthLimit];
 		}
 	}
 }
 
-- (void)updateContentStyleForTextStorage:(NSTextStorage *)textStorage withContentLineRanges:(NSArray<NSValue *> *)contentLineRanges
+- (void)updateContentStyleWithContentLineRanges:(NSArray<NSValue *> *)contentLineRanges
 {
 	if (contentLineRanges.count == 0)
 	{
 		return;
 	}
-    
+	
+	NSTextStorage *textStorage = _textView.textStorage;
 	NSString *plainText = textStorage.string;
-    
+	
 	for (NSValue *contentLineRangeValue in contentLineRanges)
 	{
 		NSRange lineRange = contentLineRangeValue.rangeValue;
@@ -537,12 +542,12 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 	}
 }
 
-- (void)highlightOverflowingTextInTextStorage:(NSTextStorage *)textStorage lineRange:(NSRange)lineRange limit:(NSUInteger)limit
+- (void)highlightOverflowingTextWithLineRange:(NSRange)lineRange limit:(NSUInteger)limit
 {
 	if (lineRange.length > limit)
 	{
 		NSRange overflowRange = NSMakeRange(lineRange.location + limit, lineRange.length - limit);
-		[textStorage addAttribute:NSBackgroundColorAttributeName value:_style.overflowColor range:overflowRange];
+		[_textView.layoutManager addTemporaryAttribute:NSBackgroundColorAttributeName value:_style.overflowColor forCharacterRange:overflowRange];
 	}
 }
 
@@ -561,48 +566,25 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 	return YES;
 }
 
-- (void)updateTextProcessingForTextStorage:(NSTextStorage *)textStorage
+- (void)updateTextProcessing
 {
-	NSArray<NSValue *> *contentLineRanges = [self contentLineRangesForTextStorage:textStorage];
+	NSArray<NSValue *> *contentLineRanges = [self contentLineRangesForTextStorage:_textView.textStorage];
 	
 	[self
-	 updateHighlightingForTextStorage:textStorage
-	 withContentLineRanges:contentLineRanges
+	 updateHighlightingWithContentLineRanges:contentLineRanges
 	 forLineLimitsAllowingSubjectLimit:ZGReadDefaultRecommendedSubjectLengthLimitEnabled()
 	 subjectLengthLimit:ZGReadDefaultRecommendedSubjectLengthLimit()
 	 allowingingBodyLimit:ZGReadDefaultRecommendedBodyLineLengthLimitEnabled()
 	 bodyLengthLimit:ZGReadDefaultRecommendedBodyLineLengthLimit()];
 	
-	[self updateCommentAttributesForTextStorage:textStorage withContentLineRanges:contentLineRanges];
-    
-	[self updateContentStyleForTextStorage:textStorage withContentLineRanges:contentLineRanges];
-}
-
-// I'm not using the passed editRange and delta because I've found them to be quite misleading...
-// This happens to be a new API (macOS 10.11) so maybe it's not really battle tested or I don't know what I'm doing
-// Either way I'd like to support older systems so for portability sake it's easier to not use these parameters
-- (void)textStorage:(NSTextStorage *)textStorage didProcessEditing:(NSTextStorageEditActions)editedMask range:(NSRange)__unused editedRange changeInLength:(NSInteger)__unused delta
-{
-	if ((editedMask & NSTextStorageEditedCharacters) != 0)
-	{
-		[self updateTextProcessingForTextStorage:textStorage];
-	}
-}
-
-// Old deprecated API for the alternative above
-// Necessary to implement for systems older than macOS 10.11
-- (void)textStorageDidProcessEditing:(NSNotification *)__unused notification
-{
-	static BOOL isOnOldSystem;
-	static dispatch_once_t onceToken;
-	dispatch_once(&onceToken, ^{
-		isOnOldSystem = ![[NSProcessInfo processInfo] isOperatingSystemAtLeastVersion:(NSOperatingSystemVersion){10, 11, 0}];
-	});
+	[self updateCommentAttributesWithContentLineRanges:contentLineRanges];
 	
-	if (isOnOldSystem)
-	{
-		[self updateTextProcessingForTextStorage:_textView.textStorage];
-	}
+	[self updateContentStyleWithContentLineRanges:contentLineRanges];
+}
+
+- (void)textDidChange:(NSNotification *)__unused notification
+{
+	[self updateTextProcessing];
 }
 
 - (NSDictionary<NSString *,id> *)layoutManager:(NSLayoutManager *)__unused layoutManager shouldUseTemporaryAttributes:(NSDictionary<NSString *, id> *)attrs forDrawingToScreen:(BOOL)toScreen atCharacterIndex:(NSUInteger)characterIndex effectiveRange:(NSRangePointer)__unused effectiveCharRange
