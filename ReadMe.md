@@ -4,6 +4,8 @@ A Cocoa text editor designed for creating commit messages.
 
 ![Image of Komet](screenshots/light.png)
 
+[Download Komet](https://zgcoder.net/software/komet/Komet.dmg)
+
 ## Purpose
 
 I do version control from the command line but I want a fast and non-obstructive editor designed for creating commit messages. Not being stuck in a save-and-close model, applying a commit takes only *one* action in Komet.
