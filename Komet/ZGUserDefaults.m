@@ -22,6 +22,7 @@
 #define ZGEditorRecommendedBodyLineLengthLimitEnabledKey @"ZGEditorRecommendedBodyLineLengthLimitEnabled"
 
 #define ZGEditorAutomaticNewlineInsertionAfterSubjectKey @"ZGEditorAutomaticNewlineInsertionAfterSubject"
+#define ZGEditorEnableAutomaticSpellingCorrection @"ZGEditorEnableAutomaticSpellingCorrection"
 
 #define ZGWindowStyleThemeKey @"ZGWindowStyleTheme"
 #define ZGWindowVibrancyKey @"ZGWindowVibrancy"
@@ -166,6 +167,21 @@ BOOL ZGReadDefaultAutomaticNewlineInsertionAfterSubjectLine(void)
 void ZGWriteDefaultAutomaticNewlineInsertionAfterSubjectLine(BOOL automaticNewlineInsertionAfterSubjectLine)
 {
 	[[NSUserDefaults standardUserDefaults] setBool:automaticNewlineInsertionAfterSubjectLine forKey:ZGEditorAutomaticNewlineInsertionAfterSubjectKey];
+}
+
+void ZGRegisterDefaultEnableAutomaticSpellingCorrection(void)
+{
+	[[NSUserDefaults standardUserDefaults] registerDefaults:@{ZGEditorEnableAutomaticSpellingCorrection : @([NSSpellChecker isAutomaticSpellingCorrectionEnabled])}];
+}
+
+BOOL ZGReadDefaultEnableAutomaticSpellingCorrection(void)
+{
+	return [[NSUserDefaults standardUserDefaults] boolForKey:ZGEditorEnableAutomaticSpellingCorrection];
+}
+
+void ZGWriteDefaultEnableAutomaticSpellingCorrection(BOOL enableAutomaticSpellingCorrection)
+{
+	[[NSUserDefaults standardUserDefaults] setBool:enableAutomaticSpellingCorrection forKey:ZGEditorEnableAutomaticSpellingCorrection];
 }
 
 void ZGRegisterDefaultWindowStyleTheme(void)
