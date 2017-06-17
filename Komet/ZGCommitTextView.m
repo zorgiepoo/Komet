@@ -7,9 +7,9 @@
 //
 
 #import "ZGCommitTextView.h"
+#import "ZGUserDefaults.h"
 
 #define ZGCommitTextViewContinuousSpellCheckingKey @"ZGCommitTextViewContinuousSpellChecking"
-#define ZGCommitTextViewAutomaticSpellingCorrectionKey @"ZGCommitTextViewAutomaticSpellingCorrection"
 #define ZGCommitTextViewAutomaticTextReplacementKey @"ZGCommitTextViewAutomaticTextReplacement"
 
 #define ZGTouchBarIdentifier @"org.zgcoder.Komet.67e9f8738561"
@@ -24,7 +24,8 @@
 	dispatch_once(&onceToken, ^{
 		NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 		
-		[defaults registerDefaults:@{ZGCommitTextViewContinuousSpellCheckingKey : @YES, ZGCommitTextViewAutomaticSpellingCorrectionKey : @([NSSpellChecker isAutomaticSpellingCorrectionEnabled]), ZGCommitTextViewAutomaticTextReplacementKey : @([NSSpellChecker isAutomaticTextReplacementEnabled])}];
+		[defaults registerDefaults:@{ZGCommitTextViewContinuousSpellCheckingKey : @YES,
+									 ZGCommitTextViewAutomaticTextReplacementKey : @([NSSpellChecker isAutomaticTextReplacementEnabled])}];
 	});
 }
 
@@ -33,7 +34,7 @@
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 	
 	[super setContinuousSpellCheckingEnabled:[defaults boolForKey:ZGCommitTextViewContinuousSpellCheckingKey]];
-	[super setAutomaticSpellingCorrectionEnabled:[defaults boolForKey:ZGCommitTextViewAutomaticSpellingCorrectionKey]];
+	[super setAutomaticSpellingCorrectionEnabled:ZGReadDefaultEnableAutomaticSpellingCorrection()];
 	[super setAutomaticTextReplacementEnabled:[defaults boolForKey:ZGCommitTextViewAutomaticTextReplacementKey]];
 }
 
@@ -42,13 +43,6 @@
 	[[NSUserDefaults standardUserDefaults] setBool:continuousSpellCheckingEnabled forKey:ZGCommitTextViewContinuousSpellCheckingKey];
 	
 	[super setContinuousSpellCheckingEnabled:continuousSpellCheckingEnabled];
-}
-
-- (void)setAutomaticSpellingCorrectionEnabled:(BOOL)automaticSpellingCorrectionEnabled
-{
-	[[NSUserDefaults standardUserDefaults] setBool:automaticSpellingCorrectionEnabled forKey:ZGCommitTextViewAutomaticSpellingCorrectionKey];
-	
-	[super setAutomaticSpellingCorrectionEnabled:automaticSpellingCorrectionEnabled];
 }
 
 - (void)setAutomaticTextReplacementEnabled:(BOOL)automaticTextReplacementEnabled
