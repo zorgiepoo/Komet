@@ -52,6 +52,7 @@ typedef NS_ENUM(NSInteger, ZGSelectedFontType)
 	
 	IBOutlet NSButton *_automaticNewlineInsertionAfterSubjectLineCheckbox;
 	IBOutlet NSButton *_automaticallyInstallUpdatesCheckbox;
+	IBOutlet NSButton *_enableAutomaticSpellingCorrectionCheckbox;
 }
 
 - (instancetype)initWithEditorListener:(id<ZGUserDefaultsEditorListener>)editorListener updaterListener:(id<ZGUpdaterSettingsListener>)updaterListener
@@ -225,11 +226,20 @@ typedef NS_ENUM(NSInteger, ZGSelectedFontType)
 	
 	_automaticallyInstallUpdatesCheckbox.state = ((canWriteToApp && updaterSettings.automaticallyChecksForUpdates) ? NSOnState : NSOffState);
 	_automaticallyInstallUpdatesCheckbox.enabled = canWriteToApp;
+	
+	BOOL enableAutocorrect = ZGReadDefaultEnableAutomaticSpellingCorrection();
+	_enableAutomaticSpellingCorrectionCheckbox.state = (enableAutocorrect ? NSOnState : NSOffState);
+	
+	[_enableAutomaticSpellingCorrectionCheckbox setToolTip:@"Overrides the system preference to selectively enable or disable automatic spelling correction"];
 }
 
 - (IBAction)changeAutomaticNewlineInsertionAfterSubjectLine:(id)__unused sender
 {
 	ZGWriteDefaultAutomaticNewlineInsertionAfterSubjectLine(_automaticNewlineInsertionAfterSubjectLineCheckbox.state == NSOnState);
+}
+- (IBAction)changeEnableAutomaticSpellingCorrection:(id)__unused sender {
+	ZGWriteDefaultEnableAutomaticSpellingCorrection(_enableAutomaticSpellingCorrectionCheckbox.state == NSOnState);
+	[_editorListener userDefaultsChangedEnableAutomaticSpellingCorrection];
 }
 
 - (IBAction)changeAutomaticallyInstallUpdates:(id)__unused sender

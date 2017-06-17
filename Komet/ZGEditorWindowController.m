@@ -54,6 +54,7 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 		ZGRegisterDefaultRecommendedBodyLineLengthLimit();
 		ZGRegisterDefaultAutomaticNewlineInsertionAfterSubjectLine();
 		ZGRegisterDefaultWindowStyleTheme();
+		ZGRegisterDefaultEnableAutomaticSpellingCorrection();
 	});
 }
 
@@ -355,6 +356,11 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 	{
 		[self updateTextProcessing];
 	}
+}
+
+- (void)userDefaultsChangedEnableAutomaticSpellingCorrection
+{
+	[_textView setAutomaticSpellingCorrectionEnabled:ZGReadDefaultEnableAutomaticSpellingCorrection()];
 }
 
 - (IBAction)changeEditorTheme:(NSMenuItem *)sender

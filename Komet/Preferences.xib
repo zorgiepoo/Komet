@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="11542" systemVersion="16B2657" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="12118" systemVersion="16E195" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="11542"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="12118"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -11,6 +11,7 @@
                 <outlet property="_automaticNewlineInsertionAfterSubjectLineCheckbox" destination="c3p-Oz-hOG" id="1qd-KI-GC8"/>
                 <outlet property="_automaticallyInstallUpdatesCheckbox" destination="4aw-Oh-wqh" id="EuJ-bx-qBG"/>
                 <outlet property="_commentsFontTextField" destination="f8W-g8-7pY" id="LHp-1J-V4v"/>
+                <outlet property="_enableAutomaticSpellingCorrectionCheckbox" destination="8LK-Wk-fTN" id="QLf-DL-6hf"/>
                 <outlet property="_fontsView" destination="h9g-vJ-Iwb" id="ihx-72-r3V"/>
                 <outlet property="_messageFontTextField" destination="P9V-1A-nFH" id="8jL-JC-ABT"/>
                 <outlet property="_recommendedBodyLineLengthLimitDescriptionTextField" destination="SFd-F9-BRj" id="4mB-fF-m5J"/>
@@ -29,7 +30,7 @@
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="855" y="378" width="317" height="191"/>
-            <rect key="screenRect" x="0.0" y="0.0" width="1366" height="745"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1440" height="877"/>
             <view key="contentView" id="bQ0-fo-hiP">
                 <rect key="frame" x="0.0" y="0.0" width="317" height="191"/>
                 <autoresizingMask key="autoresizingMask"/>
@@ -75,13 +76,13 @@
             <connections>
                 <outlet property="delegate" destination="-2" id="TCu-6C-Rbz"/>
             </connections>
-            <point key="canvasLocation" x="270" y="-80.5"/>
+            <point key="canvasLocation" x="129" y="-135"/>
         </window>
         <customView id="h9g-vJ-Iwb" userLabel="Fonts View">
             <rect key="frame" x="0.0" y="0.0" width="268" height="139"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <subviews>
-                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" verticalCompressionResistancePriority="800" translatesAutoresizingMaskIntoConstraints="NO" id="P9V-1A-nFH">
+                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" verticalCompressionResistancePriority="800" allowsCharacterPickerTouchBarItem="NO" translatesAutoresizingMaskIntoConstraints="NO" id="P9V-1A-nFH">
                     <rect key="frame" x="20" y="79" width="143" height="22"/>
                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" title="Menlo Regular - 11.0" drawsBackground="YES" id="S5K-Sz-QaX">
                         <font key="font" metaFont="system"/>
@@ -102,7 +103,7 @@
                         <action selector="changeMessageFont:" target="-2" id="19i-tL-uJv"/>
                     </connections>
                 </button>
-                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Ffs-GR-vmH">
+                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ffs-GR-vmH">
                     <rect key="frame" x="18" y="50" width="74" height="17"/>
                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Comments" id="8tv-N4-3C7">
                         <font key="font" size="13" name=".AppleSystemUIFontBold"/>
@@ -110,7 +111,7 @@
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
-                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" verticalCompressionResistancePriority="800" translatesAutoresizingMaskIntoConstraints="NO" id="f8W-g8-7pY">
+                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" verticalCompressionResistancePriority="800" allowsCharacterPickerTouchBarItem="NO" translatesAutoresizingMaskIntoConstraints="NO" id="f8W-g8-7pY">
                     <rect key="frame" x="20" y="20" width="143" height="22"/>
                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" title="Menlo Regular - 11.0" drawsBackground="YES" id="piI-Qf-pPu">
                         <font key="font" metaFont="system"/>
@@ -118,7 +119,7 @@
                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
-                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="9vQ-Qv-IvQ">
+                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9vQ-Qv-IvQ">
                     <rect key="frame" x="18" y="109" width="62" height="17"/>
                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Message" id="xwO-UY-was">
                         <font key="font" size="13" name=".AppleSystemUIFontBold"/>
@@ -158,13 +159,13 @@
                 <constraint firstItem="9vQ-Qv-IvQ" firstAttribute="leading" secondItem="h9g-vJ-Iwb" secondAttribute="leading" constant="20" id="u4f-dM-D8E"/>
                 <constraint firstItem="Ffs-GR-vmH" firstAttribute="leading" secondItem="h9g-vJ-Iwb" secondAttribute="leading" constant="20" id="uAs-WM-bWp"/>
             </constraints>
-            <point key="canvasLocation" x="268" y="158.5"/>
+            <point key="canvasLocation" x="104" y="91"/>
         </customView>
         <customView id="I8B-Aq-rvW" userLabel="Warnings View">
             <rect key="frame" x="0.0" y="0.0" width="317" height="104"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <subviews>
-                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="jy8-sf-kAO">
+                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jy8-sf-kAO">
                     <rect key="frame" x="18" y="72" width="171" height="17"/>
                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Highlight text that exceeds:" id="A0E-bX-VpF">
                         <font key="font" metaFont="system"/>
@@ -172,7 +173,7 @@
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
-                <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Xcy-hC-F81">
+                <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Xcy-hC-F81">
                     <rect key="frame" x="52" y="42" width="32" height="22"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="32" id="gzs-t9-ZE6"/>
@@ -190,7 +191,7 @@
                         <action selector="changeRecommendedSubjectLengthLimit:" target="-2" id="m5A-cp-ddD"/>
                     </connections>
                 </textField>
-                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="T4H-cy-4ps">
+                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="NO" translatesAutoresizingMaskIntoConstraints="NO" id="T4H-cy-4ps">
                     <rect key="frame" x="90" y="45" width="209" height="17"/>
                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="characters on the first line." id="v8K-FZ-wmd">
                         <font key="font" metaFont="system"/>
@@ -208,7 +209,7 @@
                         <action selector="changeRecommendedSubjectLengthLimitEnabled:" target="-2" id="dqa-jC-wvf"/>
                     </connections>
                 </button>
-                <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="J5L-oh-zfQ">
+                <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="NO" translatesAutoresizingMaskIntoConstraints="NO" id="J5L-oh-zfQ">
                     <rect key="frame" x="52" y="16" width="32" height="22"/>
                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" enabled="NO" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" title="72" drawsBackground="YES" id="GaT-02-duj">
                         <numberFormatter key="formatter" formatterBehavior="default10_4" usesGroupingSeparator="NO" groupingSize="0" minimumIntegerDigits="0" maximumIntegerDigits="42" id="sK3-gF-EeY">
@@ -223,7 +224,7 @@
                         <action selector="changeRecommendedBodyLineLengthLimit:" target="-2" id="pFi-8u-Gkz"/>
                     </connections>
                 </textField>
-                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="SFd-F9-BRj">
+                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SFd-F9-BRj">
                     <rect key="frame" x="90" y="19" width="209" height="17"/>
                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="characters on the remaining lines." id="sJ5-gB-Uf8">
                         <font key="font" metaFont="system"/>
@@ -268,14 +269,14 @@
                 <constraint firstAttribute="bottom" secondItem="UKJ-Je-zfL" secondAttribute="bottom" constant="20" id="vLK-U5-cJK"/>
                 <constraint firstItem="Xcy-hC-F81" firstAttribute="width" secondItem="J5L-oh-zfQ" secondAttribute="width" id="zX2-LE-hvZ"/>
             </constraints>
-            <point key="canvasLocation" x="273.5" y="333.5"/>
+            <point key="canvasLocation" x="129" y="270"/>
         </customView>
         <customView id="E8X-F5-Lbv" userLabel="Advanced View">
-            <rect key="frame" x="0.0" y="0.0" width="296" height="74"/>
+            <rect key="frame" x="0.0" y="0.0" width="298" height="94"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <subviews>
                 <button translatesAutoresizingMaskIntoConstraints="NO" id="c3p-Oz-hOG">
-                    <rect key="frame" x="18" y="38" width="260" height="18"/>
+                    <rect key="frame" x="18" y="58" width="262" height="18"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="14" id="WBU-Hc-14f"/>
                     </constraints>
@@ -288,7 +289,7 @@
                     </connections>
                 </button>
                 <button translatesAutoresizingMaskIntoConstraints="NO" id="4aw-Oh-wqh">
-                    <rect key="frame" x="18" y="18" width="260" height="18"/>
+                    <rect key="frame" x="18" y="38" width="262" height="18"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="14" id="lc4-mW-1RR"/>
                     </constraints>
@@ -300,18 +301,34 @@
                         <action selector="changeAutomaticallyInstallUpdates:" target="-2" id="rK1-NU-jso"/>
                     </connections>
                 </button>
+                <button translatesAutoresizingMaskIntoConstraints="NO" id="8LK-Wk-fTN">
+                    <rect key="frame" x="18" y="18" width="262" height="18"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="14" id="W8A-V3-97v"/>
+                    </constraints>
+                    <buttonCell key="cell" type="check" title="Enable automatic spelling correction" bezelStyle="regularSquare" imagePosition="left" inset="2" id="uTP-ge-OmL">
+                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                        <font key="font" metaFont="system"/>
+                    </buttonCell>
+                    <connections>
+                        <action selector="changeEnableAutomaticSpellingCorrection:" target="-2" id="MBa-zI-dRm"/>
+                    </connections>
+                </button>
             </subviews>
             <constraints>
+                <constraint firstItem="8LK-Wk-fTN" firstAttribute="leading" secondItem="E8X-F5-Lbv" secondAttribute="leading" constant="20" id="0Sr-Dw-fZv"/>
+                <constraint firstAttribute="trailing" secondItem="8LK-Wk-fTN" secondAttribute="trailing" constant="20" id="4cb-hH-hCR"/>
                 <constraint firstAttribute="trailing" secondItem="4aw-Oh-wqh" secondAttribute="trailing" constant="20" id="Fau-Tj-2Vf"/>
+                <constraint firstAttribute="bottom" secondItem="8LK-Wk-fTN" secondAttribute="bottom" constant="20" id="NZj-dG-Nox"/>
+                <constraint firstItem="8LK-Wk-fTN" firstAttribute="top" secondItem="4aw-Oh-wqh" secondAttribute="bottom" constant="6" id="W8Z-tI-yhc"/>
                 <constraint firstItem="c3p-Oz-hOG" firstAttribute="top" secondItem="E8X-F5-Lbv" secondAttribute="top" constant="20" id="YN8-rw-rd2"/>
                 <constraint firstItem="4aw-Oh-wqh" firstAttribute="top" secondItem="c3p-Oz-hOG" secondAttribute="bottom" constant="6" id="d0o-6C-FiN"/>
-                <constraint firstAttribute="bottom" secondItem="4aw-Oh-wqh" secondAttribute="bottom" constant="20" id="ibm-MI-IbW"/>
                 <constraint firstItem="4aw-Oh-wqh" firstAttribute="leading" secondItem="c3p-Oz-hOG" secondAttribute="leading" id="jSk-rt-eXH"/>
                 <constraint firstItem="4aw-Oh-wqh" firstAttribute="leading" secondItem="E8X-F5-Lbv" secondAttribute="leading" constant="20" id="kRa-dn-eAL"/>
                 <constraint firstItem="c3p-Oz-hOG" firstAttribute="leading" secondItem="E8X-F5-Lbv" secondAttribute="leading" constant="20" id="wDD-HI-rZA"/>
                 <constraint firstAttribute="trailing" secondItem="c3p-Oz-hOG" secondAttribute="trailing" constant="20" id="xAF-3v-FgK"/>
             </constraints>
-            <point key="canvasLocation" x="258" y="488"/>
+            <point key="canvasLocation" x="118" y="434"/>
         </customView>
     </objects>
     <resources>

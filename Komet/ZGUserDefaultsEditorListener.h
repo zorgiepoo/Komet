@@ -18,6 +18,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)userDefaultsChangedRecommendedLineLengthLimits;
 
+- (void)userDefaultsChangedEnableAutomaticSpellingCorrection;
+
 @end
 
 NS_ASSUME_NONNULL_END

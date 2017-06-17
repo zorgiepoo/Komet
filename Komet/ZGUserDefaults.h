@@ -40,6 +40,10 @@ void ZGRegisterDefaultAutomaticNewlineInsertionAfterSubjectLine(void);
 BOOL ZGReadDefaultAutomaticNewlineInsertionAfterSubjectLine(void);
 void ZGWriteDefaultAutomaticNewlineInsertionAfterSubjectLine(BOOL automaticNewlineInsertionAfterSubjectLine);
 
+void ZGRegisterDefaultEnableAutomaticSpellingCorrection(void);
+BOOL ZGReadDefaultEnableAutomaticSpellingCorrection(void);
+void ZGWriteDefaultEnableAutomaticSpellingCorrection(BOOL enableAutomaticSpellingCorrection);
+
 void ZGRegisterDefaultWindowStyleTheme(void);
 ZGWindowStyleTheme ZGReadDefaultWindowStyleTheme(void);
 void ZGWriteDefaultStyleTheme(ZGWindowStyleTheme theme);
