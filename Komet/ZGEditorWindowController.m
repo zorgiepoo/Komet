@@ -506,7 +506,21 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 		{
 			if (allowingSubjectLimit)
 			{
-				[self highlightOverflowingTextWithLineRange:lineRange limit:subjectLengthLimit];
+				if (lineRange.length > subjectLengthLimit)
+				{
+					[self highlightOverflowingTextWithLineRange:lineRange limit:subjectLengthLimit];
+				}
+				else
+				{
+					// Highlight just the period
+					// For now, this is tied to the subject line limit warning
+					NSString *subjectLine = [_textView.textStorage.string substringWithRange:lineRange];
+					if ([subjectLine hasSuffix:@"."])
+					{
+						NSRange periodRange = NSMakeRange(lineRange.location + lineRange.length - 1, 1);
+						[self highlightOverflowingTextWithOverflowRange:periodRange];
+					}
+				}
 			}
 			
 			if (!allowingBodyLimit)
@@ -514,7 +528,7 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 				break;
 			}
 		}
-		else
+		else if (lineRange.length > bodyLengthLimit)
 		{
 			[self highlightOverflowingTextWithLineRange:lineRange limit:bodyLengthLimit];
 		}
@@ -542,13 +556,17 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 	}
 }
 
+- (void)highlightOverflowingTextWithOverflowRange:(NSRange)overflowRange
+{
+	[_textView.layoutManager addTemporaryAttribute:NSBackgroundColorAttributeName value:_style.overflowColor forCharacterRange:overflowRange];
+}
+
 - (void)highlightOverflowingTextWithLineRange:(NSRange)lineRange limit:(NSUInteger)limit
 {
-	if (lineRange.length > limit)
-	{
-		NSRange overflowRange = NSMakeRange(lineRange.location + limit, lineRange.length - limit);
-		[_textView.layoutManager addTemporaryAttribute:NSBackgroundColorAttributeName value:_style.overflowColor forCharacterRange:overflowRange];
-	}
+	assert(lineRange.length > limit);
+	
+	NSRange overflowRange = NSMakeRange(lineRange.location + limit, lineRange.length - limit);
+	[self highlightOverflowingTextWithOverflowRange:overflowRange];
 }
 
 // Don't allow editing the comment section
