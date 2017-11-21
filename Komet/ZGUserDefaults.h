@@ -28,6 +28,9 @@ void ZGRegisterDefaultRecommendedSubjectLengthLimitEnabled(void);
 BOOL ZGReadDefaultRecommendedSubjectLengthLimitEnabled(void);
 void ZGWriteDefaultRecommendedSubjectLengthLimitEnabled(BOOL enabled);
 
+void ZGRegisterDefaultRecommendedSubjectEndingEnabled(void);
+BOOL ZGReadDefaultRecommendedSubjectEndingEnabled(void);
+
 void ZGRegisterDefaultRecommendedBodyLineLengthLimit(void);
 NSUInteger ZGReadDefaultRecommendedBodyLineLengthLimit(void);
 void ZGWriteDefaultRecommendedBodyLineLengthLimit(NSUInteger recommendedBodyLineLengthLimit);

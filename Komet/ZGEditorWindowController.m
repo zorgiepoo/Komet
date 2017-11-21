@@ -50,6 +50,7 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 		ZGRegisterDefaultCommentsFont();
 		ZGRegisterDefaultRecommendedSubjectLengthLimitEnabled();
 		ZGRegisterDefaultRecommendedSubjectLengthLimit();
+		ZGRegisterDefaultRecommendedSubjectEndingEnabled();
 		ZGRegisterDefaultRecommendedBodyLineLengthLimitEnabled();
 		ZGRegisterDefaultRecommendedBodyLineLengthLimit();
 		ZGRegisterDefaultAutomaticNewlineInsertionAfterSubjectLine();
@@ -510,7 +511,7 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 				{
 					[self highlightOverflowingTextWithLineRange:lineRange limit:subjectLengthLimit];
 				}
-				else
+				else if (ZGReadDefaultRecommendedSubjectEndingEnabled())
 				{
 					// Highlight just the period
 					// For now, this is tied to the subject line limit warning
