@@ -40,5 +40,3 @@ For optimal behavior, Komet depends on being able to distinguish the commit mess
 If you enjoy using Komet and feel like something could improve, feel free to make a contribution. It is advisable to create an issue first before submitting a big change. Please also read and follow the code of conduct in the repository first before contributing.
 
 As for one area of improvement may be enhancing the user interface. I'm no expert in UI myself and received a lot of help with the current interface.
-
-**Update**: This project may need some help! I cannot guarantee my activeness in reviewing / pulling in future changes, as well as pushing out new releases.
