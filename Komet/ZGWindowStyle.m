@@ -48,7 +48,15 @@
 			 scrollerKnobStyle:NSScrollerKnobStyleDark];
 		case ZGWindowStyleThemeDark:
 		{
-			NSVisualEffectMaterial material = [[NSProcessInfo processInfo] isOperatingSystemAtLeastVersion:(NSOperatingSystemVersion){10, 11, 0}] ? NSVisualEffectMaterialUltraDark : NSVisualEffectMaterialDark;
+			NSVisualEffectMaterial material;
+			if (@available(macOS 10.11, *))
+			{
+				material = NSVisualEffectMaterialUltraDark;
+			}
+			else
+			{
+				material = NSVisualEffectMaterialDark;
+			}
 			
 			return
 			[[ZGWindowStyle alloc]
@@ -94,7 +102,15 @@
 		}
 		case ZGWindowStyleThemeGreen:
 		{
-			NSVisualEffectMaterial material = [[NSProcessInfo processInfo] isOperatingSystemAtLeastVersion:(NSOperatingSystemVersion){10, 11, 0}] ? NSVisualEffectMaterialMediumLight : NSVisualEffectMaterialLight;
+			NSVisualEffectMaterial material;
+			if (@available(macOS 10.11, *))
+			{
+				material = NSVisualEffectMaterialMediumLight;
+			}
+			else
+			{
+				material = NSVisualEffectMaterialLight;
+			}
 			
 			NSColor *barAndTextHighlightColor = [NSColor colorWithDeviceRed:0.361 green:0.514 blue:0.184 alpha:1];
 			return
@@ -112,7 +128,15 @@
 		}
 		case ZGWindowStyleThemeRed:
 		{
-			NSVisualEffectMaterial material = [[NSProcessInfo processInfo] isOperatingSystemAtLeastVersion:(NSOperatingSystemVersion){10, 11, 0}] ? NSVisualEffectMaterialUltraDark : NSVisualEffectMaterialDark;
+			NSVisualEffectMaterial material;
+			if (@available(macOS 10.11, *))
+			{
+				material = NSVisualEffectMaterialUltraDark;
+			}
+			else
+			{
+				material = NSVisualEffectMaterialDark;
+			}
 			
 			NSColor *barAndTextHighlightColor = [NSColor colorWithDeviceRed:0.863 green:0.208 blue:0.133 alpha:1];
 			return

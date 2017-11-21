@@ -56,14 +56,14 @@
 		[alert addButtonWithTitle:@"Install on Quit"];
 		[alert addButtonWithTitle:@"Cancel"];
 		
-		switch ([alert runModal])
+		NSModalResponse modalResponse = [alert runModal];
+		if (modalResponse == NSAlertFirstButtonReturn)
 		{
-			case NSAlertFirstButtonReturn:
-				response(SPUInstallUpdateChoice);
-				break;
-			default:
-				response(SPUInstallLaterChoice);
-				break;
+			response(SPUInstallUpdateChoice);
+		}
+		else
+		{
+			response(SPUInstallLaterChoice);
 		}
 	}
 	else
