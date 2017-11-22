@@ -28,10 +28,10 @@
 	_canCheckForUpdates = canCheckForUpdates;
 }
 
-- (void)showUpdatePermissionRequest:(SPUUpdatePermissionRequest *)__unused request reply:(void (^)(SPUUpdatePermissionResponse *))reply
+- (void)showUpdatePermissionRequest:(SPUUpdatePermissionRequest *)__unused request reply:(void (^)(SUUpdatePermissionResponse *))reply
 {
 	// Our application is set to prompt the first time the updater starts, so we will just default to YES
-	reply([[SPUUpdatePermissionResponse alloc] initWithAutomaticUpdateChecks:YES sendSystemProfile:NO]);
+	reply([[SUUpdatePermissionResponse alloc] initWithAutomaticUpdateChecks:YES sendSystemProfile:NO]);
 }
 
 - (void)showUserInitiatedUpdateCheckWithCompletion:(void (^)(SPUUserInitiatedCheckStatus))updateCheckStatusCompletion
@@ -137,11 +137,11 @@
 	[_coreComponent registerDownloadStatusHandler:downloadUpdateStatusCompletion];
 }
 
-- (void)showDownloadDidReceiveExpectedContentLength:(NSUInteger)__unused expectedContentLength
+- (void)showDownloadDidReceiveExpectedContentLength:(uint64_t)__unused expectedContentLength
 {
 }
 
-- (void)showDownloadDidReceiveDataOfLength:(NSUInteger)__unused length
+- (void)showDownloadDidReceiveDataOfLength:(uint64_t)__unused length
 {
 }
 
