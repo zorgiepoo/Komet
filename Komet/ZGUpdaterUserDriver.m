@@ -132,6 +132,16 @@
 	acknowledgement();
 }
 
+- (void)showInformationalUpdateFoundWithAppcastItem:(nonnull SUAppcastItem *)appcastItem userInitiated:(BOOL)userInitiated reply:(nonnull void (^)(SPUInformationalUpdateAlertChoice))reply
+{
+	if (userInitiated)
+	{
+		[[NSWorkspace sharedWorkspace] openURL:appcastItem.infoURL];
+	}
+	
+	reply(SPUDismissInformationalNoticeChoice);
+}
+
 - (void)showDownloadInitiatedWithCompletion:(void (^)(SPUDownloadUpdateStatus))downloadUpdateStatusCompletion
 {
 	[_coreComponent registerDownloadStatusHandler:downloadUpdateStatusCompletion];
