@@ -18,8 +18,6 @@
 #define ZGEditorRecommendedSubjectLengthLimitKey @"ZGEditorRecommendedSubjectLengthLimit"
 #define ZGEditorRecommendedSubjectLengthLimitEnabledKey @"ZGEditorRecommendedSubjectLengthLimitEnabled"
 
-#define ZGEditorRecommendedSubjectEndingEnabledKey @"ZGEditorRecommendedSubjectEndingEnabled"
-
 #define ZGEditorRecommendedBodyLineLengthLimitKey @"ZGEditorRecommendedBodyLineLengthLimit"
 #define ZGEditorRecommendedBodyLineLengthLimitEnabledKey @"ZGEditorRecommendedBodyLineLengthLimitEnabled"
 
@@ -120,16 +118,6 @@ BOOL ZGReadDefaultRecommendedSubjectLengthLimitEnabled(void)
 void ZGWriteDefaultRecommendedSubjectLengthLimitEnabled(BOOL enabled)
 {
 	[[NSUserDefaults standardUserDefaults] setBool:enabled forKey:ZGEditorRecommendedSubjectLengthLimitEnabledKey];
-}
-
-void ZGRegisterDefaultRecommendedSubjectEndingEnabled(void)
-{
-	[[NSUserDefaults standardUserDefaults] registerDefaults:@{ZGEditorRecommendedSubjectEndingEnabledKey : @(YES)}];
-}
-
-BOOL ZGReadDefaultRecommendedSubjectEndingEnabled(void)
-{
-	return [[NSUserDefaults standardUserDefaults] boolForKey:ZGEditorRecommendedSubjectEndingEnabledKey];
 }
 
 void ZGRegisterDefaultRecommendedBodyLineLengthLimit(void)
