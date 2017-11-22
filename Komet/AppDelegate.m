@@ -204,4 +204,13 @@
 	return YES;
 }
 
+- (IBAction)reportIssue:(id)__unused sender
+{
+	NSURL *issuesURL = [NSURL URLWithString:@"https://github.com/zorgiepoo/Komet/issues"];
+	if (issuesURL != nil)
+	{
+		[[NSWorkspace sharedWorkspace] openURL:issuesURL];
+	}
+}
+
 @end

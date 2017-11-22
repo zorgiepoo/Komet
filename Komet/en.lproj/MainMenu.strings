@@ -86,8 +86,8 @@
 /* Class = "NSMenu"; title = "Help"; ObjectID = "F2S-fz-NVQ"; */
 "F2S-fz-NVQ.title" = "Help";
 
-/* Class = "NSMenuItem"; title = "Komet Help"; ObjectID = "FKE-Sm-Kum"; */
-"FKE-Sm-Kum.title" = "Komet Help";
+/* Class = "NSMenuItem"; title = "Report Issue"; ObjectID = "FKE-Sm-Kum"; */
+"FKE-Sm-Kum.title" = "Report Issue";
 
 /* Class = "NSMenuItem"; title = "Text"; ObjectID = "Fal-I4-PZk"; */
 "Fal-I4-PZk.title" = "Text";

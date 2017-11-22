@@ -655,9 +655,9 @@ DQ
                     <modifierMask key="keyEquivalentModifierMask"/>
                     <menu key="submenu" title="help" systemMenu="help" id="F2S-fz-NVQ">
                         <items>
-                            <menuItem title="app_help" keyEquivalent="?" id="FKE-Sm-Kum">
+                            <menuItem title="report_issue" keyEquivalent="?" id="FKE-Sm-Kum">
                                 <connections>
-                                    <action selector="showHelp:" target="-1" id="y7X-2Q-9no"/>
+                                    <action selector="reportIssue:" target="Voe-Tx-rLC" id="XMg-kj-sxZ"/>
                                 </connections>
                             </menuItem>
                         </items>
