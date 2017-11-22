@@ -292,6 +292,7 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 		[_textView setSelectedRange:NSMakeRange(commitLength, 0)];
 	}
 	
+	// Show branch name if available
 	if (!_tutorialMode && (versionControlType == ZGVersionControlGit || versionControlType == ZGVersionControlHg))
 	{
 		NSString *toolName = (versionControlType == ZGVersionControlGit) ? @"git" : @"hg";
