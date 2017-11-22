@@ -24,7 +24,7 @@
 "N1Z-Bs-8Wg.title" = "Select…";
 
 /* Class = "NSTextFieldCell"; title = "Menlo Regular - 11.0"; ObjectID = "S5K-Sz-QaX"; */
-"S5K-Sz-QaX.title" = "Menlo Regular - 11.0";
+"S5K-Sz-QaX.title" = "message_font";
 
 /* Class = "NSWindow"; title = "Preferences"; ObjectID = "X9f-Ms-esr"; */
 "X9f-Ms-esr.title" = "Preferences";
@@ -48,7 +48,7 @@
 "b0o-CE-9us.title" = "Insert double newline after the first line";
 
 /* Class = "NSTextFieldCell"; title = "Menlo Regular - 11.0"; ObjectID = "piI-Qf-pPu"; */
-"piI-Qf-pPu.title" = "Menlo Regular - 11.0";
+"piI-Qf-pPu.title" = "comments_font";
 
 /* Class = "NSTextFieldCell"; title = "characters on the remaining lines"; ObjectID = "sJ5-gB-Uf8"; */
 "sJ5-gB-Uf8.title" = "characters on the remaining lines";
