@@ -67,8 +67,6 @@
 		
 		NSString *executablePath = [[NSBundle mainBundle] executablePath];
 		
-		NSString *appName = [[NSRunningApplication currentApplication] localizedName];
-		
 		BOOL suggestMovingApp = NO;
 		
 		NSArray<NSString *> *executablePathComponents = executablePath.pathComponents;
@@ -96,19 +94,25 @@
 		
 		NSString *greeting =
 		[NSString stringWithFormat:
-		 @"Add tutorial to %@ (see below)\n"
+		 @"%@\n"
 		 @"\n"
-		 @"# Welcome to the Cocoa commit editor for macOS.\n"
+		 @"# %@\n"
 		 @"#\n"
-		 @"# Useful shortcuts:\n"
-		 @"#    Commit: ⌘return\n"
-		 @"#    Cancel: ⌘Q\n", appName];
+		 @"# %@\n"
+		 @"#    %@\n"
+		 @"#    %@\n",
+		 NSLocalizedString(@"tutorialCommitMessage", nil),
+		 NSLocalizedString(@"tutorialWelcome", nil),
+		 NSLocalizedString(@"tutorialShortcutsLabel", nil),
+		 NSLocalizedString(@"tutorialCommitShortcut", nil),
+		 NSLocalizedString(@"tutorialCancelShortcut", nil)];
 		
 		NSString *moveToApplicationsSuggestion =
 		[NSString stringWithFormat:
 		 @"#\n"
-		 @"# You should first move %@ to somewhere persistent like\n"
-		 @"# /Applications/\n", appName];
+		 @"# %@\n"
+		 @"# /Applications/\n",
+		 NSLocalizedString(@"tutorialMoveAppSuggestion", nil)];
 		
 		NSArray<NSString *> *mainBundlePathComponents = [[[NSBundle mainBundle] bundlePath] pathComponents];
 		
@@ -121,17 +125,23 @@
 		NSString *editorConfigurationRecommendation =
 		[NSString stringWithFormat:
 		 @"#\n"
-		 @"# You may want to set %@ as your default git editor:\n"
+		 @"# %@\n"
 		 @"#\n"
 		 @"# git config --global core.editor \"%@\"\n"
 		 @"#\n"
-		 @"# For hg, you will want to set the HGEDITOR environment variable.\n"
-		 @"# For svn, you will want to set the SVN_EDITOR environment variable.\n"
-		 @"# Please consult their documentation for more information.\n"
+		 @"# %@\n"
+		 @"# %@\n"
+		 @"# %@\n"
 		 @"#\n"
-		 @"# More themes can be found under View → Theme\n"
-		 @"# Automatic updates can be toggled in Komet → Preferences\n"
-		 , appName, editorPathToUse];
+		 @"# %@\n"
+		 @"# %@\n",
+		 NSLocalizedString(@"tutorialDefaultGitEditorRecommendation", nil),
+		 editorPathToUse,
+		 NSLocalizedString(@"tutorialDefaultHgEditorRecommendation", nil),
+		 NSLocalizedString(@"tutorialDefaultSvnEditorRecommendation", nil),
+		 NSLocalizedString(@"tutorialConsultEditorDocumentation", nil),
+		 NSLocalizedString(@"tutorialMoreThemes", nil),
+		 NSLocalizedString(@"tutorialAutomaticUpdates", nil)];
 		
 		NSString *finalMessage = greeting;
 		if (suggestMovingApp)
@@ -152,7 +162,7 @@
 		
 		// Write our commit file
 		NSError *writeError = nil;
-		fileURL = [tempDirectoryURL URLByAppendingPathComponent:@"Tutorial"];
+		fileURL = [tempDirectoryURL URLByAppendingPathComponent:NSLocalizedString(@"tutorialProjectFileName", nil)];
 		if (![finalMessage writeToURL:fileURL atomically:NO encoding:NSUTF8StringEncoding error:&writeError])
 		{
 			fprintf(stderr, "Failed to create temporary greetings file with error: %s\n", writeError.localizedDescription.UTF8String);

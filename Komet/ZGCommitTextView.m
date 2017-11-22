@@ -86,11 +86,11 @@ static NSCustomTouchBarItem *ZGCreateCustomTouchBarButton(NSString *identifier, 
 	NSTouchBarItem *touchBarItem;
 	if ([identifier isEqualToString:ZGTouchBarIdentifierCancel])
 	{
-		touchBarItem = ZGCreateCustomTouchBarButton(identifier, @"Cancel", self.zgCommitViewDelegate, @selector(zgCommitViewTouchCancel:));
+		touchBarItem = ZGCreateCustomTouchBarButton(identifier, NSLocalizedString(@"touchBarCancel", nil), self.zgCommitViewDelegate, @selector(zgCommitViewTouchCancel:));
 	}
 	else if ([identifier isEqualToString:ZGTouchBarIdentifierCommit])
 	{
-		touchBarItem = ZGCreateCustomTouchBarButton(identifier, @"Commit", self.zgCommitViewDelegate, @selector(zgCommitViewTouchCommit:));
+		touchBarItem = ZGCreateCustomTouchBarButton(identifier, NSLocalizedString(@"touchBarCommit", nil), self.zgCommitViewDelegate, @selector(zgCommitViewTouchCommit:));
 	}
 	else
 	{

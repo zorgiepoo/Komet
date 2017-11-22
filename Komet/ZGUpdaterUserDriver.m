@@ -52,9 +52,9 @@
 		NSAlert *alert = [[NSAlert alloc] init];
 		alert.alertStyle = NSInformationalAlertStyle;
 		alert.informativeText = informativeText;
-		alert.messageText = @"New Update";
-		[alert addButtonWithTitle:@"Install on Quit"];
-		[alert addButtonWithTitle:@"Cancel"];
+		alert.messageText = NSLocalizedString(@"updaterNewUpdateAlert", nil);
+		[alert addButtonWithTitle:NSLocalizedString(@"updaterInstallOnQuit", nil)];
+		[alert addButtonWithTitle:NSLocalizedString(@"updaterCancel", nil)];
 		
 		NSModalResponse modalResponse = [alert runModal];
 		if (modalResponse == NSAlertFirstButtonReturn)
@@ -74,7 +74,7 @@
 
 - (void)showUpdateFoundWithAppcastItem:(SUAppcastItem *)appcastItem userInitiated:(BOOL)userInitiated reply:(void (^)(SPUUpdateAlertChoice))reply
 {
-	NSString *informativeText = [NSString stringWithFormat:@"A new update (%@) is available. Would you like to download and install it after Komet quits?", appcastItem.displayVersionString];
+	NSString *informativeText = [NSString stringWithFormat:NSLocalizedString(@"updaterNewUpdateAvailableFormat", nil), appcastItem.displayVersionString];
 	
 	[self promptUserInitiatedCheck:userInitiated withInformativeText:informativeText response:reply];
 }
@@ -84,7 +84,7 @@
 	// It should be very unlikely that we reach this method but we may as well handle it
 	// (because the update would have to be downloaded in the background, and not able to have permission to start the installer, but we disallow updating if such interaction is necessary..)
 	
-	NSString *informativeText = [NSString stringWithFormat:@"A new update (%@) has been downloaded. Would you like to install it after Komet quits?", appcastItem.displayVersionString];
+	NSString *informativeText = [NSString stringWithFormat:NSLocalizedString(@"updaterNewUpdateDownloadedFormat", nil), appcastItem.displayVersionString];
 	
 	[self promptUserInitiatedCheck:userInitiated withInformativeText:informativeText response:reply];
 }
@@ -96,9 +96,9 @@
 	{
 		NSAlert *alert = [[NSAlert alloc] init];
 		alert.alertStyle = NSInformationalAlertStyle;
-		alert.informativeText = [NSString stringWithFormat:@"A new update (%@) is available, and will be installed after Komet quits.", appcastItem.displayVersionString];
-		alert.messageText = @"New Update";
-		[alert addButtonWithTitle:@"OK"];
+		alert.informativeText = [NSString stringWithFormat:NSLocalizedString(@"updaterNewUpdateResumableFormat", nil), appcastItem.displayVersionString];
+		alert.messageText = NSLocalizedString(@"updaterNewUpdateAlert", nil);
+		[alert addButtonWithTitle:NSLocalizedString(@"updaterOK", nil)];
 		[alert runModal];
 	}
 	reply(SPUDismissUpdateInstallation);
@@ -116,9 +116,9 @@
 {
 	NSAlert *alert = [[NSAlert alloc] init];
 	alert.alertStyle = NSInformationalAlertStyle;
-	alert.informativeText = [NSString stringWithFormat:@"You have the latest version installed."];
-	alert.messageText = @"No Update Available";
-	[alert addButtonWithTitle:@"OK"];
+	alert.informativeText = NSLocalizedString(@"updaterLatestVersionInstalled", nil);
+	alert.messageText = NSLocalizedString(@"updaterNoUpdateAvailable", nil);
+	[alert addButtonWithTitle:NSLocalizedString(@"updaterOK", nil)];
 	[alert runModal];
 	
 	acknowledgement();

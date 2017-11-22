@@ -1,0 +1,29 @@
+/* Tutorial */
+"tutorialCommitMessage" = "Add tutorial to Komet (see below)";
+"tutorialWelcome" = "Welcome to the Cocoa commit editor for macOS.";
+"tutorialShortcutsLabel" = "Shortcuts:";
+"tutorialCommitShortcut" = "Commit: ⌘return";
+"tutorialCancelShortcut" = "Cancel: ⌘Q";
+"tutorialMoveAppSuggestion" = "You should first move Komet to somewhere persistent like";
+"tutorialDefaultGitEditorRecommendation" = "You may want to set Komet as your default git editor:";
+"tutorialDefaultHgEditorRecommendation" = "For hg, you will want to set the HGEDITOR environment variable.";
+"tutorialDefaultSvnEditorRecommendation" = "For svn, you will want to set the SVN_EDITOR environment variable.";
+"tutorialConsultEditorDocumentation" = "Please consult their documentation for more information";
+"tutorialMoreThemes" = "More themes can be found under View → Theme";
+"tutorialAutomaticUpdates" = "Automatic updates can be toggled in Komet → Preferences";
+"tutorialProjectFileName" = "Tutorial";
+
+/* Touch Bar */
+"touchBarCancel" = "Cancel";
+"touchBarCommit" = "Commit";
+
+/* Updater */
+"updaterNewUpdateAlert" = "New Update";
+"updaterInstallOnQuit" = "Install on Quit";
+"updaterCancel" = "Cancel";
+"updaterNewUpdateAvailableFormat" = "A new update (%@) is available. Would you like to download and install it after Komet quits?";
+"updaterNewUpdateDownloadedFormat" = "A new update (%@) has been downloaded. Would you like to install it after Komet quits?";
+"updaterNewUpdateResumableFormat" = "A new update (%@) is available, and will be installed after Komet quits.";
+"updaterOK" = "OK";
+"updaterLatestVersionInstalled" = "You have the latest version installed.";
+"updaterNoUpdateAvailable" = "No Update Available";

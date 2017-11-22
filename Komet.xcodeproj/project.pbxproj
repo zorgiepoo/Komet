@@ -10,6 +10,7 @@
 		3A05CB0E1D7EA56B005106E9 /* ZGWindowStyle.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A05CB0D1D7EA56B005106E9 /* ZGWindowStyle.m */; };
 		723606A61FC6222000BDD6E9 /* Commit Editor.xib in Resources */ = {isa = PBXBuildFile; fileRef = 723606A81FC6222000BDD6E9 /* Commit Editor.xib */; };
 		723606AB1FC6235200BDD6E9 /* Preferences.xib in Resources */ = {isa = PBXBuildFile; fileRef = 723606AD1FC6235200BDD6E9 /* Preferences.xib */; };
+		723606B21FC630C400BDD6E9 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 723606B01FC630C400BDD6E9 /* Localizable.strings */; };
 		7240062F1D7359E4001042CF /* ZGUserDefaults.m in Sources */ = {isa = PBXBuildFile; fileRef = 7240062E1D7359E4001042CF /* ZGUserDefaults.m */; };
 		724006331D73B2CA001042CF /* ZGUpdaterController.m in Sources */ = {isa = PBXBuildFile; fileRef = 724006321D73B2CA001042CF /* ZGUpdaterController.m */; };
 		724006391D73BCF6001042CF /* dsa_pub.pem in Resources */ = {isa = PBXBuildFile; fileRef = 724006381D73BCF6001042CF /* dsa_pub.pem */; };
@@ -49,6 +50,7 @@
 		723606AA1FC6222300BDD6E9 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = "en.lproj/Commit Editor.strings"; sourceTree = "<group>"; };
 		723606AC1FC6235200BDD6E9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/Preferences.xib; sourceTree = "<group>"; };
 		723606AF1FC6235400BDD6E9 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Preferences.strings; sourceTree = "<group>"; };
+		723606B11FC630C400BDD6E9 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		7240062D1D7359E4001042CF /* ZGUserDefaults.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZGUserDefaults.h; sourceTree = "<group>"; };
 		7240062E1D7359E4001042CF /* ZGUserDefaults.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZGUserDefaults.m; sourceTree = "<group>"; };
 		724006301D736E83001042CF /* ZGUserDefaultsEditorListener.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZGUserDefaultsEditorListener.h; sourceTree = "<group>"; };
@@ -130,6 +132,7 @@
 				72B72C9D1D63EFF90096365F /* MainMenu.xib */,
 				72B72CA01D63EFF90096365F /* Info.plist */,
 				726F32F51DE27AB7004FB4AF /* Credits.rtf */,
+				723606B01FC630C400BDD6E9 /* Localizable.strings */,
 				72B72C981D63EFF90096365F /* Supporting Files */,
 			);
 			path = Komet;
@@ -207,6 +210,7 @@
 				724006391D73BCF6001042CF /* dsa_pub.pem in Resources */,
 				726F32F71DE27AB7004FB4AF /* Credits.rtf in Resources */,
 				723606A61FC6222000BDD6E9 /* Commit Editor.xib in Resources */,
+				723606B21FC630C400BDD6E9 /* Localizable.strings in Resources */,
 				72B72C9C1D63EFF90096365F /* Assets.xcassets in Resources */,
 				723606AB1FC6235200BDD6E9 /* Preferences.xib in Resources */,
 				72B72C9F1D63EFF90096365F /* MainMenu.xib in Resources */,
@@ -251,6 +255,14 @@
 				723606AF1FC6235400BDD6E9 /* en */,
 			);
 			name = Preferences.xib;
+			sourceTree = "<group>";
+		};
+		723606B01FC630C400BDD6E9 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				723606B11FC630C400BDD6E9 /* en */,
+			);
+			name = Localizable.strings;
 			sourceTree = "<group>";
 		};
 		726F32F51DE27AB7004FB4AF /* Credits.rtf */ = {
