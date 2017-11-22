@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		3A05CB0E1D7EA56B005106E9 /* ZGWindowStyle.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A05CB0D1D7EA56B005106E9 /* ZGWindowStyle.m */; };
+		723606A61FC6222000BDD6E9 /* Commit Editor.xib in Resources */ = {isa = PBXBuildFile; fileRef = 723606A81FC6222000BDD6E9 /* Commit Editor.xib */; };
+		723606AB1FC6235200BDD6E9 /* Preferences.xib in Resources */ = {isa = PBXBuildFile; fileRef = 723606AD1FC6235200BDD6E9 /* Preferences.xib */; };
 		7240062F1D7359E4001042CF /* ZGUserDefaults.m in Sources */ = {isa = PBXBuildFile; fileRef = 7240062E1D7359E4001042CF /* ZGUserDefaults.m */; };
 		724006331D73B2CA001042CF /* ZGUpdaterController.m in Sources */ = {isa = PBXBuildFile; fileRef = 724006321D73B2CA001042CF /* ZGUpdaterController.m */; };
 		724006391D73BCF6001042CF /* dsa_pub.pem in Resources */ = {isa = PBXBuildFile; fileRef = 724006381D73BCF6001042CF /* dsa_pub.pem */; };
@@ -20,10 +22,8 @@
 		72B72C9C1D63EFF90096365F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 72B72C9B1D63EFF90096365F /* Assets.xcassets */; };
 		72B72C9F1D63EFF90096365F /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 72B72C9D1D63EFF90096365F /* MainMenu.xib */; };
 		72B72CA91D63F0870096365F /* ZGEditorWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 72B72CA71D63F0870096365F /* ZGEditorWindowController.m */; };
-		72B72CAA1D63F0870096365F /* Commit Editor.xib in Resources */ = {isa = PBXBuildFile; fileRef = 72B72CA81D63F0870096365F /* Commit Editor.xib */; };
 		72B72CAD1D6412EE0096365F /* ZGCommitTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 72B72CAC1D6412EE0096365F /* ZGCommitTextView.m */; };
 		72D10C571D7334CA00ED32BC /* ZGPreferencesWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 72D10C561D7334CA00ED32BC /* ZGPreferencesWindowController.m */; };
-		72D10C591D7334D400ED32BC /* Preferences.xib in Resources */ = {isa = PBXBuildFile; fileRef = 72D10C581D7334D400ED32BC /* Preferences.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -44,6 +44,11 @@
 		3A05CB0C1D7EA56B005106E9 /* ZGWindowStyle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZGWindowStyle.h; sourceTree = "<group>"; };
 		3A05CB0D1D7EA56B005106E9 /* ZGWindowStyle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZGWindowStyle.m; sourceTree = "<group>"; };
 		722FB81E1DD9568F001D40CE /* ZGWindowStyleTheme.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZGWindowStyleTheme.h; sourceTree = "<group>"; };
+		723606A51FC61ECB00BDD6E9 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/MainMenu.strings; sourceTree = "<group>"; };
+		723606A71FC6222000BDD6E9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = "Base.lproj/Commit Editor.xib"; sourceTree = "<group>"; };
+		723606AA1FC6222300BDD6E9 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = "en.lproj/Commit Editor.strings"; sourceTree = "<group>"; };
+		723606AC1FC6235200BDD6E9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/Preferences.xib; sourceTree = "<group>"; };
+		723606AF1FC6235400BDD6E9 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Preferences.strings; sourceTree = "<group>"; };
 		7240062D1D7359E4001042CF /* ZGUserDefaults.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZGUserDefaults.h; sourceTree = "<group>"; };
 		7240062E1D7359E4001042CF /* ZGUserDefaults.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZGUserDefaults.m; sourceTree = "<group>"; };
 		724006301D736E83001042CF /* ZGUserDefaultsEditorListener.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZGUserDefaultsEditorListener.h; sourceTree = "<group>"; };
@@ -63,12 +68,10 @@
 		72B72CA01D63EFF90096365F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		72B72CA61D63F0870096365F /* ZGEditorWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZGEditorWindowController.h; sourceTree = "<group>"; };
 		72B72CA71D63F0870096365F /* ZGEditorWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZGEditorWindowController.m; sourceTree = "<group>"; };
-		72B72CA81D63F0870096365F /* Commit Editor.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "Commit Editor.xib"; sourceTree = "<group>"; };
 		72B72CAB1D6412EE0096365F /* ZGCommitTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZGCommitTextView.h; sourceTree = "<group>"; };
 		72B72CAC1D6412EE0096365F /* ZGCommitTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZGCommitTextView.m; sourceTree = "<group>"; };
 		72D10C551D7334CA00ED32BC /* ZGPreferencesWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZGPreferencesWindowController.h; sourceTree = "<group>"; };
 		72D10C561D7334CA00ED32BC /* ZGPreferencesWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZGPreferencesWindowController.m; sourceTree = "<group>"; };
-		72D10C581D7334D400ED32BC /* Preferences.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = Preferences.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -121,8 +124,8 @@
 				724006321D73B2CA001042CF /* ZGUpdaterController.m */,
 				7240063A1D73BE84001042CF /* ZGUpdaterUserDriver.h */,
 				7240063B1D73BE84001042CF /* ZGUpdaterUserDriver.m */,
-				72B72CA81D63F0870096365F /* Commit Editor.xib */,
-				72D10C581D7334D400ED32BC /* Preferences.xib */,
+				723606A81FC6222000BDD6E9 /* Commit Editor.xib */,
+				723606AD1FC6235200BDD6E9 /* Preferences.xib */,
 				72B72C9B1D63EFF90096365F /* Assets.xcassets */,
 				72B72C9D1D63EFF90096365F /* MainMenu.xib */,
 				72B72CA01D63EFF90096365F /* Info.plist */,
@@ -203,9 +206,9 @@
 			files = (
 				724006391D73BCF6001042CF /* dsa_pub.pem in Resources */,
 				726F32F71DE27AB7004FB4AF /* Credits.rtf in Resources */,
-				72B72CAA1D63F0870096365F /* Commit Editor.xib in Resources */,
+				723606A61FC6222000BDD6E9 /* Commit Editor.xib in Resources */,
 				72B72C9C1D63EFF90096365F /* Assets.xcassets in Resources */,
-				72D10C591D7334D400ED32BC /* Preferences.xib in Resources */,
+				723606AB1FC6235200BDD6E9 /* Preferences.xib in Resources */,
 				72B72C9F1D63EFF90096365F /* MainMenu.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -232,6 +235,24 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
+		723606A81FC6222000BDD6E9 /* Commit Editor.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				723606A71FC6222000BDD6E9 /* Base */,
+				723606AA1FC6222300BDD6E9 /* en */,
+			);
+			name = "Commit Editor.xib";
+			sourceTree = "<group>";
+		};
+		723606AD1FC6235200BDD6E9 /* Preferences.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				723606AC1FC6235200BDD6E9 /* Base */,
+				723606AF1FC6235400BDD6E9 /* en */,
+			);
+			name = Preferences.xib;
+			sourceTree = "<group>";
+		};
 		726F32F51DE27AB7004FB4AF /* Credits.rtf */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -244,6 +265,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				72B72C9E1D63EFF90096365F /* Base */,
+				723606A51FC61ECB00BDD6E9 /* en */,
 			);
 			name = MainMenu.xib;
 			sourceTree = "<group>";

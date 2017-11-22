@@ -1,0 +1,60 @@
+
+/* Class = "NSToolbarItem"; label = "Advanced"; ObjectID = "2Wj-Ck-alH"; */
+"2Wj-Ck-alH.label" = "Advanced";
+
+/* Class = "NSToolbarItem"; paletteLabel = "Advanced"; ObjectID = "2Wj-Ck-alH"; */
+"2Wj-Ck-alH.paletteLabel" = "Advanced";
+
+/* Class = "NSTextFieldCell"; title = "Comments"; ObjectID = "8tv-N4-3C7"; */
+"8tv-N4-3C7.title" = "Comments";
+
+/* Class = "NSTextFieldCell"; title = "Highlight text that exceeds:"; ObjectID = "A0E-bX-VpF"; */
+"A0E-bX-VpF.title" = "Highlight text that exceeds:";
+
+/* Class = "NSButtonCell"; title = "Install updates automatically"; ObjectID = "COk-1k-1eI"; */
+"COk-1k-1eI.title" = "Install updates automatically";
+
+/* Class = "NSTextFieldCell"; title = "72"; ObjectID = "GaT-02-duj"; */
+"GaT-02-duj.title" = "72";
+
+/* Class = "NSButtonCell"; title = "Select…"; ObjectID = "LYU-9l-NTJ"; */
+"LYU-9l-NTJ.title" = "Select…";
+
+/* Class = "NSButtonCell"; title = "Select…"; ObjectID = "N1Z-Bs-8Wg"; */
+"N1Z-Bs-8Wg.title" = "Select…";
+
+/* Class = "NSTextFieldCell"; title = "Menlo Regular - 11.0"; ObjectID = "S5K-Sz-QaX"; */
+"S5K-Sz-QaX.title" = "Menlo Regular - 11.0";
+
+/* Class = "NSWindow"; title = "Preferences"; ObjectID = "X9f-Ms-esr"; */
+"X9f-Ms-esr.title" = "Preferences";
+
+/* Class = "NSTextFieldCell"; title = "69"; ObjectID = "YSA-0z-P8Y"; */
+"YSA-0z-P8Y.title" = "69";
+
+/* Class = "NSToolbarItem"; label = "Warnings"; ObjectID = "YxA-vf-ITa"; */
+"YxA-vf-ITa.label" = "Warnings";
+
+/* Class = "NSToolbarItem"; paletteLabel = "Warnings"; ObjectID = "YxA-vf-ITa"; */
+"YxA-vf-ITa.paletteLabel" = "Warnings";
+
+/* Class = "NSToolbarItem"; label = "Fonts"; ObjectID = "ZSv-XI-2jR"; */
+"ZSv-XI-2jR.label" = "Fonts";
+
+/* Class = "NSToolbarItem"; paletteLabel = "Fonts"; ObjectID = "ZSv-XI-2jR"; */
+"ZSv-XI-2jR.paletteLabel" = "Fonts";
+
+/* Class = "NSButtonCell"; title = "Insert double newline after the first line"; ObjectID = "b0o-CE-9us"; */
+"b0o-CE-9us.title" = "Insert double newline after the first line";
+
+/* Class = "NSTextFieldCell"; title = "Menlo Regular - 11.0"; ObjectID = "piI-Qf-pPu"; */
+"piI-Qf-pPu.title" = "Menlo Regular - 11.0";
+
+/* Class = "NSTextFieldCell"; title = "characters on the remaining lines"; ObjectID = "sJ5-gB-Uf8"; */
+"sJ5-gB-Uf8.title" = "characters on the remaining lines";
+
+/* Class = "NSTextFieldCell"; title = "characters on the first line"; ObjectID = "v8K-FZ-wmd"; */
+"v8K-FZ-wmd.title" = "characters on the first line";
+
+/* Class = "NSTextFieldCell"; title = "Message"; ObjectID = "xwO-UY-was"; */
+"xwO-UY-was.title" = "Message";
