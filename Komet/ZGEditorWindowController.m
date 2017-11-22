@@ -12,6 +12,7 @@
 #import "ZGWindowStyle.h"
 
 #define ZGEditorWindowFrameNameKey @"ZGEditorWindowFrame"
+#define APP_SUPPORT_DIRECTORY_NAME @"Komet"
 
 typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 {
@@ -79,6 +80,12 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 	[self.window saveFrameUsingName:ZGEditorWindowFrameNameKey];
 }
 
+// git, hg, and svn seem to set current working directory to project directory before launching the editor
+- (NSString *)projectName
+{
+	return [[[NSFileManager defaultManager] currentDirectoryPath] lastPathComponent];
+}
+
 - (void)windowDidLoad
 {
 	[self.window setFrameUsingName:ZGEditorWindowFrameNameKey];
@@ -127,8 +134,7 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 			versionControlType = ZGVersionControlGit;
 		}
 		
-		// git, hg, and svn seem to set current working directory to project directory before launching the editor
-		label = [[[NSFileManager defaultManager] currentDirectoryPath] lastPathComponent];
+		label = [self projectName];
 	}
 	
 	_versionControlType = versionControlType;
@@ -160,31 +166,103 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 	_textView.delegate = self;
 	_textView.zgCommitViewDelegate = self;
 	
-	NSString *plainStringCandidate = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-	if (plainStringCandidate == nil)
+	NSString *initialPlainStringCandidate = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+	if (initialPlainStringCandidate == nil)
 	{
 		fprintf(stderr, "Error: Couldn't load plain-text from %s\n", _fileURL.path.UTF8String);
 		exit(EXIT_FAILURE);
 	}
 	
 	// It's unlikely we'll get content that has no line break, but if we do, just insert a newline character because Komet won't be able to deal with the content otherwise
-	NSString *plainString;
-	NSUInteger lineCount = [[plainStringCandidate componentsSeparatedByCharactersInSet:[NSCharacterSet newlineCharacterSet]] count];
+	NSString *initialPlainString;
+	NSUInteger lineCount = [[initialPlainStringCandidate componentsSeparatedByCharactersInSet:[NSCharacterSet newlineCharacterSet]] count];
 	if (lineCount <= 1)
 	{
-		plainString = @"\n";
+		initialPlainString = @"\n";
 	}
 	else
 	{
-		plainString = plainStringCandidate;
+		initialPlainString = initialPlainStringCandidate;
 	}
 	
-	_commentSectionLength = [self commentSectionLengthFromPlainText:plainString versionControlType:versionControlType];
+	NSUInteger initialCommentSectionLength = [self commentSectionLengthFromPlainText:initialPlainString versionControlType:versionControlType];
 	
-	NSUInteger commitLength = [self commitTextLengthFromPlainText:plainString commentLength:_commentSectionLength];
+	NSUInteger initialCommitLength = [self commitTextLengthFromPlainText:initialPlainString commentLength:initialCommentSectionLength];
 	
-	NSString *content = [plainString substringToIndex:commitLength];
-	_initiallyContainedEmptyContent = ([[content stringByTrimmingCharactersInSet:[NSCharacterSet newlineCharacterSet]] length] == 0);
+	NSFileManager *fileManager = [[NSFileManager alloc] init];
+	
+	NSString *initialContent = [initialPlainString substringToIndex:initialCommitLength];
+	_initiallyContainedEmptyContent = ([[initialContent stringByTrimmingCharactersInSet:[NSCharacterSet newlineCharacterSet]] length] == 0);
+	
+	// Check if we have any incomplete commit message available
+	// Load the incomplete commit message contents if our content is initially empty
+	NSString *lastSavedCommitMessage = nil;
+	if (!_tutorialMode)
+	{
+		NSError *applicationSupportQueryError = nil;
+		NSURL *applicationSupportURL = [fileManager URLForDirectory:NSApplicationSupportDirectory inDomain:NSUserDomainMask appropriateForURL:nil create:NO error:&applicationSupportQueryError];
+		if (applicationSupportURL == nil)
+		{
+			NSLog(@"Failed to find application support directory: %@", applicationSupportQueryError);
+		}
+		else
+		{
+			NSURL *supportDirectory = [applicationSupportURL URLByAppendingPathComponent:APP_SUPPORT_DIRECTORY_NAME];
+			NSString *projectName = [self projectName];
+			
+			NSURL *lastCommitFile = [supportDirectory URLByAppendingPathComponent:projectName];
+			
+			if ([lastCommitFile checkResourceIsReachableAndReturnError:NULL])
+			{
+				NSError *resourceError = nil;
+				NSDate *lastModifiedDate = nil;
+				if (![lastCommitFile getResourceValue:&lastModifiedDate forKey:NSURLAttributeModificationDateKey error:&resourceError])
+				{
+					lastModifiedDate = nil;
+					NSLog(@"Failed to retrieve last modified date of file: %@", resourceError);
+				}
+				
+				// Allow around a 10 minute leeway for using the last incomplete commit message
+				// If too much time passes by, chances are the user may want to start anew
+				NSTimeInterval modifiedLeeway = 60.0 * 10;
+				NSTimeInterval intervalSinceLastSavedCommitMessage = (lastModifiedDate == nil) ? 0.0 : [[NSDate date] timeIntervalSinceDate:lastModifiedDate];
+				
+				if (_initiallyContainedEmptyContent && (intervalSinceLastSavedCommitMessage >= 0.0 && intervalSinceLastSavedCommitMessage <= modifiedLeeway))
+				{
+					NSData *lastCommitData = [NSData dataWithContentsOfURL:lastCommitFile];
+					
+					if (lastCommitData != nil)
+					{
+						lastSavedCommitMessage = [[NSString alloc] initWithData:lastCommitData encoding:NSUTF8StringEncoding];
+					}
+				}
+			}
+			
+			// Always remove the last commit file on every launch
+			[fileManager removeItemAtURL:lastCommitFile error:NULL];
+		}
+	}
+	
+	NSString *content;
+	NSString *plainString;
+	NSUInteger commitLength;
+	NSUInteger commentSectionLength;
+	if (lastSavedCommitMessage != nil)
+	{
+		plainString = [lastSavedCommitMessage stringByAppendingString:initialPlainString];
+		commentSectionLength = [self commentSectionLengthFromPlainText:plainString versionControlType:versionControlType];
+		commitLength = [self commitTextLengthFromPlainText:plainString commentLength:commentSectionLength];
+		content = [plainString substringToIndex:commitLength];
+	}
+	else
+	{
+		plainString = initialPlainString;
+		commentSectionLength = initialCommentSectionLength;
+		commitLength = initialCommitLength;
+		content = initialContent;
+	}
+	
+	_commentSectionLength = commentSectionLength;
 	
 	NSMutableAttributedString *plainAttributedString = [[NSMutableAttributedString alloc] initWithString:plainString attributes:@{}];
 	
@@ -203,12 +281,19 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 	// Necessary to update text processing otherwise colors may not be right
 	[self updateTextProcessing];
 	
-	[_textView setSelectedRange:NSMakeRange(commitLength, 0)];
+	// If we're resuming a canceled commit message, select all the contents
+	// Otherwise point the selection at the end of the message contents
+	if (lastSavedCommitMessage != nil)
+	{
+		[_textView setSelectedRange:NSMakeRange(0, commitLength)];
+	}
+	else
+	{
+		[_textView setSelectedRange:NSMakeRange(commitLength, 0)];
+	}
 	
 	if (!_tutorialMode && (versionControlType == ZGVersionControlGit || versionControlType == ZGVersionControlHg))
 	{
-		NSFileManager *fileManager = [[NSFileManager alloc] init];
-		
 		NSString *toolName = (versionControlType == ZGVersionControlGit) ? @"git" : @"hg";
 		NSArray<NSString *> *toolArguments = (versionControlType == ZGVersionControlGit) ? @[@"rev-parse", @"--symbolic-full-name", @"--abbrev-ref", @"HEAD"] : @[@"branch"];
 		
@@ -732,8 +817,51 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 	}
 	else
 	{
+		// If we initially had no content and wrote an incomplete commit message,
+		// then save the commit message in case we may want to resume from it later
 		if (_initiallyContainedEmptyContent)
 		{
+			NSFileManager *fileManager = [[NSFileManager alloc] init];
+			
+			NSString *plainString = _textView.textStorage.string;
+			NSUInteger commitLength = [self commitTextLengthFromPlainText:plainString commentLength:_commentSectionLength];
+			
+			NSString *content = [plainString substringToIndex:commitLength];
+			NSString *trimmedContent = [content stringByTrimmingCharactersInSet:[NSCharacterSet newlineCharacterSet]];
+			if (trimmedContent.length > 0)
+			{
+				NSError *applicationSupportQueryError = nil;
+				NSURL *applicationSupportURL = [fileManager URLForDirectory:NSApplicationSupportDirectory inDomain:NSUserDomainMask appropriateForURL:nil create:NO error:&applicationSupportQueryError];
+				if (applicationSupportURL == nil)
+				{
+					NSLog(@"Failed to find application support directory: %@", applicationSupportQueryError);
+				}
+				else
+				{
+					NSURL *supportDirectory = [applicationSupportURL URLByAppendingPathComponent:APP_SUPPORT_DIRECTORY_NAME];
+					NSString *projectName = [self projectName];
+					
+					NSError *createSupportDirectoryError = nil;
+					if (![fileManager createDirectoryAtURL:supportDirectory withIntermediateDirectories:YES attributes:nil error:&createSupportDirectoryError])
+					{
+						NSLog(@"Failed to create application support directory: %@", createSupportDirectoryError);
+					}
+					else
+					{
+						NSURL *lastCommitURL = [supportDirectory URLByAppendingPathComponent:projectName];
+						
+						if (lastCommitURL != nil)
+						{
+							NSError *writeError = nil;
+							if (![trimmedContent writeToURL:lastCommitURL atomically:YES encoding:NSUTF8StringEncoding error:&writeError])
+							{
+								NSLog(@"Failed to write last commit message with error: %@", writeError);
+							}
+						}
+					}
+				}
+			}
+			
 			// Empty commits should be treated as a success
 			// Version control software will be able to handle it as an abort
 			exit(EXIT_SUCCESS);
