@@ -156,7 +156,7 @@
 		
 		if (tempDirectoryURL == nil)
 		{
-			fprintf(stderr, "Failed to create temp directory because of error: %s\n", temporaryError.localizedDescription.UTF8String);
+			NSLog(@"Failed to create temp directory because of error: %@",  temporaryError.localizedDescription);
 			exit(EXIT_FAILURE);
 		}
 		
@@ -165,7 +165,7 @@
 		fileURL = [tempDirectoryURL URLByAppendingPathComponent:NSLocalizedString(@"tutorialProjectFileName", nil)];
 		if (![finalMessage writeToURL:fileURL atomically:NO encoding:NSUTF8StringEncoding error:&writeError])
 		{
-			fprintf(stderr, "Failed to create temporary greetings file with error: %s\n", writeError.localizedDescription.UTF8String);
+			NSLog(@"Failed to create temporary greetings file with error: %@",  writeError.localizedDescription);
 			exit(EXIT_FAILURE);
 		}
 	}

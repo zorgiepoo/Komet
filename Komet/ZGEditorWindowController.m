@@ -96,7 +96,7 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 	NSData *data = [NSData dataWithContentsOfURL:_fileURL];
 	if (data == nil)
 	{
-		fprintf(stderr, "Error: Couldn't load data from %s\n", _fileURL.path.UTF8String);
+		NSLog(@"Error: Couldn't load data from %@", _fileURL.path);
 		exit(EXIT_FAILURE);
 	}
 	
@@ -169,7 +169,7 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 	NSString *initialPlainStringCandidate = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
 	if (initialPlainStringCandidate == nil)
 	{
-		fprintf(stderr, "Error: Couldn't load plain-text from %s\n", _fileURL.path.UTF8String);
+		NSLog(@"Error: Couldn't load plain-text from %@", _fileURL.path);
 		exit(EXIT_FAILURE);
 	}
 	
@@ -349,7 +349,7 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 				}
 				@catch (NSException *exception)
 				{
-					fprintf(stderr, "Error: Failed to fetch branch name: %s\n", exception.reason.UTF8String);
+					NSLog(@"Error: Failed to fetch branch name: %@", exception.reason);
 				}
 			});
 		}
@@ -881,7 +881,7 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 	if (![_textView.textStorage.string writeToURL:_fileURL atomically:YES encoding:NSUTF8StringEncoding error:&writeError])
 	{
 		// Fatal error
-		fprintf(stderr, "Failed to write to %s because of: %s\n", _fileURL.path.UTF8String, writeError.localizedDescription.UTF8String);
+		NSLog(@"Failed to write to %@ because of: %@", _fileURL.path, writeError.localizedDescription);
 		exit(EXIT_FAILURE);
 	}
 	
