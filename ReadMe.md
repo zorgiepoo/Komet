@@ -31,8 +31,6 @@ I do version control from the command line but I want a fast and non-obstructive
 
 **Version Control**: git, hg, svn
 
-Systems prior to macOS 10.10 cannot run Komet due to some appearance settings that are used.
-
 For optimal behavior, Komet depends on being able to distinguish the commit message content and the comment section at the end of the file. Thus, Komet has a small bit of code for handling each of its supported version control systems.
 
 ## Contributing
