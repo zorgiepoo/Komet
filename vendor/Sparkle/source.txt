@@ -1,3 +1,4 @@
 Git: https://github.com/sparkle-project/Sparkle.git
 Commit: 30ab76da037a0e4d24827bf1ce599717ffff336c
 Branch: ui-separation-and-xpc
+Config: Set MACOSX_DEPLOYMENT_TARGET=10.10
