@@ -20,6 +20,7 @@
                 <outlet property="_recommendedSubjectLengthLimitDescriptionTextField" destination="T4H-cy-4ps" id="2uC-Zw-If8"/>
                 <outlet property="_recommendedSubjectLengthLimitEnabledCheckbox" destination="qFV-l9-9pw" id="Huu-dl-RrD"/>
                 <outlet property="_recommendedSubjectLengthLimitTextField" destination="Xcy-hC-F81" id="L6A-GD-yWt"/>
+                <outlet property="_resumeLastIncompleteSessionCheckbox" destination="JJc-Hj-X94" id="Lxz-Hu-L9D"/>
                 <outlet property="_warningsView" destination="I8B-Aq-rvW" id="IZd-AL-CEj"/>
                 <outlet property="window" destination="X9f-Ms-esr" id="day-H5-Cqe"/>
             </connections>
@@ -277,11 +278,11 @@
             <point key="canvasLocation" x="273.5" y="333"/>
         </customView>
         <customView id="E8X-F5-Lbv" userLabel="Advanced View">
-            <rect key="frame" x="0.0" y="0.0" width="296" height="74"/>
+            <rect key="frame" x="0.0" y="0.0" width="296" height="94"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <subviews>
                 <button translatesAutoresizingMaskIntoConstraints="NO" id="c3p-Oz-hOG">
-                    <rect key="frame" x="18" y="38" width="260" height="18"/>
+                    <rect key="frame" x="18" y="58" width="260" height="18"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="14" id="WBU-Hc-14f"/>
                     </constraints>
@@ -291,6 +292,16 @@
                     </buttonCell>
                     <connections>
                         <action selector="changeAutomaticNewlineInsertionAfterSubjectLine:" target="-2" id="lVW-mN-A0U"/>
+                    </connections>
+                </button>
+                <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="JJc-Hj-X94">
+                    <rect key="frame" x="18" y="38" width="260" height="18"/>
+                    <buttonCell key="cell" type="check" title="resume_last_session" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="G3b-Vh-CFP">
+                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                        <font key="font" metaFont="system"/>
+                    </buttonCell>
+                    <connections>
+                        <action selector="changeResumeLastIncompleteSession:" target="-2" id="SzH-in-tgO"/>
                     </connections>
                 </button>
                 <button translatesAutoresizingMaskIntoConstraints="NO" id="4aw-Oh-wqh">
@@ -308,16 +319,20 @@
                 </button>
             </subviews>
             <constraints>
+                <constraint firstItem="JJc-Hj-X94" firstAttribute="leading" secondItem="c3p-Oz-hOG" secondAttribute="leading" id="27R-HH-opG"/>
+                <constraint firstItem="4aw-Oh-wqh" firstAttribute="top" secondItem="JJc-Hj-X94" secondAttribute="bottom" constant="6" id="7rg-Pr-643"/>
+                <constraint firstItem="JJc-Hj-X94" firstAttribute="leading" secondItem="E8X-F5-Lbv" secondAttribute="leading" constant="20" id="9zB-mO-Qro"/>
                 <constraint firstAttribute="trailing" secondItem="4aw-Oh-wqh" secondAttribute="trailing" constant="20" id="Fau-Tj-2Vf"/>
+                <constraint firstAttribute="trailing" secondItem="JJc-Hj-X94" secondAttribute="trailing" constant="20" id="HBP-UL-FfF"/>
                 <constraint firstItem="c3p-Oz-hOG" firstAttribute="top" secondItem="E8X-F5-Lbv" secondAttribute="top" constant="20" id="YN8-rw-rd2"/>
-                <constraint firstItem="4aw-Oh-wqh" firstAttribute="top" secondItem="c3p-Oz-hOG" secondAttribute="bottom" constant="6" id="d0o-6C-FiN"/>
                 <constraint firstAttribute="bottom" secondItem="4aw-Oh-wqh" secondAttribute="bottom" constant="20" id="ibm-MI-IbW"/>
                 <constraint firstItem="4aw-Oh-wqh" firstAttribute="leading" secondItem="c3p-Oz-hOG" secondAttribute="leading" id="jSk-rt-eXH"/>
                 <constraint firstItem="4aw-Oh-wqh" firstAttribute="leading" secondItem="E8X-F5-Lbv" secondAttribute="leading" constant="20" id="kRa-dn-eAL"/>
+                <constraint firstItem="JJc-Hj-X94" firstAttribute="top" secondItem="c3p-Oz-hOG" secondAttribute="bottom" constant="6" id="o5W-Rb-2VI"/>
                 <constraint firstItem="c3p-Oz-hOG" firstAttribute="leading" secondItem="E8X-F5-Lbv" secondAttribute="leading" constant="20" id="wDD-HI-rZA"/>
                 <constraint firstAttribute="trailing" secondItem="c3p-Oz-hOG" secondAttribute="trailing" constant="20" id="xAF-3v-FgK"/>
             </constraints>
-            <point key="canvasLocation" x="258" y="488"/>
+            <point key="canvasLocation" x="258" y="498"/>
         </customView>
     </objects>
     <resources>

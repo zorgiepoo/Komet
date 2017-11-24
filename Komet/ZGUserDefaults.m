@@ -26,6 +26,8 @@
 #define ZGWindowStyleThemeKey @"ZGWindowStyleTheme"
 #define ZGWindowVibrancyKey @"ZGWindowVibrancy"
 
+#define ZGResumeIncompleteSessionKey @"ZGResumeIncompleteSession"
+
 static NSFont *ZGReadDefaultFont(NSString *fontNameDefaultsKey, NSString *fontSizeDefaultsKey)
 {
 	NSString *fontName = [[NSUserDefaults standardUserDefaults] stringForKey:fontNameDefaultsKey];
@@ -197,4 +199,19 @@ BOOL ZGReadDefaultWindowVibrancy(void)
 void ZGWriteDefaultWindowVibrancy(BOOL windowVibrancy)
 {
 	[[NSUserDefaults standardUserDefaults] setBool:windowVibrancy forKey:ZGWindowVibrancyKey];
+}
+
+void ZGRegisterDefaultResumeIncompleteSession(void)
+{
+	[[NSUserDefaults standardUserDefaults] registerDefaults:@{ZGResumeIncompleteSessionKey : @(YES)}];
+}
+
+BOOL ZGReadDefaultResumeIncompleteSession(void)
+{
+	return [[NSUserDefaults standardUserDefaults] boolForKey:ZGResumeIncompleteSessionKey];
+}
+
+void ZGWriteDefaultResumeIncompleteSession(BOOL resumeIncompleteSession)
+{
+	[[NSUserDefaults standardUserDefaults] setBool:resumeIncompleteSession forKey:ZGResumeIncompleteSessionKey];
 }

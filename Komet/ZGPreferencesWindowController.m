@@ -51,6 +51,7 @@ typedef NS_ENUM(NSInteger, ZGSelectedFontType)
 	IBOutlet NSTextField *_recommendedBodyLineLengthLimitDescriptionTextField;
 	
 	IBOutlet NSButton *_automaticNewlineInsertionAfterSubjectLineCheckbox;
+	IBOutlet NSButton *_resumeLastIncompleteSessionCheckbox;
 	IBOutlet NSButton *_automaticallyInstallUpdatesCheckbox;
 }
 
@@ -215,6 +216,9 @@ typedef NS_ENUM(NSInteger, ZGSelectedFontType)
 	BOOL automaticInsertion = ZGReadDefaultAutomaticNewlineInsertionAfterSubjectLine();
 	_automaticNewlineInsertionAfterSubjectLineCheckbox.state = (automaticInsertion ? NSOnState : NSOffState);
 	
+	BOOL resumeIncompleteSession = ZGReadDefaultResumeIncompleteSession();
+	_resumeLastIncompleteSessionCheckbox.state = (resumeIncompleteSession ? NSOnState : NSOffState);
+	
 	SPUUpdaterSettings *updaterSettings = [[SPUUpdaterSettings alloc] initWithHostBundle:[NSBundle mainBundle]];
 	NSFileManager *fileManager = [[NSFileManager alloc] init];
 	NSString *bundlePath = [[NSBundle mainBundle] bundlePath];
@@ -230,6 +234,11 @@ typedef NS_ENUM(NSInteger, ZGSelectedFontType)
 - (IBAction)changeAutomaticNewlineInsertionAfterSubjectLine:(id)__unused sender
 {
 	ZGWriteDefaultAutomaticNewlineInsertionAfterSubjectLine(_automaticNewlineInsertionAfterSubjectLineCheckbox.state == NSOnState);
+}
+
+- (IBAction)changeResumeLastIncompleteSession:(id)__unused sender
+{
+	ZGWriteDefaultResumeIncompleteSession(_resumeLastIncompleteSessionCheckbox.state == NSOnState);
 }
 
 - (IBAction)changeAutomaticallyInstallUpdates:(id)__unused sender

@@ -48,4 +48,8 @@ void ZGRegisterDefaultWindowVibrancy(void);
 BOOL ZGReadDefaultWindowVibrancy(void);
 void ZGWriteDefaultWindowVibrancy(BOOL windowVibrancy);
 
+void ZGRegisterDefaultResumeIncompleteSession(void);
+BOOL ZGReadDefaultResumeIncompleteSession(void);
+void ZGWriteDefaultResumeIncompleteSession(BOOL resumeIncompleteSession);
+
 NS_ASSUME_NONNULL_END

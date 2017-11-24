@@ -55,6 +55,7 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 		ZGRegisterDefaultRecommendedBodyLineLengthLimit();
 		ZGRegisterDefaultAutomaticNewlineInsertionAfterSubjectLine();
 		ZGRegisterDefaultWindowStyleTheme();
+		ZGRegisterDefaultResumeIncompleteSession();
 	});
 }
 
@@ -196,7 +197,7 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 	// Check if we have any incomplete commit message available
 	// Load the incomplete commit message contents if our content is initially empty
 	NSString *lastSavedCommitMessage = nil;
-	if (!_tutorialMode)
+	if (!_tutorialMode && ZGReadDefaultResumeIncompleteSession())
 	{
 		NSError *applicationSupportQueryError = nil;
 		NSURL *applicationSupportURL = [fileManager URLForDirectory:NSApplicationSupportDirectory inDomain:NSUserDomainMask appropriateForURL:nil create:NO error:&applicationSupportQueryError];
@@ -801,7 +802,7 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 	{
 		// If we initially had no content and wrote an incomplete commit message,
 		// then save the commit message in case we may want to resume from it later
-		if (_initiallyContainedEmptyContent)
+		if (_initiallyContainedEmptyContent && ZGReadDefaultResumeIncompleteSession())
 		{
 			NSFileManager *fileManager = [[NSFileManager alloc] init];
 			
