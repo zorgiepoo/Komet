@@ -219,7 +219,7 @@ void ZGWriteDefaultResumeIncompleteSession(BOOL resumeIncompleteSession)
 
 void ZGRegisterDefaultResumeIncompleteSessionTimeoutInterval(void)
 {
-	NSTimeInterval defaultTimeoutInterval = 60.0 * 10; // around 10 minutes
+	NSTimeInterval defaultTimeoutInterval = 60.0 * 60; // around 1 hour
 	[[NSUserDefaults standardUserDefaults] registerDefaults:@{ZGResumeIncompleteSessionTimeoutIntervalKey : @(defaultTimeoutInterval)}];
 }
 
