@@ -52,4 +52,7 @@ void ZGRegisterDefaultResumeIncompleteSession(void);
 BOOL ZGReadDefaultResumeIncompleteSession(void);
 void ZGWriteDefaultResumeIncompleteSession(BOOL resumeIncompleteSession);
 
+void ZGRegisterDefaultResumeIncompleteSessionTimeoutInterval(void);
+NSTimeInterval ZGReadDefaultResumeIncompleteSessionTimeoutInterval(void);
+
 NS_ASSUME_NONNULL_END

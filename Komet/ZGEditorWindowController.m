@@ -56,6 +56,7 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 		ZGRegisterDefaultAutomaticNewlineInsertionAfterSubjectLine();
 		ZGRegisterDefaultWindowStyleTheme();
 		ZGRegisterDefaultResumeIncompleteSession();
+		ZGRegisterDefaultResumeIncompleteSessionTimeoutInterval();
 	});
 }
 
@@ -222,12 +223,12 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 					NSLog(@"Failed to retrieve last modified date of file: %@", resourceError);
 				}
 				
-				// Allow around a 10 minute leeway for using the last incomplete commit message
+				// Use a timeout interval for using the last incomplete commit message
 				// If too much time passes by, chances are the user may want to start anew
-				NSTimeInterval modifiedLeeway = 60.0 * 10;
+				NSTimeInterval timeoutInterval = ZGReadDefaultResumeIncompleteSessionTimeoutInterval();
 				NSTimeInterval intervalSinceLastSavedCommitMessage = (lastModifiedDate == nil) ? 0.0 : [[NSDate date] timeIntervalSinceDate:lastModifiedDate];
 				
-				if (_initiallyContainedEmptyContent && (intervalSinceLastSavedCommitMessage >= 0.0 && intervalSinceLastSavedCommitMessage <= modifiedLeeway))
+				if (_initiallyContainedEmptyContent && (intervalSinceLastSavedCommitMessage >= 0.0 && intervalSinceLastSavedCommitMessage <= timeoutInterval))
 				{
 					NSData *lastCommitData = [NSData dataWithContentsOfURL:lastCommitFile];
 					

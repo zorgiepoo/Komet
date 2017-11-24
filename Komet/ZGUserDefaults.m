@@ -27,6 +27,7 @@
 #define ZGWindowVibrancyKey @"ZGWindowVibrancy"
 
 #define ZGResumeIncompleteSessionKey @"ZGResumeIncompleteSession"
+#define ZGResumeIncompleteSessionTimeoutIntervalKey @"ZGResumeIncompleteSessionTimeoutInterval"
 
 static NSFont *ZGReadDefaultFont(NSString *fontNameDefaultsKey, NSString *fontSizeDefaultsKey)
 {
@@ -214,4 +215,18 @@ BOOL ZGReadDefaultResumeIncompleteSession(void)
 void ZGWriteDefaultResumeIncompleteSession(BOOL resumeIncompleteSession)
 {
 	[[NSUserDefaults standardUserDefaults] setBool:resumeIncompleteSession forKey:ZGResumeIncompleteSessionKey];
+}
+
+void ZGRegisterDefaultResumeIncompleteSessionTimeoutInterval(void)
+{
+	NSTimeInterval defaultTimeoutInterval = 60.0 * 10; // around 10 minutes
+	[[NSUserDefaults standardUserDefaults] registerDefaults:@{ZGResumeIncompleteSessionTimeoutIntervalKey : @(defaultTimeoutInterval)}];
+}
+
+NSTimeInterval ZGReadDefaultResumeIncompleteSessionTimeoutInterval(void)
+{
+	NSTimeInterval timeoutRead = [[NSUserDefaults standardUserDefaults] doubleForKey:ZGResumeIncompleteSessionTimeoutIntervalKey];
+	NSTimeInterval minTimeout = 0.0;
+	NSTimeInterval maxTimeout = 60.0 * 60.0 * 24 * 7 * 5; // around a month
+	return MIN(MAX(minTimeout, timeoutRead), maxTimeout);
 }
