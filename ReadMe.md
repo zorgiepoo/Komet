@@ -20,6 +20,7 @@ I do version control from the command line but I want a fast and non-obstructive
 * Intelligent discarding of commits (i.e, exits on failure if commit file has pre-existing content).
 * Ideal caret position on launch after the initial content.
 * Support for committing using the Touch Bar.
+* Resume off from canceled commit messages (WIP: in 0.7).
 
 ### Themes
 
@@ -37,4 +38,4 @@ For optimal behavior, Komet depends on being able to distinguish the commit mess
 
 If you enjoy using Komet and feel like something could improve, feel free to make a contribution. It is advisable to create an issue first before submitting a big change. Please also read and follow the code of conduct in the repository first before contributing.
 
-As for one area of improvement may be enhancing the user interface. I'm no expert in UI myself and received a lot of help with the current interface.
+Komet can now be translated to other languages (since version 0.7). If you want to translate Komet, duplicate `Komet.app/Contents/Resources/en.lproj/` and rename `en` to the desired [language locale code](https://www.science.co.il/language/Locale-codes.php). Then using a text editor intended for coding (not TextEdit), alter the string values in the `.strings` files. Keep a separate copy of the new language folder outside of the app in case Komet may get auto-updated (or work with the Xcode project instead). Finally, test the translation by changing your system language in System Preferences.
