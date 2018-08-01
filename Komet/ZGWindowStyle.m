@@ -10,7 +10,7 @@
 
 @implementation ZGWindowStyle
 
-- (instancetype)initWithBarColor:(NSColor *)barColor barTextColor:(NSColor *)barTextColor dividerLineColor:(NSColor *)dividerLineColor material:(NSVisualEffectMaterial)material textColor:(NSColor *)textColor textHighlightColor:(NSColor * _Nullable)textHighlightColor commentColor:(NSColor *)commentColor overflowColor:(NSColor *)overflowColor fallbackBackgroundColor:(NSColor *)fallbackBackgroundColor scrollerKnobStyle:(NSScrollerKnobStyle)scrollerKnobStyle
+- (instancetype)initWithBarColor:(NSColor *)barColor barTextColor:(NSColor *)barTextColor dividerLineColor:(NSColor *)dividerLineColor material:(NSVisualEffectMaterial)material appearance:(NSAppearance *)appearance textColor:(NSColor *)textColor textHighlightColor:(NSColor * _Nullable)textHighlightColor commentColor:(NSColor *)commentColor overflowColor:(NSColor *)overflowColor fallbackBackgroundColor:(NSColor *)fallbackBackgroundColor scrollerKnobStyle:(NSScrollerKnobStyle)scrollerKnobStyle
 {
 	self = [super init];
 	if (self != nil)
@@ -19,6 +19,7 @@
 		_barTextColor = barTextColor;
 		_dividerLineColor = dividerLineColor;
 		_material = material;
+		_appearance = appearance;
 		_textColor = textColor;
 		_textHighlightColor = textHighlightColor;
 		_commentColor = commentColor;
@@ -31,15 +32,27 @@
 
 + (ZGWindowStyle *)windowStyleWithTheme:(ZGWindowStyleTheme)theme
 {
+	NSAppearance *darkAppearance;
+	if (@available(macOS 10.14, *))
+	{
+		darkAppearance = [NSAppearance appearanceNamed:NSAppearanceNameDarkAqua];
+	}
+	else
+	{
+		// This property shouldn't be used before 10.14
+		darkAppearance = nil;
+	}
+	
 	switch (theme)
 	{
-		case ZGWindowStyleThemeDefault:
+		case ZGWindowStyleThemePlain:
 			return
 			[[ZGWindowStyle alloc]
 			 initWithBarColor:[NSColor colorWithDeviceWhite:0.9 alpha:1.0]
 			 barTextColor:[NSColor colorWithDeviceRed:0.0 green:0.0 blue:0.0 alpha:1.0]
 			 dividerLineColor:[NSColor colorWithDeviceRed:205 / 255.0 green:205 / 255.0 blue:205 / 255.0 alpha:1.0]
 			 material:NSVisualEffectMaterialLight
+			 appearance:[NSAppearance appearanceNamed:NSAppearanceNameAqua]
 			 textColor:[NSColor colorWithDeviceRed:0.0 green:0.0 blue:0.0 alpha:1.0]
 			 textHighlightColor:nil
 			 commentColor:[NSColor darkGrayColor]
@@ -64,6 +77,7 @@
 			 barTextColor:[NSColor colorWithDeviceRed:1.0 green:1.0 blue:1.0 alpha:1.0]
 			 dividerLineColor:[NSColor colorWithDeviceRed:0.0 green:0.0 blue:0.0 alpha:1.0]
 			 material:material
+			 appearance:darkAppearance
 			 textColor:[NSColor colorWithDeviceRed:1.0 green:1.0 blue:1.0 alpha:1.0]
 			 textHighlightColor:[NSColor colorWithDeviceRed:0.0 green:0.0 blue:1.0 alpha:0.4]
 			 commentColor:[NSColor colorWithDeviceWhite:1.0 alpha:0.7]
@@ -78,6 +92,7 @@
 			 barTextColor:[NSColor colorWithDeviceRed:0.714 green:0.286 blue:0.149 alpha:1]
 			 dividerLineColor:[NSColor colorWithDeviceRed:188 / 255.0 green:169 / 255.0 blue:57 / 255.0 alpha:0.55]
 			 material:NSVisualEffectMaterialLight
+			 appearance:[NSAppearance appearanceNamed:NSAppearanceNameAqua]
 			 textColor:[NSColor colorWithDeviceRed:0.557 green:0.157 blue:0 alpha:1]
 			 textHighlightColor:nil
 			 commentColor:[NSColor colorWithDeviceRed:0.714 green:0.286 blue:0.149 alpha:1]
@@ -93,6 +108,7 @@
 			 barTextColor:[NSColor colorWithDeviceRed:0.925 green:0.941 blue:0.945 alpha:1]
 			 dividerLineColor:barAndTextHighlightColor
 			 material:NSVisualEffectMaterialLight
+			 appearance:[NSAppearance appearanceNamed:NSAppearanceNameAqua]
 			 textColor:[NSColor colorWithDeviceRed:0.173 green:0.243 blue:0.314 alpha:1]
 			 textHighlightColor:barAndTextHighlightColor
 			 commentColor:[NSColor colorWithDeviceRed:0.161 green:0.502 blue:0.725 alpha:1]
@@ -119,6 +135,7 @@
 			 barTextColor:[NSColor colorWithDeviceRed:0.847 green:0.792 blue:0.659 alpha:1]
 			 dividerLineColor:barAndTextHighlightColor
 			 material:material
+			 appearance:[NSAppearance appearanceNamed:NSAppearanceNameAqua]
 			 textColor:[NSColor colorWithDeviceRed:0.157 green:0.286 blue:0.027 alpha:1]
 			 textHighlightColor:barAndTextHighlightColor
 			 commentColor:[NSColor colorWithDeviceRed:0.361 green:0.514 blue:0.184 alpha:1]
@@ -145,6 +162,7 @@
 			 barTextColor:[NSColor colorWithDeviceRed:0.118 green:0.118 blue:0.125 alpha:1]
 			 dividerLineColor:barAndTextHighlightColor
 			 material:material
+			 appearance:darkAppearance
 			 textColor:[NSColor colorWithDeviceRed:0.963 green:0.308 blue:0.233 alpha:1]
 			 textHighlightColor:barAndTextHighlightColor
 			 commentColor:[NSColor colorWithDeviceRed:0.863 green:0.208 blue:0.133 alpha:1]

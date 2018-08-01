@@ -40,8 +40,7 @@ void ZGRegisterDefaultAutomaticNewlineInsertionAfterSubjectLine(void);
 BOOL ZGReadDefaultAutomaticNewlineInsertionAfterSubjectLine(void);
 void ZGWriteDefaultAutomaticNewlineInsertionAfterSubjectLine(BOOL automaticNewlineInsertionAfterSubjectLine);
 
-void ZGRegisterDefaultWindowStyleTheme(void);
-ZGWindowStyleTheme ZGReadDefaultWindowStyleTheme(void);
+ZGWindowStyleTheme ZGReadDefaultWindowStyleTheme(NSAppearance * _Nullable effectiveAppearance);
 void ZGWriteDefaultStyleTheme(ZGWindowStyleTheme theme);
 
 void ZGRegisterDefaultWindowVibrancy(void);

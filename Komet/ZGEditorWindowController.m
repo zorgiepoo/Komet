@@ -14,6 +14,8 @@
 #define ZGEditorWindowFrameNameKey @"ZGEditorWindowFrame"
 #define APP_SUPPORT_DIRECTORY_NAME @"Komet"
 
+#define ZG_SELECTOR_STRING(object, name) (sizeof(object.name), @#name)
+
 typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 {
 	ZGVersionControlGit,
@@ -54,7 +56,6 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 		ZGRegisterDefaultRecommendedBodyLineLengthLimitEnabled();
 		ZGRegisterDefaultRecommendedBodyLineLengthLimit();
 		ZGRegisterDefaultAutomaticNewlineInsertionAfterSubjectLine();
-		ZGRegisterDefaultWindowStyleTheme();
 		ZGRegisterDefaultResumeIncompleteSession();
 		ZGRegisterDefaultResumeIncompleteSessionTimeoutInterval();
 	});
@@ -87,12 +88,32 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 	return [[[NSFileManager defaultManager] currentDirectoryPath] lastPathComponent];
 }
 
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)__unused object change:(NSDictionary *)change context:(void *)__unused context
+{
+	if ([keyPath isEqualToString:ZG_SELECTOR_STRING(self.window, effectiveAppearance)])
+	{
+		NSAppearance *oldAppearance = change[NSKeyValueChangeOldKey];
+		NSAppearance *newAppearance = change[NSKeyValueChangeNewKey];
+		
+		if (![oldAppearance.name isEqualToString:newAppearance.name])
+		{
+			[self changeEditorWindowStyle:[ZGWindowStyle windowStyleWithTheme:ZGReadDefaultWindowStyleTheme(newAppearance)]];
+		}
+	}
+}
+
 - (void)windowDidLoad
 {
 	[self.window setFrameUsingName:ZGEditorWindowFrameNameKey];
 	
-	_style = [ZGWindowStyle windowStyleWithTheme:ZGReadDefaultWindowStyleTheme()];
-	[self updateWindowStyle];
+	[self updateWindowStyle:[ZGWindowStyle windowStyleWithTheme:ZGReadDefaultWindowStyleTheme(self.window.effectiveAppearance)]];
+	
+	if (@available(macOS 10.14, *))
+	{
+		// Listen for when the system appearance changes from dark aqua to aqua or vise versa
+		// We will change the theme automatically if the user has never changed the theme themselves before
+		[self.window addObserver:self forKeyPath:ZG_SELECTOR_STRING(self.window, effectiveAppearance) options:(NSKeyValueObservingOptionOld | NSKeyValueObservingOptionNew) context:NULL];
+	}
 	
 	NSData *data = [NSData dataWithContentsOfURL:_fileURL];
 	if (data == nil)
@@ -357,11 +378,19 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 	}
 }
 
-- (void)updateWindowStyle
+- (void)updateWindowStyle:(ZGWindowStyle *)newStyle
 {
+	_style = newStyle;
+	
 	// Style top bar
 	_topBar.wantsLayer = YES;
 	_topBar.layer.backgroundColor = _style.barColor.CGColor;
+	
+	if (@available(macOS 10.14, *))
+	{
+		// Setting the top bar appearance will provide us a proper border for the commit button in dark and light themes, yay!
+		_topBar.appearance = _style.appearance;
+	}
 	
 	// Style top bar buttons
 	_commitLabelTextField.textColor = _style.barTextColor;
@@ -386,7 +415,14 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 	// Style content view
 	BOOL vibrant = ZGReadDefaultWindowVibrancy();
 	_contentView.state = (vibrant ? NSVisualEffectStateFollowsWindowActiveState : NSVisualEffectStateInactive);
-	_contentView.material = _style.material;
+	if (@available(macOS 10.14, *))
+	{
+		_contentView.appearance = _style.appearance;
+	}
+	else
+	{
+		_contentView.material = _style.material;
+	}
 	
 	// Style scroll view
 	_scrollView.scrollerKnobStyle = _style.scrollerKnobStyle;
@@ -450,34 +486,37 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 	ZGWindowStyleTheme newTheme = (ZGWindowStyleTheme)[sender tag];
 	assert(newTheme <= ZGWindowStyleMaxTheme);
 	
-	ZGWindowStyleTheme currentTheme = ZGReadDefaultWindowStyleTheme();
+	ZGWindowStyleTheme currentTheme = ZGReadDefaultWindowStyleTheme(self.window.effectiveAppearance);
 	if (currentTheme != newTheme)
 	{
 		ZGWriteDefaultStyleTheme(newTheme);
-		
-		_style = [ZGWindowStyle windowStyleWithTheme:newTheme];
-		[self updateWindowStyle];
-		[self updateTextProcessing];
-		[_topBar setNeedsDisplay:YES];
-		[_contentView setNeedsDisplay:YES];
-		
-		// The comment section isn't updated by setting the editor style elsewhere, since it's not editable.
-		[_textView.textStorage removeAttribute:NSForegroundColorAttributeName range:NSMakeRange([_textView.textStorage.string length] - _commentSectionLength, _commentSectionLength)];
-		[_textView.textStorage addAttribute:NSForegroundColorAttributeName value:_style.commentColor range:NSMakeRange([_textView.textStorage.string length] - _commentSectionLength, _commentSectionLength)];
+		[self changeEditorWindowStyle:[ZGWindowStyle windowStyleWithTheme:newTheme]];
 	}
+}
+
+- (void)changeEditorWindowStyle:(ZGWindowStyle *)newWindowStyle
+{
+	[self updateWindowStyle:newWindowStyle];
+	[self updateTextProcessing];
+	[_topBar setNeedsDisplay:YES];
+	[_contentView setNeedsDisplay:YES];
+	
+	// The comment section isn't updated by setting the editor style elsewhere, since it's not editable.
+	[_textView.textStorage removeAttribute:NSForegroundColorAttributeName range:NSMakeRange([_textView.textStorage.string length] - _commentSectionLength, _commentSectionLength)];
+	[_textView.textStorage addAttribute:NSForegroundColorAttributeName value:_style.commentColor range:NSMakeRange([_textView.textStorage.string length] - _commentSectionLength, _commentSectionLength)];
 }
 
 - (IBAction)changeVibrancy:(id)__unused sender
 {
 	ZGWriteDefaultWindowVibrancy(!ZGReadDefaultWindowVibrancy());
-	[self updateWindowStyle];
+	[self updateWindowStyle:_style];
 }
 
 - (BOOL)validateMenuItem:(NSMenuItem *)menuItem
 {
 	if (menuItem.action == @selector(changeEditorTheme:))
 	{
-		ZGWindowStyleTheme currentTheme = ZGReadDefaultWindowStyleTheme();
+		ZGWindowStyleTheme currentTheme = ZGReadDefaultWindowStyleTheme(self.window.effectiveAppearance);
 		menuItem.state = (currentTheme == menuItem.tag) ? NSOnState : NSOffState;
 	}
 	else if (menuItem.action == @selector(changeVibrancy:))

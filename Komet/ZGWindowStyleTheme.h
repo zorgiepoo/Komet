@@ -8,7 +8,7 @@
 
 typedef NS_ENUM(NSUInteger, ZGWindowStyleTheme)
 {
-	ZGWindowStyleThemeDefault = 0,
+	ZGWindowStyleThemePlain = 0,
 	ZGWindowStyleThemeDark,
 	ZGWindowStyleThemePapyrus,
 	ZGWindowStyleThemeBlue,
