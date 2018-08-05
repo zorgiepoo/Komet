@@ -54,4 +54,13 @@ void ZGWriteDefaultResumeIncompleteSession(BOOL resumeIncompleteSession);
 void ZGRegisterDefaultResumeIncompleteSessionTimeoutInterval(void);
 NSTimeInterval ZGReadDefaultResumeIncompleteSessionTimeoutInterval(void);
 
+void ZGRegisterDefaultDisableSpellCheckingAndCorrectionForSquashes(void);
+BOOL ZGReadDefaultDisableSpellCheckingAndCorrectionForSquashes(void);
+
+void ZGRegisterDefaultDisableAutomaticNewlineInsertionAfterSubjectLineForSquashes(void);
+BOOL ZGReadDefaultDisableAutomaticNewlineInsertionAfterSubjectLineForSquashes(void);
+
+void ZGRegisterDefaultDetectHGCommentStyleForSquashes(void);
+BOOL ZGReadDefaultDetectHGCommentStyleForSquashes(void);
+
 NS_ASSUME_NONNULL_END

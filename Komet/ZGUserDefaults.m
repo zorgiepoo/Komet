@@ -29,6 +29,11 @@
 #define ZGResumeIncompleteSessionKey @"ZGResumeIncompleteSession"
 #define ZGResumeIncompleteSessionTimeoutIntervalKey @"ZGResumeIncompleteSessionTimeoutInterval"
 
+#define ZGDisableSpellCheckingAndCorrectionForSquashesKey @"ZGDisableSpellCheckingAndCorrectionForSquashes"
+#define ZGDisableAutomaticNewlineInsertionAfterSubjectLineForSquashesKey @"ZGDisableAutomaticNewlineInsertionAfterSubjectLineForSquashes"
+
+#define ZGDetectHGCommentStyleForSquashesKey @"ZGDetectHGCommentStyleForSquashes"
+
 static NSFont *ZGReadDefaultFont(NSString *fontNameDefaultsKey, NSString *fontSizeDefaultsKey)
 {
 	NSString *fontName = [[NSUserDefaults standardUserDefaults] stringForKey:fontNameDefaultsKey];
@@ -243,4 +248,34 @@ NSTimeInterval ZGReadDefaultResumeIncompleteSessionTimeoutInterval(void)
 	NSTimeInterval minTimeout = 0.0;
 	NSTimeInterval maxTimeout = 60.0 * 60.0 * 24 * 7 * 5; // around a month
 	return MIN(MAX(minTimeout, timeoutRead), maxTimeout);
+}
+
+void ZGRegisterDefaultDisableSpellCheckingAndCorrectionForSquashes(void)
+{
+	[[NSUserDefaults standardUserDefaults] registerDefaults:@{ZGDisableSpellCheckingAndCorrectionForSquashesKey : @(YES)}];
+}
+
+BOOL ZGReadDefaultDisableSpellCheckingAndCorrectionForSquashes(void)
+{
+	return [[NSUserDefaults standardUserDefaults] boolForKey:ZGDisableSpellCheckingAndCorrectionForSquashesKey];
+}
+
+void ZGRegisterDefaultDisableAutomaticNewlineInsertionAfterSubjectLineForSquashes(void)
+{
+	[[NSUserDefaults standardUserDefaults] registerDefaults:@{ZGDisableAutomaticNewlineInsertionAfterSubjectLineForSquashesKey : @(YES)}];
+}
+
+BOOL ZGReadDefaultDisableAutomaticNewlineInsertionAfterSubjectLineForSquashes(void)
+{
+	return [[NSUserDefaults standardUserDefaults] boolForKey:ZGDisableAutomaticNewlineInsertionAfterSubjectLineForSquashesKey];
+}
+
+void ZGRegisterDefaultDetectHGCommentStyleForSquashes(void)
+{
+	[[NSUserDefaults standardUserDefaults] registerDefaults:@{ZGDetectHGCommentStyleForSquashesKey : @(YES)}];
+}
+
+BOOL ZGReadDefaultDetectHGCommentStyleForSquashes(void)
+{
+	return [[NSUserDefaults standardUserDefaults] boolForKey:ZGDetectHGCommentStyleForSquashesKey];
 }

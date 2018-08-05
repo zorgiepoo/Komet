@@ -17,6 +17,9 @@
 #define ZGTouchBarIdentifierCommit @"zgCommitIdentifier"
 
 @implementation ZGCommitTextView
+{
+	BOOL _zgDisabledContinuousSpellingAndAutomaticSpellingCorrection;
+}
 
 + (void)initialize
 {
@@ -37,23 +40,41 @@
 	[super setAutomaticTextReplacementEnabled:[defaults boolForKey:ZGCommitTextViewAutomaticTextReplacementKey]];
 }
 
+- (void)zgDisableContinuousSpellingAndAutomaticSpellingCorrection
+{
+	[super setContinuousSpellCheckingEnabled:NO];
+	[super setAutomaticSpellingCorrectionEnabled:NO];
+	[super setAutomaticTextReplacementEnabled:NO];
+	
+	_zgDisabledContinuousSpellingAndAutomaticSpellingCorrection = YES;
+}
+
 - (void)setContinuousSpellCheckingEnabled:(BOOL)continuousSpellCheckingEnabled
 {
-	[[NSUserDefaults standardUserDefaults] setBool:continuousSpellCheckingEnabled forKey:ZGCommitTextViewContinuousSpellCheckingKey];
+	if (!_zgDisabledContinuousSpellingAndAutomaticSpellingCorrection)
+	{
+		[[NSUserDefaults standardUserDefaults] setBool:continuousSpellCheckingEnabled forKey:ZGCommitTextViewContinuousSpellCheckingKey];
+	}
 	
 	[super setContinuousSpellCheckingEnabled:continuousSpellCheckingEnabled];
 }
 
 - (void)setAutomaticSpellingCorrectionEnabled:(BOOL)automaticSpellingCorrectionEnabled
 {
-	[[NSUserDefaults standardUserDefaults] setBool:automaticSpellingCorrectionEnabled forKey:ZGCommitTextViewAutomaticSpellingCorrectionKey];
+	if (!_zgDisabledContinuousSpellingAndAutomaticSpellingCorrection)
+	{
+		[[NSUserDefaults standardUserDefaults] setBool:automaticSpellingCorrectionEnabled forKey:ZGCommitTextViewAutomaticSpellingCorrectionKey];
+	}
 	
 	[super setAutomaticSpellingCorrectionEnabled:automaticSpellingCorrectionEnabled];
 }
 
 - (void)setAutomaticTextReplacementEnabled:(BOOL)automaticTextReplacementEnabled
 {
-	[[NSUserDefaults standardUserDefaults] setBool:automaticTextReplacementEnabled forKey:ZGCommitTextViewAutomaticTextReplacementKey];
+	if (!_zgDisabledContinuousSpellingAndAutomaticSpellingCorrection)
+	{
+		[[NSUserDefaults standardUserDefaults] setBool:automaticTextReplacementEnabled forKey:ZGCommitTextViewAutomaticTextReplacementKey];
+	}
 	
 	[super setAutomaticTextReplacementEnabled:automaticTextReplacementEnabled];
 }

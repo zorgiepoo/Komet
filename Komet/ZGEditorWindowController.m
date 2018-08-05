@@ -40,8 +40,9 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 	BOOL _preventAccidentalNewline;
 	BOOL _initiallyContainedEmptyContent;
 	BOOL _tutorialMode;
+	BOOL _isSquashMessage;
 	NSUInteger _commentSectionLength;
-	ZGVersionControlType _versionControlType;
+	ZGVersionControlType _commentVersionControlType;
 	ZGWindowStyle *_style;
 }
 
@@ -58,6 +59,9 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 		ZGRegisterDefaultAutomaticNewlineInsertionAfterSubjectLine();
 		ZGRegisterDefaultResumeIncompleteSession();
 		ZGRegisterDefaultResumeIncompleteSessionTimeoutInterval();
+		ZGRegisterDefaultDisableSpellCheckingAndCorrectionForSquashes();
+		ZGRegisterDefaultDisableAutomaticNewlineInsertionAfterSubjectLineForSquashes();
+		ZGRegisterDefaultDetectHGCommentStyleForSquashes();
 	});
 }
 
@@ -159,8 +163,6 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 		label = [self projectName];
 	}
 	
-	_versionControlType = versionControlType;
-	
 	_commitLabelTextField.stringValue = (label == nil) ? @"" : label;
 	
 	// Give a little vertical padding between the text and the top of the text view container
@@ -181,8 +183,6 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 	_textView.automaticQuoteSubstitutionEnabled = NO;
 	
 	// Take care of other textview settings...
-	[_textView zgLoadDefaults];
-	
 	_textView.textStorage.delegate = self;
 	_textView.layoutManager.delegate = self;
 	_textView.delegate = self;
@@ -207,7 +207,32 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 		initialPlainString = initialPlainStringCandidate;
 	}
 	
-	NSUInteger initialCommentSectionLength = [self commentSectionLengthFromPlainText:initialPlainString versionControlType:versionControlType];
+	// Detect heuristically if this is a squash in git or hg
+	// Just scan the entire string contents for simplicity and handle both git and hg (with histedit extension)
+	_isSquashMessage = [initialPlainString containsString:@"e, edit = use commit,"];
+	
+	// Determine what type of version control comment style we should use
+	// The only tricky case is hg, where if the message is a squash (with histedit extension) we use ZGVersionControlGit style
+	if (_isSquashMessage && versionControlType == ZGVersionControlHg && ZGReadDefaultDetectHGCommentStyleForSquashes())
+	{
+		_commentVersionControlType = ZGVersionControlGit;
+	}
+	else
+	{
+		_commentVersionControlType = versionControlType;
+	}
+	
+	// If this is a squash, just turn off spell checking and automatic spell correction as it's more likely to annoy the user
+	if (_isSquashMessage && ZGReadDefaultDisableSpellCheckingAndCorrectionForSquashes())
+	{
+		[_textView zgDisableContinuousSpellingAndAutomaticSpellingCorrection];
+	}
+	else
+	{
+		[_textView zgLoadDefaults];
+	}
+	
+	NSUInteger initialCommentSectionLength = [self commentSectionLengthFromPlainText:initialPlainString versionControlType:_commentVersionControlType];
 	
 	NSUInteger initialCommitLength = [self commitTextLengthFromPlainText:initialPlainString commentLength:initialCommentSectionLength];
 	
@@ -272,7 +297,7 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 	if (lastSavedCommitMessage != nil)
 	{
 		plainString = [lastSavedCommitMessage stringByAppendingString:initialPlainString];
-		commentSectionLength = [self commentSectionLengthFromPlainText:plainString versionControlType:versionControlType];
+		commentSectionLength = [self commentSectionLengthFromPlainText:plainString versionControlType:_commentVersionControlType];
 		commitLength = [self commitTextLengthFromPlainText:plainString commentLength:commentSectionLength];
 		content = [plainString substringToIndex:commitLength];
 	}
@@ -573,7 +598,7 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 - (void)updateCommentAttributesWithContentLineRanges:(NSArray<NSValue *> *)contentLineRanges
 {
 	// If there's only one comment line marker, we need not worry about attributing comments
-	if ([self hasSingleCommentLineMarkerForVersionControlType:_versionControlType])
+	if ([self hasSingleCommentLineMarkerForVersionControlType:_commentVersionControlType])
 	{
 		return;
 	}
@@ -588,7 +613,7 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 	for (NSValue *contentLineRangeValue in contentLineRanges)
 	{
 		NSRange contentLineRange = contentLineRangeValue.rangeValue;
-		if (contentLineRange.length > 0 && [self isCommentLine:[plainText substringWithRange:contentLineRange] forVersionControlType:_versionControlType])
+		if (contentLineRange.length > 0 && [self isCommentLine:[plainText substringWithRange:contentLineRange] forVersionControlType:_commentVersionControlType])
 		{
 			// Add comment font attribute for lines that are comments
 			[textStorage addAttribute:NSForegroundColorAttributeName value:_style.commentColor range:contentLineRange];
@@ -661,7 +686,7 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 	for (NSValue *contentLineRangeValue in contentLineRanges)
 	{
 		NSRange lineRange = contentLineRangeValue.rangeValue;
-		if (lineRange.length > 0 && ![self isCommentLine:[plainText substringWithRange:lineRange] forVersionControlType:_versionControlType])
+		if (lineRange.length > 0 && ![self isCommentLine:[plainText substringWithRange:lineRange] forVersionControlType:_commentVersionControlType])
 		{
 			[textStorage removeAttribute:NSForegroundColorAttributeName range:lineRange];
 			[textStorage addAttribute:NSForegroundColorAttributeName value:_style.textColor range:lineRange];
@@ -730,7 +755,7 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 		[plainText getLineStart:&lineStartIndex end:NULL contentsEnd:&contentEndIndex forRange:NSMakeRange(characterIndex, 0)];
 		
 		// Disable temporary attributes like spell checking if they are in a comment line
-		if ([self isCommentLine:[plainText substringWithRange:NSMakeRange(lineStartIndex, contentEndIndex - lineStartIndex)] forVersionControlType:_versionControlType])
+		if ([self isCommentLine:[plainText substringWithRange:NSMakeRange(lineStartIndex, contentEndIndex - lineStartIndex)] forVersionControlType:_commentVersionControlType])
 		{
 			attributes = nil;
 		}
@@ -752,7 +777,7 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 	
 	// Don't check for anything spelling related if the range is in a comment line
 	NSInteger newValue;
-	if ([self isCommentLine:[plainText substringWithRange:NSMakeRange(lineStartIndex, contentEndIndex - lineStartIndex)] forVersionControlType:_versionControlType])
+	if ([self isCommentLine:[plainText substringWithRange:NSMakeRange(lineStartIndex, contentEndIndex - lineStartIndex)] forVersionControlType:_commentVersionControlType])
 	{
 		newValue = 0;
 	}
@@ -771,7 +796,8 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 		// After the user enters a new line in the first line, we want to insert another newline due to commit'ing conventions
 		// for leaving a blank line right after the subject (first) line
 		// We will also have some prevention if the user performs a new line more than once consecutively
-		BOOL insertsAutomaticNewline = ZGReadDefaultAutomaticNewlineInsertionAfterSubjectLine();
+		// Don't do any of this if we are editing a squash type message though
+		BOOL insertsAutomaticNewline = ZGReadDefaultAutomaticNewlineInsertionAfterSubjectLine() && (!ZGReadDefaultDisableAutomaticNewlineInsertionAfterSubjectLineForSquashes() || !_isSquashMessage);
 		if (insertsAutomaticNewline)
 		{
 			if (_preventAccidentalNewline)
