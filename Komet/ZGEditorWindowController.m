@@ -94,7 +94,7 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)__unused object change:(NSDictionary *)change context:(void *)__unused context
 {
-	if ([keyPath isEqualToString:ZG_SELECTOR_STRING(self.window, effectiveAppearance)])
+	if ([keyPath isEqualToString:ZG_SELECTOR_STRING(NSApp, effectiveAppearance)])
 	{
 		NSAppearance *oldAppearance = change[NSKeyValueChangeOldKey];
 		NSAppearance *newAppearance = change[NSKeyValueChangeNewKey];
@@ -106,17 +106,29 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 	}
 }
 
+- (NSAppearance * _Nullable)effectiveApplicationAppearance
+{
+	if (@available(macOS 10.14, *))
+	{
+		return [NSApp effectiveAppearance];
+	}
+	else
+	{
+		return nil;
+	}
+}
+
 - (void)windowDidLoad
 {
 	[self.window setFrameUsingName:ZGEditorWindowFrameNameKey];
 	
-	[self updateWindowStyle:[ZGWindowStyle windowStyleWithTheme:ZGReadDefaultWindowStyleTheme(self.window.effectiveAppearance)]];
+	[self updateWindowStyle:[ZGWindowStyle windowStyleWithTheme:ZGReadDefaultWindowStyleTheme([self effectiveApplicationAppearance])]];
 	
 	if (@available(macOS 10.14, *))
 	{
 		// Listen for when the system appearance changes from dark aqua to aqua or vise versa
 		// We will change the theme automatically if the user has never changed the theme themselves before
-		[self.window addObserver:self forKeyPath:ZG_SELECTOR_STRING(self.window, effectiveAppearance) options:(NSKeyValueObservingOptionOld | NSKeyValueObservingOptionNew) context:NULL];
+		[NSApp addObserver:self forKeyPath:ZG_SELECTOR_STRING(NSApp, effectiveAppearance) options:(NSKeyValueObservingOptionOld | NSKeyValueObservingOptionNew) context:NULL];
 	}
 	
 	NSData *data = [NSData dataWithContentsOfURL:_fileURL];
@@ -511,7 +523,7 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 	ZGWindowStyleTheme newTheme = (ZGWindowStyleTheme)[sender tag];
 	assert(newTheme <= ZGWindowStyleMaxTheme);
 	
-	ZGWindowStyleTheme currentTheme = ZGReadDefaultWindowStyleTheme(self.window.effectiveAppearance);
+	ZGWindowStyleTheme currentTheme = ZGReadDefaultWindowStyleTheme([self effectiveApplicationAppearance]);
 	if (currentTheme != newTheme)
 	{
 		ZGWriteDefaultStyleTheme(newTheme);
@@ -541,7 +553,7 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 {
 	if (menuItem.action == @selector(changeEditorTheme:))
 	{
-		ZGWindowStyleTheme currentTheme = ZGReadDefaultWindowStyleTheme(self.window.effectiveAppearance);
+		ZGWindowStyleTheme currentTheme = ZGReadDefaultWindowStyleTheme([self effectiveApplicationAppearance]);
 		menuItem.state = (currentTheme == menuItem.tag) ? NSOnState : NSOffState;
 	}
 	else if (menuItem.action == @selector(changeVibrancy:))
