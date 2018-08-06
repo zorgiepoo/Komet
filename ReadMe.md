@@ -10,7 +10,7 @@ A Cocoa text editor designed for creating commit messages.
 
 A commit editor shouldn't be stuck in an obstructive save-and-close model. Applying and discarding a commit should be convenient, and you shouldn't [think twice](https://stackoverflow.com/a/4323790) about it. The editor should also automate actions that make writing good messages possible.
 
-After transitioning to Komet, my commit messages became higher in quality and my margin of error has decreased.
+After transitioning to Komet, I put less effort in creating higher quality messages and my margin of error has decreased.
 
 ## Features
 
