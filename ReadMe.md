@@ -8,16 +8,18 @@ A Cocoa text editor designed for creating commit messages.
 
 ## Purpose
 
-I do version control from the command line but I want a fast and non-obstructive editor designed for creating commit messages. Not being stuck in a save-and-close model, applying a commit takes only *one* action in Komet.
+A commit editor shouldn't be stuck in an obstructive save-and-close model. Applying and discarding a commit should be convenient, and you shouldn't [think twice](https://stackoverflow.com/a/4323790) about it. The editor should also automate actions that make writing good messages possible.
+
+After transitioning to Komet, I put less effort in creating higher quality messages and my margin of error has decreased.
 
 ## Features
 
-* Single action for applying or discarding a commit.
+* Single action for applying or discarding a commit (`⌘ ↩` > `<esc>:wq`)
 * Double newline insertion after the first line.
 * Cocoa's spell checking and automatic correction.
 * Text highlight warning if line becomes too long for subject and/or body.
 * Specialized text selection and font handling for message and comment sections.
-* Intelligent discarding of commits (i.e, exits on failure if commit file has pre-existing content).
+* Intelligent discarding of commits (i.e, `exit(1)` only if commit file has pre-existing content).
 * Ideal caret position on launch after the initial content.
 * Support for committing using the Touch Bar.
 * Resume off from canceled commit messages.
@@ -38,4 +40,4 @@ For optimal behavior, Komet depends on being able to distinguish the commit mess
 
 If you enjoy using Komet and feel like something could improve, feel free to make a contribution. It is advisable to create an issue first before submitting a big change. Please also read and follow the code of conduct in the repository first before contributing.
 
-Komet can now be translated to other languages. If you want to translate Komet, duplicate `Komet.app/Contents/Resources/en.lproj/` and rename `en` to the desired [language locale code](https://www.science.co.il/language/Locale-codes.php). Then using a text editor intended for coding (not TextEdit), alter the string values in the `.strings` files. Keep a separate copy of the new language folder outside of the app in case Komet may get auto-updated (or work with the Xcode project instead). Finally, test the translation by changing your system language in System Preferences.
+Komet can now be translated to other languages. If you want to translate Komet, duplicate `Komet.app/Contents/Resources/en.lproj/` and rename `en` to the desired [language locale code](https://www.science.co.il/language/Locale-codes.php). Then using a text editor intended for coding (not TextEdit), alter the string values in the `.strings` files. Keep a separate copy of the new language folder outside of the app in case Komet may get auto-updated (or preferably work with the Xcode project instead). Finally, test the translation by changing your system language in System Preferences.
