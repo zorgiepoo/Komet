@@ -16,6 +16,8 @@
 
 #define ZG_SELECTOR_STRING(object, name) (sizeof(object.name), @#name)
 
+#define MAX_CHARACTER_COUNT_FOR_NOT_DRAWING_BACKGROUND 132690
+
 typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 {
 	ZGVersionControlGit,
@@ -334,6 +336,8 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 	// and we don't want anything to register as user-editable yet or have undo activated yet
 	[_textView.textStorage replaceCharactersInRange:NSMakeRange(0, 0) withAttributedString:plainAttributedString];
 	
+	[self updateTextViewDrawingBackground];
+	
 	[self updateEditorMessageFont];
 	[self updateEditorCommentsFont];
 	
@@ -415,6 +419,17 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 	}
 }
 
+- (void)updateTextViewDrawingBackground
+{
+	NSTextStorage *textStorage = _textView.textStorage;
+	NSString *plainText = textStorage.string;
+	
+	// Having drawBackgrounds set to YES appears to cause issues when there is a lot of content.
+	// Work around this by setting drawBackgrounds to NO in such cases.
+	// In some themes the visual look may not be too different.
+	_textView.drawsBackground = (plainText.length > MAX_CHARACTER_COUNT_FOR_NOT_DRAWING_BACKGROUND);
+}
+
 - (void)updateWindowStyle:(ZGWindowStyle *)newStyle
 {
 	_style = newStyle;
@@ -443,7 +458,7 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 	
 	// Style text
 	_textView.wantsLayer = YES;
-	_textView.drawsBackground = NO;
+	[self updateTextViewDrawingBackground];
 	_textView.insertionPointColor = _style.textColor;
 	
 	NSColor *textHighlightColor = (_style.textHighlightColor == nil ? [NSColor selectedControlColor] : _style.textHighlightColor);
