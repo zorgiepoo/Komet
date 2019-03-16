@@ -424,8 +424,8 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 	NSTextStorage *textStorage = _textView.textStorage;
 	NSString *plainText = textStorage.string;
 	
-	// Having drawBackgrounds set to YES appears to cause issues when there is a lot of content.
-	// Work around this by setting drawBackgrounds to NO in such cases.
+	// Having drawBackgrounds set to NO appears to cause issues when there is a lot of content.
+	// Work around this by setting drawBackgrounds to YES in such cases.
 	// In some themes the visual look may not be too different.
 	_textView.drawsBackground = (plainText.length > MAX_CHARACTER_COUNT_FOR_NOT_DRAWING_BACKGROUND);
 }
