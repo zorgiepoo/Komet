@@ -759,6 +759,11 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 	[self updateCommentAttributesWithContentLineRanges:contentLineRanges];
 	
 	[self updateContentStyleWithContentLineRanges:contentLineRanges];
+	
+	// Sometimes the insertion point isn't properly updated after updating
+	// the comment attributes and content style.
+	// Force an update to get around this issue.
+	[_textView updateInsertionPointStateAndRestartTimer:YES];
 }
 
 - (void)textDidChange:(NSNotification *)__unused notification
