@@ -8,7 +8,7 @@
 "tutorialDefaultGitEditorRecommendation" = "You may want to set Komet as your default git editor:";
 "tutorialDefaultHgEditorRecommendation" = "For hg, you will want to set the HGEDITOR environment variable.";
 "tutorialDefaultSvnEditorRecommendation" = "For svn, you will want to set the SVN_EDITOR environment variable.";
-"tutorialConsultEditorDocumentation" = "Please consult their documentation for more information";
+"tutorialConsultEditorDocumentation" = "Please consult their documentation for more information.";
 "tutorialMoreThemes" = "More themes can be found under View → Theme";
 "tutorialAutomaticUpdates" = "Automatic updates can be toggled in Komet → Preferences";
 "tutorialProjectFileName" = "Tutorial";
