@@ -185,7 +185,8 @@ ZGWindowStyleTheme ZGReadDefaultWindowStyleTheme(NSAppearance * _Nullable effect
 		BOOL darkMode;
 		if (@available(macOS 10.14, *))
 		{
-			darkMode = [effectiveAppearance.name isEqualToString:NSAppearanceNameDarkAqua];
+			NSAppearanceName appearanceName = [effectiveAppearance bestMatchFromAppearancesWithNames:@[NSAppearanceNameAqua, NSAppearanceNameDarkAqua]];
+			darkMode = [appearanceName isEqualToString:NSAppearanceNameDarkAqua];
 		}
 		else
 		{
