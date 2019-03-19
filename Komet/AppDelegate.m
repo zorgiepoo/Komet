@@ -60,6 +60,7 @@
 		fileURL = [NSURL fileURLWithPath:arguments[1]];
 	}
 	
+	NSURL *tempDirectoryURL = nil;
 	BOOL tutorialMode = NO;
 	if (fileURL == nil || ![fileURL checkResourceIsReachableAndReturnError:NULL])
 	{
@@ -152,7 +153,7 @@
 		finalMessage = [finalMessage stringByAppendingString:editorConfigurationRecommendation];
 		
 		NSError *temporaryError = nil;
-		NSURL *tempDirectoryURL = [[NSFileManager defaultManager] URLForDirectory:NSItemReplacementDirectory inDomain:NSUserDomainMask appropriateForURL:[NSURL fileURLWithPath:NSTemporaryDirectory()] create:YES error:&temporaryError];
+		tempDirectoryURL = [[NSFileManager defaultManager] URLForDirectory:NSItemReplacementDirectory inDomain:NSUserDomainMask appropriateForURL:[NSURL fileURLWithPath:NSTemporaryDirectory()] create:YES error:&temporaryError];
 		
 		if (tempDirectoryURL == nil)
 		{
@@ -170,7 +171,7 @@
 		}
 	}
 	
-	_editorWindowController = [[ZGEditorWindowController alloc] initWithFileURL:fileURL tutorialMode:tutorialMode];
+	_editorWindowController = [[ZGEditorWindowController alloc] initWithFileURL:fileURL temporaryDirectoryURL:tempDirectoryURL tutorialMode:tutorialMode];
 	[_editorWindowController showWindow:nil];
 	
 	_updaterController = [[ZGUpdaterController alloc] init];

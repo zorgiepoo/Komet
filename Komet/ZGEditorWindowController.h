@@ -14,7 +14,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface ZGEditorWindowController : NSWindowController <ZGUserDefaultsEditorListener>
 
-- (instancetype)initWithFileURL:(NSURL *)fileURL tutorialMode:(BOOL)tutorialMode;
+- (instancetype)initWithFileURL:(NSURL *)fileURL temporaryDirectoryURL:(NSURL * _Nullable)temporaryDirectoryURL tutorialMode:(BOOL)tutorialMode;
 
 - (void)exitWithSuccess:(BOOL)success __attribute__((noreturn));
 

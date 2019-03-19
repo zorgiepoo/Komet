@@ -31,6 +31,7 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 @implementation ZGEditorWindowController
 {
 	NSURL *_fileURL;
+	NSURL *_temporaryDirectoryURL;
 	IBOutlet NSView *_topBar;
 	IBOutlet NSBox *_horizontalBarDivider;
 	IBOutlet ZGCommitTextView *_textView;
@@ -67,12 +68,13 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 	});
 }
 
-- (instancetype)initWithFileURL:(NSURL *)fileURL tutorialMode:(BOOL)tutorialMode
+- (instancetype)initWithFileURL:(NSURL *)fileURL temporaryDirectoryURL:(NSURL * _Nullable)temporaryDirectoryURL tutorialMode:(BOOL)tutorialMode
 {
 	self = [super init];
 	if (self != nil)
 	{
 		_fileURL = fileURL;
+		_temporaryDirectoryURL = temporaryDirectoryURL;
 		_tutorialMode = tutorialMode;
 	}
 	return self;
@@ -882,13 +884,9 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 {
 	[self saveWindowFrame];
 	
-	if (_tutorialMode)
+	if (_temporaryDirectoryURL != nil)
 	{
-		NSURL *parentURL = _fileURL.URLByDeletingLastPathComponent;
-		if (parentURL != nil)
-		{
-			[[NSFileManager defaultManager] removeItemAtURL:parentURL error:NULL];
-		}
+		[[NSFileManager defaultManager] removeItemAtURL:_temporaryDirectoryURL error:NULL];
 	}
 	
 	if (success)
