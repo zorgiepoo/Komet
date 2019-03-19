@@ -53,7 +53,7 @@
 	
 	// The system can pass command line arguments unfortunately
 	// So to distinguish between a user starting the app normally and a tool like git launching the app,
-	// we should see detect if the exists
+	// we should see detect if the file exists
 	NSURL *fileURL = nil;
 	if (arguments.count >= 2)
 	{
