@@ -75,6 +75,7 @@
 		72D10C551D7334CA00ED32BC /* ZGPreferencesWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZGPreferencesWindowController.h; sourceTree = "<group>"; };
 		72D10C561D7334CA00ED32BC /* ZGPreferencesWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZGPreferencesWindowController.m; sourceTree = "<group>"; };
 		772B7CCB21437E2500E993B2 /* Komet.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Komet.entitlements; sourceTree = "<group>"; };
+		77C23E5E232CB41800F5BC6C /* KometDebug.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = KometDebug.entitlements; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -109,6 +110,7 @@
 		72B72C941D63EFF90096365F /* Komet */ = {
 			isa = PBXGroup;
 			children = (
+				77C23E5E232CB41800F5BC6C /* KometDebug.entitlements */,
 				772B7CCB21437E2500E993B2 /* Komet.entitlements */,
 				72B72C961D63EFF90096365F /* AppDelegate.m */,
 				72B72CAB1D6412EE0096365F /* ZGCommitTextView.h */,
@@ -196,6 +198,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 				Base,
 			);
@@ -453,6 +456,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Komet/KometDebug.entitlements;
 				COMBINE_HIDPI_IMAGES = YES;
 				ENABLE_HARDENED_RUNTIME = YES;
 				FRAMEWORK_SEARCH_PATHS = (
