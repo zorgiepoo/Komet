@@ -223,9 +223,10 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 		initialPlainString = initialPlainStringCandidate;
 	}
 	
-	// Detect heuristically if this is a squash in git or hg
-	// Just scan the entire string contents for simplicity and handle both git and hg (with histedit extension)
-	_isSquashMessage = [initialPlainString containsString:@"e, edit = use commit,"];
+	// Detect heuristically if this is a squash/rebase in git or hg
+	// Scan the entire string contents for simplicity and handle both git and hg (with histedit extension)
+	// Also test if the filename contains "rebase"
+	_isSquashMessage = [_fileURL.lastPathComponent containsString:@"rebase"] || [initialPlainString containsString:@"= use commit"];
 	
 	// Determine what type of version control comment style we should use
 	// The only tricky case is hg, where if the message is a squash (with histedit extension) we use ZGVersionControlGit style
