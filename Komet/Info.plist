@@ -22,6 +22,8 @@
 	<string>????</string>
 	<key>CFBundleVersion</key>
 	<string>28</string>
+	<key>LSApplicationCategoryType</key>
+	<string>public.app-category.developer-tools</string>
 	<key>LSMinimumSystemVersion</key>
 	<string>$(MACOSX_DEPLOYMENT_TARGET)</string>
 	<key>NSHumanReadableCopyright</key>
@@ -32,10 +34,10 @@
 	<string>NSApplication</string>
 	<key>SUFeedURL</key>
 	<string>https://zgcoder.net/software/komet/appcast.xml</string>
-	<key>SUPublicDSAKeyFile</key>
-	<string>dsa_pub.pem</string>
 	<key>SUPromptUserOnFirstLaunch</key>
 	<true/>
+	<key>SUPublicDSAKeyFile</key>
+	<string>dsa_pub.pem</string>
 	<key>SUScheduledCheckInterval</key>
 	<integer>259200</integer>
 </dict>
