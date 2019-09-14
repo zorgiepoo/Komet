@@ -572,7 +572,7 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 	if (menuItem.action == @selector(changeEditorTheme:))
 	{
 		ZGWindowStyleTheme currentTheme = ZGReadDefaultWindowStyleTheme([self effectiveApplicationAppearance]);
-		menuItem.state = (currentTheme == menuItem.tag) ? NSOnState : NSOffState;
+		menuItem.state = (currentTheme == (ZGWindowStyleTheme)menuItem.tag) ? NSOnState : NSOffState;
 	}
 	else if (menuItem.action == @selector(changeVibrancy:))
 	{
