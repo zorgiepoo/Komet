@@ -12,7 +12,10 @@
 #import "ZGUpdaterSettingsListener.h"
 #import "ZGWindowStyle.h"
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wauto-import"
 @import SparkleCore;
+#pragma clang diagnostic pop
 
 // We could have three different nibs and swap between them with view controllers
 // But I kind of wanted to avoid unnecessary nib files (extra disk space, more runtime loading...)

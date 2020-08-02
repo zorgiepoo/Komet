@@ -7,7 +7,11 @@
 //
 
 @import Cocoa;
+
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wauto-import"
 @import SparkleCore;
+#pragma clang diagnostic pop
 
 @interface ZGUpdaterUserDriver : NSObject <SPUUserDriver>
 
