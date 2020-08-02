@@ -195,10 +195,9 @@
 			};
 			buildConfigurationList = 72B72C8D1D63EFF90096365F /* Build configuration list for PBXProject "Komet" */;
 			compatibilityVersion = "Xcode 3.2";
-			developmentRegion = English;
+			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
-				English,
 				en,
 				Base,
 			);
