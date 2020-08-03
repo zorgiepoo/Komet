@@ -209,7 +209,7 @@ void ZGWriteDefaultStyleTheme(ZGWindowStyleTheme theme)
 
 void ZGRegisterDefaultWindowVibrancy(void)
 {
-	[[NSUserDefaults standardUserDefaults] registerDefaults:@{ZGWindowVibrancyKey : @(YES)}];
+	[[NSUserDefaults standardUserDefaults] registerDefaults:@{ZGWindowVibrancyKey : @(NO)}];
 }
 
 BOOL ZGReadDefaultWindowVibrancy(void)

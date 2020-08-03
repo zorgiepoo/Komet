@@ -62,6 +62,7 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 		ZGRegisterDefaultAutomaticNewlineInsertionAfterSubjectLine();
 		ZGRegisterDefaultResumeIncompleteSession();
 		ZGRegisterDefaultResumeIncompleteSessionTimeoutInterval();
+		ZGRegisterDefaultWindowVibrancy();
 		ZGRegisterDefaultDisableSpellCheckingAndCorrectionForSquashes();
 		ZGRegisterDefaultDisableAutomaticNewlineInsertionAfterSubjectLineForSquashes();
 		ZGRegisterDefaultDetectHGCommentStyleForSquashes();
