@@ -97,6 +97,28 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 	return [[[NSFileManager defaultManager] currentDirectoryPath] lastPathComponent];
 }
 
+- (ZGWindowStyleTheme)windowStyleThemeFromDefaultWindowStyleTheme:(ZGWindowStyleDefaultTheme)defaultTheme effectiveAppearance:(NSAppearance * _Nullable)effectiveAppearance
+{
+	if (!defaultTheme.automatic)
+	{
+		return defaultTheme.theme;
+	}
+	else
+	{
+		BOOL darkMode;
+		if (@available(macOS 10.14, *))
+		{
+			NSAppearanceName appearanceName = [effectiveAppearance bestMatchFromAppearancesWithNames:@[NSAppearanceNameAqua, NSAppearanceNameDarkAqua]];
+			darkMode = [appearanceName isEqualToString:NSAppearanceNameDarkAqua];
+		}
+		else
+		{
+			darkMode = NO;
+		}
+		return darkMode ? ZGWindowStyleThemeDark : ZGWindowStyleThemePlain;
+	}
+}
+
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)__unused object change:(NSDictionary *)change context:(void *)__unused context
 {
 	if ([keyPath isEqualToString:ZG_SELECTOR_STRING(NSApp, effectiveAppearance)])
@@ -106,7 +128,10 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 		
 		if (![oldAppearance.name isEqualToString:newAppearance.name])
 		{
-			[self changeEditorWindowStyle:[ZGWindowStyle windowStyleWithTheme:ZGReadDefaultWindowStyleTheme(newAppearance)]];
+			ZGWindowStyleDefaultTheme defaultTheme = ZGReadDefaultWindowStyleTheme();
+			ZGWindowStyleTheme theme = [self windowStyleThemeFromDefaultWindowStyleTheme:defaultTheme effectiveAppearance:newAppearance];
+			
+			[self changeEditorWindowStyle:[ZGWindowStyle windowStyleWithTheme:theme]];
 		}
 	}
 }
@@ -127,7 +152,11 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 {
 	[self.window setFrameUsingName:ZGEditorWindowFrameNameKey];
 	
-	[self updateWindowStyle:[ZGWindowStyle windowStyleWithTheme:ZGReadDefaultWindowStyleTheme([self effectiveApplicationAppearance])]];
+	[self updateWindowStyle:
+	 [ZGWindowStyle windowStyleWithTheme:
+	  [self
+	   windowStyleThemeFromDefaultWindowStyleTheme:ZGReadDefaultWindowStyleTheme()
+	   effectiveAppearance:[self effectiveApplicationAppearance]]]];
 	
 	if (@available(macOS 10.14, *))
 	{
@@ -539,13 +568,26 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 
 - (IBAction)changeEditorTheme:(NSMenuItem *)sender
 {
-	ZGWindowStyleTheme newTheme = (ZGWindowStyleTheme)[sender tag];
-	assert(newTheme <= ZGWindowStyleMaxTheme);
+	NSInteger tag = sender.tag;
 	
-	ZGWindowStyleTheme currentTheme = ZGReadDefaultWindowStyleTheme([self effectiveApplicationAppearance]);
-	if (currentTheme != newTheme)
+	ZGWindowStyleDefaultTheme newDefaultTheme = {0};
+	if (tag == ZGWindowStyleAutomaticTag)
 	{
-		ZGWriteDefaultStyleTheme(newTheme);
+		newDefaultTheme.automatic = true;
+	}
+	else
+	{
+		newDefaultTheme.theme = (ZGWindowStyleTheme)tag;
+		assert(newDefaultTheme.theme <= ZGWindowStyleMaxTheme);
+	}
+	
+	ZGWindowStyleDefaultTheme currentDefaultTheme = ZGReadDefaultWindowStyleTheme();
+	if (newDefaultTheme.theme != currentDefaultTheme.theme || newDefaultTheme.automatic != currentDefaultTheme.automatic)
+	{
+		ZGWriteDefaultStyleTheme(newDefaultTheme);
+		
+		ZGWindowStyleTheme newTheme = [self windowStyleThemeFromDefaultWindowStyleTheme:newDefaultTheme effectiveAppearance:[self effectiveApplicationAppearance]];
+		
 		[self changeEditorWindowStyle:[ZGWindowStyle windowStyleWithTheme:newTheme]];
 	}
 }
@@ -572,8 +614,18 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 {
 	if (menuItem.action == @selector(changeEditorTheme:))
 	{
-		ZGWindowStyleTheme currentTheme = ZGReadDefaultWindowStyleTheme([self effectiveApplicationAppearance]);
-		menuItem.state = (currentTheme == (ZGWindowStyleTheme)menuItem.tag) ? NSOnState : NSOffState;
+		NSInteger themeTag;
+		ZGWindowStyleDefaultTheme currentDefaultTheme = ZGReadDefaultWindowStyleTheme();
+		if (currentDefaultTheme.automatic)
+		{
+			themeTag = -1;
+		}
+		else
+		{
+			themeTag = (NSInteger)currentDefaultTheme.theme;
+		}
+		
+		menuItem.state = (menuItem.tag == themeTag) ? NSOnState : NSOffState;
 	}
 	else if (menuItem.action == @selector(changeVibrancy:))
 	{

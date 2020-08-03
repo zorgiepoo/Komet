@@ -6,6 +6,8 @@
 //  Copyright © 2016 zgcoder. All rights reserved.
 //
 
+@import Darwin.C.stdbool;
+
 typedef NS_ENUM(NSUInteger, ZGWindowStyleTheme)
 {
 	ZGWindowStyleThemePlain = 0,
@@ -17,3 +19,12 @@ typedef NS_ENUM(NSUInteger, ZGWindowStyleTheme)
 };
 
 #define ZGWindowStyleMaxTheme ZGWindowStyleThemeRed
+
+typedef struct
+{
+	ZGWindowStyleTheme theme;
+	bool automatic;
+	uint8_t unused[7];
+} ZGWindowStyleDefaultTheme;
+
+#define ZGWindowStyleAutomaticTag (-1)

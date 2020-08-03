@@ -176,35 +176,40 @@ void ZGWriteDefaultAutomaticNewlineInsertionAfterSubjectLine(BOOL automaticNewli
 	[[NSUserDefaults standardUserDefaults] setBool:automaticNewlineInsertionAfterSubjectLine forKey:ZGEditorAutomaticNewlineInsertionAfterSubjectKey];
 }
 
-ZGWindowStyleTheme ZGReadDefaultWindowStyleTheme(NSAppearance * _Nullable effectiveAppearance)
+ZGWindowStyleDefaultTheme ZGReadDefaultWindowStyleTheme(void)
 {
-	ZGWindowStyleTheme theme;
+	ZGWindowStyleDefaultTheme defaultTheme = {0};
 	NSNumber *themeDefault = [[NSUserDefaults standardUserDefaults] objectForKey:ZGWindowStyleThemeKey];
 	if (themeDefault == nil || ![themeDefault isKindOfClass:[NSNumber class]])
 	{
-		BOOL darkMode;
-		if (@available(macOS 10.14, *))
-		{
-			NSAppearanceName appearanceName = [effectiveAppearance bestMatchFromAppearancesWithNames:@[NSAppearanceNameAqua, NSAppearanceNameDarkAqua]];
-			darkMode = [appearanceName isEqualToString:NSAppearanceNameDarkAqua];
-		}
-		else
-		{
-			darkMode = NO;
-		}
-		theme = darkMode ? ZGWindowStyleThemeDark : ZGWindowStyleThemePlain;
+		defaultTheme.automatic = true;
 	}
 	else
 	{
 		NSUInteger themeValue = [themeDefault unsignedIntegerValue];
-		theme = (themeValue > ZGWindowStyleMaxTheme) ? ZGWindowStyleThemePlain : themeValue;
+		if (themeValue > ZGWindowStyleMaxTheme)
+		{
+			defaultTheme.automatic = true;
+		}
+		else
+		{
+			defaultTheme.theme = themeValue;
+		}
 	}
-	return theme;
+	
+	return defaultTheme;
 }
 
-void ZGWriteDefaultStyleTheme(ZGWindowStyleTheme theme)
+void ZGWriteDefaultStyleTheme(ZGWindowStyleDefaultTheme defaultTheme)
 {
-	[[NSUserDefaults standardUserDefaults] setObject:@(theme) forKey:ZGWindowStyleThemeKey];
+	if (defaultTheme.automatic)
+	{
+		[[NSUserDefaults standardUserDefaults] removeObjectForKey:ZGWindowStyleThemeKey];
+	}
+	else
+	{
+		[[NSUserDefaults standardUserDefaults] setObject:@(defaultTheme.theme) forKey:ZGWindowStyleThemeKey];
+	}
 }
 
 void ZGRegisterDefaultWindowVibrancy(void)

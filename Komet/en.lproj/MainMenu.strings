@@ -179,6 +179,9 @@
 /* Class = "NSMenuItem"; title = "Plain"; ObjectID = "PLT-gC-iSY"; */
 "PLT-gC-iSY.title" = "Plain";
 
+/* Class = "NSMenuItem"; title = "Automatic"; ObjectID = "TS5-9f-Wod"; */
+"TS5-9f-Wod.title" = "Automatic";
+
 /* Class = "NSMenuItem"; title = "Bigger"; ObjectID = "Ptp-SP-VEL"; */
 "Ptp-SP-VEL.title" = "Bigger";
 
