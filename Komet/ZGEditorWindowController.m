@@ -950,45 +950,48 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 	}
 	else
 	{
-		// If we initially had no content and wrote an incomplete commit message,
-		// then save the commit message in case we may want to resume from it later
-		if (_initiallyContainedEmptyContent && ZGReadDefaultResumeIncompleteSession())
+		if (_initiallyContainedEmptyContent)
 		{
-			NSFileManager *fileManager = [[NSFileManager alloc] init];
-			
-			NSString *plainString = _textView.textStorage.string;
-			NSUInteger commitLength = [self commitTextLengthFromPlainText:plainString commentLength:_commentSectionLength];
-			
-			NSString *content = [plainString substringToIndex:commitLength];
-			NSString *trimmedContent = [content stringByTrimmingCharactersInSet:[NSCharacterSet newlineCharacterSet]];
-			if (trimmedContent.length > 0)
+			// If we initially had no content and wrote an incomplete commit message,
+			// then save the commit message in case we may want to resume from it later
+			if (ZGReadDefaultResumeIncompleteSession())
 			{
-				NSError *applicationSupportQueryError = nil;
-				NSURL *applicationSupportURL = [fileManager URLForDirectory:NSApplicationSupportDirectory inDomain:NSUserDomainMask appropriateForURL:nil create:NO error:&applicationSupportQueryError];
-				if (applicationSupportURL == nil)
+				NSFileManager *fileManager = [[NSFileManager alloc] init];
+				
+				NSString *plainString = _textView.textStorage.string;
+				NSUInteger commitLength = [self commitTextLengthFromPlainText:plainString commentLength:_commentSectionLength];
+				
+				NSString *content = [plainString substringToIndex:commitLength];
+				NSString *trimmedContent = [content stringByTrimmingCharactersInSet:[NSCharacterSet newlineCharacterSet]];
+				if (trimmedContent.length > 0)
 				{
-					NSLog(@"Failed to find application support directory: %@", applicationSupportQueryError);
-				}
-				else
-				{
-					NSURL *supportDirectory = [applicationSupportURL URLByAppendingPathComponent:APP_SUPPORT_DIRECTORY_NAME];
-					NSString *projectName = [self projectName];
-					
-					NSError *createSupportDirectoryError = nil;
-					if (![fileManager createDirectoryAtURL:supportDirectory withIntermediateDirectories:YES attributes:nil error:&createSupportDirectoryError])
+					NSError *applicationSupportQueryError = nil;
+					NSURL *applicationSupportURL = [fileManager URLForDirectory:NSApplicationSupportDirectory inDomain:NSUserDomainMask appropriateForURL:nil create:NO error:&applicationSupportQueryError];
+					if (applicationSupportURL == nil)
 					{
-						NSLog(@"Failed to create application support directory: %@", createSupportDirectoryError);
+						NSLog(@"Failed to find application support directory: %@", applicationSupportQueryError);
 					}
 					else
 					{
-						NSURL *lastCommitURL = [supportDirectory URLByAppendingPathComponent:projectName];
+						NSURL *supportDirectory = [applicationSupportURL URLByAppendingPathComponent:APP_SUPPORT_DIRECTORY_NAME];
+						NSString *projectName = [self projectName];
 						
-						if (lastCommitURL != nil)
+						NSError *createSupportDirectoryError = nil;
+						if (![fileManager createDirectoryAtURL:supportDirectory withIntermediateDirectories:YES attributes:nil error:&createSupportDirectoryError])
 						{
-							NSError *writeError = nil;
-							if (![trimmedContent writeToURL:lastCommitURL atomically:YES encoding:NSUTF8StringEncoding error:&writeError])
+							NSLog(@"Failed to create application support directory: %@", createSupportDirectoryError);
+						}
+						else
+						{
+							NSURL *lastCommitURL = [supportDirectory URLByAppendingPathComponent:projectName];
+							
+							if (lastCommitURL != nil)
 							{
-								NSLog(@"Failed to write last commit message with error: %@", writeError);
+								NSError *writeError = nil;
+								if (![trimmedContent writeToURL:lastCommitURL atomically:YES encoding:NSUTF8StringEncoding error:&writeError])
+								{
+									NSLog(@"Failed to write last commit message with error: %@", writeError);
+								}
 							}
 						}
 					}
