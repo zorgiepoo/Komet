@@ -63,4 +63,7 @@ BOOL ZGReadDefaultDisableAutomaticNewlineInsertionAfterSubjectLineForSquashes(vo
 void ZGRegisterDefaultDetectHGCommentStyleForSquashes(void);
 BOOL ZGReadDefaultDetectHGCommentStyleForSquashes(void);
 
+void ZGRegisterDefaultBreadcrumbsURL(void);
+NSURL * _Nullable ZGReadDefaultBreadcrumbsURL(void);
+
 NS_ASSUME_NONNULL_END

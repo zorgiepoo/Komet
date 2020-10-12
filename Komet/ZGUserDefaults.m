@@ -8,31 +8,7 @@
 
 #import "ZGUserDefaults.h"
 #import "ZGWindowStyle.h"
-
-#define ZGMessageFontNameKey @"ZGEditorFontName"
-#define ZGMessageFontPointSizeKey @"ZGEditorFontPointSize"
-
-#define ZGCommentsFontNameKey @"ZGCommentsFontName"
-#define ZGCommentsFontPointSizeKey @"ZGCommentsFontPointSize"
-
-#define ZGEditorRecommendedSubjectLengthLimitKey @"ZGEditorRecommendedSubjectLengthLimit"
-#define ZGEditorRecommendedSubjectLengthLimitEnabledKey @"ZGEditorRecommendedSubjectLengthLimitEnabled"
-
-#define ZGEditorRecommendedBodyLineLengthLimitKey @"ZGEditorRecommendedBodyLineLengthLimit"
-#define ZGEditorRecommendedBodyLineLengthLimitEnabledKey @"ZGEditorRecommendedBodyLineLengthLimitEnabled"
-
-#define ZGEditorAutomaticNewlineInsertionAfterSubjectKey @"ZGEditorAutomaticNewlineInsertionAfterSubject"
-
-#define ZGWindowStyleThemeKey @"ZGWindowStyleTheme"
-#define ZGWindowVibrancyKey @"ZGWindowVibrancy"
-
-#define ZGResumeIncompleteSessionKey @"ZGResumeIncompleteSession"
-#define ZGResumeIncompleteSessionTimeoutIntervalKey @"ZGResumeIncompleteSessionTimeoutInterval"
-
-#define ZGDisableSpellCheckingAndCorrectionForSquashesKey @"ZGDisableSpellCheckingAndCorrectionForSquashes"
-#define ZGDisableAutomaticNewlineInsertionAfterSubjectLineForSquashesKey @"ZGDisableAutomaticNewlineInsertionAfterSubjectLineForSquashes"
-
-#define ZGDetectHGCommentStyleForSquashesKey @"ZGDetectHGCommentStyleForSquashes"
+#import "ZGUserDefaultKeys.h"
 
 static NSFont *ZGReadDefaultFont(NSString *fontNameDefaultsKey, NSString *fontSizeDefaultsKey)
 {
@@ -179,14 +155,23 @@ void ZGWriteDefaultAutomaticNewlineInsertionAfterSubjectLine(BOOL automaticNewli
 ZGWindowStyleDefaultTheme ZGReadDefaultWindowStyleTheme(void)
 {
 	ZGWindowStyleDefaultTheme defaultTheme = {0};
-	NSNumber *themeDefault = [[NSUserDefaults standardUserDefaults] objectForKey:ZGWindowStyleThemeKey];
-	if (themeDefault == nil || ![themeDefault isKindOfClass:[NSNumber class]])
+	id<NSObject> themeDefault = [[NSUserDefaults standardUserDefaults] objectForKey:ZGWindowStyleThemeKey];
+	if (themeDefault == nil || (![themeDefault isKindOfClass:[NSNumber class]] && ![themeDefault isKindOfClass:[NSString class]]))
 	{
 		defaultTheme.automatic = true;
 	}
 	else
 	{
-		NSUInteger themeValue = [themeDefault unsignedIntegerValue];
+		NSUInteger themeValue;
+		if ([themeDefault isKindOfClass:[NSNumber class]])
+		{
+			themeValue = [(NSNumber *)themeDefault unsignedIntegerValue];
+		}
+		else
+		{
+			themeValue = (NSUInteger)[(NSString *)themeDefault integerValue];
+		}
+		
 		if (themeValue > ZGWindowStyleMaxTheme)
 		{
 			defaultTheme.automatic = true;
@@ -284,4 +269,20 @@ void ZGRegisterDefaultDetectHGCommentStyleForSquashes(void)
 BOOL ZGReadDefaultDetectHGCommentStyleForSquashes(void)
 {
 	return [[NSUserDefaults standardUserDefaults] boolForKey:ZGDetectHGCommentStyleForSquashesKey];
+}
+
+void ZGRegisterDefaultBreadcrumbsURL(void)
+{
+	[[NSUserDefaults standardUserDefaults] registerDefaults:@{ZGBreadcrumbsURLKey : @""}];
+}
+
+NSURL * _Nullable ZGReadDefaultBreadcrumbsURL(void)
+{
+	NSString *urlString = [[NSUserDefaults standardUserDefaults] stringForKey:ZGBreadcrumbsURLKey];
+	if (urlString.length == 0)
+	{
+		return nil;
+	}
+	
+	return [NSURL fileURLWithPath:urlString];
 }

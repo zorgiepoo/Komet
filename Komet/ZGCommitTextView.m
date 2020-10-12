@@ -7,10 +7,7 @@
 //
 
 #import "ZGCommitTextView.h"
-
-#define ZGCommitTextViewContinuousSpellCheckingKey @"ZGCommitTextViewContinuousSpellChecking"
-#define ZGCommitTextViewAutomaticSpellingCorrectionKey @"ZGCommitTextViewAutomaticSpellingCorrection"
-#define ZGCommitTextViewAutomaticTextReplacementKey @"ZGCommitTextViewAutomaticTextReplacement"
+#import "ZGUserDefaultKeys.h"
 
 #define ZGTouchBarIdentifier @"org.zgcoder.Komet.67e9f8738561"
 #define ZGTouchBarIdentifierCancel @"zgCancelIdentifier"

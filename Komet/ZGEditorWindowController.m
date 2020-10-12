@@ -10,6 +10,7 @@
 #import "ZGCommitTextView.h"
 #import "ZGUserDefaults.h"
 #import "ZGWindowStyle.h"
+#import "ZGBreadcrumbs.h"
 
 #define ZGEditorWindowFrameNameKey @"ZGEditorWindowFrame"
 #define APP_SUPPORT_DIRECTORY_NAME @"Komet"
@@ -44,6 +45,7 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 	BOOL _initiallyContainedEmptyContent;
 	BOOL _tutorialMode;
 	BOOL _isSquashMessage;
+	ZGBreadcrumbs * _Nullable _breadcrumbs;
 	NSUInteger _commentSectionLength;
 	ZGVersionControlType _commentVersionControlType;
 	ZGWindowStyle *_style;
@@ -66,6 +68,7 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 		ZGRegisterDefaultDisableSpellCheckingAndCorrectionForSquashes();
 		ZGRegisterDefaultDisableAutomaticNewlineInsertionAfterSubjectLineForSquashes();
 		ZGRegisterDefaultDetectHGCommentStyleForSquashes();
+		ZGRegisterDefaultBreadcrumbsURL();
 	});
 }
 
@@ -77,6 +80,12 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 		_fileURL = fileURL;
 		_temporaryDirectoryURL = temporaryDirectoryURL;
 		_tutorialMode = tutorialMode;
+		
+		NSURL *breadcrumbsURL = ZGReadDefaultBreadcrumbsURL();
+		if (breadcrumbsURL != nil)
+		{
+			_breadcrumbs = [ZGBreadcrumbs breadcrumbsWritingToURL:breadcrumbsURL];
+		}
 	}
 	return self;
 }
@@ -279,6 +288,11 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 		[_textView zgLoadDefaults];
 	}
 	
+	if (_breadcrumbs != nil)
+	{
+		_breadcrumbs.spellChecking = _textView.continuousSpellCheckingEnabled;
+	}
+	
 	NSUInteger initialCommentSectionLength = [self commentSectionLengthFromPlainText:initialPlainString versionControlType:_commentVersionControlType];
 	
 	NSUInteger initialCommitLength = [self commitTextLengthFromPlainText:initialPlainString commentLength:initialCommentSectionLength];
@@ -460,6 +474,7 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 	// Having drawBackgrounds set to NO appears to cause issues when there is a lot of content.
 	// Work around this by setting drawBackgrounds to YES in such cases.
 	// In some themes the visual look may not be too different.
+	// NOTE: I cannot reproduce this issue on macOS 10.15.7, not sure if this has been fixed on OS side at some point
 	_textView.drawsBackground = (plainText.length > MAX_CHARACTER_COUNT_FOR_NOT_DRAWING_BACKGROUND);
 }
 
@@ -692,6 +707,7 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 	
 	// First assume all content has no comment lines
 	[self updateFont:ZGReadDefaultMessageFont() range:NSMakeRange(0, plainText.length - _commentSectionLength)];
+	[_breadcrumbs.commentLineRanges removeAllObjects];
 	
 	for (NSValue *contentLineRangeValue in contentLineRanges)
 	{
@@ -700,6 +716,10 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 		{
 			// Add comment font attribute for lines that are comments
 			[textStorage addAttribute:NSForegroundColorAttributeName value:_style.commentColor range:contentLineRange];
+			if (_breadcrumbs != nil)
+			{
+				[_breadcrumbs.commentLineRanges addObject:[NSValue valueWithRange:contentLineRange]];
+			}
 			
 			if (commentFont == nil)
 			{
@@ -717,6 +737,8 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 - (void)removeBackgroundColors
 {
 	[_textView.layoutManager removeTemporaryAttribute:NSBackgroundColorAttributeName forCharacterRange:NSMakeRange(0, _textView.textStorage.length)];
+	
+	[_breadcrumbs.textOverflowRanges removeAllObjects];
 }
 
 - (void)updateHighlightingWithContentLineRanges:(NSArray<NSValue *> *)contentLineRanges forLineLimitsAllowingSubjectLimit:(BOOL)allowingSubjectLimit subjectLengthLimit:(NSUInteger)subjectLengthLimit allowingingBodyLimit:(BOOL)allowingBodyLimit bodyLengthLimit:(NSUInteger)bodyLengthLimit
@@ -734,6 +756,8 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 	// Remove the attribute everywhere. Might be "inefficient" but it's the easiest most reliable approach I know how to do
 	[self removeBackgroundColors];
 	
+	NSString *plainText = _textView.textStorage.string;
+	
 	for (NSValue *contentLineRangeValue in contentLineRanges)
 	{
 		NSRange lineRange = contentLineRangeValue.rangeValue;
@@ -741,7 +765,10 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 		{
 			if (allowingSubjectLimit)
 			{
-				[self highlightOverflowingTextWithLineRange:lineRange limit:subjectLengthLimit];
+				if (![self isCommentLine:[plainText substringWithRange:lineRange] forVersionControlType:_commentVersionControlType])
+				{
+					[self highlightOverflowingTextWithLineRange:lineRange limit:subjectLengthLimit];
+				}
 			}
 			
 			if (!allowingBodyLimit)
@@ -751,7 +778,10 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 		}
 		else
 		{
-			[self highlightOverflowingTextWithLineRange:lineRange limit:bodyLengthLimit];
+			if (![self isCommentLine:[plainText substringWithRange:lineRange] forVersionControlType:_commentVersionControlType])
+			{
+				[self highlightOverflowingTextWithLineRange:lineRange limit:bodyLengthLimit];
+			}
 		}
 	}
 }
@@ -783,6 +813,11 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 	{
 		NSRange overflowRange = NSMakeRange(lineRange.location + limit, lineRange.length - limit);
 		[_textView.layoutManager addTemporaryAttribute:NSBackgroundColorAttributeName value:_style.overflowColor forCharacterRange:overflowRange];
+		
+		if (_breadcrumbs != nil)
+		{
+			[_breadcrumbs.textOverflowRanges addObject:[NSValue valueWithRange:overflowRange]];
+		}
 	}
 }
 
@@ -934,6 +969,15 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 	return NO;
 }
 
+__attribute__((noreturn))
+static void _exitWithStatus(int exitStatus, ZGBreadcrumbs *breadcrumbs)
+{
+	breadcrumbs.exitStatus = exitStatus;
+	[breadcrumbs saveFile];
+	
+	exit(exitStatus);
+}
+
 - (void)exitWithSuccess:(BOOL)success __attribute__((noreturn))
 {
 	[self saveWindowFrame];
@@ -946,7 +990,7 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 	if (success)
 	{
 		// We should have wrote to the commit file successfully
-		exit(EXIT_SUCCESS);
+		_exitWithStatus(EXIT_SUCCESS, _breadcrumbs);
 	}
 	else
 	{
@@ -1000,12 +1044,12 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 			
 			// Empty commits should be treated as a success
 			// Version control software will be able to handle it as an abort
-			exit(EXIT_SUCCESS);
+			_exitWithStatus(EXIT_SUCCESS, _breadcrumbs);
 		}
 		else
 		{
 			// If we are amending an existing commit for example, we should fail and not create another change
-			exit(EXIT_FAILURE);
+			_exitWithStatus(EXIT_FAILURE, _breadcrumbs);
 		}
 	}
 }

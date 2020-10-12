@@ -6,7 +6,7 @@
 //  Copyright © 2016 zgcoder. All rights reserved.
 //
 
-@import Darwin.C.stdbool;
+@import Foundation;
 
 typedef NS_ENUM(NSUInteger, ZGWindowStyleTheme)
 {
