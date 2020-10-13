@@ -112,7 +112,20 @@ class KometApp {
 	}
 	
 	func typeText(_ text: String) {
-		textView.typeText(text)
+		// Make sure we type newline characters separately to avoid them being typed too fast
+		var currentText = text
+		while let newlineIndex = currentText.firstIndex(of: "\n") {
+			let line = currentText[currentText.startIndex ..< newlineIndex]
+			if line.count > 0 {
+				textView.typeText(String(line))
+			}
+			textView.typeText("\n")
+			currentText = String(currentText[currentText.index(newlineIndex, offsetBy: 1) ..< currentText.endIndex])
+		}
+		
+		if currentText.count > 0 {
+			textView.typeText(currentText)
+		}
 	}
 	
 	func deleteText(count: Int) {
