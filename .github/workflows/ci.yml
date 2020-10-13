@@ -1,0 +1,22 @@
+name: XCUI Testing
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+    name: Build and Test Komet on macOS
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Build
+        run: |
+          xcodebuild build-for-testing -target 'KometUITests' -scheme Komet
+      - name: Test
+        run: |
+          xcodebuild test-without-building -target 'KometUITests' -scheme Komet
