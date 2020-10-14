@@ -18,7 +18,7 @@ Disable keyboard support for tvOS
 #    squash 218a12d Disable keyboard support for tvOS
 # Next command to do (1 remaining command):
 #    pick 4833a3a Remove text distortion workaround when debugging game on macOS
-# You are currently rebasing branch 'master' on '4341540'.
+# You are currently rebasing branch 'main' on '4341540'.
 #
 # Changes to be committed:
 #	modified:   src/gamepad_gccontroller.h
