@@ -471,11 +471,18 @@ typedef NS_ENUM(NSUInteger, ZGVersionControlType)
 	NSTextStorage *textStorage = _textView.textStorage;
 	NSString *plainText = textStorage.string;
 	
-	// Having drawBackgrounds set to NO appears to cause issues when there is a lot of content.
-	// Work around this by setting drawBackgrounds to YES in such cases.
-	// In some themes the visual look may not be too different.
-	// NOTE: I cannot reproduce this issue on macOS 10.15.7, not sure if this has been fixed on OS side at some point
-	_textView.drawsBackground = (plainText.length > MAX_CHARACTER_COUNT_FOR_NOT_DRAWING_BACKGROUND);
+	if (@available(macOS 10.15.7, *))
+	{
+		_textView.drawsBackground = NO;
+	}
+	else
+	{
+		// Having drawBackgrounds set to NO appears to cause issues when there is a lot of content.
+		// Work around this by setting drawBackgrounds to YES in such cases.
+		// In some themes the visual look may not be too different.
+		// Note: I cannot reproduce this issue on 10.15.7, so I'm assuming this is no longer an issue there
+		_textView.drawsBackground = (plainText.length > MAX_CHARACTER_COUNT_FOR_NOT_DRAWING_BACKGROUND);
+	}
 }
 
 - (void)updateWindowStyle:(ZGWindowStyle *)newStyle
