@@ -12,6 +12,7 @@
 		720DF195252AE592003AD7FB /* new-commit in Resources */ = {isa = PBXBuildFile; fileRef = 720DF194252AE592003AD7FB /* new-commit */; };
 		7211A974253BB68A00F95773 /* hg-new-commit in Resources */ = {isa = PBXBuildFile; fileRef = 7211A973253BB68A00F95773 /* hg-new-commit */; };
 		7211A978253BBBBB00F95773 /* svn-new-commit in Resources */ = {isa = PBXBuildFile; fileRef = 7211A977253BBBBB00F95773 /* svn-new-commit */; };
+		7211A980253BC29E00F95773 /* hg-histedit in Resources */ = {isa = PBXBuildFile; fileRef = 7211A97F253BC29E00F95773 /* hg-histedit */; };
 		72120FB825328B490018201E /* amended-commit in Resources */ = {isa = PBXBuildFile; fileRef = 72120FB725328B490018201E /* amended-commit */; };
 		72120FBD2532DBF20018201E /* ZGBreadcrumbs.m in Sources */ = {isa = PBXBuildFile; fileRef = 72120FBC2532DBF20018201E /* ZGBreadcrumbs.m */; };
 		72120FBF2532F0840018201E /* ZGBreadcrumbs.m in Sources */ = {isa = PBXBuildFile; fileRef = 72120FBC2532DBF20018201E /* ZGBreadcrumbs.m */; };
@@ -71,6 +72,7 @@
 		720DF1BA2532369E003AD7FB /* KometUITests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "KometUITests-Bridging-Header.h"; sourceTree = "<group>"; };
 		7211A973253BB68A00F95773 /* hg-new-commit */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "hg-new-commit"; sourceTree = "<group>"; };
 		7211A977253BBBBB00F95773 /* svn-new-commit */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "svn-new-commit"; sourceTree = "<group>"; };
+		7211A97F253BC29E00F95773 /* hg-histedit */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "hg-histedit"; sourceTree = "<group>"; };
 		72120FB52532660F0018201E /* ZGUserDefaultKeys.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZGUserDefaultKeys.h; sourceTree = "<group>"; };
 		72120FB725328B490018201E /* amended-commit */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "amended-commit"; sourceTree = "<group>"; };
 		72120FBB2532DBF20018201E /* ZGBreadcrumbs.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZGBreadcrumbs.h; sourceTree = "<group>"; };
@@ -146,6 +148,7 @@
 			isa = PBXGroup;
 			children = (
 				7211A973253BB68A00F95773 /* hg-new-commit */,
+				7211A97F253BC29E00F95773 /* hg-histedit */,
 				7211A977253BBBBB00F95773 /* svn-new-commit */,
 				720DF194252AE592003AD7FB /* new-commit */,
 				72120FB725328B490018201E /* amended-commit */,
@@ -318,6 +321,7 @@
 				72120FD22533F91D0018201E /* interactive-rebase-2 in Resources */,
 				7211A978253BBBBB00F95773 /* svn-new-commit in Resources */,
 				7211A974253BB68A00F95773 /* hg-new-commit in Resources */,
+				7211A980253BC29E00F95773 /* hg-histedit in Resources */,
 				720DF195252AE592003AD7FB /* new-commit in Resources */,
 				72120FC82533F7650018201E /* interactive-rebase in Resources */,
 			);

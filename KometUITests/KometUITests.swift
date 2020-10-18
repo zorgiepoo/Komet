@@ -729,6 +729,21 @@ class KometUITests: XCTestCase {
 		XCTAssertEqual(initialLineComponents[1 ..< initialLineComponents.count], finalLineComponents[4 ..< finalLineComponents.count])
 	}
 	
+	func testHgRebaseEditing() throws {
+		let app = try KometApp(filename: "hg-histedit")
+		
+		app.selectAll()
+		app.deleteText(count: 1)
+		
+		let (breadcrumbs, finalContent) = try app.commit()
+		XCTAssertEqual(breadcrumbs!.exitStatus, 0)
+		
+		let finalLineComponents = finalContent.components(separatedBy: "\n")
+		let initialLineComponents = app.initialContent.components(separatedBy: "\n")
+		
+		XCTAssertEqual([""] + initialLineComponents[3 ..< initialLineComponents.count], finalLineComponents[0 ..< finalLineComponents.count])
+	}
+	
 	func testNewSvnCommit() throws {
 		let app = try KometApp(filename: "svn-new-commit")
 		
