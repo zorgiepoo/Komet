@@ -38,6 +38,6 @@ For optimal behavior, Komet depends on being able to distinguish the commit mess
 
 ## Contributing
 
-If you enjoy using Komet and feel like something could improve, feel free to make a contribution. It is advisable to create an issue first before submitting a big change. Please also read and follow the code of conduct in the repository first before contributing.
+If you enjoy using Komet and feel like something could improve, feel free to make a contribution. It is advisable to create an issue first before submitting a big change or to browse the current [issues](https://github.com/zorgiepoo/Komet/issues). Please also read and follow the code of conduct in the repository first before contributing.
 
-Komet can now be translated to other languages. If you want to translate Komet, duplicate `Komet.app/Contents/Resources/en.lproj/` and rename `en` to the desired [language locale code](https://www.science.co.il/language/Locale-codes.php). Then using a text editor intended for coding (not TextEdit), alter the string values in the `.strings` files. Keep a separate copy of the new language folder outside of the app in case Komet may get auto-updated (or preferably work with the Xcode project instead). Finally, test the translation by changing your system language in System Preferences.
+Komet can now be translated to other languages. To translate Komet go in the Xcode Project settings and add a new language in the Localizations section. After the localization files have been created, modify the string values in each one. Skip translating string values in xibs that are underscored like  `project_name`. Finally, test the translation by changing your system language in System Preferences and by building and running Komet.
