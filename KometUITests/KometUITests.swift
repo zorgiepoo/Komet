@@ -673,6 +673,84 @@ class KometUITests: XCTestCase {
 		XCTAssertEqual(commentLineRanges.count, 0)
 	}
 	
+	// MARK: Hg & Svn
+	
+	func testNewHgCommit() throws {
+		let app = try KometApp(filename: "hg-new-commit")
+		
+		let subject = "Hello there"
+		app.typeText(subject)
+		
+		app.moveCursorDown(count: 6)
+		app.typeText("test")
+		
+		app.moveCursorRight(count: 4)
+		app.typeText("blah")
+		
+		let (breadcrumbs, finalContent) = try app.commit()
+		XCTAssertEqual(breadcrumbs!.exitStatus, 0)
+		
+		let finalLineComponents = finalContent.components(separatedBy: "\n")
+		let initialLineComponents = app.initialContent.components(separatedBy: "\n")
+		
+		XCTAssertEqual(finalLineComponents[0], subject)
+		XCTAssertEqual(initialLineComponents[1 ..< initialLineComponents.count], finalLineComponents[1 ..< initialLineComponents.count])
+	}
+	
+	func testAddingHgCommentContent() throws {
+		let app = try KometApp(filename: "hg-new-commit")
+		
+		let subject = "Hello there"
+		app.typeText(subject + "\n")
+		
+		let commentLine = "HG: Here is a comment line"
+		app.typeText(commentLine + "\n")
+		
+		let secondLine = "Here is a normal line"
+		app.typeText(secondLine)
+		
+		let (breadcrumbs, finalContent) = try app.commit()
+		XCTAssertEqual(breadcrumbs!.exitStatus, 0)
+		
+		let commentLineRanges = breadcrumbs!.commentLineRanges
+		XCTAssertEqual(commentLineRanges.count, 1)
+		
+		let commentLineRange = commentLineRanges[0] as! NSValue
+		XCTAssertEqual(commentLineRange.rangeValue, NSMakeRange(subject.count + "\n\n".count, commentLine.count))
+		
+		let finalLineComponents = finalContent.components(separatedBy: "\n")
+		let initialLineComponents = app.initialContent.components(separatedBy: "\n")
+		
+		XCTAssertEqual(finalLineComponents[0], subject)
+		XCTAssertEqual(finalLineComponents[1], "")
+		XCTAssertEqual(finalLineComponents[2], commentLine)
+		XCTAssertEqual(finalLineComponents[3], secondLine)
+		
+		XCTAssertEqual(initialLineComponents[1 ..< initialLineComponents.count], finalLineComponents[4 ..< finalLineComponents.count])
+	}
+	
+	func testNewSvnCommit() throws {
+		let app = try KometApp(filename: "svn-new-commit")
+		
+		let subject = "Hello there"
+		app.typeText(subject)
+		
+		app.moveCursorDown(count: 2)
+		app.typeText("test")
+		
+		app.moveCursorRight(count: 2)
+		app.typeText("blah")
+		
+		let (breadcrumbs, finalContent) = try app.commit()
+		XCTAssertEqual(breadcrumbs!.exitStatus, 0)
+		
+		let finalLineComponents = finalContent.components(separatedBy: "\n")
+		let initialLineComponents = app.initialContent.components(separatedBy: "\n")
+		
+		XCTAssertEqual(finalLineComponents[0], subject)
+		XCTAssertEqual(initialLineComponents[1 ..< initialLineComponents.count], finalLineComponents[1 ..< initialLineComponents.count])
+	}
+	
 	// MARK: Emoji
 	
 	func testInsertingEmoji() throws {
