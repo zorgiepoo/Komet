@@ -1,0 +1,14 @@
+pick c561b4e977df Add beta
+pick 030b686bedc4 Add gamma
+pick 7c2fd3b9020c Add delta
+
+# Edit history between c561b4e977df and 7c2fd3b9020c
+#
+# Commands:
+#  p, pick = use commit
+#  e, edit = use commit, but stop for amending
+#  f, fold = use commit, but fold into previous commit
+#  r, roll = use commit, but fold into previous commit and drop commit message
+#  d, drop = remove commit from history
+#  m, mess = edit message without changing commit content
+#
