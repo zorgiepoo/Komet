@@ -404,8 +404,7 @@ enum VersionControlType {
 		updateCurrentStyle()
 	}
 	
-	private func currentCommentUTF16Range() -> NSRange {
-		let plainText = currentPlainText()
+	private func commentUTF16Range(plainText: String) -> NSRange {
 		let commentSectionIndex = plainText.index(plainText.endIndex, offsetBy: -commentSectionLength)
 		
 		return convertToUTF16Range(range: commentSectionIndex ..< plainText.endIndex, in: plainText)
@@ -508,11 +507,11 @@ enum VersionControlType {
 				return
 			}
 			
-			let commentUTF16Range = currentCommentUTF16Range()
-			let contentUTF16Range = NSMakeRange(0, commentUTF16Range.location)
+			let commentUTFRange = commentUTF16Range(plainText: currentPlainText())
+			let contentUTFRange = NSMakeRange(0, commentUTFRange.location)
 			
 			// First assume all content has no comment lines
-			updateFont(ZGReadDefaultMessageFont(), utf16Range: contentUTF16Range)
+			updateFont(ZGReadDefaultMessageFont(), utf16Range: contentUTFRange)
 			
 			let textStorage = textView.textStorage
 			
@@ -577,7 +576,7 @@ enum VersionControlType {
 		contentView.needsDisplay = true
 		
 		// The comment section isn't updated by setting the editor style elsewhere, since it's not editable.
-		let commentRange = currentCommentUTF16Range()
+		let commentRange = commentUTF16Range(plainText: currentPlainText())
 		textView.textStorage?.removeAttribute(.foregroundColor, range: commentRange)
 		textView.textStorage?.addAttribute(.foregroundColor, value: style.commentColor, range: commentRange)
 	}
@@ -590,7 +589,7 @@ enum VersionControlType {
 	}
 	
 	private func updateEditorCommentsFont() {
-		updateFont(ZGReadDefaultCommentsFont(), utf16Range: currentCommentUTF16Range())
+		updateFont(ZGReadDefaultCommentsFont(), utf16Range: commentUTF16Range(plainText: currentPlainText()))
 	}
 	
 	private func commitTextRange(plainText: String, commentLength: Int) -> Range<String.Index> {
@@ -657,7 +656,7 @@ enum VersionControlType {
 		// Set comment section attributes
 		let plainAttributedString = NSMutableAttributedString(string: initialPlainText)
 		if commentSectionLength != 0 {
-			plainAttributedString.addAttribute(.foregroundColor, value: style.commentColor, range: currentCommentUTF16Range())
+			plainAttributedString.addAttribute(.foregroundColor, value: style.commentColor, range: commentUTF16Range(plainText: initialPlainText))
 		}
 		
 		// I don't think we want to invoke beginEditing/endEditing, etc, events because we are setting the textview content for the first time,
@@ -738,6 +737,14 @@ enum VersionControlType {
 	
 	func exit(withSuccess success: Bool) {
 		//...
+	}
+	
+	@IBAction @objc func commit(_ sender: AnyObject) {
+		
+	}
+	
+	@IBAction @objc func cancelCommit(_ sender: AnyObject) {
+		
 	}
 	
 	// MARK: ZGCommitViewDelegate
