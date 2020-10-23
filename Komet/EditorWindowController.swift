@@ -34,6 +34,7 @@ enum VersionControlType {
 	private let commentVersionControlType: VersionControlType
 	private let projectNameDisplay: String
 	private let initialPlainText: String
+	private let initialCommitTextRange: Range<String.Index>
 	private let resumedFromSavedCommit: Bool
 	
 	private var style: ZGWindowStyle
@@ -135,7 +136,7 @@ enum VersionControlType {
 	
 	// The content range should extend to before the comments, only allowing one trailing newline in between the comments and content
 	// Make sure to scan from the bottom to top
-	private static func commitTextLength(plainText: String, commentLength: Int) -> Int {
+	private static func commitTextRange(plainText: String, commentLength: Int) -> Range<String.Index> {
 		var bestEndCharacterIndex = plainText.index(plainText.endIndex, offsetBy: -commentLength)
 		var passedNewline = false
 		
@@ -156,8 +157,8 @@ enum VersionControlType {
 				break
 			}
 		}
-		
-		return plainText.distance(from: startIndex, to: bestEndCharacterIndex)
+
+		return startIndex ..< bestEndCharacterIndex
 	}
 	
 	private static func projectName(fileManager: FileManager) -> String {
@@ -244,9 +245,9 @@ enum VersionControlType {
 		
 		// Detect if there's empty content
 		let loadedCommentSectionLength = Self.commentSectionLength(plainText: loadedPlainString, versionControlType: versionControlType)
-		let loadedCommitLength = Self.commitTextLength(plainText: loadedPlainString, commentLength: loadedCommentSectionLength)
+		let loadedCommitRange = Self.commitTextRange(plainText: loadedPlainString, commentLength: loadedCommentSectionLength)
 		
-		let loadedContent = loadedPlainString[loadedPlainString.startIndex ..< loadedPlainString.index(loadedPlainString.startIndex, offsetBy: loadedCommitLength)]
+		let loadedContent = loadedPlainString[loadedCommitRange.lowerBound ..< loadedCommitRange.upperBound]
 		
 		initiallyContainedEmptyContent = (loadedContent.trimmingCharacters(in: .newlines).count == 0)
 		
@@ -299,10 +300,12 @@ enum VersionControlType {
 		if let savedCommitMessage = lastSavedCommitMessage {
 			initialPlainText = savedCommitMessage.appending(loadedPlainString)
 			commentSectionLength = Self.commentSectionLength(plainText: initialPlainText, versionControlType: commentVersionControlType)
+			initialCommitTextRange = Self.commitTextRange(plainText: initialPlainText, commentLength: commentSectionLength)
 			resumedFromSavedCommit = true
 		} else {
 			initialPlainText = loadedPlainString
 			commentSectionLength = loadedCommentSectionLength
+			initialCommitTextRange = loadedCommitRange
 			resumedFromSavedCommit = false
 		}
 		
@@ -592,10 +595,6 @@ enum VersionControlType {
 		updateFont(ZGReadDefaultCommentsFont(), utf16Range: commentUTF16Range(plainText: currentPlainText()))
 	}
 	
-	private func commitTextRange(plainText: String, commentLength: Int) -> Range<String.Index> {
-		return plainText.startIndex ..< plainText.endIndex
-	}
-	
 	@objc override func windowDidLoad() {
 		self.window?.setFrameUsingName(ZGEditorWindowFrameNameKey)
 
@@ -673,11 +672,10 @@ enum VersionControlType {
 		
 		// If we're resuming a canceled commit message, select all the contents
 		// Otherwise point the selection at the end of the message contents
-		let commitRange = commitTextRange(plainText: initialPlainText, commentLength: commentSectionLength)
 		if resumedFromSavedCommit {
-			textView.setSelectedRange(convertToUTF16Range(range: commitRange, in: initialPlainText))
+			textView.setSelectedRange(convertToUTF16Range(range: initialCommitTextRange, in: initialPlainText))
 		} else {
-			textView.setSelectedRange(convertToUTF16Range(range: commitRange.upperBound ..< commitRange.upperBound, in: initialPlainText))
+			textView.setSelectedRange(convertToUTF16Range(range: initialCommitTextRange.upperBound ..< initialCommitTextRange.upperBound, in: initialPlainText))
 		}
 		
 		func showBranchName() {
