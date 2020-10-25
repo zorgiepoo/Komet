@@ -180,7 +180,7 @@ typealias StatFS = statfs
 	}
 	
 	@objc func applicationWillTerminate(_ notification: Notification) {
-		editorWindowController?.exit(withSuccess: false)
+		editorWindowController?.exit(success: false)
 	}
 	
 	@objc @IBAction func showPreferences(_ sender: AnyObject) {
