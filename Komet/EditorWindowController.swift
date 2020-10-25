@@ -34,7 +34,7 @@ enum VersionControlType {
 	private let commentVersionControlType: VersionControlType
 	private let projectNameDisplay: String
 	private let initialPlainText: String
-	private let initialCommitTextRange: Range<String.Index>
+	private let initialCommitTextRange: Range<String.UTF16View.Index>
 	private let resumedFromSavedCommit: Bool
 	
 	private var style: ZGWindowStyle
@@ -131,16 +131,18 @@ enum VersionControlType {
 			characterIndex = lineEndIndex
 		}
 		
-		return foundCommentSection ? (plainText.distance(from: commentSectionCharacterIndex, to: plainTextEndIndex)) : 0
+		return foundCommentSection ? (plainText.utf16.count - commentSectionCharacterIndex.utf16Offset(in: plainText)) : 0
 	}
 	
 	// The content range should extend to before the comments, only allowing one trailing newline in between the comments and content
 	// Make sure to scan from the bottom to top
-	private static func commitTextRange(plainText: String, commentLength: Int) -> Range<String.Index> {
-		var bestEndCharacterIndex = plainText.index(plainText.endIndex, offsetBy: -commentLength)
+	private static func commitTextRange(plainText: String, commentLength: Int) -> Range<String.UTF16View.Index> {
+		let utf16View = plainText.utf16
+		var bestEndCharacterIndex = utf16View.index(utf16View.endIndex, offsetBy: -commentLength)
+		
 		var passedNewline = false
 		
-		let startIndex = plainText.startIndex
+		let startIndex = utf16View.startIndex
 		while bestEndCharacterIndex > startIndex {
 			let priorCharacterIndex = plainText.index(before: bestEndCharacterIndex)
 			
@@ -404,12 +406,13 @@ enum VersionControlType {
 		updateCurrentStyle()
 	}
 	
-	private func commentSectionIndex(plainText: String) -> String.Index {
-		return plainText.index(plainText.endIndex, offsetBy: -commentSectionLength)
+	private func commentSectionIndex(plainUTF16Text: String.UTF16View) -> String.UTF16View.Index {
+		return plainUTF16Text.index(plainUTF16Text.endIndex, offsetBy: -commentSectionLength)
 	}
 	
 	private func commentUTF16Range(plainText: String) -> NSRange {
-		return convertToUTF16Range(range: commentSectionIndex(plainText: plainText) ..< plainText.endIndex, in: plainText)
+		let utf16View = plainText.utf16
+		return convertToUTF16Range(range: commentSectionIndex(plainUTF16Text: utf16View) ..< utf16View.endIndex, in: plainText)
 	}
 	
 	private func removeBackgroundColors() {
@@ -433,7 +436,8 @@ enum VersionControlType {
 		let plainText = currentPlainText()
 		
 		func retrieveContentLineRanges() -> [Range<String.Index>] {
-			let commentIndex = commentSectionIndex(plainText: plainText)
+			let utf16View = plainText.utf16
+			let commentIndex = commentSectionIndex(plainUTF16Text: utf16View)
 			
 			var lineRanges: [Range<String.Index>] = []
 			var characterIndex = plainText.startIndex
@@ -592,9 +596,11 @@ enum VersionControlType {
 	
 	private func updateEditorMessageFont() {
 		let plainText = currentPlainText()
-		let commentIndex = commentSectionIndex(plainText: plainText)
+		let utf16View = plainText.utf16
 		
-		updateFont(ZGReadDefaultMessageFont(), utf16Range: convertToUTF16Range(range: plainText.startIndex ..< commentIndex, in: plainText))
+		let commentIndex = commentSectionIndex(plainUTF16Text: utf16View)
+		
+		updateFont(ZGReadDefaultMessageFont(), utf16Range: convertToUTF16Range(range: utf16View.startIndex ..< commentIndex, in: plainText))
 	}
 	
 	private func updateEditorCommentsFont() {
@@ -938,7 +944,8 @@ enum VersionControlType {
 			}
 			
 			// Line must be at beginning of comment section or must be newline character
-			guard lineEndIndex == commentSectionIndex(plainText: plainText) || plainText[lineEndIndex].isNewline else {
+			let utf16View = plainText.utf16
+			guard lineEndIndex == commentSectionIndex(plainUTF16Text: utf16View) || plainText[lineEndIndex].isNewline else {
 				return false
 			}
 		}
