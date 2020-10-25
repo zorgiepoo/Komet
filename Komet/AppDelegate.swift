@@ -17,6 +17,12 @@ typealias StatFS = statfs
 	var preferencesWindowController: ZGPreferencesWindowController?
 	var updaterController: ZGUpdaterController?
 	
+	@objc override init() {
+		ZGEditorWindowController.registerDefaults()
+		
+		super.init()
+	}
+	
 	@objc func applicationDidFinishLaunching(_ notification: Notification) {
 		NSApp.activate(ignoringOtherApps: true)
 		NSApp.isAutomaticCustomizeTouchBarMenuItemEnabled = true
@@ -174,7 +180,7 @@ typealias StatFS = statfs
 	}
 	
 	@objc func applicationWillTerminate(_ notification: Notification) {
-		editorWindowController?.exit(withSuccess: false)
+		editorWindowController?.exit(success: false)
 	}
 	
 	@objc @IBAction func showPreferences(_ sender: AnyObject) {

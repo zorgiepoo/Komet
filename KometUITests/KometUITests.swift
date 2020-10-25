@@ -224,6 +224,43 @@ class KometUITests: XCTestCase {
 		XCTAssertEqual(finalContent, "\(subject)\n\n\(body)\(app.initialContent)")
 	}
 	
+	// MARK: Empty file
+	
+	func testEmptyCommitWithSubject() throws {
+		let app = try KometApp(filename: "empty")
+		
+		let subject = "Hello there"
+		app.typeText(subject)
+		
+		let (breadcrumbs, finalContent) = try app.commit()
+		XCTAssertEqual(breadcrumbs!.exitStatus, 0, "commit failed with non-zero status")
+		XCTAssertEqual(finalContent, "\(subject)\n")
+	}
+	
+	func testEmptyCommitWithEmptySubjectAndNewline() throws {
+		let app = try KometApp(filename: "empty")
+		app.typeText("\n")
+		
+		let (breadcrumbs, finalContent) = try app.commit()
+		XCTAssertEqual(breadcrumbs!.exitStatus, 0, "commit failed with non-zero status")
+		XCTAssertEqual(finalContent, "\n\n")
+	}
+	
+	func testEmptyCommitWithSubjectBodyAndNewline() throws {
+		let app = try KometApp(filename: "empty")
+		
+		let subject = "Hello there"
+		app.typeText(subject)
+		app.typeText("\n")
+		
+		let body = "ok"
+		app.typeText(body)
+		
+		let (breadcrumbs, finalContent) = try app.commit()
+		XCTAssertEqual(breadcrumbs!.exitStatus, 0, "commit failed with non-zero status")
+		XCTAssertEqual(finalContent, "\(subject)\n\n\(body)\n")
+	}
+	
 	// MARK: Selection
 
 	func testSubjectSelection() throws {

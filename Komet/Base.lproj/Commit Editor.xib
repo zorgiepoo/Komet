@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14313.3.2" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="17506" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14313.3.2"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="17506"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="ZGEditorWindowController">
             <connections>
-                <outlet property="_cancelButton" destination="eoZ-dv-vM8" id="nMP-mJ-75q"/>
-                <outlet property="_commitButton" destination="SIQ-xl-8MY" id="G77-Pg-TwW"/>
-                <outlet property="_commitLabelTextField" destination="vV7-fu-K3M" id="jXI-Po-BbJ"/>
-                <outlet property="_contentView" destination="5Ms-NX-CHZ" id="pgk-UA-0ri"/>
-                <outlet property="_horizontalBarDivider" destination="iBM-Yy-b1k" id="i8i-i7-ukG"/>
-                <outlet property="_scrollView" destination="ZR8-bz-mFA" id="gnm-JR-QTh"/>
-                <outlet property="_textView" destination="AXg-Fl-XGk" id="bHs-ph-oOV"/>
-                <outlet property="_topBar" destination="iuq-58-oil" id="ptU-zp-Hrn"/>
+                <outlet property="cancelButton" destination="eoZ-dv-vM8" id="nut-R3-GfT"/>
+                <outlet property="commitButton" destination="SIQ-xl-8MY" id="hx9-Vx-VqX"/>
+                <outlet property="commitLabelTextField" destination="vV7-fu-K3M" id="cY8-MU-xAx"/>
+                <outlet property="contentView" destination="5Ms-NX-CHZ" id="a5v-Qc-MbF"/>
+                <outlet property="horizontalBarDivider" destination="iBM-Yy-b1k" id="mfH-98-euX"/>
+                <outlet property="scrollView" destination="ZR8-bz-mFA" id="1L6-2R-0nQ"/>
+                <outlet property="textView" destination="AXg-Fl-XGk" id="Ryb-PN-n6P"/>
+                <outlet property="topBar" destination="iuq-58-oil" id="in9-OF-xMR"/>
                 <outlet property="window" destination="4Y4-O8-fQs" id="9cp-uO-prZ"/>
             </connections>
         </customObject>
@@ -25,7 +25,7 @@
             <windowStyleMask key="styleMask" titled="YES" resizable="YES" fullSizeContentView="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="205" y="188" width="500" height="329"/>
-            <rect key="screenRect" x="0.0" y="0.0" width="2560" height="1417"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1440" height="877"/>
             <value key="minSize" type="size" width="300" height="200"/>
             <view key="contentView" id="UXa-uU-h9N">
                 <rect key="frame" x="0.0" y="0.0" width="500" height="329"/>
@@ -35,7 +35,7 @@
                         <rect key="frame" x="0.0" y="306" width="500" height="23"/>
                         <subviews>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="vV7-fu-K3M">
-                                <rect key="frame" x="3" y="4" width="75" height="15"/>
+                                <rect key="frame" x="3" y="5" width="75" height="14"/>
                                 <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="project_name" id="rGL-rv-935">
                                     <font key="font" metaFont="smallSystem"/>
                                     <color key="textColor" name="disabledControlTextColor" catalog="System" colorSpace="catalog"/>
@@ -60,7 +60,7 @@ DQ
                                 </connections>
                             </button>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="bxH-iH-acy">
-                                <rect key="frame" x="381" y="5" width="55" height="15"/>
+                                <rect key="frame" x="381" y="6" width="55" height="14"/>
                                 <buttonCell key="cell" type="roundRect" title="cancel" bezelStyle="roundedRect" alignment="center" controlSize="small" lineBreakMode="truncatingTail" state="on" imageScaling="proportionallyDown" inset="2" id="eoZ-dv-vM8">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="smallSystem"/>
