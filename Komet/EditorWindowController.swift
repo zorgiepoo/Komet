@@ -433,11 +433,11 @@ enum VersionControlType {
 		let plainText = currentPlainText()
 		
 		func retrieveContentLineRanges() -> [Range<String.Index>] {
-			let commentSectionIndex = plainText.index(plainText.endIndex, offsetBy: -commentSectionLength)
+			let commentIndex = commentSectionIndex(plainText: plainText)
 			
 			var lineRanges: [Range<String.Index>] = []
 			var characterIndex = plainText.startIndex
-			while characterIndex < commentSectionIndex {
+			while characterIndex < commentIndex {
 				var lineStartIndex = String.Index(utf16Offset: 0, in: plainText)
 				var lineEndIndex = String.Index(utf16Offset: 0, in: plainText)
 				var contentEndIndex = String.Index(utf16Offset: 0, in: plainText)
@@ -592,9 +592,9 @@ enum VersionControlType {
 	
 	private func updateEditorMessageFont() {
 		let plainText = currentPlainText()
-		let commentSectionIndex = plainText.index(plainText.endIndex, offsetBy: -commentSectionLength)
+		let commentIndex = commentSectionIndex(plainText: plainText)
 		
-		updateFont(ZGReadDefaultMessageFont(), utf16Range: convertToUTF16Range(range: plainText.startIndex ..< commentSectionIndex, in: plainText))
+		updateFont(ZGReadDefaultMessageFont(), utf16Range: convertToUTF16Range(range: plainText.startIndex ..< commentIndex, in: plainText))
 	}
 	
 	private func updateEditorCommentsFont() {
