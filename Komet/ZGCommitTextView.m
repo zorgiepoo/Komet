@@ -88,9 +88,6 @@
 	}
 }
 
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wpartial-availability"
-
 static NSCustomTouchBarItem *ZGCreateCustomTouchBarButton(NSString *identifier, NSString *title, id target, SEL action)
 {
 	NSCustomTouchBarItem *touchBarItem = [[NSCustomTouchBarItem alloc] initWithIdentifier:identifier];
@@ -126,7 +123,5 @@ static NSCustomTouchBarItem *ZGCreateCustomTouchBarButton(NSString *identifier, 
 	touchBar.customizationAllowedItemIdentifiers = @[NSTouchBarItemIdentifierCharacterPicker, ZGTouchBarIdentifierCancel, ZGTouchBarIdentifierCommit, NSTouchBarItemIdentifierFlexibleSpace, NSTouchBarItemIdentifierCandidateList];
 	return touchBar;
 }
-
-#pragma clang diagnostic pop
 
 @end

@@ -155,12 +155,12 @@ typedef NS_ENUM(NSInteger, ZGSelectedFontType)
 	_recommendedSubjectLengthLimitTextField.integerValue = (NSInteger)ZGReadDefaultRecommendedSubjectLengthLimit();
 	
 	BOOL enabledSubjectLengthLimit = ZGReadDefaultRecommendedSubjectLengthLimitEnabled();
-	_recommendedSubjectLengthLimitEnabledCheckbox.state = (enabledSubjectLengthLimit ? NSOnState : NSOffState);
+	_recommendedSubjectLengthLimitEnabledCheckbox.state = (enabledSubjectLengthLimit ? NSControlStateValueOn : NSControlStateValueOff);
 	_recommendedSubjectLengthLimitTextField.enabled = enabledSubjectLengthLimit;
 	[self setTextField:_recommendedSubjectLengthLimitDescriptionTextField enabled:enabledSubjectLengthLimit];
 	
 	BOOL enabledBodyLineLengthLimit = ZGReadDefaultRecommendedBodyLineLengthLimitEnabled();
-	_recommendedBodyLineLengthLimitEnabledCheckbox.state = (enabledBodyLineLengthLimit ? NSOnState : NSOffState);
+	_recommendedBodyLineLengthLimitEnabledCheckbox.state = (enabledBodyLineLengthLimit ? NSControlStateValueOn : NSControlStateValueOff);
 	_recommendedBodyLineLengthLimitTextField.enabled = enabledBodyLineLengthLimit;
 	[self setTextField:_recommendedBodyLineLengthLimitDescriptionTextField enabled:enabledBodyLineLengthLimit];
 }
@@ -179,7 +179,7 @@ typedef NS_ENUM(NSInteger, ZGSelectedFontType)
 
 - (IBAction)changeRecommendedSubjectLengthLimitEnabled:(id)__unused sender
 {
-	BOOL enabled = (_recommendedSubjectLengthLimitEnabledCheckbox.state == NSOnState);
+	BOOL enabled = (_recommendedSubjectLengthLimitEnabledCheckbox.state == NSControlStateValueOn);
 	
 	ZGWriteDefaultRecommendedSubjectLengthLimitEnabled(enabled);
 	_recommendedSubjectLengthLimitTextField.enabled = enabled;
@@ -196,7 +196,7 @@ typedef NS_ENUM(NSInteger, ZGSelectedFontType)
 
 - (IBAction)changeRecommendedBodyLineLengthLimitEnabled:(id)__unused sender
 {
-	BOOL enabled = (_recommendedBodyLineLengthLimitEnabledCheckbox.state == NSOnState);
+	BOOL enabled = (_recommendedBodyLineLengthLimitEnabledCheckbox.state == NSControlStateValueOn);
 	
 	ZGWriteDefaultRecommendedBodyLineLengthLimitEnabled(enabled);
 	_recommendedBodyLineLengthLimitTextField.enabled = enabled;
@@ -217,10 +217,10 @@ typedef NS_ENUM(NSInteger, ZGSelectedFontType)
 	[self.window.toolbar setSelectedItemIdentifier:ZGToolbarAdvancedIdentifier];
 	
 	BOOL automaticInsertion = ZGReadDefaultAutomaticNewlineInsertionAfterSubjectLine();
-	_automaticNewlineInsertionAfterSubjectLineCheckbox.state = (automaticInsertion ? NSOnState : NSOffState);
+	_automaticNewlineInsertionAfterSubjectLineCheckbox.state = (automaticInsertion ? NSControlStateValueOn : NSControlStateValueOff);
 	
 	BOOL resumeIncompleteSession = ZGReadDefaultResumeIncompleteSession();
-	_resumeLastIncompleteSessionCheckbox.state = (resumeIncompleteSession ? NSOnState : NSOffState);
+	_resumeLastIncompleteSessionCheckbox.state = (resumeIncompleteSession ? NSControlStateValueOn : NSControlStateValueOff);
 	
 	SPUUpdaterSettings *updaterSettings = [[SPUUpdaterSettings alloc] initWithHostBundle:[NSBundle mainBundle]];
 	NSFileManager *fileManager = [[NSFileManager alloc] init];
@@ -230,23 +230,23 @@ typedef NS_ENUM(NSInteger, ZGSelectedFontType)
 	// (Sparkle has a better check, but it's not as simple/efficient. Even if we are wrong here, Sparkle still won't be able to install updates automatically).
 	BOOL canWriteToApp = ([fileManager isWritableFileAtPath:bundlePath] && [fileManager isWritableFileAtPath:bundlePath.stringByDeletingLastPathComponent]);
 	
-	_automaticallyInstallUpdatesCheckbox.state = ((canWriteToApp && updaterSettings.automaticallyChecksForUpdates) ? NSOnState : NSOffState);
+	_automaticallyInstallUpdatesCheckbox.state = ((canWriteToApp && updaterSettings.automaticallyChecksForUpdates) ? NSControlStateValueOn : NSControlStateValueOff);
 	_automaticallyInstallUpdatesCheckbox.enabled = canWriteToApp;
 }
 
 - (IBAction)changeAutomaticNewlineInsertionAfterSubjectLine:(id)__unused sender
 {
-	ZGWriteDefaultAutomaticNewlineInsertionAfterSubjectLine(_automaticNewlineInsertionAfterSubjectLineCheckbox.state == NSOnState);
+	ZGWriteDefaultAutomaticNewlineInsertionAfterSubjectLine(_automaticNewlineInsertionAfterSubjectLineCheckbox.state == NSControlStateValueOn);
 }
 
 - (IBAction)changeResumeLastIncompleteSession:(id)__unused sender
 {
-	ZGWriteDefaultResumeIncompleteSession(_resumeLastIncompleteSessionCheckbox.state == NSOnState);
+	ZGWriteDefaultResumeIncompleteSession(_resumeLastIncompleteSessionCheckbox.state == NSControlStateValueOn);
 }
 
 - (IBAction)changeAutomaticallyInstallUpdates:(id)__unused sender
 {
-	[_updaterListener updaterSettingsChangedAutomaticallyInstallingUpdates:(_automaticallyInstallUpdatesCheckbox.state == NSOnState)];
+	[_updaterListener updaterSettingsChangedAutomaticallyInstallingUpdates:(_automaticallyInstallUpdatesCheckbox.state == NSControlStateValueOn)];
 }
 
 @end

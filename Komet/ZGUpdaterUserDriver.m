@@ -50,7 +50,7 @@
 	if (userInitiatedCheck)
 	{
 		NSAlert *alert = [[NSAlert alloc] init];
-		alert.alertStyle = NSInformationalAlertStyle;
+		alert.alertStyle = NSAlertStyleInformational;
 		alert.informativeText = informativeText;
 		alert.messageText = NSLocalizedString(@"updaterNewUpdateAlert", nil);
 		[alert addButtonWithTitle:NSLocalizedString(@"updaterInstallOnQuit", nil)];
@@ -95,7 +95,7 @@
 	if (userInitiated)
 	{
 		NSAlert *alert = [[NSAlert alloc] init];
-		alert.alertStyle = NSInformationalAlertStyle;
+		alert.alertStyle = NSAlertStyleInformational;
 		alert.informativeText = [NSString stringWithFormat:NSLocalizedString(@"updaterNewUpdateResumableFormat", nil), appcastItem.displayVersionString];
 		alert.messageText = NSLocalizedString(@"updaterNewUpdateAlert", nil);
 		[alert addButtonWithTitle:NSLocalizedString(@"updaterOK", nil)];
@@ -115,7 +115,7 @@
 - (void)showUpdateNotFoundWithAcknowledgement:(void (^)(void))acknowledgement
 {
 	NSAlert *alert = [[NSAlert alloc] init];
-	alert.alertStyle = NSInformationalAlertStyle;
+	alert.alertStyle = NSAlertStyleInformational;
 	alert.informativeText = NSLocalizedString(@"updaterLatestVersionInstalled", nil);
 	alert.messageText = NSLocalizedString(@"updaterNoUpdateAvailable", nil);
 	[alert addButtonWithTitle:NSLocalizedString(@"updaterOK", nil)];
