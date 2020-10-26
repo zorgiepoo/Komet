@@ -87,22 +87,23 @@ class KometApp {
 		let _ = try? FileManager.default.removeItem(at: tempDirectoryURL)
 	}
 	
-	private func waitForExit() throws -> (ZGBreadcrumbs?, String) {
+	private func waitForExit() throws -> (Breadcrumbs?, String) {
 		var status: Int32 = 0
 		waitpid(pid, &status, 0)
 		
-		let breadcrumbs = ZGBreadcrumbs(readingFrom: breadcrumbsURL)
+		let breadcrumbsData = try Data(contentsOf: breadcrumbsURL)
+		let breadcrumbs = try JSONDecoder().decode(Breadcrumbs.self, from: breadcrumbsData)
 		
 		let finalContent = try String(contentsOf: fileURL)
 		return (breadcrumbs, finalContent)
 	}
 	
-	func commit() throws -> (ZGBreadcrumbs?, String) {
+	func commit() throws -> (Breadcrumbs?, String) {
 		application.menuBars.menuBarItems["File"].menuItems["Commit"].click()
 		return try waitForExit()
 	}
 	
-	func cancel() throws -> (ZGBreadcrumbs?, String) {
+	func cancel() throws -> (Breadcrumbs?, String) {
 		application.menuBars.menuBarItems["File"].menuItems["Cancel"].click()
 		return try waitForExit()
 	}
@@ -395,10 +396,7 @@ class KometUITests: XCTestCase {
 		let overflowRanges = breadcrumbs!.textOverflowRanges
 		XCTAssertEqual(overflowRanges.count, 1)
 		
-		let rangeObject = overflowRanges[0] as! NSValue
-		let range = rangeObject.rangeValue
-		
-		XCTAssertEqual(range, NSMakeRange(OVERFLOW_SUBJECT_THRESHOLD, 1))
+		XCTAssertEqual(overflowRanges[0], OVERFLOW_SUBJECT_THRESHOLD ..< OVERFLOW_SUBJECT_THRESHOLD + 1)
 	}
 	
 	func testNewCommitWithLongOverflowingSubjectLine() throws {
@@ -412,10 +410,7 @@ class KometUITests: XCTestCase {
 		let overflowRanges = breadcrumbs!.textOverflowRanges
 		XCTAssertEqual(overflowRanges.count, 1)
 		
-		let rangeObject = overflowRanges[0] as! NSValue
-		let range = rangeObject.rangeValue
-		
-		XCTAssertEqual(range, NSMakeRange(OVERFLOW_SUBJECT_THRESHOLD, newContent.count - OVERFLOW_SUBJECT_THRESHOLD))
+		XCTAssertEqual(overflowRanges[0], OVERFLOW_SUBJECT_THRESHOLD ..< newContent.count)
 	}
 	
 	func testNewCommitWithNoOverflowingBody() throws {
@@ -462,10 +457,8 @@ class KometUITests: XCTestCase {
 		let overflowRanges = breadcrumbs!.textOverflowRanges
 		XCTAssertEqual(overflowRanges.count, 1)
 		
-		let rangeObject = overflowRanges[0] as! NSValue
-		let range = rangeObject.rangeValue
-		
-		XCTAssertEqual(range, NSMakeRange(subject.count + "\n\n".count + OVERFLOW_BODY_THRESHOLD, 1))
+		let location = subject.count + "\n\n".count + OVERFLOW_BODY_THRESHOLD
+		XCTAssertEqual(overflowRanges[0], location ..< location + 1)
 	}
 	
 	func testNewCommitWithLongOverflowingBody() throws {
@@ -482,10 +475,8 @@ class KometUITests: XCTestCase {
 		let overflowRanges = breadcrumbs!.textOverflowRanges
 		XCTAssertEqual(overflowRanges.count, 1)
 		
-		let rangeObject = overflowRanges[0] as! NSValue
-		let range = rangeObject.rangeValue
-		
-		XCTAssertEqual(range, NSMakeRange(subject.count + "\n\n".count + OVERFLOW_BODY_THRESHOLD, body.count - OVERFLOW_BODY_THRESHOLD))
+		let lineLocation = subject.count + "\n\n".count
+		XCTAssertEqual(overflowRanges[0], (lineLocation + OVERFLOW_BODY_THRESHOLD) ..< (lineLocation + body.count))
 	}
 	
 	func testNewCommitWithMultipleOverflowingLines() throws {
@@ -520,26 +511,19 @@ class KometUITests: XCTestCase {
 		XCTAssertEqual(overflowRanges.count, 3)
 		
 		do {
-			let rangeObject = overflowRanges[0] as! NSValue
-			let range = rangeObject.rangeValue
-			
-			XCTAssertEqual(range, NSMakeRange(OVERFLOW_SUBJECT_THRESHOLD, subject.count - OVERFLOW_SUBJECT_THRESHOLD))
+			XCTAssertEqual(overflowRanges[0], OVERFLOW_SUBJECT_THRESHOLD ..< subject.count)
 		}
 		
 		do {
-			let rangeObject = overflowRanges[1] as! NSValue
-			let range = rangeObject.rangeValue
+			let lineLocation = subject.count + "\n\n".count + body1.count + "\n".count
 			
-			XCTAssertEqual(range, NSMakeRange(subject.count + "\n\n".count + body1.count + "\n".count + OVERFLOW_BODY_THRESHOLD, body2.count - OVERFLOW_BODY_THRESHOLD))
+			XCTAssertEqual(overflowRanges[1], (lineLocation + OVERFLOW_BODY_THRESHOLD) ..< (lineLocation + body2.count))
 		}
 		
 		do {
-			let rangeObject = overflowRanges[2] as! NSValue
-			let range = rangeObject.rangeValue
-			
 			let skipCount = subject.count + "\n\n".count + [body1, body2, body3, body4].joined(separator: "\n").count + "\n".count
 			
-			XCTAssertEqual(range, NSMakeRange(skipCount + OVERFLOW_BODY_THRESHOLD, body5.count - OVERFLOW_BODY_THRESHOLD))
+			XCTAssertEqual(overflowRanges[2], (skipCount + OVERFLOW_BODY_THRESHOLD) ..< (skipCount + body5.count))
 		}
 	}
 	
@@ -570,10 +554,8 @@ class KometUITests: XCTestCase {
 		let overflowRanges = breadcrumbs!.textOverflowRanges
 		XCTAssertEqual(overflowRanges.count, 1)
 		
-		let rangeObject = overflowRanges[0] as! NSValue
-		let range = rangeObject.rangeValue
-		
-		XCTAssertEqual(range, NSMakeRange(OVERFLOW_SUBJECT_THRESHOLD, 1))
+		let location = OVERFLOW_SUBJECT_THRESHOLD
+		XCTAssertEqual(overflowRanges[0], location ..< location + 1)
 	}
 	
 	func testNoBodyOverflowAfterDeletion() throws {
@@ -613,10 +595,8 @@ class KometUITests: XCTestCase {
 		let overflowRanges = breadcrumbs!.textOverflowRanges
 		XCTAssertEqual(overflowRanges.count, 1)
 		
-		let rangeObject = overflowRanges[0] as! NSValue
-		let range = rangeObject.rangeValue
-		
-		XCTAssertEqual(range, NSMakeRange(subject.count + "\n\n".count + OVERFLOW_BODY_THRESHOLD, 1))
+		let location = subject.count + "\n\n".count + OVERFLOW_BODY_THRESHOLD
+		XCTAssertEqual(overflowRanges[0], location ..< location + 1)
 	}
 	
 	// MARK: Comments
@@ -680,10 +660,8 @@ class KometUITests: XCTestCase {
 		let commentLineRanges = breadcrumbs!.commentLineRanges
 		XCTAssertEqual(commentLineRanges.count, 1)
 		
-		let rangeObject = commentLineRanges[0] as! NSValue
-		let range = rangeObject.rangeValue
-		
-		XCTAssertEqual(range, NSMakeRange(subject.count + "\n\n".count, body1.count))
+		let lineLocation = subject.count + "\n\n".count
+		XCTAssertEqual(commentLineRanges[0], lineLocation ..< lineLocation + body1.count)
 	}
 	
 	func testDeletingCommentContent() throws {
@@ -752,8 +730,8 @@ class KometUITests: XCTestCase {
 		let commentLineRanges = breadcrumbs!.commentLineRanges
 		XCTAssertEqual(commentLineRanges.count, 1)
 		
-		let commentLineRange = commentLineRanges[0] as! NSValue
-		XCTAssertEqual(commentLineRange.rangeValue, NSMakeRange(subject.count + "\n\n".count, commentLine.count))
+		let commentLineLocation = subject.count + "\n\n".count
+		XCTAssertEqual(commentLineRanges[0], commentLineLocation ..< commentLineLocation + commentLine.count)
 		
 		let finalLineComponents = finalContent.components(separatedBy: "\n")
 		let initialLineComponents = app.initialContent.components(separatedBy: "\n")

@@ -16,9 +16,9 @@
 		7211A986253BCF1600F95773 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7211A985253BCF1600F95773 /* AppDelegate.swift */; };
 		7211A996253C06F200F95773 /* EditorWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7211A995253C06F200F95773 /* EditorWindowController.swift */; };
 		7211A9AC2546170900F95773 /* empty in Resources */ = {isa = PBXBuildFile; fileRef = 7211A9AB2546170800F95773 /* empty */; };
+		7211A9B12546704C00F95773 /* Breadcrumbs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7211A9B02546704C00F95773 /* Breadcrumbs.swift */; };
+		7211A9B22546704C00F95773 /* Breadcrumbs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7211A9B02546704C00F95773 /* Breadcrumbs.swift */; };
 		72120FB825328B490018201E /* amended-commit in Resources */ = {isa = PBXBuildFile; fileRef = 72120FB725328B490018201E /* amended-commit */; };
-		72120FBD2532DBF20018201E /* ZGBreadcrumbs.m in Sources */ = {isa = PBXBuildFile; fileRef = 72120FBC2532DBF20018201E /* ZGBreadcrumbs.m */; };
-		72120FBF2532F0840018201E /* ZGBreadcrumbs.m in Sources */ = {isa = PBXBuildFile; fileRef = 72120FBC2532DBF20018201E /* ZGBreadcrumbs.m */; };
 		72120FC42533EC570018201E /* linux-partial in Resources */ = {isa = PBXBuildFile; fileRef = 72120FC32533EC570018201E /* linux-partial */; };
 		72120FC82533F7650018201E /* interactive-rebase in Resources */ = {isa = PBXBuildFile; fileRef = 72120FC72533F7650018201E /* interactive-rebase */; };
 		72120FD22533F91D0018201E /* interactive-rebase-2 in Resources */ = {isa = PBXBuildFile; fileRef = 72120FD12533F91D0018201E /* interactive-rebase-2 */; };
@@ -78,10 +78,9 @@
 		7211A985253BCF1600F95773 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		7211A995253C06F200F95773 /* EditorWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorWindowController.swift; sourceTree = "<group>"; };
 		7211A9AB2546170800F95773 /* empty */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = empty; sourceTree = "<group>"; };
+		7211A9B02546704C00F95773 /* Breadcrumbs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Breadcrumbs.swift; sourceTree = "<group>"; };
 		72120FB52532660F0018201E /* ZGUserDefaultKeys.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZGUserDefaultKeys.h; sourceTree = "<group>"; };
 		72120FB725328B490018201E /* amended-commit */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "amended-commit"; sourceTree = "<group>"; };
-		72120FBB2532DBF20018201E /* ZGBreadcrumbs.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZGBreadcrumbs.h; sourceTree = "<group>"; };
-		72120FBC2532DBF20018201E /* ZGBreadcrumbs.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZGBreadcrumbs.m; sourceTree = "<group>"; };
 		72120FC32533EC570018201E /* linux-partial */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "linux-partial"; sourceTree = "<group>"; };
 		72120FC72533F7650018201E /* interactive-rebase */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "interactive-rebase"; sourceTree = "<group>"; };
 		72120FD12533F91D0018201E /* interactive-rebase-2 */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "interactive-rebase-2"; sourceTree = "<group>"; };
@@ -190,8 +189,7 @@
 				7211A985253BCF1600F95773 /* AppDelegate.swift */,
 				72B72CAB1D6412EE0096365F /* ZGCommitTextView.h */,
 				72B72CAC1D6412EE0096365F /* ZGCommitTextView.m */,
-				72120FBB2532DBF20018201E /* ZGBreadcrumbs.h */,
-				72120FBC2532DBF20018201E /* ZGBreadcrumbs.m */,
+				7211A9B02546704C00F95773 /* Breadcrumbs.swift */,
 				7211A995253C06F200F95773 /* EditorWindowController.swift */,
 				3A05CB0C1D7EA56B005106E9 /* ZGWindowStyle.h */,
 				3A05CB0D1D7EA56B005106E9 /* ZGWindowStyle.m */,
@@ -374,7 +372,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				72120FBF2532F0840018201E /* ZGBreadcrumbs.m in Sources */,
+				7211A9B22546704C00F95773 /* Breadcrumbs.swift in Sources */,
 				720DF18C252AE3F7003AD7FB /* KometUITests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -386,7 +384,7 @@
 				7211A996253C06F200F95773 /* EditorWindowController.swift in Sources */,
 				7211A986253BCF1600F95773 /* AppDelegate.swift in Sources */,
 				72D10C571D7334CA00ED32BC /* ZGPreferencesWindowController.m in Sources */,
-				72120FBD2532DBF20018201E /* ZGBreadcrumbs.m in Sources */,
+				7211A9B12546704C00F95773 /* Breadcrumbs.swift in Sources */,
 				7240063C1D73BE84001042CF /* ZGUpdaterUserDriver.m in Sources */,
 				3A05CB0E1D7EA56B005106E9 /* ZGWindowStyle.m in Sources */,
 				724006331D73B2CA001042CF /* ZGUpdaterController.m in Sources */,

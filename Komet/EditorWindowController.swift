@@ -25,7 +25,7 @@ enum VersionControlType {
 	private let fileURL: URL
 	private let temporaryDirectoryURL: URL?
 	private let tutorialMode: Bool
-	private let breadcrumbs: ZGBreadcrumbs?
+	private var breadcrumbs: Breadcrumbs?
 	
 	private let initiallyContainedEmptyContent: Bool
 	private let isSquashMessage: Bool
@@ -191,7 +191,7 @@ enum VersionControlType {
 		self.temporaryDirectoryURL = temporaryDirectoryURL
 		self.tutorialMode = tutorialMode
 		
-		breadcrumbs = ZGReadDefaultBreadcrumbsURL().flatMap({ ZGBreadcrumbs(writingTo: $0) })
+		breadcrumbs = (ZGReadDefaultBreadcrumbsURL() != nil) ? Breadcrumbs() : nil
 		
 		style = ZGWindowStyle.init(theme: Self.styleTheme(defaultTheme: ZGReadDefaultWindowStyleTheme(), effectiveAppearance: NSApp.effectiveAppearance))
 		
@@ -418,7 +418,7 @@ enum VersionControlType {
 	private func removeBackgroundColors() {
 		let plainText = currentPlainText()
 		textView.layoutManager?.removeTemporaryAttribute(.backgroundColor, forCharacterRange: NSMakeRange(0, plainText.endIndex.utf16Offset(in: plainText)))
-		breadcrumbs?.textOverflowRanges.removeAllObjects()
+		breadcrumbs?.textOverflowRanges.removeAll()
 	}
 	
 	private func updateFont(_ font: NSFont, utf16Range: NSRange) {
@@ -469,11 +469,12 @@ enum VersionControlType {
 				textView.layoutManager?.addTemporaryAttribute(.backgroundColor, value: style.overflowColor, forCharacterRange: utf16Range)
 			}
 			
-			if let breadcrumbs = breadcrumbs {
-				let lowerIndex = plainText.distance(from: plainText.startIndex, to: overflowRange.lowerBound)
-				let upperIndex = plainText.distance(from: plainText.startIndex, to: overflowRange.upperBound)
+			// Don't re-assign / make another copy of breadcrumbs
+			if breadcrumbs != nil {
+				let lowerIndex = overflowRange.lowerBound.utf16Offset(in: plainText)
+				let upperIndex = overflowRange.upperBound.utf16Offset(in: plainText)
 				
-				breadcrumbs.textOverflowRanges.add(NSMakeRange(lowerIndex, upperIndex - lowerIndex))
+				breadcrumbs!.textOverflowRanges.append(lowerIndex ..< upperIndex)
 			}
 		}
 		
@@ -519,7 +520,7 @@ enum VersionControlType {
 			
 			// First assume all content has no comment lines
 			updateFont(ZGReadDefaultMessageFont(), utf16Range: contentUTFRange)
-			breadcrumbs?.commentLineRanges.removeAllObjects()
+			breadcrumbs?.commentLineRanges.removeAll()
 			
 			let textStorage = textView.textStorage
 			
@@ -532,11 +533,12 @@ enum VersionControlType {
 					
 					textStorage?.addAttribute(.foregroundColor, value: style.commentColor, range: utf16LineRange)
 					
-					if let breadcrumbs = breadcrumbs {
-						let lowerIndex = plainText.distance(from: plainText.startIndex, to: contentLineRange.lowerBound)
-						let upperIndex = plainText.distance(from: plainText.startIndex, to: contentLineRange.upperBound)
+					// Don't re-assign / make another copy of breadcrumbs
+					if breadcrumbs != nil {
+						let lowerIndex = contentLineRange.lowerBound.utf16Offset(in: plainText)
+						let upperIndex = contentLineRange.upperBound.utf16Offset(in: plainText)
 						
-						breadcrumbs.commentLineRanges.add(NSMakeRange(lowerIndex, upperIndex - lowerIndex))
+						breadcrumbs!.commentLineRanges.append(lowerIndex ..< upperIndex)
 					}
 					
 					if let font = commentFont {
@@ -660,9 +662,7 @@ enum VersionControlType {
 			textView.zgLoadDefaults()
 		}
 		
-		if let breadcrumbs = breadcrumbs {
-			breadcrumbs.spellChecking = textView.isContinuousSpellCheckingEnabled
-		}
+		breadcrumbs?.spellChecking = textView.isContinuousSpellCheckingEnabled
 		
 		// Set comment section attributes
 		let plainAttributedString = NSMutableAttributedString(string: initialPlainText)
@@ -748,9 +748,15 @@ enum VersionControlType {
 	// MARK: Actions
 	
 	private func exit(status: Int32) -> Never {
-		if let breadcrumbs = breadcrumbs {
+		if var breadcrumbs = breadcrumbs, let breadcrumbsURL = ZGReadDefaultBreadcrumbsURL() {
 			breadcrumbs.exitStatus = status
-			breadcrumbs.saveFile()
+			
+			do {
+				let jsonData = try JSONEncoder().encode(breadcrumbs)
+				try jsonData.write(to: breadcrumbsURL)
+			} catch {
+				print("Failed to save breadcrumbs: \(error)")
+			}
 		}
 		
 		Darwin.exit(status)

@@ -6,7 +6,6 @@
 #import "ZGPreferencesWindowController.h"
 #import "ZGUserDefaultsEditorListener.h"
 #import "ZGCommitTextView.h"
-#import "ZGBreadcrumbs.h"
 #import "ZGUserDefaults.h"
 #import "ZGWindowStyleTheme.h"
 #import "ZGWindowStyle.h"
