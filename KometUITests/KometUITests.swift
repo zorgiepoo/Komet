@@ -795,6 +795,92 @@ class KometUITests: XCTestCase {
 		XCTAssertEqual(subject + app.initialContent, finalContent)
 	}
 	
+	func testSubjectLimitWithEmoji() throws {
+		let app = try KometApp(filename: "new-commit")
+		
+		let subject = "Hello this is a line that will be exactly 69 characters long and yep📝"
+		app.typeText(subject)
+		
+		let (breadcrumbs, _) = try app.commit()
+		XCTAssertEqual(breadcrumbs!.exitStatus, 0)
+		XCTAssertEqual(breadcrumbs!.textOverflowRanges.count, 0)
+	}
+	
+	func testSubjectExceedingLimitWithEmoji() throws {
+		let app = try KometApp(filename: "new-commit")
+		
+		let emoji = "📝"
+		let subject = "Hello this is a line that will be exactly 69 characters long and yepa\(emoji)"
+		app.typeText(subject)
+		
+		let (breadcrumbs, _) = try app.commit()
+		XCTAssertEqual(breadcrumbs!.exitStatus, 0)
+		
+		let textOverflowRanges = breadcrumbs!.textOverflowRanges
+		XCTAssertEqual(textOverflowRanges.count, 1)
+		
+		XCTAssertEqual(textOverflowRanges[0], (subject.utf16.count - emoji.utf16.count) ..< subject.utf16.count)
+	}
+	
+	func testBodyLimitWithEmoji() throws {
+		let app = try KometApp(filename: "new-commit")
+		
+		let subject = "Hello"
+		let body = "Hello this is a line that will be exactly 72 characters long and yepppp📝"
+		
+		app.typeText(subject)
+		app.typeText("\n")
+		app.typeText(body)
+		
+		let (breadcrumbs, _) = try app.commit()
+		XCTAssertEqual(breadcrumbs!.exitStatus, 0)
+		XCTAssertEqual(breadcrumbs!.textOverflowRanges.count, 0)
+	}
+	
+	func testBodyExceedingLimitWithEmoji() throws {
+		let app = try KometApp(filename: "new-commit")
+		
+		let emoji = "📝"
+		let subject = "Hello"
+		let body = "Hello this is a line that will be exactly 72 characters long and yeppppa\(emoji)"
+		
+		app.typeText(subject)
+		app.typeText("\n")
+		app.typeText(body)
+		
+		let (breadcrumbs, _) = try app.commit()
+		XCTAssertEqual(breadcrumbs!.exitStatus, 0)
+		
+		let textOverflowRanges = breadcrumbs!.textOverflowRanges
+		XCTAssertEqual(textOverflowRanges.count, 1)
+		
+		let lineLocation = subject.utf16.count + "\n\n".utf16.count
+		XCTAssertEqual(textOverflowRanges[0], (lineLocation + body.utf16.count - emoji.utf16.count) ..< (lineLocation + body.utf16.count))
+	}
+	
+	func testCommentLineWithEmoji() throws {
+		let app = try KometApp(filename: "new-commit")
+		let subject = "Hello"
+		let emoji = "📝"
+		let body = "# \(emoji) This is a comment line with see"
+		let body2 = "Okay"
+		
+		app.typeText(subject)
+		app.typeText("\n")
+		app.typeText(body)
+		app.typeText("\n")
+		app.typeText(body2)
+		
+		let (breadcrumbs, _) = try app.commit()
+		XCTAssertEqual(breadcrumbs!.exitStatus, 0)
+		
+		let commentLineRanges = breadcrumbs!.commentLineRanges
+		XCTAssertEqual(commentLineRanges.count, 1)
+		
+		let lineLocation = subject.utf16.count + "\n\n".utf16.count
+		XCTAssertEqual(commentLineRanges[0], lineLocation ..< lineLocation + body.utf16.count)
+	}
+	
 	// MARK: Large file
 	
 	func testLargeFileCommit() throws {
