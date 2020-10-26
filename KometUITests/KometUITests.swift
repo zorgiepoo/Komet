@@ -118,15 +118,19 @@ class KometApp {
 		while let newlineIndex = currentText.firstIndex(of: "\n") {
 			let line = currentText[currentText.startIndex ..< newlineIndex]
 			if line.count > 0 {
-				textView.typeText(String(line))
+				typeRawText(String(line))
 			}
-			textView.typeText("\n")
+			typeRawText("\n")
 			currentText = String(currentText[currentText.index(newlineIndex, offsetBy: 1) ..< currentText.endIndex])
 		}
 		
 		if currentText.count > 0 {
-			textView.typeText(currentText)
+			typeRawText(currentText)
 		}
+	}
+	
+	func typeRawText(_ text: String) {
+		textView.typeText(text)
 	}
 	
 	func deleteText(count: Int) {
@@ -357,6 +361,34 @@ class KometUITests: XCTestCase {
 		let (breadcrumbs, finalContent) = try app.commit()
 		XCTAssertEqual(breadcrumbs!.exitStatus, 0, "commit failed with non-zero status")
 		XCTAssertEqual(finalContent, newContent + app.initialContent)
+	}
+	
+	func testNewCommitWithNewlinePrevention() throws {
+		let app = try KometApp(filename: "new-commit")
+		
+		let newContent = "Hello there"
+		app.typeText(newContent)
+		
+		app.typeRawText("\n\n")
+		
+		let (breadcrumbs, finalContent) = try app.commit()
+		XCTAssertEqual(breadcrumbs!.exitStatus, 0, "commit failed with non-zero status")
+		XCTAssertEqual(finalContent, newContent + "\n\n" + app.initialContent)
+	}
+	
+	func testNewCommitWithNewlinePreventionAfterDelay() throws {
+		let app = try KometApp(filename: "new-commit")
+		
+		let newContent = "Hello there"
+		app.typeText(newContent)
+		
+		app.typeRawText("\n")
+		sleep(2)
+		app.typeRawText("\n")
+		
+		let (breadcrumbs, finalContent) = try app.commit()
+		XCTAssertEqual(breadcrumbs!.exitStatus, 0, "commit failed with non-zero status")
+		XCTAssertEqual(finalContent, newContent + "\n\n\n" + app.initialContent)
 	}
 	
 	// MARK: Text overflow

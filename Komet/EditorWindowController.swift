@@ -973,7 +973,7 @@ enum VersionControlType {
 		
 		preventAccidentalNewline = true
 		
-		DispatchQueue.main.asyncAfter(deadline: DispatchTime(uptimeNanoseconds: UInt64(0.3 * Double(NSEC_PER_SEC)))) {
+		DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
 			self.preventAccidentalNewline = false
 		}
 		
