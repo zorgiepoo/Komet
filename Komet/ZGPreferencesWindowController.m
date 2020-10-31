@@ -8,6 +8,7 @@
 
 #import "ZGPreferencesWindowController.h"
 #import "ZGUserDefaults.h"
+#import "ZGUserDefaultKeys.h"
 #import "ZGUserDefaultsEditorListener.h"
 #import "ZGUpdaterSettingsListener.h"
 #import "ZGWindowStyle.h"
@@ -90,8 +91,8 @@ typedef NS_ENUM(NSInteger, ZGSelectedFontType)
 	_messageFontTextField.selectable = NO;
 	_commentsFontTextField.selectable = NO;
 	
-	NSFont *messageFont = ZGReadDefaultMessageFont();
-	NSFont *commentsFont = ZGReadDefaultCommentsFont();
+	NSFont *messageFont = ZGReadDefaultFont(NSUserDefaults.standardUserDefaults, ZGMessageFontNameKey, ZGMessageFontPointSizeKey);
+	NSFont *commentsFont = ZGReadDefaultFont(NSUserDefaults.standardUserDefaults, ZGCommentsFontNameKey, ZGCommentsFontPointSizeKey);
 	
 	[self updateFont:messageFont atTextField:_messageFontTextField];
 	[self updateFont:commentsFont atTextField:_commentsFontTextField];
@@ -114,12 +115,14 @@ typedef NS_ENUM(NSInteger, ZGSelectedFontType)
 
 - (IBAction)changeMessageFont:(id)__unused sender
 {
-	[self showFontPromptWithSelectedFont:ZGReadDefaultMessageFont() selectedFontType:ZGSelectedFontTypeMessage];
+	NSFont *messageFont = ZGReadDefaultFont(NSUserDefaults.standardUserDefaults, ZGMessageFontNameKey, ZGMessageFontPointSizeKey);
+	[self showFontPromptWithSelectedFont:messageFont selectedFontType:ZGSelectedFontTypeMessage];
 }
 
 - (IBAction)changeCommentsFont:(id)__unused sender
 {
-	[self showFontPromptWithSelectedFont:ZGReadDefaultCommentsFont() selectedFontType:ZGSelectedFontTypeComments];
+	NSFont *commentsFont = ZGReadDefaultFont(NSUserDefaults.standardUserDefaults, ZGCommentsFontNameKey, ZGCommentsFontPointSizeKey);
+	[self showFontPromptWithSelectedFont:commentsFont selectedFontType:ZGSelectedFontTypeComments];
 }
 
 - (void)changeFont:(id)__unused sender
@@ -134,12 +137,12 @@ typedef NS_ENUM(NSInteger, ZGSelectedFontType)
 		switch (_selectedFontType)
 		{
 			case ZGSelectedFontTypeMessage:
-				ZGWriteDefaultMessageFont(convertedFont);
+				ZGWriteDefaultFont(NSUserDefaults.standardUserDefaults, convertedFont, ZGMessageFontNameKey, ZGMessageFontPointSizeKey);
 				[_editorListener userDefaultsChangedMessageFont];
 				[self updateFont:convertedFont atTextField:_messageFontTextField];
 				break;
 			case ZGSelectedFontTypeComments:
-				ZGWriteDefaultCommentsFont(convertedFont);
+				ZGWriteDefaultFont(NSUserDefaults.standardUserDefaults, convertedFont, ZGCommentsFontNameKey, ZGCommentsFontPointSizeKey);
 				[_editorListener userDefaultsChangedCommentsFont];
 				[self updateFont:convertedFont atTextField:_commentsFontTextField];
 				break;
@@ -152,14 +155,16 @@ typedef NS_ENUM(NSInteger, ZGSelectedFontType)
 	self.window.contentView = _warningsView;
 	[self.window.toolbar setSelectedItemIdentifier:ZGToolbarWarningsIdentifier];
 	
-	_recommendedSubjectLengthLimitTextField.integerValue = (NSInteger)ZGReadDefaultRecommendedSubjectLengthLimit();
+	NSUserDefaults *userDefaults = NSUserDefaults.standardUserDefaults;
 	
-	BOOL enabledSubjectLengthLimit = ZGReadDefaultRecommendedSubjectLengthLimitEnabled();
+	_recommendedSubjectLengthLimitTextField.integerValue = ZGReadDefaultLineLimit(userDefaults, ZGEditorRecommendedSubjectLengthLimitKey);
+	
+	BOOL enabledSubjectLengthLimit = [userDefaults boolForKey:ZGEditorRecommendedSubjectLengthLimitEnabledKey];
 	_recommendedSubjectLengthLimitEnabledCheckbox.state = (enabledSubjectLengthLimit ? NSControlStateValueOn : NSControlStateValueOff);
 	_recommendedSubjectLengthLimitTextField.enabled = enabledSubjectLengthLimit;
 	[self setTextField:_recommendedSubjectLengthLimitDescriptionTextField enabled:enabledSubjectLengthLimit];
 	
-	BOOL enabledBodyLineLengthLimit = ZGReadDefaultRecommendedBodyLineLengthLimitEnabled();
+	BOOL enabledBodyLineLengthLimit = [userDefaults boolForKey:ZGEditorRecommendedBodyLineLengthLimitEnabledKey];
 	_recommendedBodyLineLengthLimitEnabledCheckbox.state = (enabledBodyLineLengthLimit ? NSControlStateValueOn : NSControlStateValueOff);
 	_recommendedBodyLineLengthLimitTextField.enabled = enabledBodyLineLengthLimit;
 	[self setTextField:_recommendedBodyLineLengthLimitDescriptionTextField enabled:enabledBodyLineLengthLimit];
@@ -180,8 +185,9 @@ typedef NS_ENUM(NSInteger, ZGSelectedFontType)
 - (IBAction)changeRecommendedSubjectLengthLimitEnabled:(id)__unused sender
 {
 	BOOL enabled = (_recommendedSubjectLengthLimitEnabledCheckbox.state == NSControlStateValueOn);
+
+	[NSUserDefaults.standardUserDefaults setBool:enabled forKey:ZGEditorRecommendedSubjectLengthLimitEnabledKey];
 	
-	ZGWriteDefaultRecommendedSubjectLengthLimitEnabled(enabled);
 	_recommendedSubjectLengthLimitTextField.enabled = enabled;
 	[self setTextField:_recommendedSubjectLengthLimitDescriptionTextField enabled:enabled];
 	
@@ -190,15 +196,15 @@ typedef NS_ENUM(NSInteger, ZGSelectedFontType)
 
 - (IBAction)changeRecommendedSubjectLengthLimit:(id)__unused sender
 {
-	ZGWriteDefaultRecommendedSubjectLengthLimit((NSUInteger)_recommendedSubjectLengthLimitTextField.integerValue);
+	[NSUserDefaults.standardUserDefaults setInteger:_recommendedSubjectLengthLimitTextField.integerValue forKey:ZGEditorRecommendedSubjectLengthLimitKey];
 	[_editorListener userDefaultsChangedRecommendedLineLengthLimits];
 }
 
 - (IBAction)changeRecommendedBodyLineLengthLimitEnabled:(id)__unused sender
 {
 	BOOL enabled = (_recommendedBodyLineLengthLimitEnabledCheckbox.state == NSControlStateValueOn);
+	[NSUserDefaults.standardUserDefaults setBool:enabled forKey:ZGEditorRecommendedBodyLineLengthLimitEnabledKey];
 	
-	ZGWriteDefaultRecommendedBodyLineLengthLimitEnabled(enabled);
 	_recommendedBodyLineLengthLimitTextField.enabled = enabled;
 	[self setTextField:_recommendedBodyLineLengthLimitDescriptionTextField enabled:enabled];
 	
@@ -207,7 +213,7 @@ typedef NS_ENUM(NSInteger, ZGSelectedFontType)
 
 - (IBAction)changeRecommendedBodyLineLengthLimit:(id)__unused sender
 {
-	ZGWriteDefaultRecommendedBodyLineLengthLimit((NSUInteger)_recommendedBodyLineLengthLimitTextField.integerValue);
+	[NSUserDefaults.standardUserDefaults setInteger:_recommendedBodyLineLengthLimitTextField.integerValue forKey:ZGEditorRecommendedBodyLineLengthLimitEnabledKey];
 	[_editorListener userDefaultsChangedRecommendedLineLengthLimits];
 }
 
@@ -216,10 +222,13 @@ typedef NS_ENUM(NSInteger, ZGSelectedFontType)
 	self.window.contentView = _advancedView;
 	[self.window.toolbar setSelectedItemIdentifier:ZGToolbarAdvancedIdentifier];
 	
-	BOOL automaticInsertion = ZGReadDefaultAutomaticNewlineInsertionAfterSubjectLine();
+	NSUserDefaults *userDefaults = NSUserDefaults.standardUserDefaults;
+	
+	BOOL automaticInsertion = [userDefaults boolForKey:ZGEditorAutomaticNewlineInsertionAfterSubjectKey];
 	_automaticNewlineInsertionAfterSubjectLineCheckbox.state = (automaticInsertion ? NSControlStateValueOn : NSControlStateValueOff);
 	
-	BOOL resumeIncompleteSession = ZGReadDefaultResumeIncompleteSession();
+	BOOL resumeIncompleteSession = [userDefaults boolForKey:ZGResumeIncompleteSessionKey];
+	
 	_resumeLastIncompleteSessionCheckbox.state = (resumeIncompleteSession ? NSControlStateValueOn : NSControlStateValueOff);
 	
 	SPUUpdaterSettings *updaterSettings = [[SPUUpdaterSettings alloc] initWithHostBundle:[NSBundle mainBundle]];
@@ -236,12 +245,12 @@ typedef NS_ENUM(NSInteger, ZGSelectedFontType)
 
 - (IBAction)changeAutomaticNewlineInsertionAfterSubjectLine:(id)__unused sender
 {
-	ZGWriteDefaultAutomaticNewlineInsertionAfterSubjectLine(_automaticNewlineInsertionAfterSubjectLineCheckbox.state == NSControlStateValueOn);
+	[NSUserDefaults.standardUserDefaults setBool:(_automaticNewlineInsertionAfterSubjectLineCheckbox.state == NSControlStateValueOn) forKey:ZGEditorAutomaticNewlineInsertionAfterSubjectKey];
 }
 
 - (IBAction)changeResumeLastIncompleteSession:(id)__unused sender
 {
-	ZGWriteDefaultResumeIncompleteSession(_resumeLastIncompleteSessionCheckbox.state == NSControlStateValueOn);
+	[NSUserDefaults.standardUserDefaults setBool:(_resumeLastIncompleteSessionCheckbox.state == NSControlStateValueOn) forKey:ZGResumeIncompleteSessionKey];
 }
 
 - (IBAction)changeAutomaticallyInstallUpdates:(id)__unused sender

@@ -7,5 +7,6 @@
 #import "ZGUserDefaultsEditorListener.h"
 #import "ZGCommitTextView.h"
 #import "ZGUserDefaults.h"
+#import "ZGUserDefaultKeys.h"
 #import "ZGWindowStyleTheme.h"
 #import "ZGWindowStyle.h"

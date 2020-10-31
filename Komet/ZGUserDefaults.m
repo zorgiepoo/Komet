@@ -8,12 +8,11 @@
 
 #import "ZGUserDefaults.h"
 #import "ZGWindowStyle.h"
-#import "ZGUserDefaultKeys.h"
 
-static NSFont *ZGReadDefaultFont(NSString *fontNameDefaultsKey, NSString *fontSizeDefaultsKey)
+NSFont *ZGReadDefaultFont(NSUserDefaults *userDefaults, NSString *fontNameDefaultsKey, NSString *fontSizeDefaultsKey)
 {
-	NSString *fontName = [[NSUserDefaults standardUserDefaults] stringForKey:fontNameDefaultsKey];
-	CGFloat fontSize = [[NSUserDefaults standardUserDefaults] doubleForKey:fontSizeDefaultsKey];
+	NSString *fontName = [userDefaults stringForKey:fontNameDefaultsKey];
+	CGFloat fontSize = [userDefaults doubleForKey:fontSizeDefaultsKey];
 	
 	NSFont *font;
 	if (fontName.length == 0)
@@ -35,127 +34,27 @@ static NSFont *ZGReadDefaultFont(NSString *fontNameDefaultsKey, NSString *fontSi
 	return font;
 }
 
-static void ZGWriteDefaultFont(NSFont *font, NSString *fontNameKey, NSString *fontPointSizeKey)
+void ZGWriteDefaultFont(NSUserDefaults *userDefaults, NSFont *font, NSString *fontNameKey, NSString *fontPointSizeKey)
 {
-	[[NSUserDefaults standardUserDefaults] setObject:font.fontName forKey:fontNameKey];
-	[[NSUserDefaults standardUserDefaults] setObject:@(font.pointSize) forKey:fontPointSizeKey];
+	[userDefaults setObject:font.fontName forKey:fontNameKey];
+	[userDefaults setObject:@(font.pointSize) forKey:fontPointSizeKey];
 }
 
-void ZGRegisterDefaultMessageFont(void)
+void ZGRegisterDefaultFont(NSUserDefaults *userDefaults, NSString *fontNameKey, NSString *pointSizeKey)
 {
-	[[NSUserDefaults standardUserDefaults] registerDefaults:@{ZGMessageFontNameKey : @"", ZGMessageFontPointSizeKey : @(0.0)}];
+	[userDefaults registerDefaults:@{fontNameKey : @"", pointSizeKey : @(0.0)}];
 }
 
-NSFont *ZGReadDefaultMessageFont(void)
+NSInteger ZGReadDefaultLineLimit(NSUserDefaults *userDefaults, NSString *defaultsKey)
 {
-	return ZGReadDefaultFont(ZGMessageFontNameKey, ZGMessageFontPointSizeKey);
+	NSUInteger limitRead = (NSUInteger)[userDefaults integerForKey:defaultsKey];
+	return (NSInteger)MIN(limitRead, 1000LU);
 }
 
-void ZGWriteDefaultMessageFont(NSFont *font)
-{
-	ZGWriteDefaultFont(font, ZGMessageFontNameKey, ZGMessageFontPointSizeKey);
-}
-
-void ZGRegisterDefaultCommentsFont(void)
-{
-	[[NSUserDefaults standardUserDefaults] registerDefaults:@{ZGCommentsFontNameKey : @"", ZGCommentsFontPointSizeKey : @(0.0)}];
-}
-
-NSFont *ZGReadDefaultCommentsFont(void)
-{
-	return ZGReadDefaultFont(ZGCommentsFontNameKey, ZGCommentsFontPointSizeKey);
-}
-
-void ZGWriteDefaultCommentsFont(NSFont *font)
-{
-	ZGWriteDefaultFont(font, ZGCommentsFontNameKey, ZGCommentsFontPointSizeKey);
-}
-
-void ZGRegisterDefaultRecommendedSubjectLengthLimit(void)
-{
-	// This is the max subject length GitHub uses before the subject overflows
-	// Not using 50 because I think it may be too irritating of a default for Mac users
-	[[NSUserDefaults standardUserDefaults] registerDefaults:@{ZGEditorRecommendedSubjectLengthLimitKey : @(69)}];
-}
-
-NSUInteger ZGReadDefaultRecommendedSubjectLengthLimit(void)
-{
-	NSUInteger limitRead = (NSUInteger)[[NSUserDefaults standardUserDefaults] integerForKey:ZGEditorRecommendedSubjectLengthLimitKey];
-	return MIN(limitRead, 1000LU);
-}
-
-void ZGWriteDefaultRecommendedSubjectLengthLimit(NSUInteger recommendedSubjectLengthLimit)
-{
-	[[NSUserDefaults standardUserDefaults] setInteger:(NSInteger)recommendedSubjectLengthLimit forKey:ZGEditorRecommendedSubjectLengthLimitKey];
-}
-
-void ZGRegisterDefaultRecommendedSubjectLengthLimitEnabled(void)
-{
-	[[NSUserDefaults standardUserDefaults] registerDefaults:@{ZGEditorRecommendedSubjectLengthLimitEnabledKey : @(YES)}];
-}
-
-BOOL ZGReadDefaultRecommendedSubjectLengthLimitEnabled(void)
-{
-	return [[NSUserDefaults standardUserDefaults] boolForKey:ZGEditorRecommendedSubjectLengthLimitEnabledKey];
-}
-
-void ZGWriteDefaultRecommendedSubjectLengthLimitEnabled(BOOL enabled)
-{
-	[[NSUserDefaults standardUserDefaults] setBool:enabled forKey:ZGEditorRecommendedSubjectLengthLimitEnabledKey];
-}
-
-void ZGRegisterDefaultRecommendedBodyLineLengthLimit(void)
-{
-	// 72 seems to be the standard recommended body line length limit for git
-	[[NSUserDefaults standardUserDefaults] registerDefaults:@{ZGEditorRecommendedBodyLineLengthLimitKey : @(72)}];
-}
-
-NSUInteger ZGReadDefaultRecommendedBodyLineLengthLimit(void)
-{
-	NSUInteger limitRead = (NSUInteger)[[NSUserDefaults standardUserDefaults] integerForKey:ZGEditorRecommendedBodyLineLengthLimitKey];
-	return MIN(limitRead, 1000LU);
-}
-
-void ZGWriteDefaultRecommendedBodyLineLengthLimit(NSUInteger recommendedBodyLineLengthLimit)
-{
-	[[NSUserDefaults standardUserDefaults] setInteger:(NSInteger)recommendedBodyLineLengthLimit forKey:ZGEditorRecommendedBodyLineLengthLimitKey];
-}
-
-void ZGRegisterDefaultRecommendedBodyLineLengthLimitEnabled(void)
-{
-	// Having a recommendation limit for body lines could be irritating as a default, so we disable it by default
-	[[NSUserDefaults standardUserDefaults] registerDefaults:@{ZGEditorRecommendedBodyLineLengthLimitEnabledKey : @(NO)}];
-}
-
-BOOL ZGReadDefaultRecommendedBodyLineLengthLimitEnabled(void)
-{
-	return [[NSUserDefaults standardUserDefaults] boolForKey:ZGEditorRecommendedBodyLineLengthLimitEnabledKey];
-}
-
-void ZGWriteDefaultRecommendedBodyLineLengthLimitEnabled(BOOL enabled)
-{
-	[[NSUserDefaults standardUserDefaults] setBool:enabled forKey:ZGEditorRecommendedBodyLineLengthLimitEnabledKey];
-}
-
-void ZGRegisterDefaultAutomaticNewlineInsertionAfterSubjectLine(void)
-{
-	[[NSUserDefaults standardUserDefaults] registerDefaults:@{ZGEditorAutomaticNewlineInsertionAfterSubjectKey : @(YES)}];
-}
-
-BOOL ZGReadDefaultAutomaticNewlineInsertionAfterSubjectLine(void)
-{
-	return [[NSUserDefaults standardUserDefaults] boolForKey:ZGEditorAutomaticNewlineInsertionAfterSubjectKey];
-}
-
-void ZGWriteDefaultAutomaticNewlineInsertionAfterSubjectLine(BOOL automaticNewlineInsertionAfterSubjectLine)
-{
-	[[NSUserDefaults standardUserDefaults] setBool:automaticNewlineInsertionAfterSubjectLine forKey:ZGEditorAutomaticNewlineInsertionAfterSubjectKey];
-}
-
-ZGWindowStyleDefaultTheme ZGReadDefaultWindowStyleTheme(void)
+ZGWindowStyleDefaultTheme ZGReadDefaultWindowStyleTheme(NSUserDefaults *userDefaults, NSString *defaultsKey)
 {
 	ZGWindowStyleDefaultTheme defaultTheme = {0};
-	id<NSObject> themeDefault = [[NSUserDefaults standardUserDefaults] objectForKey:ZGWindowStyleThemeKey];
+	id<NSObject> themeDefault = [userDefaults objectForKey:defaultsKey];
 	if (themeDefault == nil || (![themeDefault isKindOfClass:[NSNumber class]] && ![themeDefault isKindOfClass:[NSString class]]))
 	{
 		defaultTheme.automatic = true;
@@ -185,100 +84,28 @@ ZGWindowStyleDefaultTheme ZGReadDefaultWindowStyleTheme(void)
 	return defaultTheme;
 }
 
-void ZGWriteDefaultStyleTheme(ZGWindowStyleDefaultTheme defaultTheme)
+void ZGWriteDefaultStyleTheme(NSUserDefaults *userDefaults, NSString *defaultsKey, ZGWindowStyleDefaultTheme defaultTheme)
 {
 	if (defaultTheme.automatic)
 	{
-		[[NSUserDefaults standardUserDefaults] removeObjectForKey:ZGWindowStyleThemeKey];
+		[userDefaults removeObjectForKey:defaultsKey];
 	}
 	else
 	{
-		[[NSUserDefaults standardUserDefaults] setObject:@(defaultTheme.theme) forKey:ZGWindowStyleThemeKey];
+		[userDefaults setObject:@(defaultTheme.theme) forKey:defaultsKey];
 	}
 }
 
-void ZGRegisterDefaultWindowVibrancy(void)
+NSTimeInterval ZGReadDefaultTimeoutInterval(NSUserDefaults *userDefaults, NSString *defaultsKey, NSTimeInterval maxTimeout)
 {
-	[[NSUserDefaults standardUserDefaults] registerDefaults:@{ZGWindowVibrancyKey : @(NO)}];
-}
-
-BOOL ZGReadDefaultWindowVibrancy(void)
-{
-	return [[NSUserDefaults standardUserDefaults] boolForKey:ZGWindowVibrancyKey];
-}
-
-void ZGWriteDefaultWindowVibrancy(BOOL windowVibrancy)
-{
-	[[NSUserDefaults standardUserDefaults] setBool:windowVibrancy forKey:ZGWindowVibrancyKey];
-}
-
-void ZGRegisterDefaultResumeIncompleteSession(void)
-{
-	[[NSUserDefaults standardUserDefaults] registerDefaults:@{ZGResumeIncompleteSessionKey : @(YES)}];
-}
-
-BOOL ZGReadDefaultResumeIncompleteSession(void)
-{
-	return [[NSUserDefaults standardUserDefaults] boolForKey:ZGResumeIncompleteSessionKey];
-}
-
-void ZGWriteDefaultResumeIncompleteSession(BOOL resumeIncompleteSession)
-{
-	[[NSUserDefaults standardUserDefaults] setBool:resumeIncompleteSession forKey:ZGResumeIncompleteSessionKey];
-}
-
-void ZGRegisterDefaultResumeIncompleteSessionTimeoutInterval(void)
-{
-	NSTimeInterval defaultTimeoutInterval = 60.0 * 60; // around 1 hour
-	[[NSUserDefaults standardUserDefaults] registerDefaults:@{ZGResumeIncompleteSessionTimeoutIntervalKey : @(defaultTimeoutInterval)}];
-}
-
-NSTimeInterval ZGReadDefaultResumeIncompleteSessionTimeoutInterval(void)
-{
-	NSTimeInterval timeoutRead = [[NSUserDefaults standardUserDefaults] doubleForKey:ZGResumeIncompleteSessionTimeoutIntervalKey];
+	NSTimeInterval timeoutRead = [userDefaults doubleForKey:defaultsKey];
 	NSTimeInterval minTimeout = 0.0;
-	NSTimeInterval maxTimeout = 60.0 * 60.0 * 24 * 7 * 5; // around a month
 	return MIN(MAX(minTimeout, timeoutRead), maxTimeout);
 }
 
-void ZGRegisterDefaultDisableSpellCheckingAndCorrectionForSquashes(void)
+NSURL * _Nullable ZGReadDefaultURL(NSUserDefaults *userDefaults, NSString *defaultsKey)
 {
-	[[NSUserDefaults standardUserDefaults] registerDefaults:@{ZGDisableSpellCheckingAndCorrectionForSquashesKey : @(YES)}];
-}
-
-BOOL ZGReadDefaultDisableSpellCheckingAndCorrectionForSquashes(void)
-{
-	return [[NSUserDefaults standardUserDefaults] boolForKey:ZGDisableSpellCheckingAndCorrectionForSquashesKey];
-}
-
-void ZGRegisterDefaultDisableAutomaticNewlineInsertionAfterSubjectLineForSquashes(void)
-{
-	[[NSUserDefaults standardUserDefaults] registerDefaults:@{ZGDisableAutomaticNewlineInsertionAfterSubjectLineForSquashesKey : @(YES)}];
-}
-
-BOOL ZGReadDefaultDisableAutomaticNewlineInsertionAfterSubjectLineForSquashes(void)
-{
-	return [[NSUserDefaults standardUserDefaults] boolForKey:ZGDisableAutomaticNewlineInsertionAfterSubjectLineForSquashesKey];
-}
-
-void ZGRegisterDefaultDetectHGCommentStyleForSquashes(void)
-{
-	[[NSUserDefaults standardUserDefaults] registerDefaults:@{ZGDetectHGCommentStyleForSquashesKey : @(YES)}];
-}
-
-BOOL ZGReadDefaultDetectHGCommentStyleForSquashes(void)
-{
-	return [[NSUserDefaults standardUserDefaults] boolForKey:ZGDetectHGCommentStyleForSquashesKey];
-}
-
-void ZGRegisterDefaultBreadcrumbsURL(void)
-{
-	[[NSUserDefaults standardUserDefaults] registerDefaults:@{ZGBreadcrumbsURLKey : @""}];
-}
-
-NSURL * _Nullable ZGReadDefaultBreadcrumbsURL(void)
-{
-	NSString *urlString = [[NSUserDefaults standardUserDefaults] stringForKey:ZGBreadcrumbsURLKey];
+	NSString *urlString = [userDefaults stringForKey:defaultsKey];
 	if (urlString.length == 0)
 	{
 		return nil;

@@ -170,20 +170,27 @@ enum VersionControlType {
 	// MARK: Initialization
 	
 	static func registerDefaults() {
-		ZGRegisterDefaultMessageFont()
-		ZGRegisterDefaultCommentsFont()
-		ZGRegisterDefaultRecommendedSubjectLengthLimitEnabled()
-		ZGRegisterDefaultRecommendedSubjectLengthLimit()
-		ZGRegisterDefaultRecommendedBodyLineLengthLimitEnabled()
-		ZGRegisterDefaultRecommendedBodyLineLengthLimit()
-		ZGRegisterDefaultAutomaticNewlineInsertionAfterSubjectLine()
-		ZGRegisterDefaultResumeIncompleteSession()
-		ZGRegisterDefaultResumeIncompleteSessionTimeoutInterval()
-		ZGRegisterDefaultWindowVibrancy()
-		ZGRegisterDefaultDisableSpellCheckingAndCorrectionForSquashes()
-		ZGRegisterDefaultDisableAutomaticNewlineInsertionAfterSubjectLineForSquashes()
-		ZGRegisterDefaultDetectHGCommentStyleForSquashes()
-		ZGRegisterDefaultBreadcrumbsURL()
+		let userDefaults = UserDefaults.standard
+		
+		ZGRegisterDefaultFont(userDefaults, ZGMessageFontNameKey, ZGMessageFontPointSizeKey)
+		ZGRegisterDefaultFont(userDefaults, ZGCommentsFontNameKey, ZGCommentsFontPointSizeKey)
+		
+		userDefaults.register(defaults: [
+			ZGEditorRecommendedSubjectLengthLimitEnabledKey: true,
+			// Not using 50 because I think it may be too irritating of a default for Mac users
+			// GitHub's max limit is technically 72 so we are slightly shy under it
+			ZGEditorRecommendedSubjectLengthLimitKey: 69,
+			// Having a recommendation limit for body lines could be irritating as a default, so we disable it by default
+			ZGEditorRecommendedBodyLineLengthLimitEnabledKey: false,
+			ZGEditorRecommendedBodyLineLengthLimitKey: 72,
+			ZGEditorAutomaticNewlineInsertionAfterSubjectKey: true,
+			ZGResumeIncompleteSessionKey: true,
+			ZGResumeIncompleteSessionTimeoutIntervalKey: 60.0 * 60, // around 1 hour
+			ZGWindowVibrancyKey: false,
+			ZGDisableSpellCheckingAndCorrectionForSquashesKey: true,
+			ZGDisableAutomaticNewlineInsertionAfterSubjectLineForSquashesKey: true,
+			ZGDetectHGCommentStyleForSquashesKey: true
+		])
 	}
 	
 	required init(fileURL: URL, temporaryDirectoryURL: URL?, tutorialMode: Bool) {
@@ -191,9 +198,11 @@ enum VersionControlType {
 		self.temporaryDirectoryURL = temporaryDirectoryURL
 		self.tutorialMode = tutorialMode
 		
-		breadcrumbs = (ZGReadDefaultBreadcrumbsURL() != nil) ? Breadcrumbs() : nil
+		let userDefaults = UserDefaults.standard
 		
-		style = ZGWindowStyle.init(theme: Self.styleTheme(defaultTheme: ZGReadDefaultWindowStyleTheme(), effectiveAppearance: NSApp.effectiveAppearance))
+		breadcrumbs = (ZGReadDefaultURL(userDefaults, ZGBreadcrumbsURLKey) != nil) ? Breadcrumbs() : nil
+		
+		style = ZGWindowStyle.init(theme: Self.styleTheme(defaultTheme: ZGReadDefaultWindowStyleTheme(userDefaults, ZGWindowStyleThemeKey), effectiveAppearance: NSApp.effectiveAppearance))
 		
 		// Detect squash message
 		let loadedPlainString: String
@@ -242,7 +251,7 @@ enum VersionControlType {
 		self.versionControlType = versionControlType
 		
 		commentVersionControlType =
-			(isSquashMessage && versionControlType == .hg && ZGReadDefaultDetectHGCommentStyleForSquashes()) ?
+			(isSquashMessage && versionControlType == .hg && userDefaults.bool(forKey: ZGDetectHGCommentStyleForSquashesKey)) ?
 			.git : versionControlType
 		
 		// Detect if there's empty content
@@ -256,7 +265,7 @@ enum VersionControlType {
 		// Check if we have any incomplete commit message available
 		// Load the incomplete commit message contents if our content is initially empty
 		let lastSavedCommitMessage: String?
-		if !self.tutorialMode && ZGReadDefaultResumeIncompleteSession() {
+		if !self.tutorialMode && userDefaults.bool(forKey: ZGResumeIncompleteSessionKey) {
 			if let applicationSupportURL = fileManager.urls(for: .applicationSupportDirectory, in: .userDomainMask).first {
 				let supportDirectory = applicationSupportURL.appendingPathComponent(APP_SUPPORT_DIRECTORY_NAME)
 				let projectName = Self.projectName(fileManager: fileManager)
@@ -276,7 +285,8 @@ enum VersionControlType {
 						
 						// Use a timeout interval for using the last incomplete commit message
 						// If too much time passes by, chances are the user may want to start anew
-						let timeoutInterval = ZGReadDefaultResumeIncompleteSessionTimeoutInterval()
+						let maxTimeout = 60.0 * 60.0 * 24 * 7 * 5 // around a month
+						let timeoutInterval = ZGReadDefaultTimeoutInterval(userDefaults, ZGResumeIncompleteSessionTimeoutIntervalKey, maxTimeout)
 						let intervalSinceLastSavedCommitMessage = lastModifiedDate.flatMap({ Date().timeIntervalSince($0) }) ?? 0.0
 						
 						if initiallyContainedEmptyContent && intervalSinceLastSavedCommitMessage >= 0.0 && intervalSinceLastSavedCommitMessage <= timeoutInterval {
@@ -383,7 +393,7 @@ enum VersionControlType {
 		}
 		
 		// Style content view
-		let vibrant = ZGReadDefaultWindowVibrancy()
+		let vibrant = UserDefaults.standard.bool(forKey: ZGWindowVibrancyKey)
 		do {
 			contentView.state = vibrant ? .followsWindowActiveState : .inactive
 			contentView.appearance = style.appearance
@@ -519,7 +529,9 @@ enum VersionControlType {
 			let contentUTFRange = NSMakeRange(0, commentUTFRange.location)
 			
 			// First assume all content has no comment lines
-			updateFont(ZGReadDefaultMessageFont(), utf16Range: contentUTFRange)
+			let userDefaults = UserDefaults.standard
+			let messageFont = ZGReadDefaultFont(userDefaults, ZGMessageFontNameKey, ZGMessageFontPointSizeKey)
+			updateFont(messageFont, utf16Range: contentUTFRange)
 			breadcrumbs?.commentLineRanges.removeAll()
 			
 			let textStorage = textView.textStorage
@@ -544,7 +556,7 @@ enum VersionControlType {
 					if let font = commentFont {
 						updateFont(font, utf16Range: utf16LineRange)
 					} else {
-						let font = ZGReadDefaultCommentsFont()
+						let font = ZGReadDefaultFont(userDefaults, ZGCommentsFontNameKey, ZGCommentsFontPointSizeKey)
 						updateFont(font, utf16Range: utf16LineRange)
 						commentFont = font
 					}
@@ -570,8 +582,9 @@ enum VersionControlType {
 		
 		let contentLineRanges = retrieveContentLineRanges()
 		
-		let subjectLengthLimit = ZGReadDefaultRecommendedSubjectLengthLimitEnabled() ? Int(ZGReadDefaultRecommendedSubjectLengthLimit()) : nil
-		let bodyLengthLimit = ZGReadDefaultRecommendedBodyLineLengthLimitEnabled() ? Int(ZGReadDefaultRecommendedBodyLineLengthLimit()) : nil
+		let userDefaults = UserDefaults.standard
+		let subjectLengthLimit = userDefaults.bool(forKey: ZGEditorRecommendedSubjectLengthLimitEnabledKey) ? ZGReadDefaultLineLimit(userDefaults, ZGEditorRecommendedSubjectLengthLimitKey) : nil
+		let bodyLengthLimit = userDefaults.bool(forKey: ZGEditorRecommendedBodyLineLengthLimitEnabledKey) ? ZGReadDefaultLineLimit(userDefaults, ZGEditorRecommendedBodyLineLengthLimitKey) : nil
 		
 		updateHighlighting(contentLineRanges: contentLineRanges, subjectLengthLimit: subjectLengthLimit, bodyLengthLimit: bodyLengthLimit)
 		
@@ -596,23 +609,27 @@ enum VersionControlType {
 		textView.textStorage?.addAttribute(.foregroundColor, value: style.commentColor, range: commentRange)
 	}
 	
-	private func updateEditorMessageFont() {
+	private func updateEditorMessageFont(userDefaults: UserDefaults) {
 		let plainText = currentPlainText()
 		let utf16View = plainText.utf16
 		
 		let commentIndex = commentSectionIndex(plainUTF16Text: utf16View)
 		
-		updateFont(ZGReadDefaultMessageFont(), utf16Range: convertToUTF16Range(range: utf16View.startIndex ..< commentIndex, in: plainText))
+		let messageFont = ZGReadDefaultFont(userDefaults, ZGMessageFontNameKey, ZGMessageFontPointSizeKey)
+		updateFont(messageFont, utf16Range: convertToUTF16Range(range: utf16View.startIndex ..< commentIndex, in: plainText))
 	}
 	
-	private func updateEditorCommentsFont() {
-		updateFont(ZGReadDefaultCommentsFont(), utf16Range: commentUTF16Range(plainText: currentPlainText()))
+	private func updateEditorCommentsFont(userDefaults: UserDefaults) {
+		let commentsFont = ZGReadDefaultFont(userDefaults, ZGCommentsFontNameKey, ZGCommentsFontPointSizeKey)
+		updateFont(commentsFont, utf16Range: commentUTF16Range(plainText: currentPlainText()))
 	}
 	
 	@objc override func windowDidLoad() {
 		self.window?.setFrameUsingName(ZGEditorWindowFrameNameKey)
 
 		self.updateCurrentStyle()
+		
+		let userDefaults = UserDefaults.standard
 		
 		// Update style when user changes the system appearance
 		self.effectiveAppearanceObserver = NSApp.observe(\.effectiveAppearance, changeHandler: { [weak self] (application, change) in
@@ -621,7 +638,7 @@ enum VersionControlType {
 			}
 			
 			if change.oldValue?.name != change.newValue?.name {
-				let defaultTheme = ZGReadDefaultWindowStyleTheme()
+				let defaultTheme = ZGReadDefaultWindowStyleTheme(userDefaults, ZGWindowStyleThemeKey)
 				let theme = Self.styleTheme(defaultTheme: defaultTheme, effectiveAppearance: application.effectiveAppearance)
 				
 				self.updateEditorStyle(ZGWindowStyle(theme: theme))
@@ -656,7 +673,7 @@ enum VersionControlType {
 		textView.zgCommitViewDelegate = self
 		
 		// If this is a squash, just turn off spell checking and automatic spell correction as it's more likely to annoy the user
-		if isSquashMessage && ZGReadDefaultDisableSpellCheckingAndCorrectionForSquashes() {
+		if isSquashMessage && userDefaults.bool(forKey: ZGDisableSpellCheckingAndCorrectionForSquashesKey) {
 			textView.zgDisableContinuousSpellingAndAutomaticSpellingCorrection()
 		} else {
 			textView.zgLoadDefaults()
@@ -676,8 +693,8 @@ enum VersionControlType {
 		
 		updateTextViewDrawingBackground()
 		
-		updateEditorMessageFont()
-		updateEditorCommentsFont()
+		updateEditorMessageFont(userDefaults: userDefaults)
+		updateEditorCommentsFont(userDefaults: userDefaults)
 		
 		// Necessary to update text processing otherwise colors may not be right
 		updateTextProcessing()
@@ -748,7 +765,7 @@ enum VersionControlType {
 	// MARK: Actions
 	
 	private func exit(status: Int32) -> Never {
-		if var breadcrumbs = breadcrumbs, let breadcrumbsURL = ZGReadDefaultBreadcrumbsURL() {
+		if var breadcrumbs = breadcrumbs, let breadcrumbsURL = ZGReadDefaultURL(UserDefaults.standard, ZGBreadcrumbsURLKey) {
 			breadcrumbs.exitStatus = status
 			
 			do {
@@ -780,7 +797,7 @@ enum VersionControlType {
 			} else {
 				// If we initially had no content and wrote an incomplete commit message,
 				// then save the commit message in case we may want to resume from it later
-				if ZGReadDefaultResumeIncompleteSession() {
+				if UserDefaults.standard.bool(forKey: ZGResumeIncompleteSessionKey) {
 					let plainText = currentPlainText()
 					let commitRange = Self.commitTextRange(plainText: plainText, commentLength: commentSectionLength)
 					
@@ -841,9 +858,10 @@ enum VersionControlType {
 			newDefaultTheme.theme = ZGWindowStyleTheme(rawValue: UInt(tag))!
 		}
 		
-		let currentDefaultTheme = ZGReadDefaultWindowStyleTheme()
+		let userDefaults = UserDefaults.standard
+		let currentDefaultTheme = ZGReadDefaultWindowStyleTheme(userDefaults, ZGWindowStyleThemeKey)
 		if newDefaultTheme.theme != currentDefaultTheme.theme || newDefaultTheme.automatic != currentDefaultTheme.automatic {
-			ZGWriteDefaultStyleTheme(newDefaultTheme)
+			ZGWriteDefaultStyleTheme(userDefaults, ZGWindowStyleThemeKey, newDefaultTheme)
 			let newTheme = Self.styleTheme(defaultTheme: newDefaultTheme, effectiveAppearance: NSApp.effectiveAppearance)
 			
 			updateEditorStyle(ZGWindowStyle(theme: newTheme))
@@ -851,19 +869,22 @@ enum VersionControlType {
 	}
 	
 	@IBAction @objc func changeVibrancy(_ sender: Any) {
-		ZGWriteDefaultWindowVibrancy(!ZGReadDefaultWindowVibrancy())
+		let userDefaults = UserDefaults.standard
+		let vibrancy = userDefaults.bool(forKey: ZGWindowVibrancyKey)
+		userDefaults.set(!vibrancy, forKey: ZGWindowVibrancyKey)
+		
 		updateCurrentStyle()
 	}
 	
 	@objc func validateMenuItem(_ menuItem: NSMenuItem) -> Bool {
 		switch menuItem.action {
 		case #selector(changeEditorTheme(_:)):
-			let currentDefaultTheme = ZGReadDefaultWindowStyleTheme()
+			let currentDefaultTheme = ZGReadDefaultWindowStyleTheme(UserDefaults.standard, ZGWindowStyleThemeKey)
 			let themeTag = currentDefaultTheme.automatic ? -1 : Int(currentDefaultTheme.theme.rawValue)
 			menuItem.state = (menuItem.tag == themeTag) ? .on : .off
 			break
 		case #selector(changeVibrancy(_:)):
-			menuItem.state = ZGReadDefaultWindowVibrancy() ? .on : .off
+			menuItem.state = UserDefaults.standard.bool(forKey: ZGWindowVibrancyKey) ? .on : .off
 			break
 		default:
 			break
@@ -916,7 +937,8 @@ enum VersionControlType {
 		}
 		
 		// Bail if automatic newline insertion is disabled or if we are dealing with a squash message
-		guard ZGReadDefaultAutomaticNewlineInsertionAfterSubjectLine() && (!ZGReadDefaultDisableAutomaticNewlineInsertionAfterSubjectLineForSquashes() || !isSquashMessage) else {
+		let userDefaults = UserDefaults.standard
+		guard userDefaults.bool(forKey: ZGEditorAutomaticNewlineInsertionAfterSubjectKey) && (!userDefaults.bool(forKey: ZGDisableAutomaticNewlineInsertionAfterSubjectLineForSquashesKey) || !isSquashMessage) else {
 			return false
 		}
 		
@@ -1005,16 +1027,18 @@ enum VersionControlType {
 	// MARK: ZGCommitViewDelegate
 	
 	@objc func userDefaultsChangedMessageFont() {
-		updateEditorMessageFont()
+		updateEditorMessageFont(userDefaults: UserDefaults.standard)
 	}
 	
 	@objc func userDefaultsChangedCommentsFont() {
-		updateEditorCommentsFont()
+		updateEditorCommentsFont(userDefaults: UserDefaults.standard)
 	}
 	
 	@objc func userDefaultsChangedRecommendedLineLengthLimits() {
-		let hasSubjectLimit = ZGReadDefaultRecommendedSubjectLengthLimitEnabled()
-		let hasBodyLineLimit = ZGReadDefaultRecommendedBodyLineLengthLimitEnabled()
+		let userDefaults = UserDefaults.standard
+		
+		let hasSubjectLimit = userDefaults.bool(forKey: ZGEditorRecommendedSubjectLengthLimitEnabledKey)
+		let hasBodyLineLimit = userDefaults.bool(forKey: ZGEditorRecommendedBodyLineLengthLimitEnabledKey)
 		
 		if !hasSubjectLimit && !hasBodyLineLimit {
 			// Remove all background color highlighting in case any text is currently highlighted
