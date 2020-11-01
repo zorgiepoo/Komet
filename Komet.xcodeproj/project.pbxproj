@@ -72,7 +72,6 @@
 		720DF18B252AE3F7003AD7FB /* KometUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KometUITests.swift; sourceTree = "<group>"; };
 		720DF18D252AE3F7003AD7FB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		720DF194252AE592003AD7FB /* new-commit */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "new-commit"; sourceTree = "<group>"; };
-		720DF1BA2532369E003AD7FB /* KometUITests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "KometUITests-Bridging-Header.h"; sourceTree = "<group>"; };
 		7211A973253BB68A00F95773 /* hg-new-commit */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "hg-new-commit"; sourceTree = "<group>"; };
 		7211A977253BBBBB00F95773 /* svn-new-commit */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "svn-new-commit"; sourceTree = "<group>"; };
 		7211A97F253BC29E00F95773 /* hg-histedit */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "hg-histedit"; sourceTree = "<group>"; };
@@ -139,7 +138,6 @@
 				72120FD52534240A0018201E /* Resources */,
 				720DF18B252AE3F7003AD7FB /* KometUITests.swift */,
 				720DF18D252AE3F7003AD7FB /* Info.plist */,
-				720DF1BA2532369E003AD7FB /* KometUITests-Bridging-Header.h */,
 			);
 			path = KometUITests;
 			sourceTree = "<group>";
@@ -471,7 +469,6 @@
 				PRODUCT_BUNDLE_IDENTIFIER = org.zgcoder.KometUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
-				SWIFT_OBJC_BRIDGING_HEADER = "KometUITests/KometUITests-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				TEST_TARGET_NAME = Komet;
 			};
@@ -497,7 +494,6 @@
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = org.zgcoder.KometUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_OBJC_BRIDGING_HEADER = "KometUITests/KometUITests-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				TEST_TARGET_NAME = Komet;
 			};
