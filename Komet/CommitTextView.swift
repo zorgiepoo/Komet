@@ -97,4 +97,13 @@ let ZGTouchBarIdentifierCommit = "zgCommitIdentifier"
 			return super.touchBar(touchBar, makeItemForIdentifier: identifier)
 		}
 	}
+	
+	@objc override func makeTouchBar() -> NSTouchBar? {
+		let touchBar = NSTouchBar()
+		touchBar.customizationIdentifier = ZGTouchBarIdentifier
+		touchBar.delegate = self
+		touchBar.defaultItemIdentifiers = [.characterPicker, NSTouchBarItem.Identifier(ZGTouchBarIdentifierCommit), .candidateList]
+		touchBar.customizationAllowedItemIdentifiers = [.characterPicker, NSTouchBarItem.Identifier(ZGTouchBarIdentifierCancel), NSTouchBarItem.Identifier(ZGTouchBarIdentifierCommit), .flexibleSpace, .candidateList]
+		return touchBar
+	}
 }
