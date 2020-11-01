@@ -52,14 +52,15 @@ enum VersionControlType {
 	
 	// MARK: Static functions
 	
-	private static func styleTheme(defaultTheme: ZGWindowStyleDefaultTheme, effectiveAppearance: NSAppearance) -> ZGWindowStyleTheme {
-		if !defaultTheme.automatic {
-			return defaultTheme.theme
-		} else {
+	private static func styleTheme(defaultTheme: WindowStyleDefaultTheme, effectiveAppearance: NSAppearance) -> WindowStyleTheme {
+		switch defaultTheme {
+		case .automatic:
 			let appearanceName = effectiveAppearance.bestMatch(from: [.aqua, .darkAqua])
 			let darkMode = (appearanceName == .darkAqua)
 			
 			return darkMode ? .dark : .plain
+		case .theme(let theme):
+			return theme
 		}
 	}
 	
@@ -634,7 +635,7 @@ enum VersionControlType {
 		let userDefaults = UserDefaults.standard
 		
 		// Update style when user changes the system appearance
-		self.effectiveAppearanceObserver = NSApp.observe(\.effectiveAppearance, changeHandler: { [weak self] (application, change) in
+		self.effectiveAppearanceObserver = NSApp.observe(\.effectiveAppearance, options: [.old, .new]) { [weak self] (application, change) in
 			guard let self = self else {
 				return
 			}
@@ -645,7 +646,7 @@ enum VersionControlType {
 				
 				self.updateEditorStyle(WindowStyle.withTheme(theme))
 			}
-		})
+		}
 		
 		commitLabelTextField.stringValue = projectNameDisplay
 		
@@ -853,16 +854,11 @@ enum VersionControlType {
 		
 		let tag = menuItem.tag
 		
-		var newDefaultTheme = ZGWindowStyleDefaultTheme()
-		if tag == ZGWindowStyleAutomaticTag {
-			newDefaultTheme.automatic = true
-		} else {
-			newDefaultTheme.theme = ZGWindowStyleTheme(rawValue: UInt(tag))!
-		}
+		let newDefaultTheme: WindowStyleDefaultTheme = (tag == WindowStyleAutomaticTag) ? .automatic : .theme(WindowStyleTheme(rawValue: tag)!)
 		
 		let userDefaults = UserDefaults.standard
 		let currentDefaultTheme = ZGReadDefaultWindowStyleTheme(userDefaults, ZGWindowStyleThemeKey)
-		if newDefaultTheme.theme != currentDefaultTheme.theme || newDefaultTheme.automatic != currentDefaultTheme.automatic {
+		if newDefaultTheme != currentDefaultTheme {
 			ZGWriteDefaultStyleTheme(userDefaults, ZGWindowStyleThemeKey, newDefaultTheme)
 			let newTheme = Self.styleTheme(defaultTheme: newDefaultTheme, effectiveAppearance: NSApp.effectiveAppearance)
 			
@@ -882,7 +878,13 @@ enum VersionControlType {
 		switch menuItem.action {
 		case #selector(changeEditorTheme(_:)):
 			let currentDefaultTheme = ZGReadDefaultWindowStyleTheme(UserDefaults.standard, ZGWindowStyleThemeKey)
-			let themeTag = currentDefaultTheme.automatic ? -1 : Int(currentDefaultTheme.theme.rawValue)
+			let themeTag: Int
+			switch currentDefaultTheme {
+			case .automatic:
+				themeTag = WindowStyleAutomaticTag
+			case .theme(let theme):
+				themeTag = theme.rawValue
+			}
 			menuItem.state = (menuItem.tag == themeTag) ? .on : .off
 			break
 		case #selector(changeVibrancy(_:)):

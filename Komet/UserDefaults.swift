@@ -39,29 +39,24 @@ func ZGReadDefaultLineLimit(_ userDefaults: UserDefaults, _ defaultsKey: String)
 	return min(1000, max(userDefaults.integer(forKey: defaultsKey), 0))
 }
 
-func ZGReadDefaultWindowStyleTheme(_ userDefaults: UserDefaults, _ defaultsKey: String) -> ZGWindowStyleDefaultTheme {
+func ZGReadDefaultWindowStyleTheme(_ userDefaults: UserDefaults, _ defaultsKey: String) -> WindowStyleDefaultTheme {
 	// The theme can be stored as either an integer or string (convertible to integer)
 	// or be nil for automatic
-	let readTheme: ZGWindowStyleTheme? = userDefaults.object(forKey: defaultsKey).flatMap { themeDefault -> Int? in
+	let readTheme: WindowStyleTheme? = userDefaults.object(forKey: defaultsKey).flatMap { themeDefault -> Int? in
 		let integerValue = themeDefault as? Int
 		return integerValue ?? (themeDefault as? String).flatMap({ Int($0) })
-	}.flatMap({ ZGWindowStyleTheme(rawValue: UInt($0)) })
+	}.flatMap({ WindowStyleTheme(rawValue: $0) })
 	
-	var defaultTheme = ZGWindowStyleDefaultTheme()
-	if let theme = readTheme {
-		defaultTheme.automatic = false
-		defaultTheme.theme = theme
-	} else {
-		defaultTheme.automatic = true
-	}
+	let defaultTheme: WindowStyleDefaultTheme = readTheme.flatMap({ .theme($0) }) ?? .automatic
 	return defaultTheme
 }
 
-func ZGWriteDefaultStyleTheme(_ userDefaults: UserDefaults, _ defaultsKey: String, _ defaultTheme: ZGWindowStyleDefaultTheme) {
-	if defaultTheme.automatic {
+func ZGWriteDefaultStyleTheme(_ userDefaults: UserDefaults, _ defaultsKey: String, _ defaultTheme: WindowStyleDefaultTheme) {
+	switch defaultTheme {
+	case .automatic:
 		userDefaults.removeObject(forKey: defaultsKey)
-	} else {
-		userDefaults.set(defaultTheme.theme.rawValue, forKey: defaultsKey)
+	case .theme(let theme):
+		userDefaults.set(theme.rawValue, forKey: defaultsKey)
 	}
 }
 

@@ -4,7 +4,6 @@
 
 #import "ZGUpdaterController.h"
 #import "ZGUserDefaultsEditorListener.h"
-#import "ZGWindowStyleTheme.h"
 #import "ZGUserDefaultsEditorListener.h"
 #import "ZGUpdaterSettingsListener.h"
 

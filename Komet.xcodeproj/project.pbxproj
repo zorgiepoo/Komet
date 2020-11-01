@@ -39,6 +39,7 @@
 		72D3BE6A254E93E90051914F /* UserDefaultKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72D3BE69254E93E90051914F /* UserDefaultKeys.swift */; };
 		72D3BE6B254E93E90051914F /* UserDefaultKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72D3BE69254E93E90051914F /* UserDefaultKeys.swift */; };
 		72D3BE70254E9A590051914F /* WindowStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72D3BE6F254E9A590051914F /* WindowStyle.swift */; };
+		72D3BE79254F24CF0051914F /* WindowStyleTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72D3BE78254F24CF0051914F /* WindowStyleTheme.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -82,7 +83,6 @@
 		72120FC32533EC570018201E /* linux-partial */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "linux-partial"; sourceTree = "<group>"; };
 		72120FC72533F7650018201E /* interactive-rebase */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "interactive-rebase"; sourceTree = "<group>"; };
 		72120FD12533F91D0018201E /* interactive-rebase-2 */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "interactive-rebase-2"; sourceTree = "<group>"; };
-		722FB81E1DD9568F001D40CE /* ZGWindowStyleTheme.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZGWindowStyleTheme.h; sourceTree = "<group>"; };
 		723606A51FC61ECB00BDD6E9 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/MainMenu.strings; sourceTree = "<group>"; };
 		723606A71FC6222000BDD6E9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = "Base.lproj/Commit Editor.xib"; sourceTree = "<group>"; };
 		723606AA1FC6222300BDD6E9 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = "en.lproj/Commit Editor.strings"; sourceTree = "<group>"; };
@@ -108,6 +108,7 @@
 		72D3BE64254E8BE00051914F /* CommitTextView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommitTextView.swift; sourceTree = "<group>"; };
 		72D3BE69254E93E90051914F /* UserDefaultKeys.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserDefaultKeys.swift; sourceTree = "<group>"; };
 		72D3BE6F254E9A590051914F /* WindowStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowStyle.swift; sourceTree = "<group>"; };
+		72D3BE78254F24CF0051914F /* WindowStyleTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowStyleTheme.swift; sourceTree = "<group>"; };
 		772B7CCB21437E2500E993B2 /* Komet.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Komet.entitlements; sourceTree = "<group>"; };
 		77C23E5E232CB41800F5BC6C /* KometDebug.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = KometDebug.entitlements; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -187,7 +188,7 @@
 				7211A9B02546704C00F95773 /* Breadcrumbs.swift */,
 				7211A995253C06F200F95773 /* EditorWindowController.swift */,
 				72D3BE6F254E9A590051914F /* WindowStyle.swift */,
-				722FB81E1DD9568F001D40CE /* ZGWindowStyleTheme.h */,
+				72D3BE78254F24CF0051914F /* WindowStyleTheme.swift */,
 				72D3BE69254E93E90051914F /* UserDefaultKeys.swift */,
 				72D3BE5C254E6E3F0051914F /* UserDefaults.swift */,
 				72D3BE57254E37B70051914F /* PreferencesWindowController.swift */,
@@ -383,6 +384,7 @@
 				72D3BE65254E8BE00051914F /* CommitTextView.swift in Sources */,
 				7240063C1D73BE84001042CF /* ZGUpdaterUserDriver.m in Sources */,
 				72D3BE70254E9A590051914F /* WindowStyle.swift in Sources */,
+				72D3BE79254F24CF0051914F /* WindowStyleTheme.swift in Sources */,
 				724006331D73B2CA001042CF /* ZGUpdaterController.m in Sources */,
 				72B72C9A1D63EFF90096365F /* main.m in Sources */,
 			);

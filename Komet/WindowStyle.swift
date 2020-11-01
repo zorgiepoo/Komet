@@ -20,7 +20,7 @@ struct WindowStyle {
 	let fallbackBackgroundColor: NSColor
 	let scrollerKnobStyle: NSScroller.KnobStyle
 	
-	static func withTheme(_ theme: ZGWindowStyleTheme) -> WindowStyle {
+	static func withTheme(_ theme: WindowStyleTheme) -> WindowStyle {
 		switch theme {
 		case .plain:
 			return
