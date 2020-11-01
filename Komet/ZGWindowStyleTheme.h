@@ -18,8 +18,6 @@ typedef NS_ENUM(NSUInteger, ZGWindowStyleTheme)
 	ZGWindowStyleThemeRed
 };
 
-#define ZGWindowStyleMaxTheme ZGWindowStyleThemeRed
-
 typedef struct
 {
 	ZGWindowStyleTheme theme;
