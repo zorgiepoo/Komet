@@ -19,24 +19,24 @@ enum FontType {
 	
 	private var selectedFontType: FontType? = nil
 	
-	@IBOutlet var fontsView: NSView!
-	@IBOutlet var warningsView: NSView!
-	@IBOutlet var advancedView: NSView!
+	@IBOutlet private var fontsView: NSView!
+	@IBOutlet private var warningsView: NSView!
+	@IBOutlet private var advancedView: NSView!
 	
-	@IBOutlet var messageFontTextField: NSTextField!
-	@IBOutlet var commentsFontTextField: NSTextField!
+	@IBOutlet private var messageFontTextField: NSTextField!
+	@IBOutlet private var commentsFontTextField: NSTextField!
 	
-	@IBOutlet var recommendedSubjectLengthLimitTextField: NSTextField!
-	@IBOutlet var recommendedSubjectLengthLimitEnabledCheckbox: NSButton!
-	@IBOutlet var recommendedSubjectLengthLimitDescriptionTextField: NSTextField!
+	@IBOutlet private var recommendedSubjectLengthLimitTextField: NSTextField!
+	@IBOutlet private var recommendedSubjectLengthLimitEnabledCheckbox: NSButton!
+	@IBOutlet private var recommendedSubjectLengthLimitDescriptionTextField: NSTextField!
 	
-	@IBOutlet var recommendedBodyLineLengthLimitTextField: NSTextField!
-	@IBOutlet var recommendedBodyLineLengthLimitEnabledCheckbox: NSButton!
-	@IBOutlet var recommendedBodyLineLengthLimitDescriptionTextField: NSTextField!
+	@IBOutlet private var recommendedBodyLineLengthLimitTextField: NSTextField!
+	@IBOutlet private var recommendedBodyLineLengthLimitEnabledCheckbox: NSButton!
+	@IBOutlet private var recommendedBodyLineLengthLimitDescriptionTextField: NSTextField!
 	
-	@IBOutlet var automaticNewlineInsertionAfterSubjectLineCheckbox: NSButton!
-	@IBOutlet var resumeLastIncompleteSessionCheckbox: NSButton!
-	@IBOutlet var automaticallyInstallUpdatesCheckbox: NSButton!
+	@IBOutlet private var automaticNewlineInsertionAfterSubjectLineCheckbox: NSButton!
+	@IBOutlet private var resumeLastIncompleteSessionCheckbox: NSButton!
+	@IBOutlet private var automaticallyInstallUpdatesCheckbox: NSButton!
 	
 	private let ZGToolbarFontsIdentifier = "fonts"
 	private let ZGToolbarWarningsIdentifier = "warnings"

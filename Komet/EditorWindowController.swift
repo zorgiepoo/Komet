@@ -41,14 +41,14 @@ enum VersionControlType {
 	private var preventAccidentalNewline: Bool = false
 	private var effectiveAppearanceObserver: NSKeyValueObservation? = nil
 	
-	@IBOutlet var topBar: NSView!
-	@IBOutlet var horizontalBarDivider: NSBox!
-	@IBOutlet var textView: ZGCommitTextView!
-	@IBOutlet var scrollView: NSScrollView!
-	@IBOutlet var contentView: NSVisualEffectView!
-	@IBOutlet var commitLabelTextField: NSTextField!
-	@IBOutlet var cancelButton: NSButtonCell!
-	@IBOutlet var commitButton: NSButton!
+	@IBOutlet private var topBar: NSView!
+	@IBOutlet private var horizontalBarDivider: NSBox!
+	@IBOutlet private var textView: ZGCommitTextView!
+	@IBOutlet private var scrollView: NSScrollView!
+	@IBOutlet private var contentView: NSVisualEffectView!
+	@IBOutlet private var commitLabelTextField: NSTextField!
+	@IBOutlet private var cancelButton: NSButtonCell!
+	@IBOutlet private var commitButton: NSButton!
 	
 	// MARK: Static functions
 	
