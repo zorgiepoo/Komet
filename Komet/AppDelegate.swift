@@ -13,9 +13,9 @@ import AppKit
 typealias StatFS = statfs
 
 @objc class AppDelegate: NSObject, NSApplicationDelegate {
-	var editorWindowController: ZGEditorWindowController?
-	var preferencesWindowController: ZGPreferencesWindowController?
-	var updaterController: ZGUpdaterController?
+	private var editorWindowController: ZGEditorWindowController?
+	private var preferencesWindowController: ZGPreferencesWindowController?
+	private var updaterController: ZGUpdaterController?
 	
 	@objc override init() {
 		ZGEditorWindowController.registerDefaults()
