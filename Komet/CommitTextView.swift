@@ -14,9 +14,9 @@ import AppKit
 	@objc func zgCommitViewTouchCancel(_ sender: Any)
 }
 
-let ZGTouchBarIdentifier = "org.zgcoder.Komet.67e9f8738561"
-let ZGTouchBarIdentifierCancel = "zgCancelIdentifier"
-let ZGTouchBarIdentifierCommit = "zgCommitIdentifier"
+private let ZGTouchBarIdentifier = "org.zgcoder.Komet.67e9f8738561"
+private let ZGTouchBarIdentifierCancel = "zgCancelIdentifier"
+private let ZGTouchBarIdentifierCommit = "zgCommitIdentifier"
 
 @objc class ZGCommitTextView: NSTextView {
 	@objc weak var zgCommitViewDelegate: ZGCommitViewDelegate?
