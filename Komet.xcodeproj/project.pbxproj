@@ -36,7 +36,7 @@
 		72B72C9C1D63EFF90096365F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 72B72C9B1D63EFF90096365F /* Assets.xcassets */; };
 		72B72C9F1D63EFF90096365F /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 72B72C9D1D63EFF90096365F /* MainMenu.xib */; };
 		72B72CAD1D6412EE0096365F /* ZGCommitTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 72B72CAC1D6412EE0096365F /* ZGCommitTextView.m */; };
-		72D10C571D7334CA00ED32BC /* ZGPreferencesWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 72D10C561D7334CA00ED32BC /* ZGPreferencesWindowController.m */; };
+		72D3BE58254E37B70051914F /* PreferencesWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72D3BE57254E37B70051914F /* PreferencesWindowController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -109,8 +109,7 @@
 		72B72CA01D63EFF90096365F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		72B72CAB1D6412EE0096365F /* ZGCommitTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZGCommitTextView.h; sourceTree = "<group>"; };
 		72B72CAC1D6412EE0096365F /* ZGCommitTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZGCommitTextView.m; sourceTree = "<group>"; };
-		72D10C551D7334CA00ED32BC /* ZGPreferencesWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZGPreferencesWindowController.h; sourceTree = "<group>"; };
-		72D10C561D7334CA00ED32BC /* ZGPreferencesWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZGPreferencesWindowController.m; sourceTree = "<group>"; };
+		72D3BE57254E37B70051914F /* PreferencesWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferencesWindowController.swift; sourceTree = "<group>"; };
 		772B7CCB21437E2500E993B2 /* Komet.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Komet.entitlements; sourceTree = "<group>"; };
 		77C23E5E232CB41800F5BC6C /* KometDebug.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = KometDebug.entitlements; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -197,8 +196,7 @@
 				72120FB52532660F0018201E /* ZGUserDefaultKeys.h */,
 				7240062D1D7359E4001042CF /* ZGUserDefaults.h */,
 				7240062E1D7359E4001042CF /* ZGUserDefaults.m */,
-				72D10C551D7334CA00ED32BC /* ZGPreferencesWindowController.h */,
-				72D10C561D7334CA00ED32BC /* ZGPreferencesWindowController.m */,
+				72D3BE57254E37B70051914F /* PreferencesWindowController.swift */,
 				724006301D736E83001042CF /* ZGUserDefaultsEditorListener.h */,
 				7240063D1D73E17B001042CF /* ZGUpdaterSettingsListener.h */,
 				724006311D73B2CA001042CF /* ZGUpdaterController.h */,
@@ -382,8 +380,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				7211A996253C06F200F95773 /* EditorWindowController.swift in Sources */,
+				72D3BE58254E37B70051914F /* PreferencesWindowController.swift in Sources */,
 				7211A986253BCF1600F95773 /* AppDelegate.swift in Sources */,
-				72D10C571D7334CA00ED32BC /* ZGPreferencesWindowController.m in Sources */,
 				7211A9B12546704C00F95773 /* Breadcrumbs.swift in Sources */,
 				7240063C1D73BE84001042CF /* ZGUpdaterUserDriver.m in Sources */,
 				3A05CB0E1D7EA56B005106E9 /* ZGWindowStyle.m in Sources */,
