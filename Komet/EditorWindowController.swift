@@ -37,7 +37,7 @@ enum VersionControlType {
 	private let initialCommitTextRange: Range<String.UTF16View.Index>
 	private let resumedFromSavedCommit: Bool
 	
-	private var style: ZGWindowStyle
+	private var style: WindowStyle
 	private var preventAccidentalNewline: Bool = false
 	private var effectiveAppearanceObserver: NSKeyValueObservation? = nil
 	
@@ -204,7 +204,7 @@ enum VersionControlType {
 		
 		breadcrumbs = (ZGReadDefaultURL(userDefaults, ZGBreadcrumbsURLKey) != nil) ? Breadcrumbs() : nil
 		
-		style = ZGWindowStyle.init(theme: Self.styleTheme(defaultTheme: ZGReadDefaultWindowStyleTheme(userDefaults, ZGWindowStyleThemeKey), effectiveAppearance: NSApp.effectiveAppearance))
+		style = WindowStyle.withTheme(Self.styleTheme(defaultTheme: ZGReadDefaultWindowStyleTheme(userDefaults, ZGWindowStyleThemeKey), effectiveAppearance: NSApp.effectiveAppearance))
 		
 		// Detect squash message
 		let loadedPlainString: String
@@ -413,7 +413,7 @@ enum VersionControlType {
 		}
 	}
 	
-	private func updateStyle(_ newStyle: ZGWindowStyle) {
+	private func updateStyle(_ newStyle: WindowStyle) {
 		style = newStyle
 		updateCurrentStyle()
 	}
@@ -599,7 +599,7 @@ enum VersionControlType {
 		textView.updateInsertionPointStateAndRestartTimer(true)
 	}
 	
-	private func updateEditorStyle(_ style: ZGWindowStyle) {
+	private func updateEditorStyle(_ style: WindowStyle) {
 		updateStyle(style)
 		updateTextProcessing()
 		topBar.needsDisplay = true
@@ -643,7 +643,7 @@ enum VersionControlType {
 				let defaultTheme = ZGReadDefaultWindowStyleTheme(userDefaults, ZGWindowStyleThemeKey)
 				let theme = Self.styleTheme(defaultTheme: defaultTheme, effectiveAppearance: application.effectiveAppearance)
 				
-				self.updateEditorStyle(ZGWindowStyle(theme: theme))
+				self.updateEditorStyle(WindowStyle.withTheme(theme))
 			}
 		})
 		
@@ -866,7 +866,7 @@ enum VersionControlType {
 			ZGWriteDefaultStyleTheme(userDefaults, ZGWindowStyleThemeKey, newDefaultTheme)
 			let newTheme = Self.styleTheme(defaultTheme: newDefaultTheme, effectiveAppearance: NSApp.effectiveAppearance)
 			
-			updateEditorStyle(ZGWindowStyle(theme: newTheme))
+			updateEditorStyle(WindowStyle.withTheme(newTheme))
 		}
 	}
 	

@@ -8,7 +8,7 @@
 
 @import Foundation;
 
-typedef NS_ENUM(NSUInteger, ZGWindowStyleTheme)
+typedef NS_CLOSED_ENUM(NSUInteger, ZGWindowStyleTheme)
 {
 	ZGWindowStyleThemePlain = 0,
 	ZGWindowStyleThemeDark,
