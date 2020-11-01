@@ -12,58 +12,17 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-void ZGRegisterDefaultMessageFont(void);
-NSFont *ZGReadDefaultMessageFont(void);
-void ZGWriteDefaultMessageFont(NSFont *font);
+void ZGRegisterDefaultFont(NSUserDefaults *userDefaults, NSString *fontNameKey, NSString *pointSizeKey);
+NSFont *ZGReadDefaultFont(NSUserDefaults *userDefaults, NSString *fontNameDefaultsKey, NSString *fontSizeDefaultsKey);
+void ZGWriteDefaultFont(NSUserDefaults *userDefaults, NSFont *font, NSString *fontNameKey, NSString *fontPointSizeKey);
 
-void ZGRegisterDefaultCommentsFont(void);
-NSFont *ZGReadDefaultCommentsFont(void);
-void ZGWriteDefaultCommentsFont(NSFont *font);
+NSInteger ZGReadDefaultLineLimit(NSUserDefaults *userDefaults, NSString *defaultsKey);
 
-void ZGRegisterDefaultRecommendedSubjectLengthLimit(void);
-NSUInteger ZGReadDefaultRecommendedSubjectLengthLimit(void);
-void ZGWriteDefaultRecommendedSubjectLengthLimit(NSUInteger recommendedSubjectLengthLimit);
+ZGWindowStyleDefaultTheme ZGReadDefaultWindowStyleTheme(NSUserDefaults *userDefaults, NSString *defaultsKey);
+void ZGWriteDefaultStyleTheme(NSUserDefaults *userDefaults, NSString *defaultsKey, ZGWindowStyleDefaultTheme defaultTheme);
 
-void ZGRegisterDefaultRecommendedSubjectLengthLimitEnabled(void);
-BOOL ZGReadDefaultRecommendedSubjectLengthLimitEnabled(void);
-void ZGWriteDefaultRecommendedSubjectLengthLimitEnabled(BOOL enabled);
+NSTimeInterval ZGReadDefaultTimeoutInterval(NSUserDefaults *userDefaults, NSString *defaultsKey, NSTimeInterval maxTimeout);
 
-void ZGRegisterDefaultRecommendedBodyLineLengthLimit(void);
-NSUInteger ZGReadDefaultRecommendedBodyLineLengthLimit(void);
-void ZGWriteDefaultRecommendedBodyLineLengthLimit(NSUInteger recommendedBodyLineLengthLimit);
-
-void ZGRegisterDefaultRecommendedBodyLineLengthLimitEnabled(void);
-BOOL ZGReadDefaultRecommendedBodyLineLengthLimitEnabled(void);
-void ZGWriteDefaultRecommendedBodyLineLengthLimitEnabled(BOOL enabled);
-
-void ZGRegisterDefaultAutomaticNewlineInsertionAfterSubjectLine(void);
-BOOL ZGReadDefaultAutomaticNewlineInsertionAfterSubjectLine(void);
-void ZGWriteDefaultAutomaticNewlineInsertionAfterSubjectLine(BOOL automaticNewlineInsertionAfterSubjectLine);
-
-ZGWindowStyleDefaultTheme ZGReadDefaultWindowStyleTheme(void);
-void ZGWriteDefaultStyleTheme(ZGWindowStyleDefaultTheme defaultTheme);
-
-void ZGRegisterDefaultWindowVibrancy(void);
-BOOL ZGReadDefaultWindowVibrancy(void);
-void ZGWriteDefaultWindowVibrancy(BOOL windowVibrancy);
-
-void ZGRegisterDefaultResumeIncompleteSession(void);
-BOOL ZGReadDefaultResumeIncompleteSession(void);
-void ZGWriteDefaultResumeIncompleteSession(BOOL resumeIncompleteSession);
-
-void ZGRegisterDefaultResumeIncompleteSessionTimeoutInterval(void);
-NSTimeInterval ZGReadDefaultResumeIncompleteSessionTimeoutInterval(void);
-
-void ZGRegisterDefaultDisableSpellCheckingAndCorrectionForSquashes(void);
-BOOL ZGReadDefaultDisableSpellCheckingAndCorrectionForSquashes(void);
-
-void ZGRegisterDefaultDisableAutomaticNewlineInsertionAfterSubjectLineForSquashes(void);
-BOOL ZGReadDefaultDisableAutomaticNewlineInsertionAfterSubjectLineForSquashes(void);
-
-void ZGRegisterDefaultDetectHGCommentStyleForSquashes(void);
-BOOL ZGReadDefaultDetectHGCommentStyleForSquashes(void);
-
-void ZGRegisterDefaultBreadcrumbsURL(void);
-NSURL * _Nullable ZGReadDefaultBreadcrumbsURL(void);
+NSURL * _Nullable ZGReadDefaultURL(NSUserDefaults *userDefaults, NSString *defaultsKey);
 
 NS_ASSUME_NONNULL_END
