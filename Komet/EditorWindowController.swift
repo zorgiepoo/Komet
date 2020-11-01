@@ -852,9 +852,10 @@ enum VersionControlType {
 			return
 		}
 		
-		let tag = menuItem.tag
-		
-		let newDefaultTheme: WindowStyleDefaultTheme = (tag == WindowStyleAutomaticTag) ? .automatic : .theme(WindowStyleTheme(rawValue: tag)!)
+		guard let newDefaultTheme = WindowStyleDefaultTheme(tag: menuItem.tag) else {
+			print("Unsupported theme with tag: \(menuItem.tag)")
+			return
+		}
 		
 		let userDefaults = UserDefaults.standard
 		let currentDefaultTheme = ZGReadDefaultWindowStyleTheme(userDefaults, ZGWindowStyleThemeKey)
@@ -878,14 +879,7 @@ enum VersionControlType {
 		switch menuItem.action {
 		case #selector(changeEditorTheme(_:)):
 			let currentDefaultTheme = ZGReadDefaultWindowStyleTheme(UserDefaults.standard, ZGWindowStyleThemeKey)
-			let themeTag: Int
-			switch currentDefaultTheme {
-			case .automatic:
-				themeTag = WindowStyleAutomaticTag
-			case .theme(let theme):
-				themeTag = theme.rawValue
-			}
-			menuItem.state = (menuItem.tag == themeTag) ? .on : .off
+			menuItem.state = (menuItem.tag == currentDefaultTheme.tag) ? .on : .off
 			break
 		case #selector(changeVibrancy(_:)):
 			menuItem.state = UserDefaults.standard.bool(forKey: ZGWindowVibrancyKey) ? .on : .off
