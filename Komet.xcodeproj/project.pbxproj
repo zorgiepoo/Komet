@@ -34,9 +34,9 @@
 		72B72C9A1D63EFF90096365F /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 72B72C991D63EFF90096365F /* main.m */; };
 		72B72C9C1D63EFF90096365F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 72B72C9B1D63EFF90096365F /* Assets.xcassets */; };
 		72B72C9F1D63EFF90096365F /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 72B72C9D1D63EFF90096365F /* MainMenu.xib */; };
-		72B72CAD1D6412EE0096365F /* ZGCommitTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 72B72CAC1D6412EE0096365F /* ZGCommitTextView.m */; };
 		72D3BE58254E37B70051914F /* PreferencesWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72D3BE57254E37B70051914F /* PreferencesWindowController.swift */; };
 		72D3BE5D254E6E3F0051914F /* UserDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72D3BE5C254E6E3F0051914F /* UserDefaults.swift */; };
+		72D3BE65254E8BE00051914F /* CommitTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72D3BE64254E8BE00051914F /* CommitTextView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -105,10 +105,9 @@
 		72B72C9B1D63EFF90096365F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		72B72C9E1D63EFF90096365F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		72B72CA01D63EFF90096365F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		72B72CAB1D6412EE0096365F /* ZGCommitTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZGCommitTextView.h; sourceTree = "<group>"; };
-		72B72CAC1D6412EE0096365F /* ZGCommitTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZGCommitTextView.m; sourceTree = "<group>"; };
 		72D3BE57254E37B70051914F /* PreferencesWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferencesWindowController.swift; sourceTree = "<group>"; };
 		72D3BE5C254E6E3F0051914F /* UserDefaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaults.swift; sourceTree = "<group>"; };
+		72D3BE64254E8BE00051914F /* CommitTextView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommitTextView.swift; sourceTree = "<group>"; };
 		772B7CCB21437E2500E993B2 /* Komet.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Komet.entitlements; sourceTree = "<group>"; };
 		77C23E5E232CB41800F5BC6C /* KometDebug.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = KometDebug.entitlements; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -185,8 +184,7 @@
 				772B7CCB21437E2500E993B2 /* Komet.entitlements */,
 				7211A984253BCF1500F95773 /* Komet-Bridging-Header.h */,
 				7211A985253BCF1600F95773 /* AppDelegate.swift */,
-				72B72CAB1D6412EE0096365F /* ZGCommitTextView.h */,
-				72B72CAC1D6412EE0096365F /* ZGCommitTextView.m */,
+				72D3BE64254E8BE00051914F /* CommitTextView.swift */,
 				7211A9B02546704C00F95773 /* Breadcrumbs.swift */,
 				7211A995253C06F200F95773 /* EditorWindowController.swift */,
 				3A05CB0C1D7EA56B005106E9 /* ZGWindowStyle.h */,
@@ -382,11 +380,11 @@
 				7211A986253BCF1600F95773 /* AppDelegate.swift in Sources */,
 				72D3BE5D254E6E3F0051914F /* UserDefaults.swift in Sources */,
 				7211A9B12546704C00F95773 /* Breadcrumbs.swift in Sources */,
+				72D3BE65254E8BE00051914F /* CommitTextView.swift in Sources */,
 				7240063C1D73BE84001042CF /* ZGUpdaterUserDriver.m in Sources */,
 				3A05CB0E1D7EA56B005106E9 /* ZGWindowStyle.m in Sources */,
 				724006331D73B2CA001042CF /* ZGUpdaterController.m in Sources */,
 				72B72C9A1D63EFF90096365F /* main.m in Sources */,
-				72B72CAD1D6412EE0096365F /* ZGCommitTextView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

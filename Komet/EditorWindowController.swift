@@ -191,6 +191,8 @@ enum VersionControlType {
 			ZGDisableAutomaticNewlineInsertionAfterSubjectLineForSquashesKey: true,
 			ZGDetectHGCommentStyleForSquashesKey: true
 		])
+		
+		ZGCommitTextView.registerDefaults()
 	}
 	
 	required init(fileURL: URL, temporaryDirectoryURL: URL?, tutorialMode: Bool) {

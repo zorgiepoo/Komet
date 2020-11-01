@@ -92,7 +92,7 @@ DQ
                                     <rect key="frame" x="0.0" y="0.0" width="500" height="306"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
-                                        <textView importsGraphics="NO" richText="NO" verticallyResizable="YES" findStyle="bar" incrementalSearchingEnabled="YES" continuousSpellChecking="YES" allowsUndo="YES" allowsNonContiguousLayout="YES" smartInsertDelete="YES" id="AXg-Fl-XGk" customClass="ZGCommitTextView">
+                                        <textView importsGraphics="NO" richText="NO" verticallyResizable="YES" findStyle="bar" incrementalSearchingEnabled="YES" continuousSpellChecking="YES" allowsUndo="YES" allowsNonContiguousLayout="YES" smartInsertDelete="YES" id="AXg-Fl-XGk" customClass="ZGCommitTextView" customModule="Komet" customModuleProvider="target">
                                             <rect key="frame" x="0.0" y="0.0" width="500" height="306"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>

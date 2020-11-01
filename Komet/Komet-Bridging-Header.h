@@ -4,9 +4,16 @@
 
 #import "ZGUpdaterController.h"
 #import "ZGUserDefaultsEditorListener.h"
-#import "ZGCommitTextView.h"
 #import "ZGUserDefaultKeys.h"
 #import "ZGWindowStyleTheme.h"
 #import "ZGWindowStyle.h"
 #import "ZGUserDefaultsEditorListener.h"
 #import "ZGUpdaterSettingsListener.h"
+
+@interface NSTextView (OverridableSetters)
+
+- (void)setContinuousSpellCheckingEnabled:(BOOL)continuousSpellCheckingEnabled;
+- (void)setAutomaticSpellingCorrectionEnabled:(BOOL)automaticSpellingCorrectionEnabled;
+- (void)setAutomaticTextReplacementEnabled:(BOOL)automaticTextReplacementEnabled;
+
+@end
