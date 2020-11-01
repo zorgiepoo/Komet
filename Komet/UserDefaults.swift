@@ -41,6 +41,7 @@ func ZGReadDefaultLineLimit(_ userDefaults: UserDefaults, _ defaultsKey: String)
 
 func ZGReadDefaultWindowStyleTheme(_ userDefaults: UserDefaults, _ defaultsKey: String) -> ZGWindowStyleDefaultTheme {
 	// The theme can be stored as either an integer or string (convertible to integer)
+	// or be nil for automatic
 	let readTheme: ZGWindowStyleTheme? = userDefaults.object(forKey: defaultsKey).flatMap { themeDefault -> Int? in
 		let integerValue = themeDefault as? Int
 		return integerValue ?? (themeDefault as? String).flatMap({ Int($0) })
