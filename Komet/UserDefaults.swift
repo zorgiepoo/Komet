@@ -12,7 +12,7 @@ func ZGReadDefaultFont(_ userDefaults: UserDefaults, _ fontNameDefaultsKey: Stri
 	let fontSize = userDefaults.double(forKey: fontSizeDefaultsKey)
 	
 	let font: NSFont?
-	if let fontName = userDefaults.string(forKey: fontNameDefaultsKey), fontName.utf16.count > 0 {
+	if let fontName = userDefaults.string(forKey: fontNameDefaultsKey), !fontName.isEmpty {
 		if let userFont = NSFont(name: fontName, size: CGFloat(fontSize)) {
 			font = userFont
 		} else {
@@ -66,7 +66,7 @@ func ZGReadDefaultTimeoutInterval(_ userDefaults: UserDefaults, _ defaultsKey: S
 }
 
 func ZGReadDefaultURL(_ userDefaults: UserDefaults, _ defaultsKey: String) -> URL? {
-	if let urlString = userDefaults.string(forKey: defaultsKey), urlString.utf16.count > 0 {
+	if let urlString = userDefaults.string(forKey: defaultsKey), !urlString.isEmpty {
 		return URL(fileURLWithPath: urlString)
 	} else {
 		return nil
