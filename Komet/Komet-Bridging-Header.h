@@ -3,7 +3,6 @@
 //
 
 #import "ZGUpdaterController.h"
-#import "ZGUserDefaultsEditorListener.h"
 #import "ZGUpdaterSettingsListener.h"
 
 #import <Cocoa/Cocoa.h>

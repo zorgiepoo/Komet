@@ -20,7 +20,7 @@ enum VersionControlType {
 	case svn
 }
 
-@objc class ZGEditorWindowController: NSWindowController, ZGUserDefaultsEditorListener, NSTextStorageDelegate, NSLayoutManagerDelegate, NSTextViewDelegate, ZGCommitViewDelegate {
+@objc class ZGEditorWindowController: NSWindowController, UserDefaultsEditorListener, NSTextStorageDelegate, NSLayoutManagerDelegate, NSTextViewDelegate, ZGCommitViewDelegate {
 	
 	private let fileURL: URL
 	private let temporaryDirectoryURL: URL?
