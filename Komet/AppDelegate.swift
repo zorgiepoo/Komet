@@ -15,7 +15,7 @@ typealias StatFS = statfs
 @objc class AppDelegate: NSObject, NSApplicationDelegate {
 	private var editorWindowController: ZGEditorWindowController?
 	private var preferencesWindowController: ZGPreferencesWindowController?
-	private var updaterController: ZGUpdaterController?
+	private var updaterController: UpdaterController?
 	
 	@objc override init() {
 		ZGEditorWindowController.registerDefaults()
@@ -176,7 +176,7 @@ typealias StatFS = statfs
 		editorWindowController = ZGEditorWindowController(fileURL: commitFileURL, temporaryDirectoryURL: tempDirectoryURL, tutorialMode: tutorialMode)
 		editorWindowController?.showWindow(nil)
 		
-		updaterController = ZGUpdaterController()
+		updaterController = UpdaterController()
 	}
 	
 	@objc func applicationWillTerminate(_ notification: Notification) {

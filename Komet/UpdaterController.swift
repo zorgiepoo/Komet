@@ -26,13 +26,13 @@ import Foundation
 	}
 }
 
-@objc class ZGUpdaterController: NSObject, UpdaterSettingsListener {
+class UpdaterController: UpdaterSettingsListener {
 	let updater: SPUUpdater
 	let userDriver: ZGUpdaterUserDriver
 	let updaterDelegate: SPUUpdaterDelegate
 	let startedUpdater: Bool
 	
-	override init() {
+	init() {
 		let mainBundle = Bundle.main
 		
 		userDriver = ZGUpdaterUserDriver()
@@ -49,8 +49,6 @@ import Foundation
 			startedUpdater = false
 			print("Error: Failed to start updater because of error: \(error)")
 		}
-		
-		super.init()
 	}
 	
 	var canCheckForUpdates: Bool {
