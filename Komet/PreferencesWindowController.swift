@@ -15,7 +15,7 @@ enum FontType {
 
 @objc class ZGPreferencesWindowController: NSWindowController {
 	private weak var editorListener: UserDefaultsEditorListener?
-	private weak var updaterListener: ZGUpdaterSettingsListener?
+	private weak var updaterListener: UpdaterSettingsListener?
 	
 	private var selectedFontType: FontType? = nil
 	
@@ -42,7 +42,7 @@ enum FontType {
 	private let ZGToolbarWarningsIdentifier = "warnings"
 	private let ZGToolbarAdvancedIdentifier = "advanced"
 	
-	required init(editorListener: UserDefaultsEditorListener, updaterListener: ZGUpdaterSettingsListener) {
+	required init(editorListener: UserDefaultsEditorListener, updaterListener: UpdaterSettingsListener) {
 		self.editorListener = editorListener
 		self.updaterListener = updaterListener
 		

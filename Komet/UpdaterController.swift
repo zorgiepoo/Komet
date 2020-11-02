@@ -26,7 +26,7 @@ import Foundation
 	}
 }
 
-@objc class ZGUpdaterController: NSObject, ZGUpdaterSettingsListener {
+@objc class ZGUpdaterController: NSObject, UpdaterSettingsListener {
 	let updater: SPUUpdater
 	let userDriver: ZGUpdaterUserDriver
 	let updaterDelegate: SPUUpdaterDelegate

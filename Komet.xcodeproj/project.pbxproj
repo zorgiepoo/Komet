@@ -41,6 +41,7 @@
 		72D3BE79254F24CF0051914F /* WindowStyleTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72D3BE78254F24CF0051914F /* WindowStyleTheme.swift */; };
 		72D3BE7D254FD41E0051914F /* UserDefaultsEditorListener.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72D3BE7C254FD41E0051914F /* UserDefaultsEditorListener.swift */; };
 		72D3BE81254FD56F0051914F /* UpdaterController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72D3BE80254FD56F0051914F /* UpdaterController.swift */; };
+		72D3BE86254FDB6A0051914F /* UpdaterSettingsListener.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72D3BE85254FDB6A0051914F /* UpdaterSettingsListener.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -93,7 +94,6 @@
 		724006381D73BCF6001042CF /* dsa_pub.pem */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = dsa_pub.pem; sourceTree = "<group>"; };
 		7240063A1D73BE84001042CF /* ZGUpdaterUserDriver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZGUpdaterUserDriver.h; sourceTree = "<group>"; };
 		7240063B1D73BE84001042CF /* ZGUpdaterUserDriver.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZGUpdaterUserDriver.m; sourceTree = "<group>"; };
-		7240063D1D73E17B001042CF /* ZGUpdaterSettingsListener.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZGUpdaterSettingsListener.h; sourceTree = "<group>"; };
 		7244AD8B1DF5329A004780EF /* SparkleCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SparkleCore.framework; path = vendor/Sparkle/SparkleCore.framework; sourceTree = SOURCE_ROOT; };
 		726F32F61DE27AB7004FB4AF /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = Base; path = Base.lproj/Credits.rtf; sourceTree = "<group>"; };
 		72B72C921D63EFF90096365F /* Komet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Komet.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -109,6 +109,7 @@
 		72D3BE78254F24CF0051914F /* WindowStyleTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowStyleTheme.swift; sourceTree = "<group>"; };
 		72D3BE7C254FD41E0051914F /* UserDefaultsEditorListener.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsEditorListener.swift; sourceTree = "<group>"; };
 		72D3BE80254FD56F0051914F /* UpdaterController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdaterController.swift; sourceTree = "<group>"; };
+		72D3BE85254FDB6A0051914F /* UpdaterSettingsListener.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdaterSettingsListener.swift; sourceTree = "<group>"; };
 		772B7CCB21437E2500E993B2 /* Komet.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Komet.entitlements; sourceTree = "<group>"; };
 		77C23E5E232CB41800F5BC6C /* KometDebug.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = KometDebug.entitlements; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -193,7 +194,7 @@
 				72D3BE5C254E6E3F0051914F /* UserDefaults.swift */,
 				72D3BE57254E37B70051914F /* PreferencesWindowController.swift */,
 				72D3BE7C254FD41E0051914F /* UserDefaultsEditorListener.swift */,
-				7240063D1D73E17B001042CF /* ZGUpdaterSettingsListener.h */,
+				72D3BE85254FDB6A0051914F /* UpdaterSettingsListener.swift */,
 				72D3BE80254FD56F0051914F /* UpdaterController.swift */,
 				7240063A1D73BE84001042CF /* ZGUpdaterUserDriver.h */,
 				7240063B1D73BE84001042CF /* ZGUpdaterUserDriver.m */,
@@ -382,6 +383,7 @@
 				7211A9B12546704C00F95773 /* Breadcrumbs.swift in Sources */,
 				72D3BE6A254E93E90051914F /* UserDefaultKeys.swift in Sources */,
 				72D3BE65254E8BE00051914F /* CommitTextView.swift in Sources */,
+				72D3BE86254FDB6A0051914F /* UpdaterSettingsListener.swift in Sources */,
 				7240063C1D73BE84001042CF /* ZGUpdaterUserDriver.m in Sources */,
 				72D3BE70254E9A590051914F /* WindowStyle.swift in Sources */,
 				72D3BE79254F24CF0051914F /* WindowStyleTheme.swift in Sources */,
