@@ -24,7 +24,6 @@
 		723606A61FC6222000BDD6E9 /* Commit Editor.xib in Resources */ = {isa = PBXBuildFile; fileRef = 723606A81FC6222000BDD6E9 /* Commit Editor.xib */; };
 		723606AB1FC6235200BDD6E9 /* Preferences.xib in Resources */ = {isa = PBXBuildFile; fileRef = 723606AD1FC6235200BDD6E9 /* Preferences.xib */; };
 		723606B21FC630C400BDD6E9 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 723606B01FC630C400BDD6E9 /* Localizable.strings */; };
-		724006331D73B2CA001042CF /* ZGUpdaterController.m in Sources */ = {isa = PBXBuildFile; fileRef = 724006321D73B2CA001042CF /* ZGUpdaterController.m */; };
 		724006391D73BCF6001042CF /* dsa_pub.pem in Resources */ = {isa = PBXBuildFile; fileRef = 724006381D73BCF6001042CF /* dsa_pub.pem */; };
 		7240063C1D73BE84001042CF /* ZGUpdaterUserDriver.m in Sources */ = {isa = PBXBuildFile; fileRef = 7240063B1D73BE84001042CF /* ZGUpdaterUserDriver.m */; };
 		7244AD8C1DF5329A004780EF /* SparkleCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7244AD8B1DF5329A004780EF /* SparkleCore.framework */; };
@@ -41,6 +40,7 @@
 		72D3BE70254E9A590051914F /* WindowStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72D3BE6F254E9A590051914F /* WindowStyle.swift */; };
 		72D3BE79254F24CF0051914F /* WindowStyleTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72D3BE78254F24CF0051914F /* WindowStyleTheme.swift */; };
 		72D3BE7D254FD41E0051914F /* UserDefaultsEditorListener.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72D3BE7C254FD41E0051914F /* UserDefaultsEditorListener.swift */; };
+		72D3BE81254FD56F0051914F /* UpdaterController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72D3BE80254FD56F0051914F /* UpdaterController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -90,8 +90,6 @@
 		723606AC1FC6235200BDD6E9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/Preferences.xib; sourceTree = "<group>"; };
 		723606AF1FC6235400BDD6E9 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Preferences.strings; sourceTree = "<group>"; };
 		723606B11FC630C400BDD6E9 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
-		724006311D73B2CA001042CF /* ZGUpdaterController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZGUpdaterController.h; sourceTree = "<group>"; };
-		724006321D73B2CA001042CF /* ZGUpdaterController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZGUpdaterController.m; sourceTree = "<group>"; };
 		724006381D73BCF6001042CF /* dsa_pub.pem */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = dsa_pub.pem; sourceTree = "<group>"; };
 		7240063A1D73BE84001042CF /* ZGUpdaterUserDriver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZGUpdaterUserDriver.h; sourceTree = "<group>"; };
 		7240063B1D73BE84001042CF /* ZGUpdaterUserDriver.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZGUpdaterUserDriver.m; sourceTree = "<group>"; };
@@ -110,6 +108,7 @@
 		72D3BE6F254E9A590051914F /* WindowStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowStyle.swift; sourceTree = "<group>"; };
 		72D3BE78254F24CF0051914F /* WindowStyleTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowStyleTheme.swift; sourceTree = "<group>"; };
 		72D3BE7C254FD41E0051914F /* UserDefaultsEditorListener.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsEditorListener.swift; sourceTree = "<group>"; };
+		72D3BE80254FD56F0051914F /* UpdaterController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdaterController.swift; sourceTree = "<group>"; };
 		772B7CCB21437E2500E993B2 /* Komet.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Komet.entitlements; sourceTree = "<group>"; };
 		77C23E5E232CB41800F5BC6C /* KometDebug.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = KometDebug.entitlements; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -195,8 +194,7 @@
 				72D3BE57254E37B70051914F /* PreferencesWindowController.swift */,
 				72D3BE7C254FD41E0051914F /* UserDefaultsEditorListener.swift */,
 				7240063D1D73E17B001042CF /* ZGUpdaterSettingsListener.h */,
-				724006311D73B2CA001042CF /* ZGUpdaterController.h */,
-				724006321D73B2CA001042CF /* ZGUpdaterController.m */,
+				72D3BE80254FD56F0051914F /* UpdaterController.swift */,
 				7240063A1D73BE84001042CF /* ZGUpdaterUserDriver.h */,
 				7240063B1D73BE84001042CF /* ZGUpdaterUserDriver.m */,
 				723606A81FC6222000BDD6E9 /* Commit Editor.xib */,
@@ -387,7 +385,7 @@
 				7240063C1D73BE84001042CF /* ZGUpdaterUserDriver.m in Sources */,
 				72D3BE70254E9A590051914F /* WindowStyle.swift in Sources */,
 				72D3BE79254F24CF0051914F /* WindowStyleTheme.swift in Sources */,
-				724006331D73B2CA001042CF /* ZGUpdaterController.m in Sources */,
+				72D3BE81254FD56F0051914F /* UpdaterController.swift in Sources */,
 				72B72C9A1D63EFF90096365F /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

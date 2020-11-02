@@ -2,8 +2,10 @@
 //  Use this file to import your target's public headers that you would like to expose to Swift.
 //
 
-#import "ZGUpdaterController.h"
 #import "ZGUpdaterSettingsListener.h"
+
+#import <SparkleCore/SparkleCore.h>
+#import "ZGUpdaterUserDriver.h"
 
 #import <Cocoa/Cocoa.h>
 
