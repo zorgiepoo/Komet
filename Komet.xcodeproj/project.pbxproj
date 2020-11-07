@@ -28,7 +28,6 @@
 		7244AD8C1DF5329A004780EF /* SparkleCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7244AD8B1DF5329A004780EF /* SparkleCore.framework */; };
 		7244AD8D1DF5356D004780EF /* SparkleCore.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 7244AD8B1DF5329A004780EF /* SparkleCore.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		726F32F71DE27AB7004FB4AF /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 726F32F51DE27AB7004FB4AF /* Credits.rtf */; };
-		72B72C9A1D63EFF90096365F /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 72B72C991D63EFF90096365F /* main.m */; };
 		72B72C9C1D63EFF90096365F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 72B72C9B1D63EFF90096365F /* Assets.xcassets */; };
 		72B72C9F1D63EFF90096365F /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 72B72C9D1D63EFF90096365F /* MainMenu.xib */; };
 		72D3BE58254E37B70051914F /* PreferencesWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72D3BE57254E37B70051914F /* PreferencesWindowController.swift */; };
@@ -42,6 +41,7 @@
 		72D3BE81254FD56F0051914F /* UpdaterController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72D3BE80254FD56F0051914F /* UpdaterController.swift */; };
 		72D3BE86254FDB6A0051914F /* UpdaterSettingsListener.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72D3BE85254FDB6A0051914F /* UpdaterSettingsListener.swift */; };
 		72D3BE8A25564D420051914F /* UpdaterUserDriver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72D3BE8925564D420051914F /* UpdaterUserDriver.swift */; };
+		72D3BE8E25565CDC0051914F /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72D3BE8D25565CDC0051914F /* main.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -95,7 +95,6 @@
 		7244AD8B1DF5329A004780EF /* SparkleCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SparkleCore.framework; path = vendor/Sparkle/SparkleCore.framework; sourceTree = SOURCE_ROOT; };
 		726F32F61DE27AB7004FB4AF /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = Base; path = Base.lproj/Credits.rtf; sourceTree = "<group>"; };
 		72B72C921D63EFF90096365F /* Komet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Komet.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		72B72C991D63EFF90096365F /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		72B72C9B1D63EFF90096365F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		72B72C9E1D63EFF90096365F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		72B72CA01D63EFF90096365F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -109,6 +108,7 @@
 		72D3BE80254FD56F0051914F /* UpdaterController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdaterController.swift; sourceTree = "<group>"; };
 		72D3BE85254FDB6A0051914F /* UpdaterSettingsListener.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdaterSettingsListener.swift; sourceTree = "<group>"; };
 		72D3BE8925564D420051914F /* UpdaterUserDriver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdaterUserDriver.swift; sourceTree = "<group>"; };
+		72D3BE8D25565CDC0051914F /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		772B7CCB21437E2500E993B2 /* Komet.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Komet.entitlements; sourceTree = "<group>"; };
 		77C23E5E232CB41800F5BC6C /* KometDebug.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = KometDebug.entitlements; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -213,7 +213,7 @@
 			children = (
 				7244AD8B1DF5329A004780EF /* SparkleCore.framework */,
 				724006381D73BCF6001042CF /* dsa_pub.pem */,
-				72B72C991D63EFF90096365F /* main.m */,
+				72D3BE8D25565CDC0051914F /* main.swift */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -384,9 +384,9 @@
 				72D3BE65254E8BE00051914F /* CommitTextView.swift in Sources */,
 				72D3BE86254FDB6A0051914F /* UpdaterSettingsListener.swift in Sources */,
 				72D3BE70254E9A590051914F /* WindowStyle.swift in Sources */,
+				72D3BE8E25565CDC0051914F /* main.swift in Sources */,
 				72D3BE79254F24CF0051914F /* WindowStyleTheme.swift in Sources */,
 				72D3BE81254FD56F0051914F /* UpdaterController.swift in Sources */,
-				72B72C9A1D63EFF90096365F /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -657,7 +657,7 @@
 				);
 				INFOPLIST_FILE = Komet/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
-				OTHER_CFLAGS = "-DDEBUG";
+				OTHER_SWIFT_FLAGS = "-D DEBUG";
 				PRODUCT_BUNDLE_IDENTIFIER = org.zgcoder.Komet;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "Komet/Komet-Bridging-Header.h";
@@ -687,6 +687,7 @@
 				);
 				INFOPLIST_FILE = Komet/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				OTHER_SWIFT_FLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = org.zgcoder.Komet;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "Komet/Komet-Bridging-Header.h";
