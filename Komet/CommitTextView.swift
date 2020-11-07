@@ -8,8 +8,8 @@
 
 import AppKit
 
-@objc protocol ZGCommitViewDelegate: NSTextViewDelegate, NSTouchBarDelegate {
-	@objc func zgCommitViewSelectAll()
+@objc protocol ZGCommitViewDelegate {
+	func zgCommitViewSelectAll()
 	@objc func zgCommitViewTouchCommit(_ sender: Any)
 	@objc func zgCommitViewTouchCancel(_ sender: Any)
 }

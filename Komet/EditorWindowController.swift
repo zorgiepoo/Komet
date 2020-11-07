@@ -1046,7 +1046,7 @@ enum VersionControlType {
 		}
 	}
 	
-	@objc func zgCommitViewSelectAll() {
+	func zgCommitViewSelectAll() {
 		let plainText = currentPlainText()
 		let commitRange = Self.commitTextRange(plainText: plainText, commentLength: commentSectionLength)
 		textView.setSelectedRange(convertToUTF16Range(range: commitRange, in: plainText))
