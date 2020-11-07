@@ -3,7 +3,6 @@
 //
 
 #import <SparkleCore/SparkleCore.h>
-#import "ZGUpdaterUserDriver.h"
 
 #import <Cocoa/Cocoa.h>
 

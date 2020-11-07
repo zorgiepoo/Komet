@@ -25,7 +25,6 @@
 		723606AB1FC6235200BDD6E9 /* Preferences.xib in Resources */ = {isa = PBXBuildFile; fileRef = 723606AD1FC6235200BDD6E9 /* Preferences.xib */; };
 		723606B21FC630C400BDD6E9 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 723606B01FC630C400BDD6E9 /* Localizable.strings */; };
 		724006391D73BCF6001042CF /* dsa_pub.pem in Resources */ = {isa = PBXBuildFile; fileRef = 724006381D73BCF6001042CF /* dsa_pub.pem */; };
-		7240063C1D73BE84001042CF /* ZGUpdaterUserDriver.m in Sources */ = {isa = PBXBuildFile; fileRef = 7240063B1D73BE84001042CF /* ZGUpdaterUserDriver.m */; };
 		7244AD8C1DF5329A004780EF /* SparkleCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7244AD8B1DF5329A004780EF /* SparkleCore.framework */; };
 		7244AD8D1DF5356D004780EF /* SparkleCore.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 7244AD8B1DF5329A004780EF /* SparkleCore.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		726F32F71DE27AB7004FB4AF /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 726F32F51DE27AB7004FB4AF /* Credits.rtf */; };
@@ -42,6 +41,7 @@
 		72D3BE7D254FD41E0051914F /* UserDefaultsEditorListener.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72D3BE7C254FD41E0051914F /* UserDefaultsEditorListener.swift */; };
 		72D3BE81254FD56F0051914F /* UpdaterController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72D3BE80254FD56F0051914F /* UpdaterController.swift */; };
 		72D3BE86254FDB6A0051914F /* UpdaterSettingsListener.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72D3BE85254FDB6A0051914F /* UpdaterSettingsListener.swift */; };
+		72D3BE8A25564D420051914F /* UpdaterUserDriver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72D3BE8925564D420051914F /* UpdaterUserDriver.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -92,8 +92,6 @@
 		723606AF1FC6235400BDD6E9 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Preferences.strings; sourceTree = "<group>"; };
 		723606B11FC630C400BDD6E9 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		724006381D73BCF6001042CF /* dsa_pub.pem */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = dsa_pub.pem; sourceTree = "<group>"; };
-		7240063A1D73BE84001042CF /* ZGUpdaterUserDriver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZGUpdaterUserDriver.h; sourceTree = "<group>"; };
-		7240063B1D73BE84001042CF /* ZGUpdaterUserDriver.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZGUpdaterUserDriver.m; sourceTree = "<group>"; };
 		7244AD8B1DF5329A004780EF /* SparkleCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SparkleCore.framework; path = vendor/Sparkle/SparkleCore.framework; sourceTree = SOURCE_ROOT; };
 		726F32F61DE27AB7004FB4AF /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = Base; path = Base.lproj/Credits.rtf; sourceTree = "<group>"; };
 		72B72C921D63EFF90096365F /* Komet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Komet.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -110,6 +108,7 @@
 		72D3BE7C254FD41E0051914F /* UserDefaultsEditorListener.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsEditorListener.swift; sourceTree = "<group>"; };
 		72D3BE80254FD56F0051914F /* UpdaterController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdaterController.swift; sourceTree = "<group>"; };
 		72D3BE85254FDB6A0051914F /* UpdaterSettingsListener.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdaterSettingsListener.swift; sourceTree = "<group>"; };
+		72D3BE8925564D420051914F /* UpdaterUserDriver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdaterUserDriver.swift; sourceTree = "<group>"; };
 		772B7CCB21437E2500E993B2 /* Komet.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Komet.entitlements; sourceTree = "<group>"; };
 		77C23E5E232CB41800F5BC6C /* KometDebug.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = KometDebug.entitlements; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -196,8 +195,7 @@
 				72D3BE7C254FD41E0051914F /* UserDefaultsEditorListener.swift */,
 				72D3BE85254FDB6A0051914F /* UpdaterSettingsListener.swift */,
 				72D3BE80254FD56F0051914F /* UpdaterController.swift */,
-				7240063A1D73BE84001042CF /* ZGUpdaterUserDriver.h */,
-				7240063B1D73BE84001042CF /* ZGUpdaterUserDriver.m */,
+				72D3BE8925564D420051914F /* UpdaterUserDriver.swift */,
 				723606A81FC6222000BDD6E9 /* Commit Editor.xib */,
 				723606AD1FC6235200BDD6E9 /* Preferences.xib */,
 				72B72C9B1D63EFF90096365F /* Assets.xcassets */,
@@ -380,11 +378,11 @@
 				72D3BE58254E37B70051914F /* PreferencesWindowController.swift in Sources */,
 				7211A986253BCF1600F95773 /* AppDelegate.swift in Sources */,
 				72D3BE5D254E6E3F0051914F /* UserDefaults.swift in Sources */,
+				72D3BE8A25564D420051914F /* UpdaterUserDriver.swift in Sources */,
 				7211A9B12546704C00F95773 /* Breadcrumbs.swift in Sources */,
 				72D3BE6A254E93E90051914F /* UserDefaultKeys.swift in Sources */,
 				72D3BE65254E8BE00051914F /* CommitTextView.swift in Sources */,
 				72D3BE86254FDB6A0051914F /* UpdaterSettingsListener.swift in Sources */,
-				7240063C1D73BE84001042CF /* ZGUpdaterUserDriver.m in Sources */,
 				72D3BE70254E9A590051914F /* WindowStyle.swift in Sources */,
 				72D3BE79254F24CF0051914F /* WindowStyleTheme.swift in Sources */,
 				72D3BE81254FD56F0051914F /* UpdaterController.swift in Sources */,
