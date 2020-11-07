@@ -9,10 +9,10 @@
 import Foundation
 import AppKit
 
-let ZGEditorWindowFrameNameKey = "ZGEditorWindowFrame"
-let APP_SUPPORT_DIRECTORY_NAME = "Komet"
+private let ZGEditorWindowFrameNameKey = "ZGEditorWindowFrame"
+private let APP_SUPPORT_DIRECTORY_NAME = "Komet"
 
-let MAX_CHARACTER_COUNT_FOR_NOT_DRAWING_BACKGROUND = 132690
+private let MAX_CHARACTER_COUNT_FOR_NOT_DRAWING_BACKGROUND = 132690
 
 enum VersionControlType {
 	case git
