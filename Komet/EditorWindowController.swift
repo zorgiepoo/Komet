@@ -190,7 +190,8 @@ enum VersionControlType {
 			ZGWindowVibrancyKey: false,
 			ZGDisableSpellCheckingAndCorrectionForSquashesKey: true,
 			ZGDisableAutomaticNewlineInsertionAfterSubjectLineForSquashesKey: true,
-			ZGDetectHGCommentStyleForSquashesKey: true
+			ZGDetectHGCommentStyleForSquashesKey: true,
+			ZGAllowEditingCommentSectionKey: false
 		])
 		
 		ZGCommitTextView.registerDefaults()
@@ -258,7 +259,8 @@ enum VersionControlType {
 			.git : versionControlType
 		
 		// Detect if there's empty content
-		let loadedCommentSectionLength = Self.commentSectionLength(plainText: loadedPlainString, versionControlType: commentVersionControlType)
+		let allowEditingCommentSection = userDefaults.bool(forKey: ZGAllowEditingCommentSectionKey)
+		let loadedCommentSectionLength = allowEditingCommentSection ? 0 : Self.commentSectionLength(plainText: loadedPlainString, versionControlType: commentVersionControlType)
 		let loadedCommitRange = Self.commitTextRange(plainText: loadedPlainString, commentLength: loadedCommentSectionLength)
 		
 		let loadedContent = loadedPlainString[loadedCommitRange.lowerBound ..< loadedCommitRange.upperBound]
@@ -314,7 +316,7 @@ enum VersionControlType {
 		
 		if let savedCommitMessage = lastSavedCommitMessage {
 			initialPlainText = savedCommitMessage.appending(loadedPlainString)
-			commentSectionLength = Self.commentSectionLength(plainText: initialPlainText, versionControlType: commentVersionControlType)
+			commentSectionLength = allowEditingCommentSection ? 0 : Self.commentSectionLength(plainText: initialPlainText, versionControlType: commentVersionControlType)
 			initialCommitTextRange = Self.commitTextRange(plainText: initialPlainText, commentLength: commentSectionLength)
 			resumedFromSavedCommit = true
 		} else {
@@ -702,12 +704,17 @@ enum VersionControlType {
 		// Necessary to update text processing otherwise colors may not be right
 		updateTextProcessing()
 		
-		// If we're resuming a canceled commit message, select all the contents
+		// If we allow editing comment section, point selection at start of content
+		// Otherwise if we're resuming a canceled commit message, select all the contents
 		// Otherwise point the selection at the end of the message contents
-		if resumedFromSavedCommit {
-			textView.setSelectedRange(convertToUTF16Range(range: initialCommitTextRange, in: initialPlainText))
+		if userDefaults.bool(forKey: ZGAllowEditingCommentSectionKey) {
+			textView.setSelectedRange(NSMakeRange(0, 0))
 		} else {
-			textView.setSelectedRange(convertToUTF16Range(range: initialCommitTextRange.upperBound ..< initialCommitTextRange.upperBound, in: initialPlainText))
+			if resumedFromSavedCommit {
+				textView.setSelectedRange(convertToUTF16Range(range: initialCommitTextRange, in: initialPlainText))
+			} else {
+				textView.setSelectedRange(convertToUTF16Range(range: initialCommitTextRange.upperBound ..< initialCommitTextRange.upperBound, in: initialPlainText))
+			}
 		}
 		
 		func showBranchName() {
@@ -896,10 +903,14 @@ enum VersionControlType {
 		let commentRange = commentUTF16Range(plainText: currentPlainText())
 		
 		// Don't allow editing the comment section
-		for rangeValue in affectedRanges {
-			let range = rangeValue.rangeValue
-			if range.location + range.length >= commentRange.location {
-				return false
+		// Make sure to also check we have a comment section, otherwise we would be
+		// not allowing to insert text at the end of the document for no reason
+		if commentRange.length > 0 {
+			for rangeValue in affectedRanges {
+				let range = rangeValue.rangeValue
+				if range.location + range.length >= commentRange.location {
+					return false
+				}
 			}
 		}
 		
@@ -1048,8 +1059,14 @@ enum VersionControlType {
 	
 	func zgCommitViewSelectAll() {
 		let plainText = currentPlainText()
-		let commitRange = Self.commitTextRange(plainText: plainText, commentLength: commentSectionLength)
-		textView.setSelectedRange(convertToUTF16Range(range: commitRange, in: plainText))
+		if commentSectionLength > 0 {
+			// Select only the commit text range
+			let commitRange = Self.commitTextRange(plainText: plainText, commentLength: commentSectionLength)
+			textView.setSelectedRange(convertToUTF16Range(range: commitRange, in: plainText))
+		} else {
+			// Select everything
+			textView.setSelectedRange(NSMakeRange(0, plainText.utf16.count))
+		}
 	}
 	
 	@objc func zgCommitViewTouchCommit(_ sender: Any) {

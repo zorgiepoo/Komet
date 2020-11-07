@@ -21,7 +21,7 @@ class KometApp {
 	private let tempDirectoryURL: URL
 	private let breadcrumbsURL: URL
 	
-	init(filename: String, automicNewlineInsertion: Bool = true, resumeIncompleteSession: Bool = false) throws {
+	init(filename: String, automicNewlineInsertion: Bool = true, resumeIncompleteSession: Bool = false, allowEditingCommentSection: Bool = false) throws {
 		let bundle = Bundle(for: Self.self)
 		let resourceURL = bundle.url(forResource: filename, withExtension: "")!
 		
@@ -67,6 +67,7 @@ class KometApp {
 			 key(ZGMessageFontPointSizeKey), String(0.0),
 			 key(ZGCommentsFontNameKey), "",
 			 key(ZGCommentsFontPointSizeKey), String(0.0),
+			 key(ZGAllowEditingCommentSectionKey), String(allowEditingCommentSection),
 			 key(ZGCommitTextViewContinuousSpellCheckingKey), String(true),
 			 key(ZGCommitTextViewAutomaticSpellingCorrectionKey), String(false),
 			 key(ZGCommitTextViewAutomaticTextReplacementKey), String(false),
@@ -718,6 +719,61 @@ class KometUITests: XCTestCase {
 		
 		let commentLineRanges = breadcrumbs!.commentLineRanges
 		XCTAssertEqual(commentLineRanges.count, 0)
+	}
+	
+	func testAllowEditingCommentSectionAtEnd() throws {
+		let app = try KometApp(filename: "new-commit", allowEditingCommentSection: true)
+		
+		app.moveCursorDown(count: app.initialContent.components(separatedBy: "\n").count + 1)
+		
+		let newBodyContent = "\nThis should succeed\n"
+		app.typeText(newBodyContent)
+		
+		let (breadcrumbs, newContent) = try app.commit()
+		XCTAssertEqual(breadcrumbs!.exitStatus, 0)
+		XCTAssertEqual(app.initialContent + newBodyContent, newContent)
+	}
+	
+	func testAllowEditingCommentSectionAtBeginningContent() throws {
+		let app = try KometApp(filename: "new-commit", allowEditingCommentSection: true)
+		
+		let subject = "Hello"
+		app.typeText(subject)
+		
+		let (breadcrumbs, newContent) = try app.commit()
+		XCTAssertEqual(breadcrumbs!.exitStatus, 0)
+		XCTAssertEqual(subject + app.initialContent, newContent)
+	}
+	
+	func testAllowEditingCommentSectionAtMiddle() throws {
+		let app = try KometApp(filename: "new-commit", allowEditingCommentSection: true)
+		
+		app.moveCursorDown(count: 3)
+		app.moveCursorRight(count: 1)
+		app.deleteText(count: 1)
+		
+		let body = "Hello"
+		app.typeText(body)
+		
+		let lineComponents = app.initialContent.components(separatedBy: "\n")
+		let newLineComponents = lineComponents[0 ..< 3] + [body] + lineComponents[4 ..< lineComponents.count]
+		
+		let (breadcrumbs, newContent) = try app.commit()
+		XCTAssertEqual(breadcrumbs!.exitStatus, 0)
+		XCTAssertEqual(newLineComponents.joined(separator: "\n"), newContent)
+	}
+	
+	func testAllowEditingCommentSectionSelection() throws {
+		let app = try KometApp(filename: "new-commit", allowEditingCommentSection: true)
+		
+		app.selectAll()
+		
+		let content = "Hello"
+		app.typeText(content)
+		
+		let (breadcrumbs, newContent) = try app.commit()
+		XCTAssertEqual(breadcrumbs!.exitStatus, 0)
+		XCTAssertEqual(content, newContent)
 	}
 	
 	// MARK: Hg & Svn
