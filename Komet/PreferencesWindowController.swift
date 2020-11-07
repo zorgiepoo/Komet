@@ -58,9 +58,6 @@ enum FontType {
 	}
 	
 	@objc override func windowDidLoad() {
-		if #available(macOS 11.0, *) {
-			self.window?.toolbarStyle = .preference
-		}
 		showFonts(nil)
 	}
 	
