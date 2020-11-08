@@ -3,8 +3,8 @@
 A Cocoa text editor designed for creating commit messages.
 
 <p float="left">
-  <img src="screenshots/light.png" width="300 alt="Light version of Komet" />
-  <img src="screenshots/dark.png" width="300" alt="Dark version of Komet" />
+  <img src="screenshots/light.png" width="350 alt="Light version of Komet" />
+  <img src="screenshots/dark.png" width="350" alt="Dark version of Komet" />
 </p>
 
 [Download Komet](https://zgcoder.net/software/komet/Komet.dmg)
