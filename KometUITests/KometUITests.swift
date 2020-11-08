@@ -64,7 +64,7 @@ class KometApp {
 			 key(ZGEditorRecommendedSubjectLengthLimitKey), String(OVERFLOW_SUBJECT_THRESHOLD),
 			 key(ZGEditorRecommendedBodyLineLengthLimitEnabledKey), String(true),
 			 key(ZGEditorRecommendedBodyLineLengthLimitKey), String(OVERFLOW_BODY_THRESHOLD),
-			 key(ZGWindowStyleThemeKey), String(0),
+			 key(ZGWindowStyleThemeKey), String(WindowStyleTheme.plain.rawValue),
 			 key(ZGWindowVibrancyKey), String(false),
 			 key(ZGMessageFontNameKey), "",
 			 key(ZGMessageFontPointSizeKey), String(0.0),

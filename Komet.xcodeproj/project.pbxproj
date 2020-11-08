@@ -28,6 +28,8 @@
 		7244AD8C1DF5329A004780EF /* SparkleCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7244AD8B1DF5329A004780EF /* SparkleCore.framework */; };
 		7244AD8D1DF5356D004780EF /* SparkleCore.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 7244AD8B1DF5329A004780EF /* SparkleCore.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		726F32F71DE27AB7004FB4AF /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 726F32F51DE27AB7004FB4AF /* Credits.rtf */; };
+		7272EB4A25588D4300C78C4D /* WindowStyleTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72D3BE78254F24CF0051914F /* WindowStyleTheme.swift */; };
+		7272EB4D25588DC900C78C4D /* WindowStyleDefaultTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7272EB4C25588DC900C78C4D /* WindowStyleDefaultTheme.swift */; };
 		72B72C9C1D63EFF90096365F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 72B72C9B1D63EFF90096365F /* Assets.xcassets */; };
 		72B72C9F1D63EFF90096365F /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 72B72C9D1D63EFF90096365F /* MainMenu.xib */; };
 		72D3BE58254E37B70051914F /* PreferencesWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72D3BE57254E37B70051914F /* PreferencesWindowController.swift */; };
@@ -94,6 +96,7 @@
 		724006381D73BCF6001042CF /* dsa_pub.pem */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = dsa_pub.pem; sourceTree = "<group>"; };
 		7244AD8B1DF5329A004780EF /* SparkleCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SparkleCore.framework; path = vendor/Sparkle/SparkleCore.framework; sourceTree = SOURCE_ROOT; };
 		726F32F61DE27AB7004FB4AF /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = Base; path = Base.lproj/Credits.rtf; sourceTree = "<group>"; };
+		7272EB4C25588DC900C78C4D /* WindowStyleDefaultTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowStyleDefaultTheme.swift; sourceTree = "<group>"; };
 		72B72C921D63EFF90096365F /* Komet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Komet.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		72B72C9B1D63EFF90096365F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		72B72C9E1D63EFF90096365F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MainMenu.xib; sourceTree = "<group>"; };
@@ -189,6 +192,7 @@
 				7211A995253C06F200F95773 /* EditorWindowController.swift */,
 				72D3BE6F254E9A590051914F /* WindowStyle.swift */,
 				72D3BE78254F24CF0051914F /* WindowStyleTheme.swift */,
+				7272EB4C25588DC900C78C4D /* WindowStyleDefaultTheme.swift */,
 				72D3BE69254E93E90051914F /* UserDefaultKeys.swift */,
 				72D3BE5C254E6E3F0051914F /* UserDefaults.swift */,
 				72D3BE57254E37B70051914F /* PreferencesWindowController.swift */,
@@ -363,6 +367,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7272EB4A25588D4300C78C4D /* WindowStyleTheme.swift in Sources */,
 				7211A9B22546704C00F95773 /* Breadcrumbs.swift in Sources */,
 				720DF18C252AE3F7003AD7FB /* KometUITests.swift in Sources */,
 				72D3BE6B254E93E90051914F /* UserDefaultKeys.swift in Sources */,
@@ -386,6 +391,7 @@
 				72D3BE70254E9A590051914F /* WindowStyle.swift in Sources */,
 				72D3BE8E25565CDC0051914F /* main.swift in Sources */,
 				72D3BE79254F24CF0051914F /* WindowStyleTheme.swift in Sources */,
+				7272EB4D25588DC900C78C4D /* WindowStyleDefaultTheme.swift in Sources */,
 				72D3BE81254FD56F0051914F /* UpdaterController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
