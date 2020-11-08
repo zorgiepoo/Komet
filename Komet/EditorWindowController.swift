@@ -13,6 +13,7 @@ private let ZGEditorWindowFrameNameKey = "ZGEditorWindowFrame"
 private let APP_SUPPORT_DIRECTORY_NAME = "Komet"
 
 private let MAX_CHARACTER_COUNT_FOR_NOT_DRAWING_BACKGROUND = 132690
+private let MAX_CHARACTER_COUNT_FOR_NON_VERSION_CONTROL_COMMENT_ATTRIBUTES = 10000
 
 enum VersionControlType {
 	case git
@@ -576,6 +577,11 @@ enum VersionControlType {
 			}
 		}
 		
+		func updateForegroundColor(textStorage: NSTextStorage?, utf16Range: NSRange) {
+			textStorage?.removeAttribute(.foregroundColor, range: utf16Range)
+			textStorage?.addAttribute(.foregroundColor, value: style.textColor, range: utf16Range)
+		}
+		
 		func updateContentStyle(contentLineRanges: [Range<String.Index>]) {
 			let textStorage = textView.textStorage
 			
@@ -584,22 +590,27 @@ enum VersionControlType {
 				
 				if contentLineRange.upperBound > contentLineRange.lowerBound &&
 					!Self.isCommentLine(String(plainText[contentLineRange.lowerBound ..< contentLineRange.upperBound]), versionControlType: commentVersionControlType) {
-					textStorage?.removeAttribute(.foregroundColor, range: utf16LineRange)
-					textStorage?.addAttribute(.foregroundColor, value: style.textColor, range: utf16LineRange)
+					updateForegroundColor(textStorage: textStorage, utf16Range: utf16LineRange)
 				}
 			}
 		}
 		
-		let contentLineRanges = retrieveContentLineRanges()
-		
 		let userDefaults = UserDefaults.standard
-		let subjectLengthLimit = Self.lengthLimitWarningEnabled(userDefaults: userDefaults, userDefaultKey: ZGEditorRecommendedSubjectLengthLimitEnabledKey) ? ZGReadDefaultLineLimit(userDefaults, ZGEditorRecommendedSubjectLengthLimitKey) : nil
-		let bodyLengthLimit = Self.lengthLimitWarningEnabled(userDefaults: userDefaults, userDefaultKey: ZGEditorRecommendedBodyLineLengthLimitEnabledKey) ? ZGReadDefaultLineLimit(userDefaults, ZGEditorRecommendedBodyLineLengthLimitKey) : nil
+		let versionControlledFile = userDefaults.bool(forKey: ZGAssumeVersionControlledFileKey)
 		
-		updateHighlighting(contentLineRanges: contentLineRanges, subjectLengthLimit: subjectLengthLimit, bodyLengthLimit: bodyLengthLimit)
-		
-		updateCommentAttributes(contentLineRanges: contentLineRanges)
-		updateContentStyle(contentLineRanges: contentLineRanges)
+		if versionControlledFile || plainText.utf16.count < MAX_CHARACTER_COUNT_FOR_NON_VERSION_CONTROL_COMMENT_ATTRIBUTES {
+			let contentLineRanges = retrieveContentLineRanges()
+			
+			let subjectLengthLimit = Self.lengthLimitWarningEnabled(userDefaults: userDefaults, userDefaultKey: ZGEditorRecommendedSubjectLengthLimitEnabledKey) ? ZGReadDefaultLineLimit(userDefaults, ZGEditorRecommendedSubjectLengthLimitKey) : nil
+			let bodyLengthLimit = Self.lengthLimitWarningEnabled(userDefaults: userDefaults, userDefaultKey: ZGEditorRecommendedBodyLineLengthLimitEnabledKey) ? ZGReadDefaultLineLimit(userDefaults, ZGEditorRecommendedBodyLineLengthLimitKey) : nil
+			
+			updateHighlighting(contentLineRanges: contentLineRanges, subjectLengthLimit: subjectLengthLimit, bodyLengthLimit: bodyLengthLimit)
+			
+			updateCommentAttributes(contentLineRanges: contentLineRanges)
+			updateContentStyle(contentLineRanges: contentLineRanges)
+		} else {
+			updateForegroundColor(textStorage: textView.textStorage, utf16Range: NSMakeRange(0, plainText.utf16.count))
+		}
 		
 		// Sometimes the insertion point isn't properly updated after updating
 		// the comment attributes and content style.

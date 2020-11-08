@@ -1054,6 +1054,22 @@ class KometUITests: XCTestCase {
 		XCTAssertEqual(breadcrumbs!.exitStatus, 0)
 	}
 	
+	func testLargeNonVersionControlledFileCommit() throws {
+		let app = try KometApp(filename: "linux-partial", versionControlledFile: false)
+		
+		let subject = "Hello there!"
+		let body = "I hope this works pretty well!!!!"
+		
+		app.typeText(subject + "\n")
+		
+		measure {
+			app.typeText(body + "\n")
+		}
+		
+		let (breadcrumbs, _) = try app.commit()
+		XCTAssertEqual(breadcrumbs!.exitStatus, 0)
+	}
+	
 	// MARK: Rebasing
 	
 	func testRebaseWithNoAutomaticNewline() throws {
