@@ -737,7 +737,7 @@ class KometUITests: XCTestCase {
 	}
 	
 	func testAllowEditingCommentSectionAtBeginningContent() throws {
-		let app = try KometApp(filename: "new-commit", versionControlledFile: false)
+		let app = try KometApp(filename: "amended-commit", versionControlledFile: false)
 		
 		let subject = "Hello"
 		app.typeText(subject)
