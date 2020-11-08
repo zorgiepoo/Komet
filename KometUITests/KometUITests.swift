@@ -8,8 +8,11 @@
 
 import XCTest
 
-let OVERFLOW_SUBJECT_THRESHOLD = 69
-let OVERFLOW_BODY_THRESHOLD = 72
+private let OVERFLOW_SUBJECT_THRESHOLD = 69
+private let OVERFLOW_BODY_THRESHOLD = 72
+
+private let KOMET_ERROR_DOMAIN = "KometErrorDomain"
+private let KOMET_COMMIT_ERROR = 1
 
 class KometApp {
 	let initialContent: String
@@ -84,8 +87,12 @@ class KometApp {
 		textView = application.windows.textViews.element
 	}
 	
-	deinit {
+	func removeTemporaryDirectory() {
 		let _ = try? FileManager.default.removeItem(at: tempDirectoryURL)
+	}
+	
+	deinit {
+		removeTemporaryDirectory()
 	}
 	
 	private func waitForExit() throws -> (Breadcrumbs?, String) {
@@ -101,7 +108,13 @@ class KometApp {
 	
 	func commit() throws -> (Breadcrumbs?, String) {
 		application.menuBars.menuBarItems["File"].menuItems["Commit"].click()
-		return try waitForExit()
+		
+		if application.sheets.count > 0 {
+			// The error we supply doesn't really matter
+			throw NSError(domain: KOMET_ERROR_DOMAIN, code: KOMET_COMMIT_ERROR, userInfo: nil)
+		} else {
+			return try waitForExit()
+		}
 	}
 	
 	func cancel() throws -> (Breadcrumbs?, String) {
@@ -228,6 +241,24 @@ class KometUITests: XCTestCase {
 		let (breadcrumbs, finalContent) = try app.commit()
 		XCTAssertEqual(breadcrumbs!.exitStatus, 0, "commit failed with non-zero status")
 		XCTAssertEqual(finalContent, "\(subject)\n\n\(body)\(app.initialContent)")
+	}
+	
+	func testNewCommitWithError() throws {
+		let app = try KometApp(filename: "new-commit")
+		
+		let newContent = "Hello there"
+		app.typeText(newContent)
+		
+		app.removeTemporaryDirectory()
+		
+		do {
+			let _ = try app.commit()
+			XCTFail("Commit passed but should have failed")
+		} catch {
+			let kometError = error as NSError
+			XCTAssertEqual(kometError.domain, KOMET_ERROR_DOMAIN)
+			XCTAssertEqual(kometError.code, KOMET_COMMIT_ERROR)
+		}
 	}
 	
 	// MARK: Empty file

@@ -850,12 +850,17 @@ enum VersionControlType {
 		
 		do {
 			try plainText.write(to: fileURL, atomically: true, encoding: .utf8)
+			exit(success: true)
 		} catch {
 			print("Failed to write file for commit: \(error)")
-			Darwin.exit(EXIT_FAILURE)
+			
+			if let window = self.window {
+				let alert = NSAlert(error: error)
+				alert.alertStyle = .critical
+				alert.beginSheetModal(for: window) { response in
+				}
+			}
 		}
-		
-		exit(success: true)
 	}
 	
 	@IBAction @objc func cancelCommit(_ sender: Any?) {
