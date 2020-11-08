@@ -2,7 +2,10 @@
 
 A Cocoa text editor designed for creating commit messages.
 
-![Image of Komet](screenshots/light.png)
+<p float="left">
+  <img src="screenshots/light.png" width="300 alt="Light version of Komet" />
+  <img src="screenshots/dark.png" width="300" alt="Dark version of Komet" />
+</p>
 
 [Download Komet](https://zgcoder.net/software/komet/Komet.dmg)
 
@@ -10,7 +13,7 @@ A Cocoa text editor designed for creating commit messages.
 
 A commit editor shouldn't be stuck in an obstructive save-and-close model. Applying and discarding a commit should be convenient, and you shouldn't [think twice](https://stackoverflow.com/a/4323790) about it. The editor should also automate actions that make writing good messages possible.
 
-After transitioning to Komet, I put less effort in creating higher quality messages and my margin of error has decreased.
+After transitioning to Komet, I put less effort in creating higher quality messages.
 
 ## Features
 
@@ -24,20 +27,26 @@ After transitioning to Komet, I put less effort in creating higher quality messa
 * Support for committing using the Touch Bar.
 * Resume off from canceled commit messages.
 
-### Themes
-
-![Image of Komet](screenshots/dark.png)
-
 ## Requirements
 
-**System Version**: macOS 10.10 or later
+**System Version**:
 
-**Version Control**: git, hg, svn
+Komet 1.0 onwards supports macOS 10.14.4 or later
+
+Komet 0.9.1 is the last version to support macOS 10.10 - 10.13
+
+**Version Control**:
+
+Git, Mercurial (hg), Subversion (svn)
 
 For optimal behavior, Komet depends on being able to distinguish the commit message content and the comment section at the end of the file. Thus, Komet has a small bit of code for handling each of its supported version control systems.
 
 ## Contributing
 
-If you enjoy using Komet and feel like something could improve, feel free to make a contribution. It is advisable to create an issue first before submitting a big change or to browse the current [issues](https://github.com/zorgiepoo/Komet/issues). Please also read and follow the code of conduct in the repository first before contributing.
+### Code
+If you enjoy using Komet and think something could improve, feel free to make a contribution. Create an issue first before submitting a big change or browse the current [issues](https://github.com/zorgiepoo/Komet/issues). Please also read and follow the code of conduct in the repository first before contributing.
 
-Komet can now be translated to other languages. To translate Komet go in the Xcode Project settings and add a new language in the Localizations section. After the localization files have been created, modify the string values in each one. Skip translating string values in xibs that are underscored like  `project_name`. Finally, test the translation by changing your system language in System Preferences and by building and running Komet.
+Pull requests will also need to pass Komet's set of automated UI tests. New features may require writing additional tests 🙂.
+
+### Localizations
+Komet can be translated to other languages. To translate Komet go in the Xcode Project settings and add a new language in the Localizations section. After the localization files have been created, modify the string values in each one. Skip translating string values in xibs that are underscored like  `project_name`. Finally, test the translation by changing your system language in System Preferences and by building and running Komet.
