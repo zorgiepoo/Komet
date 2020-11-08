@@ -109,6 +109,9 @@ class KometApp {
 	func commit() throws -> (Breadcrumbs?, String) {
 		application.menuBars.menuBarItems["File"].menuItems["Commit"].click()
 		
+		// For some reason we need to send activate message before querying the application's sheets
+		// Otherwise it may fail to retrieve a snapshot
+		application.activate()
 		if application.sheets.count > 0 {
 			// The error we supply doesn't really matter
 			throw NSError(domain: KOMET_ERROR_DOMAIN, code: KOMET_COMMIT_ERROR, userInfo: nil)
