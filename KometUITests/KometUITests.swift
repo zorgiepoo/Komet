@@ -21,7 +21,7 @@ class KometApp {
 	private let tempDirectoryURL: URL
 	private let breadcrumbsURL: URL
 	
-	init(filename: String, automicNewlineInsertion: Bool = true, resumeIncompleteSession: Bool = false, allowEditingCommentSection: Bool = false) throws {
+	init(filename: String, automicNewlineInsertion: Bool = true, resumeIncompleteSession: Bool = false, versionControlledFile: Bool = true) throws {
 		let bundle = Bundle(for: Self.self)
 		let resourceURL = bundle.url(forResource: filename, withExtension: "")!
 		
@@ -67,7 +67,7 @@ class KometApp {
 			 key(ZGMessageFontPointSizeKey), String(0.0),
 			 key(ZGCommentsFontNameKey), "",
 			 key(ZGCommentsFontPointSizeKey), String(0.0),
-			 key(ZGAllowEditingCommentSectionKey), String(allowEditingCommentSection),
+			 key(ZGAssumeVersionControlledFileKey), String(versionControlledFile),
 			 key(ZGCommitTextViewContinuousSpellCheckingKey), String(true),
 			 key(ZGCommitTextViewAutomaticSpellingCorrectionKey), String(false),
 			 key(ZGCommitTextViewAutomaticTextReplacementKey), String(false),
@@ -721,8 +721,10 @@ class KometUITests: XCTestCase {
 		XCTAssertEqual(commentLineRanges.count, 0)
 	}
 	
+	// MARK: Non-version controlled file
+	
 	func testAllowEditingCommentSectionAtEnd() throws {
-		let app = try KometApp(filename: "new-commit", allowEditingCommentSection: true)
+		let app = try KometApp(filename: "new-commit", versionControlledFile: false)
 		
 		app.moveCursorDown(count: app.initialContent.components(separatedBy: "\n").count + 1)
 		
@@ -735,7 +737,7 @@ class KometUITests: XCTestCase {
 	}
 	
 	func testAllowEditingCommentSectionAtBeginningContent() throws {
-		let app = try KometApp(filename: "new-commit", allowEditingCommentSection: true)
+		let app = try KometApp(filename: "new-commit", versionControlledFile: false)
 		
 		let subject = "Hello"
 		app.typeText(subject)
@@ -746,7 +748,7 @@ class KometUITests: XCTestCase {
 	}
 	
 	func testAllowEditingCommentSectionAtMiddle() throws {
-		let app = try KometApp(filename: "new-commit", allowEditingCommentSection: true)
+		let app = try KometApp(filename: "new-commit", versionControlledFile: false)
 		
 		app.moveCursorDown(count: 3)
 		app.moveCursorRight(count: 1)
@@ -764,7 +766,7 @@ class KometUITests: XCTestCase {
 	}
 	
 	func testAllowEditingCommentSectionSelection() throws {
-		let app = try KometApp(filename: "new-commit", allowEditingCommentSection: true)
+		let app = try KometApp(filename: "new-commit", versionControlledFile: false)
 		
 		app.selectAll()
 		
@@ -774,6 +776,35 @@ class KometUITests: XCTestCase {
 		let (breadcrumbs, newContent) = try app.commit()
 		XCTAssertEqual(breadcrumbs!.exitStatus, 0)
 		XCTAssertEqual(content, newContent)
+	}
+	
+	func testNonVersionControlledFileLengthWarningsAndAutomaticInsertion() throws {
+		let app = try KometApp(filename: "new-commit", versionControlledFile: false)
+		
+		let line = "Hello this is a line that will be exceed many characters very very very very long okay"
+		let content = line + "\n" + line
+		app.typeText(content)
+		
+		let (breadcrumbs, newContent) = try app.commit()
+		XCTAssertEqual(breadcrumbs!.exitStatus, 0)
+		XCTAssertEqual(breadcrumbs!.textOverflowRanges.count, 0)
+		XCTAssertEqual(content + app.initialContent, newContent)
+	}
+	
+	func testNonVersionControlledFileResumeIncompleteSessionAndEmptyContent() throws {
+		let app = try KometApp(filename: "new-commit", resumeIncompleteSession: true, versionControlledFile: false)
+		
+		let subject = "Hello there!"
+		app.typeText(subject)
+		
+		let _ = try app.cancel()
+		
+		// Test that the content was not restored and we can commit an empty messsage
+		app.relaunch()
+		
+		let (breadcrumbs, finalContent) = try app.commit()
+		XCTAssertEqual(breadcrumbs!.exitStatus, 0)
+		XCTAssertEqual(app.initialContent, finalContent)
 	}
 	
 	// MARK: Hg & Svn

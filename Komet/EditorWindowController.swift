@@ -168,6 +168,10 @@ enum VersionControlType {
 		return URL(fileURLWithPath:fileManager.currentDirectoryPath).lastPathComponent
 	}
 	
+	private static func lengthLimitWarningEnabled(userDefaults: UserDefaults, userDefaultKey: String) -> Bool {
+		return userDefaults.bool(forKey: ZGAssumeVersionControlledFileKey) && userDefaults.bool(forKey: userDefaultKey)
+	}
+	
 	// MARK: Initialization
 	
 	static func registerDefaults() {
@@ -191,7 +195,7 @@ enum VersionControlType {
 			ZGDisableSpellCheckingAndCorrectionForSquashesKey: true,
 			ZGDisableAutomaticNewlineInsertionAfterSubjectLineForSquashesKey: true,
 			ZGDetectHGCommentStyleForSquashesKey: true,
-			ZGAllowEditingCommentSectionKey: false
+			ZGAssumeVersionControlledFileKey: true
 		])
 		
 		ZGCommitTextView.registerDefaults()
@@ -229,12 +233,14 @@ enum VersionControlType {
 		// Detect version control type
 		let fileManager = FileManager()
 		let parentURL = self.fileURL.deletingLastPathComponent()
+		let versionControlledFile = userDefaults.bool(forKey: ZGAssumeVersionControlledFileKey)
+		
 		let versionControlType: VersionControlType
-		if tutorialMode {
+		if tutorialMode || !versionControlledFile {
 			versionControlType = .git
 			self.projectNameDisplay = self.fileURL.lastPathComponent
 		} else if parentURL.lastPathComponent == ".git" {
-			// We don't *have* to detect this for gits because we could look at the current working directory first,
+			// We don't *have* to detect this for git because we could look at the current working directory first,
 			// but I want to rely on the current working directory as a last resort.
 			
 			versionControlType = .git
@@ -259,8 +265,7 @@ enum VersionControlType {
 			.git : versionControlType
 		
 		// Detect if there's empty content
-		let allowEditingCommentSection = userDefaults.bool(forKey: ZGAllowEditingCommentSectionKey)
-		let loadedCommentSectionLength = allowEditingCommentSection ? 0 : Self.commentSectionLength(plainText: loadedPlainString, versionControlType: commentVersionControlType)
+		let loadedCommentSectionLength = !versionControlledFile ? 0 : Self.commentSectionLength(plainText: loadedPlainString, versionControlType: commentVersionControlType)
 		let loadedCommitRange = Self.commitTextRange(plainText: loadedPlainString, commentLength: loadedCommentSectionLength)
 		
 		let loadedContent = loadedPlainString[loadedCommitRange.lowerBound ..< loadedCommitRange.upperBound]
@@ -270,7 +275,7 @@ enum VersionControlType {
 		// Check if we have any incomplete commit message available
 		// Load the incomplete commit message contents if our content is initially empty
 		let lastSavedCommitMessage: String?
-		if !self.tutorialMode && userDefaults.bool(forKey: ZGResumeIncompleteSessionKey) {
+		if !self.tutorialMode && userDefaults.bool(forKey: ZGAssumeVersionControlledFileKey) && userDefaults.bool(forKey: ZGResumeIncompleteSessionKey) {
 			if let applicationSupportURL = fileManager.urls(for: .applicationSupportDirectory, in: .userDomainMask).first {
 				let supportDirectory = applicationSupportURL.appendingPathComponent(APP_SUPPORT_DIRECTORY_NAME)
 				let projectName = Self.projectName(fileManager: fileManager)
@@ -316,7 +321,7 @@ enum VersionControlType {
 		
 		if let savedCommitMessage = lastSavedCommitMessage {
 			initialPlainText = savedCommitMessage.appending(loadedPlainString)
-			commentSectionLength = allowEditingCommentSection ? 0 : Self.commentSectionLength(plainText: initialPlainText, versionControlType: commentVersionControlType)
+			commentSectionLength = !versionControlledFile ? 0 : Self.commentSectionLength(plainText: initialPlainText, versionControlType: commentVersionControlType)
 			initialCommitTextRange = Self.commitTextRange(plainText: initialPlainText, commentLength: commentSectionLength)
 			resumedFromSavedCommit = true
 		} else {
@@ -588,8 +593,8 @@ enum VersionControlType {
 		let contentLineRanges = retrieveContentLineRanges()
 		
 		let userDefaults = UserDefaults.standard
-		let subjectLengthLimit = userDefaults.bool(forKey: ZGEditorRecommendedSubjectLengthLimitEnabledKey) ? ZGReadDefaultLineLimit(userDefaults, ZGEditorRecommendedSubjectLengthLimitKey) : nil
-		let bodyLengthLimit = userDefaults.bool(forKey: ZGEditorRecommendedBodyLineLengthLimitEnabledKey) ? ZGReadDefaultLineLimit(userDefaults, ZGEditorRecommendedBodyLineLengthLimitKey) : nil
+		let subjectLengthLimit = Self.lengthLimitWarningEnabled(userDefaults: userDefaults, userDefaultKey: ZGEditorRecommendedSubjectLengthLimitEnabledKey) ? ZGReadDefaultLineLimit(userDefaults, ZGEditorRecommendedSubjectLengthLimitKey) : nil
+		let bodyLengthLimit = Self.lengthLimitWarningEnabled(userDefaults: userDefaults, userDefaultKey: ZGEditorRecommendedBodyLineLengthLimitEnabledKey) ? ZGReadDefaultLineLimit(userDefaults, ZGEditorRecommendedBodyLineLengthLimitKey) : nil
 		
 		updateHighlighting(contentLineRanges: contentLineRanges, subjectLengthLimit: subjectLengthLimit, bodyLengthLimit: bodyLengthLimit)
 		
@@ -704,10 +709,11 @@ enum VersionControlType {
 		// Necessary to update text processing otherwise colors may not be right
 		updateTextProcessing()
 		
-		// If we allow editing comment section, point selection at start of content
+		// If we have a non-version controlled file, point selection at start of content
 		// Otherwise if we're resuming a canceled commit message, select all the contents
 		// Otherwise point the selection at the end of the message contents
-		if userDefaults.bool(forKey: ZGAllowEditingCommentSectionKey) {
+		let versionControlledFile = userDefaults.bool(forKey: ZGAssumeVersionControlledFileKey)
+		if !versionControlledFile {
 			textView.setSelectedRange(NSMakeRange(0, 0))
 		} else {
 			if resumedFromSavedCommit {
@@ -767,7 +773,7 @@ enum VersionControlType {
 		}
 		
 		// Show branch name if available
-		if !tutorialMode {
+		if !tutorialMode && versionControlledFile {
 			showBranchName()
 		}
 	}
@@ -801,13 +807,15 @@ enum VersionControlType {
 			// We should have wrote to the commit file successfully
 			exit(status: EXIT_SUCCESS)
 		} else {
-			if !initiallyContainedEmptyContent {
-				// If we are amending an existing commit for example, we should fail and not create another change
+			let userDefaults = UserDefaults.standard
+			let versionControlledFile = userDefaults.bool(forKey: ZGAssumeVersionControlledFileKey)
+			if !versionControlledFile || !initiallyContainedEmptyContent {
+				// If we aren't dealing with a version controlled file or are amending an existing commit for example, we should fail and not create another change
 				exit(status: EXIT_FAILURE)
 			} else {
 				// If we initially had no content and wrote an incomplete commit message,
 				// then save the commit message in case we may want to resume from it later
-				if UserDefaults.standard.bool(forKey: ZGResumeIncompleteSessionKey) {
+				if userDefaults.bool(forKey: ZGResumeIncompleteSessionKey) {
 					let plainText = currentPlainText()
 					let commitRange = Self.commitTextRange(plainText: plainText, commentLength: commentSectionLength)
 					
@@ -947,7 +955,7 @@ enum VersionControlType {
 		
 		// Bail if automatic newline insertion is disabled or if we are dealing with a squash message
 		let userDefaults = UserDefaults.standard
-		guard userDefaults.bool(forKey: ZGEditorAutomaticNewlineInsertionAfterSubjectKey) && (!userDefaults.bool(forKey: ZGDisableAutomaticNewlineInsertionAfterSubjectLineForSquashesKey) || !isSquashMessage) else {
+		guard userDefaults.bool(forKey: ZGAssumeVersionControlledFileKey) && userDefaults.bool(forKey: ZGEditorAutomaticNewlineInsertionAfterSubjectKey) && (!userDefaults.bool(forKey: ZGDisableAutomaticNewlineInsertionAfterSubjectLineForSquashesKey) || !isSquashMessage) else {
 			return false
 		}
 		
@@ -1046,8 +1054,8 @@ enum VersionControlType {
 	@objc func userDefaultsChangedRecommendedLineLengthLimits() {
 		let userDefaults = UserDefaults.standard
 		
-		let hasSubjectLimit = userDefaults.bool(forKey: ZGEditorRecommendedSubjectLengthLimitEnabledKey)
-		let hasBodyLineLimit = userDefaults.bool(forKey: ZGEditorRecommendedBodyLineLengthLimitEnabledKey)
+		let hasSubjectLimit = Self.lengthLimitWarningEnabled(userDefaults: userDefaults, userDefaultKey: ZGEditorRecommendedSubjectLengthLimitEnabledKey)
+		let hasBodyLineLimit = Self.lengthLimitWarningEnabled(userDefaults: userDefaults, userDefaultKey: ZGEditorRecommendedBodyLineLengthLimitEnabledKey)
 		
 		if !hasSubjectLimit && !hasBodyLineLimit {
 			// Remove all background color highlighting in case any text is currently highlighted

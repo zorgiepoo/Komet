@@ -31,7 +31,7 @@ let ZGDisableAutomaticNewlineInsertionAfterSubjectLineForSquashesKey = "ZGDisabl
 
 let ZGDetectHGCommentStyleForSquashesKey = "ZGDetectHGCommentStyleForSquashes"
 
-let ZGAllowEditingCommentSectionKey = "ZGAllowEditingCommentSection"
+let ZGAssumeVersionControlledFileKey = "ZGAssumeVersionControlledFile"
 
 let ZGBreadcrumbsURLKey = "ZGBreadcrumbsURL"
 
