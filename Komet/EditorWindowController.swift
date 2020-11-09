@@ -771,7 +771,7 @@ enum VersionControlType {
 							let data = pipe.fileHandleForReading.readDataToEndOfFile()
 							if let branchName = String(data: data, encoding: .utf8)?.trimmingCharacters(in: .whitespacesAndNewlines), branchName.count > 0 {
 								DispatchQueue.main.async {
-									let projectNameWithBranch = "\(self.projectNameDisplay) \(branchName)"
+									let projectNameWithBranch = "\(self.projectNameDisplay) (\(branchName))"
 									self.commitLabelTextField.stringValue = projectNameWithBranch
 								}
 							}
