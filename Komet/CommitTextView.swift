@@ -48,28 +48,40 @@ private let ZGTouchBarIdentifierCommit = "zgCommitIdentifier"
 		disabledContinuousSpellingAndAutomaticSpellingCorrection = true
 	}
 	
-	@objc override func setContinuousSpellCheckingEnabled(_ continuousSpellCheckingEnabled: Bool) {
-		if !disabledContinuousSpellingAndAutomaticSpellingCorrection {
-			UserDefaults.standard.set(continuousSpellCheckingEnabled, forKey: ZGCommitTextViewContinuousSpellCheckingKey)
+	override var isContinuousSpellCheckingEnabled: Bool {
+		set {
+			if !disabledContinuousSpellingAndAutomaticSpellingCorrection {
+				UserDefaults.standard.set(newValue, forKey: ZGCommitTextViewContinuousSpellCheckingKey)
+			}
+			super.isContinuousSpellCheckingEnabled = newValue
 		}
-		
-		super.setContinuousSpellCheckingEnabled(continuousSpellCheckingEnabled)
+		get {
+			return super.isContinuousSpellCheckingEnabled
+		}
 	}
 	
-	@objc override func setAutomaticSpellingCorrectionEnabled(_ automaticSpellingCorrectionEnabled: Bool) {
-		if !disabledContinuousSpellingAndAutomaticSpellingCorrection {
-			UserDefaults.standard.set(automaticSpellingCorrectionEnabled, forKey: ZGCommitTextViewAutomaticSpellingCorrectionKey)
+	override var isAutomaticSpellingCorrectionEnabled: Bool {
+		set {
+			if !disabledContinuousSpellingAndAutomaticSpellingCorrection {
+				UserDefaults.standard.set(newValue, forKey: ZGCommitTextViewAutomaticSpellingCorrectionKey)
+			}
+			super.isAutomaticSpellingCorrectionEnabled = newValue
 		}
-		
-		super.setAutomaticSpellingCorrectionEnabled(automaticSpellingCorrectionEnabled)
+		get {
+			return super.isAutomaticSpellingCorrectionEnabled
+		}
 	}
 	
-	@objc override func setAutomaticTextReplacementEnabled(_ automaticTextReplacementEnabled: Bool) {
-		if !disabledContinuousSpellingAndAutomaticSpellingCorrection {
-			UserDefaults.standard.set(automaticTextReplacementEnabled, forKey: ZGCommitTextViewAutomaticTextReplacementKey)
+	override var isAutomaticTextReplacementEnabled: Bool {
+		set {
+			if !disabledContinuousSpellingAndAutomaticSpellingCorrection {
+				UserDefaults.standard.set(newValue, forKey: ZGCommitTextViewAutomaticTextReplacementKey)
+			}
+			super.isAutomaticTextReplacementEnabled = newValue
 		}
-		
-		super.setAutomaticTextReplacementEnabled(automaticTextReplacementEnabled)
+		get {
+			return super.isAutomaticTextReplacementEnabled
+		}
 	}
 	
 	@objc override func selectAll(_ sender: Any?) {
