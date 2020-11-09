@@ -27,7 +27,7 @@ After transitioning to Komet, I put less effort in creating higher quality messa
 * Support for committing using the Touch Bar.
 * Resume off from canceled commit messages.
 
-[Options](https://github.com/zorgiepoo/Komet/wiki/Options) elaborates on customizing some features.
+The [Options](https://github.com/zorgiepoo/Komet/wiki/Options) page elaborates on customizing some of these features.
 
 ## Requirements
 
