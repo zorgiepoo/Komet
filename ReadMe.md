@@ -27,13 +27,15 @@ After transitioning to Komet, I put less effort in creating higher quality messa
 * Support for committing using the Touch Bar.
 * Resume off from canceled commit messages.
 
+[Options](https://github.com/zorgiepoo/Komet/wiki/Options) elaborates on customizing some features.
+
 ## Requirements
 
 **System Version**:
 
-Komet 1.0 onwards supports macOS 10.14.4 or later
+1.0 onwards supports macOS 10.14.4 or later
 
-Komet 0.9.1 is the last version to support macOS 10.10 - 10.13
+0.9.1 is the last version to support macOS 10.10 - 10.13
 
 **Version Control**:
 
