@@ -24,6 +24,7 @@ After transitioning to Komet, I put less effort in creating higher quality messa
 * Specialized text selection and font handling for message and comment sections.
 * Intelligent discarding of commits (i.e, `exit(1)` only if commit file has pre-existing content).
 * Ideal caret position on launch after the initial content.
+* Several themes to choose from.
 * Support for committing using the Touch Bar.
 * Resume off from canceled commit messages.
 
