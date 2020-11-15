@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>classNames</key>
+	<dict>
+		<key>KometUITests</key>
+		<dict>
+			<key>testAppLaunchLargeFilePerformance()</key>
+			<dict>
+				<key>com.apple.dt.XCTMetric_OSSignpost-ApplicationLaunch.duration</key>
+				<dict>
+					<key>baselineAverage</key>
+					<real>1.2349</real>
+					<key>baselineIntegrationDisplayName</key>
+					<string>Local Baseline</string>
+				</dict>
+			</dict>
+			<key>testAppLaunchPerformance()</key>
+			<dict>
+				<key>com.apple.dt.XCTMetric_OSSignpost-ApplicationLaunch.duration</key>
+				<dict>
+					<key>baselineAverage</key>
+					<real>0.82307</real>
+					<key>baselineIntegrationDisplayName</key>
+					<string>Local Baseline</string>
+				</dict>
+			</dict>
+		</dict>
+	</dict>
+</dict>
+</plist>

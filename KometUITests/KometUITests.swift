@@ -1036,7 +1036,7 @@ class KometUITests: XCTestCase {
 		XCTAssertEqual(commentLineRanges[0], lineLocation ..< lineLocation + body.utf16.count)
 	}
 	
-	// MARK: Large file
+	// MARK: Performance
 	
 	func testLargeFileCommit() throws {
 		let app = try KometApp(filename: "linux-partial")
@@ -1068,6 +1068,20 @@ class KometUITests: XCTestCase {
 		
 		let (breadcrumbs, _) = try app.commit()
 		XCTAssertEqual(breadcrumbs!.exitStatus, 0)
+	}
+	
+	func testAppLaunchPerformance() throws {
+		measure(metrics: [XCTOSSignpostMetric.applicationLaunch]) {
+			let app = try! KometApp(filename: "new-commit")
+			let _ = try! app.commit()
+		}
+	}
+	
+	func testAppLaunchLargeFilePerformance() throws {
+		measure(metrics: [XCTOSSignpostMetric.applicationLaunch]) {
+			let app = try! KometApp(filename: "linux-partial")
+			let _ = try! app.commit()
+		}
 	}
 	
 	// MARK: Rebasing
