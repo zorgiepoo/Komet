@@ -12,7 +12,7 @@ import AppKit
 // For better clarity to differentiate between the struct statfs vs function statfs
 typealias StatFS = statfs
 
-@objc class AppDelegate: NSObject, NSApplicationDelegate {
+@objc class AppDelegate: NSObject, NSApplicationDelegate, NSMenuItemValidation {
 	private var editorWindowController: ZGEditorWindowController?
 	private var preferencesWindowController: ZGPreferencesWindowController?
 	private var updaterController: UpdaterController?
@@ -198,7 +198,7 @@ typealias StatFS = statfs
 	
 	@objc func validateMenuItem(_ menuItem: NSMenuItem) -> Bool {
 		if menuItem.action == #selector(checkForUpdates(_:)) {
-			return updaterController?.canCheckForUpdates ?? false
+			return updaterController?.updater.canCheckForUpdates ?? false
 		} else {
 			return true
 		}

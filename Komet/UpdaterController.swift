@@ -7,22 +7,31 @@
 //
 
 import Foundation
+import Sparkle
+
+private let KOMET_ERROR_DOMAIN = "KometErrorDomain"
+private let USER_AUTHORIZATION_ERROR_CODE = 1
 
 @objc class ZGUpdaterDelegate: NSObject, SPUUpdaterDelegate {
-	func updater(_ updater: SPUUpdater, shouldAllowInstallerInteractionFor updateCheck: SPUUpdateCheck) -> Bool {
-		switch updateCheck {
-		case .userInitiated:
-			return true
-		case .backgroundScheduled:
-			return false
-		@unknown default:
-			print("Encountered unknown update check")
-			return false
-		}
+	func updater(_ updater: SPUUpdater, shouldDownloadReleaseNotesForUpdate updateItem: SUAppcastItem) -> Bool {
+		return false
 	}
 	
-	func updaterShouldDownloadReleaseNotes(_ updater: SPUUpdater) -> Bool {
-		return false
+	func updater(_ updater: SPUUpdater, mayPerform updateCheck: SPUUpdateCheck) throws {
+		switch updateCheck {
+		case .updates:
+			break
+		case .updatesInBackground:
+			let mainBundlePath = Bundle.main.bundlePath
+			if SPUSystemNeedsAuthorizationAccessForBundlePath(mainBundlePath) {
+				throw NSError(domain: KOMET_ERROR_DOMAIN, code: USER_AUTHORIZATION_ERROR_CODE, userInfo: [NSLocalizedDescriptionKey: "Updates that require user authorization cannot be installed in the background."])
+			}
+			break
+		case .updateInformation:
+			break
+		@unknown default:
+			break
+		}
 	}
 }
 
@@ -30,7 +39,6 @@ class UpdaterController: UpdaterSettingsListener {
 	let updater: SPUUpdater
 	let userDriver: ZGUpdaterUserDriver
 	let updaterDelegate: SPUUpdaterDelegate
-	let startedUpdater: Bool
 	
 	init() {
 		let mainBundle = Bundle.main
@@ -40,27 +48,18 @@ class UpdaterController: UpdaterSettingsListener {
 		updaterDelegate = ZGUpdaterDelegate()
 		updater = SPUUpdater(hostBundle: mainBundle, applicationBundle: mainBundle, userDriver: userDriver, delegate: updaterDelegate)
 		
-		updater.automaticallyDownloadsUpdates = true
+		// This is set in the Info.plist instead now
+		//updater.automaticallyDownloadsUpdates = true
 		
 		do {
 			try updater.start()
-			startedUpdater = true
 		} catch {
-			startedUpdater = false
 			print("Error: Failed to start updater because of error: \(error)")
 		}
 	}
 	
-	var canCheckForUpdates: Bool {
-		get {
-			return startedUpdater && userDriver.canCheckForUpdates
-		}
-	}
-	
 	func checkForUpdates() {
-		if startedUpdater {
-			updater.checkForUpdates()
-		}
+		updater.checkForUpdates()
 	}
 	
 	func updaterSettingsChangedAutomaticallyInstallingUpdates(_ automaticallyInstallUpdates: Bool) {

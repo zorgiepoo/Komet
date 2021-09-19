@@ -6,6 +6,6 @@
 //  Copyright © 2020 zgcoder. All rights reserved.
 //
 
-protocol UpdaterSettingsListener: class {
+protocol UpdaterSettingsListener: AnyObject {
 	func updaterSettingsChangedAutomaticallyInstallingUpdates(_ automaticallyInstallUpdates: Bool)
 }

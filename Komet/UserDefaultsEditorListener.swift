@@ -6,7 +6,7 @@
 //  Copyright © 2020 zgcoder. All rights reserved.
 //
 
-protocol UserDefaultsEditorListener: class {
+protocol UserDefaultsEditorListener: AnyObject {
 	func userDefaultsChangedMessageFont()
 	func userDefaultsChangedCommentsFont()
 	func userDefaultsChangedRecommendedLineLengthLimits()

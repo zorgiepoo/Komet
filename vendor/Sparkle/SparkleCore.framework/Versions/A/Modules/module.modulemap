@@ -1,6 +1,0 @@
-framework module SparkleCore {
-  umbrella header "SparkleCore.h"
-
-  export *
-  module * { export * }
-}

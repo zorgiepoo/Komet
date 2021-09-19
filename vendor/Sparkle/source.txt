@@ -1,4 +1,4 @@
 Git: https://github.com/sparkle-project/Sparkle.git
-Commit: 438f4a21d5b52596b899d9931525c02a691b2287
+Commit: 0f53f65241097c04613c41f75fc99ef2de70cf00
 Branch: 2.x
-Config: Set MACOSX_DEPLOYMENT_TARGET=10.10. Fix #import headers in SparkleCore framework.
+Configuration: Set SPARKLE_BUILD_UI_BITS to 0

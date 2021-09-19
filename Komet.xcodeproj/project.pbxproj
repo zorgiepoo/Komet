@@ -25,8 +25,8 @@
 		723606AB1FC6235200BDD6E9 /* Preferences.xib in Resources */ = {isa = PBXBuildFile; fileRef = 723606AD1FC6235200BDD6E9 /* Preferences.xib */; };
 		723606B21FC630C400BDD6E9 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 723606B01FC630C400BDD6E9 /* Localizable.strings */; };
 		724006391D73BCF6001042CF /* dsa_pub.pem in Resources */ = {isa = PBXBuildFile; fileRef = 724006381D73BCF6001042CF /* dsa_pub.pem */; };
-		7244AD8C1DF5329A004780EF /* SparkleCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7244AD8B1DF5329A004780EF /* SparkleCore.framework */; };
-		7244AD8D1DF5356D004780EF /* SparkleCore.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 7244AD8B1DF5329A004780EF /* SparkleCore.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		725148EC266DC2C000247C9C /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 725148EA266DC2B000247C9C /* Sparkle.framework */; };
+		725148ED266DC2C000247C9C /* Sparkle.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 725148EA266DC2B000247C9C /* Sparkle.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		726F32F71DE27AB7004FB4AF /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 726F32F51DE27AB7004FB4AF /* Credits.rtf */; };
 		7272EB4A25588D4300C78C4D /* WindowStyleTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72D3BE78254F24CF0051914F /* WindowStyleTheme.swift */; };
 		7272EB4D25588DC900C78C4D /* WindowStyleDefaultTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7272EB4C25588DC900C78C4D /* WindowStyleDefaultTheme.swift */; };
@@ -63,7 +63,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				7244AD8D1DF5356D004780EF /* SparkleCore.framework in Copy Frameworks */,
+				725148ED266DC2C000247C9C /* Sparkle.framework in Copy Frameworks */,
 			);
 			name = "Copy Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -94,7 +94,7 @@
 		723606AF1FC6235400BDD6E9 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Preferences.strings; sourceTree = "<group>"; };
 		723606B11FC630C400BDD6E9 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		724006381D73BCF6001042CF /* dsa_pub.pem */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = dsa_pub.pem; sourceTree = "<group>"; };
-		7244AD8B1DF5329A004780EF /* SparkleCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SparkleCore.framework; path = vendor/Sparkle/SparkleCore.framework; sourceTree = SOURCE_ROOT; };
+		725148EA266DC2B000247C9C /* Sparkle.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Sparkle.framework; path = vendor/Sparkle/Sparkle.framework; sourceTree = SOURCE_ROOT; };
 		726F32F61DE27AB7004FB4AF /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = Base; path = Base.lproj/Credits.rtf; sourceTree = "<group>"; };
 		7272EB4C25588DC900C78C4D /* WindowStyleDefaultTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowStyleDefaultTheme.swift; sourceTree = "<group>"; };
 		72B72C921D63EFF90096365F /* Komet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Komet.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -128,7 +128,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7244AD8C1DF5329A004780EF /* SparkleCore.framework in Frameworks */,
+				725148EC266DC2C000247C9C /* Sparkle.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -215,7 +215,7 @@
 		72B72C981D63EFF90096365F /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				7244AD8B1DF5329A004780EF /* SparkleCore.framework */,
+				725148EA266DC2B000247C9C /* Sparkle.framework */,
 				724006381D73BCF6001042CF /* dsa_pub.pem */,
 				72D3BE8D25565CDC0051914F /* main.swift */,
 			);
@@ -251,7 +251,6 @@
 				72B72C8F1D63EFF90096365F /* Frameworks */,
 				72B72C901D63EFF90096365F /* Resources */,
 				724006361D73B446001042CF /* Copy Frameworks */,
-				772B7CCC214412C300E993B2 /* Sign Sparkle Tools */,
 			);
 			buildRules = (
 			);
@@ -340,27 +339,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
-
-/* Begin PBXShellScriptBuildPhase section */
-		772B7CCC214412C300E993B2 /* Sign Sparkle Tools */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			name = "Sign Sparkle Tools";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "if [ -n \"$CODE_SIGN_IDENTITY\" ]\nthen\n    codesign --verbose --force -o runtime --sign \"$CODE_SIGN_IDENTITY\" \"$TARGET_BUILD_DIR/$TARGETNAME.app/Contents/Frameworks/SparkleCore.framework/Versions/A/Resources/AutoUpdate\"\n    codesign --verbose --force --deep -o runtime --sign \"$CODE_SIGN_IDENTITY\" \"$TARGET_BUILD_DIR/$TARGETNAME.app/Contents/Frameworks/SparkleCore.framework/Versions/A/Resources/Updater.app\"\nfi\n";
-		};
-/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		720DF185252AE3F7003AD7FB /* Sources */ = {
