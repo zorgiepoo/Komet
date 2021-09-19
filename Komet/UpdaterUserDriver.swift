@@ -19,9 +19,10 @@ import Sparkle
 		// Ideally we should show progress but do nothing for now
 	}
 	
-	private func promptUpdate(userInitiated: Bool, informativeText: String, response: (SPUUserUpdateChoice) -> ()) {
+	private func promptUpdate(userInitiated: Bool, informativeText: String, stage: SPUUserUpdateStage, response: (SPUUserUpdateChoice) -> ()) {
 		// Only bug the user if they were the ones that intiated an update check
 		if userInitiated {
+			// We only give the user an option to install the update on quit, or to cancel/defer
 			let alert = NSAlert()
 			alert.alertStyle = .informational
 			alert.informativeText = informativeText
@@ -31,7 +32,13 @@ import Sparkle
 			
 			switch alert.runModal() {
 			case .alertFirstButtonReturn:
-				response(.install)
+				if stage == .installing {
+					// Defer installing/relaunching the update until quit
+					response(.dismiss)
+				} else {
+					// Begin installation. Later when are ready to relaunch, we will defer the update
+					response(.install)
+				}
 			default:
 				response(.dismiss)
 			}
@@ -64,7 +71,7 @@ import Sparkle
 			
 			let informativeText = String(format: NSLocalizedString(newUpdateLocalizedKey, tableName: nil, comment: ""), appcastItemDisplayVersion)
 			
-			promptUpdate(userInitiated: state.userInitiated, informativeText: informativeText, response: reply)
+			promptUpdate(userInitiated: state.userInitiated, informativeText: informativeText, stage: state.stage, response: reply)
 		}
 	}
 	
@@ -119,7 +126,8 @@ import Sparkle
 	}
 	
 	func showReady(toInstallAndRelaunch reply: @escaping (SPUUserUpdateChoice) -> Void) {
-		// Don't make a reply - if we do, the user can check/resume for updates again and there's no need for that
+		// Defer the update
+		reply(.dismiss)
 	}
 	
 	func showSendingTerminationSignal() {
