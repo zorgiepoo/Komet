@@ -32,8 +32,6 @@
 	<string>NSApplication</string>
 	<key>SUFeedURL</key>
 	<string>https://zgcoder.net/software/komet/appcast.xml</string>
-	<key>SUPromptUserOnFirstLaunch</key>
-	<true/>
 	<key>SUPublicDSAKeyFile</key>
 	<string>dsa_pub.pem</string>
 	<key>SUScheduledCheckInterval</key>
