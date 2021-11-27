@@ -440,7 +440,11 @@ enum VersionControlType {
 	
 	private func removeBackgroundColors() {
 		let plainText = currentPlainText()
-		textView.layoutManager?.removeTemporaryAttribute(.backgroundColor, forCharacterRange: NSMakeRange(0, plainText.endIndex.utf16Offset(in: plainText)))
+		
+		if #available(macOS 12.0, *) {
+		} else {
+			textView.layoutManager?.removeTemporaryAttribute(.backgroundColor, forCharacterRange: NSMakeRange(0, plainText.endIndex.utf16Offset(in: plainText)))
+		}
 		breadcrumbs?.textOverflowRanges.removeAll()
 	}
 	
@@ -489,7 +493,18 @@ enum VersionControlType {
 			do {
 				let utf16Range = convertToUTF16Range(range: overflowRange, in: plainText)
 				
-				textView.layoutManager?.addTemporaryAttribute(.backgroundColor, value: style.overflowColor, forCharacterRange: utf16Range)
+				if #available(macOS 12.0, *) {
+					if let textLayoutManager = textView.textLayoutManager {
+						let documentLocation = textLayoutManager.documentRange.location
+						if let beginLocation = textLayoutManager.location(documentLocation, offsetBy: utf16Range.location),
+						   let endLocation = textLayoutManager.location(documentLocation, offsetBy: utf16Range.location + utf16Range.location + utf16Range.length),
+						   let textRange = NSTextRange(location: beginLocation, end: endLocation) {
+							textLayoutManager.addRenderingAttribute(.backgroundColor, value: style.overflowColor, for: textRange)
+						}
+					}
+				} else {
+					textView.layoutManager?.addTemporaryAttribute(.backgroundColor, value: style.overflowColor, forCharacterRange: utf16Range)
+				}
 			}
 			
 			// Don't re-assign / make another copy of breadcrumbs
@@ -694,7 +709,11 @@ enum VersionControlType {
 		
 		// Set textview delegates
 		textView.textStorage?.delegate = self
-		textView.layoutManager?.delegate = self
+		
+		if #available(macOS 12.0, *) {
+		} else {
+			textView.layoutManager?.delegate = self
+		}
 		textView.delegate = self
 		textView.zgCommitViewDelegate = self
 		
