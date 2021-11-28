@@ -42,10 +42,12 @@ enum VersionControlType {
 	private var preventAccidentalNewline: Bool = false
 	private var effectiveAppearanceObserver: NSKeyValueObservation? = nil
 	
+	private var textView: ZGCommitTextView!
+	
 	@IBOutlet private var topBar: NSView!
 	@IBOutlet private var horizontalBarDivider: NSBox!
-	@IBOutlet private var textView: ZGCommitTextView!
 	@IBOutlet private var scrollView: NSScrollView!
+	@IBOutlet private var documentView: NSView!
 	@IBOutlet private var contentView: NSVisualEffectView!
 	@IBOutlet private var commitLabelTextField: NSTextField!
 	@IBOutlet private var cancelButton: NSButtonCell!
@@ -646,6 +648,9 @@ enum VersionControlType {
 	}
 	
 	@objc override func windowDidLoad() {
+		textView = ZGCommitTextView(frame: NSMakeRect(0.0, 0.0, documentView.frame.size.width, documentView.frame.size.height))
+		scrollView.documentView = textView
+		
 		self.window?.setFrameUsingName(ZGEditorWindowFrameNameKey)
 
 		self.updateCurrentStyle()
