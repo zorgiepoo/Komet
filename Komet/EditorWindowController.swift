@@ -43,11 +43,11 @@ enum VersionControlType {
 	private var effectiveAppearanceObserver: NSKeyValueObservation? = nil
 	
 	private var textView: ZGCommitTextView!
+	private var scrollView: NSScrollView!
 	
 	@IBOutlet private var topBar: NSView!
 	@IBOutlet private var horizontalBarDivider: NSBox!
-	@IBOutlet private var scrollView: NSScrollView!
-	@IBOutlet private var documentView: NSView!
+	@IBOutlet private var scrollViewContainer: NSView!
 	@IBOutlet private var contentView: NSVisualEffectView!
 	@IBOutlet private var commitLabelTextField: NSTextField!
 	@IBOutlet private var cancelButton: NSButtonCell!
@@ -441,7 +441,7 @@ enum VersionControlType {
 	private func removeBackgroundColors() {
 		let plainText = currentPlainText()
 		
-		if #available(macOS 12.0, *) {
+		if #available(macOS 13.0, *) {
 		} else {
 			textView.layoutManager?.removeTemporaryAttribute(.backgroundColor, forCharacterRange: NSMakeRange(0, plainText.endIndex.utf16Offset(in: plainText)))
 		}
@@ -493,15 +493,15 @@ enum VersionControlType {
 			do {
 				let utf16Range = convertToUTF16Range(range: overflowRange, in: plainText)
 				
-				if #available(macOS 12.0, *) {
-					if let textLayoutManager = textView.textLayoutManager {
-						let documentLocation = textLayoutManager.documentRange.location
-						if let beginLocation = textLayoutManager.location(documentLocation, offsetBy: utf16Range.location),
-						   let endLocation = textLayoutManager.location(documentLocation, offsetBy: utf16Range.location + utf16Range.location + utf16Range.length),
-						   let textRange = NSTextRange(location: beginLocation, end: endLocation) {
-							textLayoutManager.addRenderingAttribute(.backgroundColor, value: style.overflowColor, for: textRange)
-						}
-					}
+				if #available(macOS 13.0, *) {
+//					if let textLayoutManager = textView.textLayoutManager {
+//						let documentLocation = textLayoutManager.documentRange.location
+//						if let beginLocation = textLayoutManager.location(documentLocation, offsetBy: utf16Range.location),
+//						   let endLocation = textLayoutManager.location(documentLocation, offsetBy: utf16Range.location + utf16Range.location + utf16Range.length),
+//						   let textRange = NSTextRange(location: beginLocation, end: endLocation) {
+//							textLayoutManager.addRenderingAttribute(.backgroundColor, value: style.overflowColor, for: textRange)
+//						}
+//					}
 				} else {
 					textView.layoutManager?.addTemporaryAttribute(.backgroundColor, value: style.overflowColor, forCharacterRange: utf16Range)
 				}
@@ -663,8 +663,54 @@ enum VersionControlType {
 	}
 	
 	@objc override func windowDidLoad() {
-		textView = ZGCommitTextView(frame: NSMakeRect(0.0, 0.0, documentView.frame.size.width, documentView.frame.size.height))
+		// Following these steps to set up scroll view and text view
+		// https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/TextUILayer/Tasks/TextInScrollView.html#//apple_ref/doc/uid/20000938-CJBBIAAF
+		scrollView = NSScrollView(frame: scrollViewContainer.frame)
+		scrollView.borderType = .noBorder
+		scrollView.hasVerticalScroller = true
+		scrollView.hasHorizontalScroller = false
+		scrollView.autoresizingMask = .init(rawValue: NSView.AutoresizingMask.width.rawValue | NSView.AutoresizingMask.height.rawValue)
+		
+		let scrollViewContentSize = scrollView.contentSize
+		
+		if #available(macOS 12.0, *) {
+//			let textLayoutManager = NSTextLayoutManager()
+//			let textContainer = NSTextContainer(size: NSSize(width: CGFloat.greatestFiniteMagnitude, height: CGFloat.greatestFiniteMagnitude))
+//
+//			textLayoutManager.textContainer = textContainer
+//
+//			let textContentStorage = NSTextContentStorage()
+//			textContentStorage.addTextLayoutManager(textLayoutManager)
+//
+//			textView = ZGCommitTextView(frame: NSMakeRect(0.0, 0.0, documentView.frame.size.width, documentView.frame.size.height), textContainer: textContainer)
+			
+			//..
+			
+//			let containerSize = NSSize(width: CGFloat.greatestFiniteMagnitude, height: CGFloat.greatestFiniteMagnitude)
+//			let textContainer = NSTextContainer(size: containerSize)
+//			let layoutManager = NSLayoutManager()
+//			layoutManager.addTextContainer(textContainer)
+//
+//			let textStorage = NSTextStorage()
+//			textStorage.addLayoutManager(layoutManager)
+//
+//			textView = ZGCommitTextView(frame: NSMakeRect(0.0, 0.0, documentView.bounds.size.width, documentView.bounds.size.height), textContainer: textContainer)
+			
+			textView = ZGCommitTextView(frame: NSMakeRect(0.0, 0.0, scrollViewContentSize.width, scrollViewContentSize.height))
+		} else {
+			textView = ZGCommitTextView(frame: NSMakeRect(0.0, 0.0, scrollViewContentSize.width, scrollViewContentSize.height))
+		}
+		
+		textView.minSize = NSMakeSize(0.0, scrollViewContentSize.height)
+		textView.maxSize = NSMakeSize(CGFloat(Float.greatestFiniteMagnitude), CGFloat(Float.greatestFiniteMagnitude))
+		textView.isVerticallyResizable = true
+		textView.isHorizontallyResizable = false
+		textView.autoresizingMask = .width
+		textView.textContainer?.containerSize = NSMakeSize(scrollViewContentSize.width, CGFloat(Float.greatestFiniteMagnitude))
+		textView.textContainer?.widthTracksTextView = true
+		
 		scrollView.documentView = textView
+		scrollViewContainer.addSubview(scrollView)
 		
 		self.window?.setFrameUsingName(ZGEditorWindowFrameNameKey)
 
@@ -710,7 +756,7 @@ enum VersionControlType {
 		// Set textview delegates
 		textView.textStorage?.delegate = self
 		
-		if #available(macOS 12.0, *) {
+		if #available(macOS 13.0, *) {
 		} else {
 			textView.layoutManager?.delegate = self
 		}

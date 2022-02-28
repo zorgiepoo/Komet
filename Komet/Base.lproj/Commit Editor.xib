@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="19455" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="19529" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="19455"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="19529"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -12,9 +12,8 @@
                 <outlet property="commitButton" destination="SIQ-xl-8MY" id="hx9-Vx-VqX"/>
                 <outlet property="commitLabelTextField" destination="vV7-fu-K3M" id="cY8-MU-xAx"/>
                 <outlet property="contentView" destination="5Ms-NX-CHZ" id="a5v-Qc-MbF"/>
-                <outlet property="documentView" destination="eeH-wP-uOb" id="SVj-II-2Nt"/>
                 <outlet property="horizontalBarDivider" destination="iBM-Yy-b1k" id="mfH-98-euX"/>
-                <outlet property="scrollView" destination="zRw-mJ-ap5" id="WA6-tV-woR"/>
+                <outlet property="scrollViewContainer" destination="38p-dz-bpP" id="OpB-79-CzB"/>
                 <outlet property="topBar" destination="iuq-58-oil" id="in9-OF-xMR"/>
                 <outlet property="window" destination="4Y4-O8-fQs" id="9cp-uO-prZ"/>
             </connections>
@@ -97,34 +96,16 @@ DQ
                                 </constraints>
                                 <color key="fillColor" red="0.83529411764705885" green="0.83529411764705885" blue="0.83529411764705885" alpha="1" colorSpace="calibratedRGB"/>
                             </box>
-                            <scrollView borderType="none" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zRw-mJ-ap5">
-                                <rect key="frame" x="0.0" y="0.0" width="500" height="307"/>
-                                <clipView key="contentView" id="Azf-jc-RpH">
-                                    <rect key="frame" x="0.0" y="0.0" width="500" height="307"/>
-                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                    <subviews>
-                                        <view id="eeH-wP-uOb" userLabel="Document View">
-                                            <rect key="frame" x="0.0" y="0.0" width="497" height="306"/>
-                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                        </view>
-                                    </subviews>
-                                </clipView>
-                                <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="ax5-ju-H9A">
-                                    <rect key="frame" x="-100" y="-100" width="500" height="16"/>
-                                    <autoresizingMask key="autoresizingMask"/>
-                                </scroller>
-                                <scroller key="verticalScroller" wantsLayer="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="ocZ-hf-LqL">
-                                    <rect key="frame" x="484" y="0.0" width="16" height="307"/>
-                                    <autoresizingMask key="autoresizingMask"/>
-                                </scroller>
-                            </scrollView>
+                            <customView translatesAutoresizingMaskIntoConstraints="NO" id="38p-dz-bpP" userLabel="Scroll view container">
+                                <rect key="frame" x="0.0" y="0.0" width="500" height="306"/>
+                            </customView>
                         </subviews>
                         <constraints>
-                            <constraint firstAttribute="trailing" secondItem="zRw-mJ-ap5" secondAttribute="trailing" id="N65-1T-ElJ"/>
-                            <constraint firstItem="zRw-mJ-ap5" firstAttribute="leading" secondItem="5Ms-NX-CHZ" secondAttribute="leading" id="SvZ-yj-CPh"/>
+                            <constraint firstItem="38p-dz-bpP" firstAttribute="top" secondItem="iBM-Yy-b1k" secondAttribute="bottom" id="7WF-AP-64p"/>
+                            <constraint firstAttribute="bottom" secondItem="38p-dz-bpP" secondAttribute="bottom" id="Krf-MX-B3l"/>
+                            <constraint firstAttribute="trailing" secondItem="38p-dz-bpP" secondAttribute="trailing" id="OYP-vE-Enf"/>
                             <constraint firstAttribute="trailing" secondItem="iBM-Yy-b1k" secondAttribute="trailing" id="WLf-xu-CEj"/>
-                            <constraint firstItem="zRw-mJ-ap5" firstAttribute="top" secondItem="iBM-Yy-b1k" secondAttribute="top" id="bAb-mz-vdz"/>
-                            <constraint firstAttribute="bottom" secondItem="zRw-mJ-ap5" secondAttribute="bottom" id="dS1-QY-UgX"/>
+                            <constraint firstItem="38p-dz-bpP" firstAttribute="leading" secondItem="5Ms-NX-CHZ" secondAttribute="leading" id="uOB-4j-jJm"/>
                             <constraint firstItem="iBM-Yy-b1k" firstAttribute="leading" secondItem="5Ms-NX-CHZ" secondAttribute="leading" id="xeu-UR-M2U"/>
                             <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="300" id="zfz-rS-Fcw"/>
                         </constraints>
