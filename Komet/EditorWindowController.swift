@@ -672,33 +672,28 @@ enum VersionControlType {
 		scrollView.autoresizingMask = .init(rawValue: NSView.AutoresizingMask.width.rawValue | NSView.AutoresizingMask.height.rawValue)
 		
 		let scrollViewContentSize = scrollView.contentSize
+		let textContainerSize = NSMakeSize(scrollViewContentSize.width, CGFloat(Float.greatestFiniteMagnitude))
 		
+		// Initialize NSTextView via code snippets from https://developer.apple.com/documentation/appkit/nstextview/1449347-initwithframe
 		if #available(macOS 12.0, *) {
-//			let textLayoutManager = NSTextLayoutManager()
-//			let textContainer = NSTextContainer(size: NSSize(width: CGFloat.greatestFiniteMagnitude, height: CGFloat.greatestFiniteMagnitude))
-//
-//			textLayoutManager.textContainer = textContainer
-//
-//			let textContentStorage = NSTextContentStorage()
-//			textContentStorage.addTextLayoutManager(textLayoutManager)
-//
-//			textView = ZGCommitTextView(frame: NSMakeRect(0.0, 0.0, documentView.frame.size.width, documentView.frame.size.height), textContainer: textContainer)
+			let textLayoutManager = NSTextLayoutManager()
+			let textContainer = NSTextContainer(size: textContainerSize)
+			textLayoutManager.textContainer = textContainer
 			
-			//..
+			let textContentStorage = NSTextContentStorage()
+			textContentStorage.addTextLayoutManager(textLayoutManager)
 			
-//			let containerSize = NSSize(width: CGFloat.greatestFiniteMagnitude, height: CGFloat.greatestFiniteMagnitude)
-//			let textContainer = NSTextContainer(size: containerSize)
-//			let layoutManager = NSLayoutManager()
-//			layoutManager.addTextContainer(textContainer)
-//
-//			let textStorage = NSTextStorage()
-//			textStorage.addLayoutManager(layoutManager)
-//
-//			textView = ZGCommitTextView(frame: NSMakeRect(0.0, 0.0, documentView.bounds.size.width, documentView.bounds.size.height), textContainer: textContainer)
-			
-			textView = ZGCommitTextView(frame: NSMakeRect(0.0, 0.0, scrollViewContentSize.width, scrollViewContentSize.height))
+			textView = ZGCommitTextView(frame: NSMakeRect(0.0, 0.0, scrollViewContentSize.width, scrollViewContentSize.height), textContainer: textLayoutManager.textContainer)
 		} else {
-			textView = ZGCommitTextView(frame: NSMakeRect(0.0, 0.0, scrollViewContentSize.width, scrollViewContentSize.height))
+			let textContainer = NSTextContainer(size: textContainerSize)
+			let layoutManager = NSLayoutManager()
+			
+			layoutManager.addTextContainer(textContainer)
+			
+			let textStorage = NSTextStorage()
+			textStorage.addLayoutManager(layoutManager)
+			
+			textView = ZGCommitTextView(frame: NSMakeRect(0.0, 0.0, scrollViewContentSize.width, scrollViewContentSize.height), textContainer: textContainer)
 		}
 		
 		textView.minSize = NSMakeSize(0.0, scrollViewContentSize.height)
@@ -706,7 +701,6 @@ enum VersionControlType {
 		textView.isVerticallyResizable = true
 		textView.isHorizontallyResizable = false
 		textView.autoresizingMask = .width
-		textView.textContainer?.containerSize = NSMakeSize(scrollViewContentSize.width, CGFloat(Float.greatestFiniteMagnitude))
 		textView.textContainer?.widthTracksTextView = true
 		
 		scrollView.documentView = textView
