@@ -685,6 +685,7 @@ enum VersionControlType {
 		textView.autoresizingMask = .width
 		textView.textContainer?.widthTracksTextView = true
 		textView.allowsUndo = true
+		textView.isRichText = false
 		
 		scrollView.documentView = textView
 		scrollViewContainer.addSubview(scrollView)
