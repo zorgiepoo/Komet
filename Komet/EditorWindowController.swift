@@ -442,7 +442,13 @@ enum VersionControlType {
 		return NSRange(range, in: string)
 	}
 	
-	private func updateTextProcessing() {
+	private func updateCommentSection() {
+		let commentRange = commentUTF16Range(plainText: currentPlainText())
+		textView.textStorage?.removeAttribute(.foregroundColor, range: commentRange)
+		textView.textStorage?.addAttribute(.foregroundColor, value: style.commentColor, range: commentRange)
+	}
+	
+	private func updateTextContent() {
 		let plainText = currentPlainText()
 		
 		func retrieveContentLineRanges() -> [Range<String.Index>] {
@@ -631,17 +637,10 @@ enum VersionControlType {
 	
 	private func updateEditorStyle(_ style: WindowStyle) {
 		updateStyle(style)
-		updateTextProcessing()
+		updateTextContent()
+		updateCommentSection()
 		topBar.needsDisplay = true
 		contentView.needsDisplay = true
-		
-		if #available(macOS 10.12, *) {
-		} else {
-			// The comment section isn't updated by setting the editor style elsewhere, since it's not editable.
-			let commentRange = commentUTF16Range(plainText: currentPlainText())
-			textView.textStorage?.removeAttribute(.foregroundColor, range: commentRange)
-			textView.textStorage?.addAttribute(.foregroundColor, value: style.commentColor, range: commentRange)
-		}
 	}
 	
 	@objc override func windowDidLoad() {
@@ -762,7 +761,8 @@ enum VersionControlType {
 		
 		updateTextViewDrawingBackground()
 		
-		updateTextProcessing()
+		updateTextContent()
+		updateCommentSection()
 		
 		// If we have a non-version controlled file, point selection at start of content
 		// Otherwise if we're resuming a canceled commit message, select all the contents
@@ -988,7 +988,7 @@ enum VersionControlType {
 	@objc func textDidChange(_ notification: Notification) {
 		if #available(macOS 12.0, *) {
 		} else {
-			updateTextProcessing()
+			updateTextContent()
 		}
 	}
 	
@@ -1176,15 +1176,15 @@ enum VersionControlType {
 	// MARK: ZGCommitViewDelegate
 	
 	@objc func userDefaultsChangedMessageFont() {
-		updateTextProcessing()
+		updateTextContent()
 	}
 	
 	@objc func userDefaultsChangedCommentsFont() {
-		updateTextProcessing()
+		updateCommentSection()
 	}
 	
 	@objc func userDefaultsChangedRecommendedLineLengthLimits() {
-		updateTextProcessing()
+		updateTextContent()
 	}
 	
 	func zgCommitViewSelectAll() {
