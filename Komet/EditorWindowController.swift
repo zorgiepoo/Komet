@@ -1007,7 +1007,8 @@ enum VersionControlType {
 		}
 		
 		let paragraphWithDisplayAttributes: NSTextParagraph?
-		let isCommentParagraph = (range.location >= commentRange.location) || Self.isCommentLine(originalTextString, versionControlType: versionControlType)
+		let isCommentSection = (range.location >= commentRange.location)
+		let isCommentParagraph = isCommentSection || Self.isCommentLine(originalTextString, versionControlType: versionControlType)
 
 		let userDefaults = UserDefaults.standard
 		
@@ -1041,6 +1042,10 @@ enum VersionControlType {
 						let overflowAttributes: [NSAttributedString.Key: AnyObject] = [.font: contentFont, .backgroundColor: style.overflowColor]
 						
 						textWithDisplayAttributes.addAttributes(overflowAttributes, range: overflowUtf16Range)
+						
+						if breadcrumbs != nil {
+							breadcrumbs!.textOverflowRanges.append(range.location + overflowUtf16Range.location ..< range.location + NSMaxRange(overflowUtf16Range))
+						}
 					}
 				}
 			}
@@ -1054,6 +1059,10 @@ enum VersionControlType {
 			let textWithDisplayAttributes = NSMutableAttributedString(attributedString: originalText)
 			
 			textWithDisplayAttributes.addAttributes(displayAttributes, range: NSMakeRange(0, range.length))
+			
+			if !isCommentSection && breadcrumbs != nil {
+				breadcrumbs!.commentLineRanges.append(range.location ..< NSMaxRange(range))
+			}
 			
 			paragraphWithDisplayAttributes = NSTextParagraph(attributedString: textWithDisplayAttributes)
 		}
