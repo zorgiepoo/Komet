@@ -369,9 +369,9 @@ enum VersionControlType {
 		}
 	}
 	
-	private func usesTextKit2() -> Bool {
+	private func usesTextKit2(userDefaults: UserDefaults) -> Bool {
 		if #available(macOS 12.0, *) {
-			return !UserDefaults.standard.bool(forKey: ZGDisableTextKit2Key)
+			return !userDefaults.bool(forKey: ZGDisableTextKit2Key)
 		} else {
 			return false
 		}
@@ -483,7 +483,8 @@ enum VersionControlType {
 		
 		let textStorage = textView.textStorage
 		
-		let isUsingTextKit2 = usesTextKit2()
+		let userDefaults = UserDefaults.standard
+		let isUsingTextKit2 = usesTextKit2(userDefaults: userDefaults)
 		
 		func updateHighlightOverflowing(lineRange: Range<String.Index>, limit: Int) {
 			let distance = plainText.distance(from: lineRange.lowerBound, to: lineRange.upperBound)
@@ -623,7 +624,6 @@ enum VersionControlType {
 			}
 		}
 		
-		let userDefaults = UserDefaults.standard
 		let versionControlledFile = userDefaults.bool(forKey: ZGAssumeVersionControlledFileKey)
 		
 		if versionControlledFile || plainText.utf16.count < MAX_CHARACTER_COUNT_FOR_NON_VERSION_CONTROL_COMMENT_ATTRIBUTES {
@@ -666,8 +666,10 @@ enum VersionControlType {
 		let scrollViewContentSize = scrollView.contentSize
 		let textContainerSize = NSMakeSize(scrollViewContentSize.width, CGFloat(Float.greatestFiniteMagnitude))
 		
+		let userDefaults = UserDefaults.standard
+		
 		// Initialize NSTextView via code snippets from https://developer.apple.com/documentation/appkit/nstextview/1449347-initwithframe
-		let isUsingTextKit2 = usesTextKit2()
+		let isUsingTextKit2 = usesTextKit2(userDefaults: userDefaults)
 		if isUsingTextKit2 {
 			if #available(macOS 12.0, *) {
 				let textLayoutManager = NSTextLayoutManager()
@@ -711,8 +713,6 @@ enum VersionControlType {
 		self.window?.setFrameUsingName(ZGEditorWindowFrameNameKey)
 
 		self.updateCurrentStyle()
-		
-		let userDefaults = UserDefaults.standard
 		
 		// Update style when user changes the system appearance
 		self.effectiveAppearanceObserver = NSApp.observe(\.effectiveAppearance, options: [.old, .new]) { [weak self] (application, change) in
@@ -1004,7 +1004,7 @@ enum VersionControlType {
 	}
 	
 	@objc func textDidChange(_ notification: Notification) {
-		if !usesTextKit2() {
+		if !usesTextKit2(userDefaults: UserDefaults.standard) {
 			updateTextContent()
 		}
 	}
