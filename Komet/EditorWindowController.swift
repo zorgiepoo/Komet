@@ -198,7 +198,8 @@ enum VersionControlType {
 			ZGDisableSpellCheckingAndCorrectionForSquashesKey: true,
 			ZGDisableAutomaticNewlineInsertionAfterSubjectLineForSquashesKey: true,
 			ZGDetectHGCommentStyleForSquashesKey: true,
-			ZGAssumeVersionControlledFileKey: true
+			ZGAssumeVersionControlledFileKey: true,
+			ZGDisableTextKit2Key: false
 		])
 		
 		ZGCommitTextView.registerDefaults()
@@ -368,6 +369,14 @@ enum VersionControlType {
 		}
 	}
 	
+	private func usesTextKit2() -> Bool {
+		if #available(macOS 12.0, *) {
+			return !UserDefaults.standard.bool(forKey: ZGDisableTextKit2Key)
+		} else {
+			return false
+		}
+	}
+	
 	private func updateCurrentStyle() {
 		// Style top bar
 		do {
@@ -474,6 +483,8 @@ enum VersionControlType {
 		
 		let textStorage = textView.textStorage
 		
+		let isUsingTextKit2 = usesTextKit2()
+		
 		func updateHighlightOverflowing(lineRange: Range<String.Index>, limit: Int) {
 			let distance = plainText.distance(from: lineRange.lowerBound, to: lineRange.upperBound)
 			guard distance > limit else {
@@ -484,7 +495,7 @@ enum VersionControlType {
 			do {
 				let utf16Range = convertToUTF16Range(range: overflowRange, in: plainText)
 				
-				if #available(macOS 12.0, *) {
+				if isUsingTextKit2 {
 					textStorage?.addAttribute(.backgroundColor, value: style.overflowColor, range: utf16Range)
 				} else {
 					textView.layoutManager?.addTemporaryAttribute(.backgroundColor, value: style.overflowColor, forCharacterRange: utf16Range)
@@ -503,7 +514,7 @@ enum VersionControlType {
 		func removeBackgroundColors() {
 			let plainText = currentPlainText()
 			
-			if #available(macOS 12.0, *) {
+			if isUsingTextKit2 {
 				textStorage?.removeAttribute(.backgroundColor, range: NSMakeRange(0, plainText.endIndex.utf16Offset(in: plainText)))
 			} else {
 				textView.layoutManager?.removeTemporaryAttribute(.backgroundColor, forCharacterRange: NSMakeRange(0, plainText.endIndex.utf16Offset(in: plainText)))
@@ -656,16 +667,23 @@ enum VersionControlType {
 		let textContainerSize = NSMakeSize(scrollViewContentSize.width, CGFloat(Float.greatestFiniteMagnitude))
 		
 		// Initialize NSTextView via code snippets from https://developer.apple.com/documentation/appkit/nstextview/1449347-initwithframe
-		if #available(macOS 12.0, *) {
-			let textLayoutManager = NSTextLayoutManager()
-			let textContainer = NSTextContainer(size: textContainerSize)
-			textLayoutManager.textContainer = textContainer
-			
-			let textContentStorage = NSTextContentStorage()
-			textContentStorage.addTextLayoutManager(textLayoutManager)
-			textContentStorage.delegate = self
-			
-			textView = ZGCommitTextView(frame: NSMakeRect(0.0, 0.0, scrollViewContentSize.width, scrollViewContentSize.height), textContainer: textLayoutManager.textContainer)
+		let isUsingTextKit2 = usesTextKit2()
+		if isUsingTextKit2 {
+			if #available(macOS 12.0, *) {
+				let textLayoutManager = NSTextLayoutManager()
+				
+				let textContainer = NSTextContainer(size: textContainerSize)
+				textLayoutManager.textContainer = textContainer
+				
+				let textContentStorage = NSTextContentStorage()
+				textContentStorage.addTextLayoutManager(textLayoutManager)
+				textContentStorage.delegate = self
+				
+				textView = ZGCommitTextView(frame: NSMakeRect(0.0, 0.0, scrollViewContentSize.width, scrollViewContentSize.height), textContainer: textLayoutManager.textContainer)
+			} else {
+				// This should not be possible
+				assertionFailure("If we're using TextKit2, we must be on macOS 12 or later")
+			}
 		} else {
 			let textContainer = NSTextContainer(size: textContainerSize)
 			let layoutManager = NSLayoutManager()
@@ -734,8 +752,7 @@ enum VersionControlType {
 		// Set textview delegates
 		textView.textStorage?.delegate = self
 		
-		if #available(macOS 12.0, *) {
-		} else {
+		if !isUsingTextKit2 {
 			textView.layoutManager?.delegate = self
 		}
 		textView.delegate = self
@@ -987,8 +1004,7 @@ enum VersionControlType {
 	}
 	
 	@objc func textDidChange(_ notification: Notification) {
-		if #available(macOS 12.0, *) {
-		} else {
+		if !usesTextKit2() {
 			updateTextContent()
 		}
 	}

@@ -38,3 +38,5 @@ let ZGBreadcrumbsURLKey = "ZGBreadcrumbsURL"
 let ZGCommitTextViewContinuousSpellCheckingKey = "ZGCommitTextViewContinuousSpellChecking"
 let ZGCommitTextViewAutomaticSpellingCorrectionKey = "ZGCommitTextViewAutomaticSpellingCorrection"
 let ZGCommitTextViewAutomaticTextReplacementKey = "ZGCommitTextViewAutomaticTextReplacement"
+
+let ZGDisableTextKit2Key = "ZGDisableTextKit2"
