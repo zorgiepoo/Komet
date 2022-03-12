@@ -74,8 +74,12 @@ class KometApp {
 			 key(ZGCommitTextViewContinuousSpellCheckingKey), String(true),
 			 key(ZGCommitTextViewAutomaticSpellingCorrectionKey), String(false),
 			 key(ZGCommitTextViewAutomaticTextReplacementKey), String(false),
-			 key(ZGDisableTextKit2Key), String(false),
-			 key(ZGBreadcrumbsURLKey), breadcrumbsURL.path]
+			 key(ZGDisableTextKit2Key), String(false)]
+		
+		application.launchEnvironment = [
+			ZGBreadcrumbsURLKey: breadcrumbsURL.path,
+			ZGProjectNameKey: tempDirectoryURL.lastPathComponent
+		]
 		application.launch()
 		
 		let newRunningApplications = NSRunningApplication.runningApplications(withBundleIdentifier: appIdentifier)

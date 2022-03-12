@@ -167,10 +167,6 @@ enum VersionControlType {
 		return startIndex ..< bestEndCharacterIndex
 	}
 	
-	private static func projectName(fileManager: FileManager) -> String {
-		return URL(fileURLWithPath:fileManager.currentDirectoryPath).lastPathComponent
-	}
-	
 	private static func lengthLimitWarningEnabled(userDefaults: UserDefaults, userDefaultKey: String) -> Bool {
 		return userDefaults.bool(forKey: ZGAssumeVersionControlledFileKey) && userDefaults.bool(forKey: userDefaultKey)
 	}
@@ -212,7 +208,12 @@ enum VersionControlType {
 		
 		let userDefaults = UserDefaults.standard
 		
-		breadcrumbs = (ZGReadDefaultURL(userDefaults, ZGBreadcrumbsURLKey) != nil) ? Breadcrumbs() : nil
+		let processInfo = ProcessInfo.processInfo
+		if let _ = processInfo.environment[ZGBreadcrumbsURLKey] {
+			breadcrumbs = Breadcrumbs()
+		} else {
+			breadcrumbs = nil
+		}
 		
 		style = WindowStyle.withTheme(Self.styleTheme(defaultTheme: ZGReadDefaultWindowStyleTheme(userDefaults, ZGWindowStyleThemeKey), effectiveAppearance: NSApp.effectiveAppearance))
 		
@@ -259,7 +260,11 @@ enum VersionControlType {
 				versionControlType = .git
 			}
 			
-			self.projectNameDisplay = Self.projectName(fileManager: fileManager)
+			if let projectNameFromEnvironment = processInfo.environment[ZGProjectNameKey] {
+				self.projectNameDisplay = projectNameFromEnvironment
+			} else {
+				self.projectNameDisplay = URL(fileURLWithPath: fileManager.currentDirectoryPath).lastPathComponent
+			}
 		}
 		
 		self.versionControlType = versionControlType
@@ -282,9 +287,8 @@ enum VersionControlType {
 		if !self.tutorialMode && userDefaults.bool(forKey: ZGAssumeVersionControlledFileKey) && userDefaults.bool(forKey: ZGResumeIncompleteSessionKey) {
 			if let applicationSupportURL = fileManager.urls(for: .applicationSupportDirectory, in: .userDomainMask).first {
 				let supportDirectory = applicationSupportURL.appendingPathComponent(APP_SUPPORT_DIRECTORY_NAME)
-				let projectName = Self.projectName(fileManager: fileManager)
 				
-				let lastCommitURL = supportDirectory.appendingPathComponent(projectName)
+				let lastCommitURL = supportDirectory.appendingPathComponent(projectNameDisplay)
 				
 				do {
 					let reachable = try lastCommitURL.checkResourceIsReachable()
@@ -854,7 +858,8 @@ enum VersionControlType {
 	// MARK: Actions
 	
 	private func exit(status: Int32) -> Never {
-		if var breadcrumbs = breadcrumbs, let breadcrumbsURL = ZGReadDefaultURL(UserDefaults.standard, ZGBreadcrumbsURLKey) {
+		if var breadcrumbs = breadcrumbs, let breadcrumbsPath = ProcessInfo.processInfo.environment[ZGBreadcrumbsURLKey] {
+			let breadcrumbsURL = URL(fileURLWithPath: breadcrumbsPath, isDirectory: false)
 			breadcrumbs.exitStatus = status
 			
 			do {
@@ -902,7 +907,7 @@ enum VersionControlType {
 							
 							try fileManager.createDirectory(at: supportDirectory, withIntermediateDirectories: true, attributes: nil)
 							
-							let lastCommitURL = supportDirectory.appendingPathComponent(Self.projectName(fileManager: fileManager))
+							let lastCommitURL = supportDirectory.appendingPathComponent(projectNameDisplay)
 							
 							try trimmedContent.write(to: lastCommitURL, atomically: true, encoding: .utf8)
 						} catch {
