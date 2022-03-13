@@ -45,6 +45,8 @@ enum VersionControlType {
 	private var textView: ZGCommitTextView!
 	private var scrollView: NSScrollView!
 	
+	private var usesTextKit2: Bool
+	
 	@IBOutlet private var topBar: NSView!
 	@IBOutlet private var horizontalBarDivider: NSBox!
 	@IBOutlet private var scrollViewContainer: NSView!
@@ -207,6 +209,12 @@ enum VersionControlType {
 		self.tutorialMode = tutorialMode
 		
 		let userDefaults = UserDefaults.standard
+		
+		if #available(macOS 12.0, *) {
+			usesTextKit2 = !userDefaults.bool(forKey: ZGDisableTextKit2Key)
+		} else {
+			usesTextKit2 = false
+		}
 		
 		let processInfo = ProcessInfo.processInfo
 		if let _ = processInfo.environment[ZGBreadcrumbsURLKey] {
@@ -373,14 +381,6 @@ enum VersionControlType {
 		}
 	}
 	
-	private func usesTextKit2(userDefaults: UserDefaults) -> Bool {
-		if #available(macOS 12.0, *) {
-			return !userDefaults.bool(forKey: ZGDisableTextKit2Key)
-		} else {
-			return false
-		}
-	}
-	
 	private func updateCurrentStyle() {
 		// Style top bar
 		do {
@@ -488,7 +488,6 @@ enum VersionControlType {
 		let textStorage = textView.textStorage
 		
 		let userDefaults = UserDefaults.standard
-		let isUsingTextKit2 = usesTextKit2(userDefaults: userDefaults)
 		
 		func updateHighlightOverflowing(lineRange: Range<String.Index>, limit: Int) {
 			let distance = plainText.distance(from: lineRange.lowerBound, to: lineRange.upperBound)
@@ -500,7 +499,7 @@ enum VersionControlType {
 			do {
 				let utf16Range = convertToUTF16Range(range: overflowRange, in: plainText)
 				
-				if isUsingTextKit2 {
+				if usesTextKit2 {
 					textStorage?.addAttribute(.backgroundColor, value: style.overflowColor, range: utf16Range)
 				} else {
 					textView.layoutManager?.addTemporaryAttribute(.backgroundColor, value: style.overflowColor, forCharacterRange: utf16Range)
@@ -519,7 +518,7 @@ enum VersionControlType {
 		func removeBackgroundColors() {
 			let plainText = currentPlainText()
 			
-			if isUsingTextKit2 {
+			if usesTextKit2 {
 				textStorage?.removeAttribute(.backgroundColor, range: NSMakeRange(0, plainText.endIndex.utf16Offset(in: plainText)))
 			} else {
 				textView.layoutManager?.removeTemporaryAttribute(.backgroundColor, forCharacterRange: NSMakeRange(0, plainText.endIndex.utf16Offset(in: plainText)))
@@ -630,7 +629,7 @@ enum VersionControlType {
 		
 		let versionControlledFile = userDefaults.bool(forKey: ZGAssumeVersionControlledFileKey)
 		
-		if versionControlledFile || plainText.utf16.count < MAX_CHARACTER_COUNT_FOR_NON_VERSION_CONTROL_COMMENT_ATTRIBUTES {
+		if versionControlledFile || usesTextKit2 || plainText.utf16.count < MAX_CHARACTER_COUNT_FOR_NON_VERSION_CONTROL_COMMENT_ATTRIBUTES {
 			let contentLineRanges = retrieveContentLineRanges()
 			
 			let subjectLengthLimit = Self.lengthLimitWarningEnabled(userDefaults: userDefaults, userDefaultKey: ZGEditorRecommendedSubjectLengthLimitEnabledKey) ? ZGReadDefaultLineLimit(userDefaults, ZGEditorRecommendedSubjectLengthLimitKey) : nil
@@ -644,10 +643,12 @@ enum VersionControlType {
 			updateForegroundColor(textStorage: textView.textStorage, utf16Range: NSMakeRange(0, plainText.utf16.count))
 		}
 		
-		// Sometimes the insertion point isn't properly updated after updating
-		// the comment attributes and content style.
-		// Force an update to get around this issue.
-		textView.updateInsertionPointStateAndRestartTimer(true)
+		if !usesTextKit2 {
+			// Sometimes the insertion point isn't properly updated after updating
+			// the comment attributes and content style.
+			// Force an update to get around this issue.
+			textView.updateInsertionPointStateAndRestartTimer(true)
+		}
 	}
 	
 	private func updateEditorStyle(_ style: WindowStyle) {
@@ -673,8 +674,7 @@ enum VersionControlType {
 		let userDefaults = UserDefaults.standard
 		
 		// Initialize NSTextView via code snippets from https://developer.apple.com/documentation/appkit/nstextview/1449347-initwithframe
-		let isUsingTextKit2 = usesTextKit2(userDefaults: userDefaults)
-		if isUsingTextKit2 {
+		if usesTextKit2 {
 			if #available(macOS 12.0, *) {
 				let textLayoutManager = NSTextLayoutManager()
 				
@@ -686,6 +686,26 @@ enum VersionControlType {
 				textContentStorage.delegate = self
 				
 				textView = ZGCommitTextView(frame: NSMakeRect(0.0, 0.0, scrollViewContentSize.width, scrollViewContentSize.height), textContainer: textLayoutManager.textContainer)
+				
+				// Transition to TextKit 1 if the system cannot use TextKit2 for whatever reason in the future
+				var notificationToken: NSObjectProtocol?
+				let notificationCenter = NotificationCenter.default
+				notificationToken = notificationCenter.addObserver(forName: NSTextView.didSwitchToNSLayoutManagerNotification, object: textView, queue: OperationQueue.main) { [weak self] _ in
+					
+					if let token = notificationToken {
+						notificationCenter.removeObserver(token)
+					}
+					
+					guard let self = self else {
+						return
+					}
+					
+					assertionFailure("TextView should not be switching to TextKit 1 layout manager")
+					
+					self.usesTextKit2 = false
+					self.textView.layoutManager?.delegate = self
+					self.updateTextContent()
+				}
 			} else {
 				// This should not be possible
 				assertionFailure("If we're using TextKit2, we must be on macOS 12 or later")
@@ -756,7 +776,7 @@ enum VersionControlType {
 		// Set textview delegates
 		textView.textStorage?.delegate = self
 		
-		if !isUsingTextKit2 {
+		if !usesTextKit2 {
 			textView.layoutManager?.delegate = self
 		}
 		textView.delegate = self
@@ -1009,7 +1029,7 @@ enum VersionControlType {
 	}
 	
 	@objc func textDidChange(_ notification: Notification) {
-		if !usesTextKit2(userDefaults: UserDefaults.standard) {
+		if !usesTextKit2 {
 			updateTextContent()
 		}
 	}
