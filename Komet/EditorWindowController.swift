@@ -461,7 +461,7 @@ enum VersionControlType {
 		textView.textStorage?.addAttribute(.foregroundColor, value: style.commentColor, range: commentRange)
 	}
 	
-	private func updateTextContent() {
+	private func updateTextContent(updateBreadcrumbs: Bool = false) {
 		let plainText = currentPlainText()
 		
 		func retrieveContentLineRanges() -> [Range<String.Index>] {
@@ -496,7 +496,7 @@ enum VersionControlType {
 			}
 			
 			let overflowRange = plainText.index(lineRange.lowerBound, offsetBy: limit) ..< lineRange.upperBound
-			do {
+			if !updateBreadcrumbs {
 				let utf16Range = convertToUTF16Range(range: overflowRange, in: plainText)
 				
 				if usesTextKit2 {
@@ -504,29 +504,36 @@ enum VersionControlType {
 				} else {
 					textView.layoutManager?.addTemporaryAttribute(.backgroundColor, value: style.overflowColor, forCharacterRange: utf16Range)
 				}
-			}
-			
-			// Don't re-assign / make another copy of breadcrumbs
-			if breadcrumbs != nil {
-				let lowerIndex = overflowRange.lowerBound.utf16Offset(in: plainText)
-				let upperIndex = overflowRange.upperBound.utf16Offset(in: plainText)
-				
-				breadcrumbs!.textOverflowRanges.append(lowerIndex ..< upperIndex)
+			} else {
+				// Don't re-assign / make another copy of breadcrumbs
+				if breadcrumbs != nil {
+					let lowerIndex = overflowRange.lowerBound.utf16Offset(in: plainText)
+					let upperIndex = overflowRange.upperBound.utf16Offset(in: plainText)
+					
+					breadcrumbs!.textOverflowRanges.append(lowerIndex ..< upperIndex)
+				}
 			}
 		}
 		
 		func removeBackgroundColors() {
 			let plainText = currentPlainText()
 			
-			if usesTextKit2 {
-				textStorage?.removeAttribute(.backgroundColor, range: NSMakeRange(0, plainText.endIndex.utf16Offset(in: plainText)))
+			if !updateBreadcrumbs {
+				if usesTextKit2 {
+					textStorage?.removeAttribute(.backgroundColor, range: NSMakeRange(0, plainText.endIndex.utf16Offset(in: plainText)))
+				} else {
+					textView.layoutManager?.removeTemporaryAttribute(.backgroundColor, forCharacterRange: NSMakeRange(0, plainText.endIndex.utf16Offset(in: plainText)))
+				}
 			} else {
-				textView.layoutManager?.removeTemporaryAttribute(.backgroundColor, forCharacterRange: NSMakeRange(0, plainText.endIndex.utf16Offset(in: plainText)))
+				breadcrumbs?.textOverflowRanges.removeAll()
 			}
-			breadcrumbs?.textOverflowRanges.removeAll()
 		}
 		
 		func updateFont(_ font: NSFont, utf16Range: NSRange) {
+			guard !updateBreadcrumbs else {
+				return
+			}
+			
 			textView.textStorage?.addAttribute(.font, value: font, range: utf16Range)
 			
 			// If we don't fix the font attributes, then attachments (like emoji) may become invisible and not show up
@@ -577,7 +584,10 @@ enum VersionControlType {
 			let userDefaults = UserDefaults.standard
 			let messageFont = ZGReadDefaultFont(userDefaults, ZGMessageFontNameKey, ZGMessageFontPointSizeKey)
 			updateFont(messageFont, utf16Range: contentUTFRange)
-			breadcrumbs?.commentLineRanges.removeAll()
+			
+			if updateBreadcrumbs {
+				breadcrumbs?.commentLineRanges.removeAll()
+			}
 			
 			var commentFont: NSFont? = nil
 			for contentLineRange in contentLineRanges {
@@ -586,30 +596,38 @@ enum VersionControlType {
 				if contentLineRange.upperBound > contentLineRange.lowerBound &&
 					Self.isCommentLine(String(plainText[contentLineRange.lowerBound ..< contentLineRange.upperBound]), versionControlType: commentVersionControlType) {
 					
-					textStorage?.addAttribute(.foregroundColor, value: style.commentColor, range: utf16LineRange)
-					
-					// Don't re-assign / make another copy of breadcrumbs
-					if breadcrumbs != nil {
-						let lowerIndex = contentLineRange.lowerBound.utf16Offset(in: plainText)
-						let upperIndex = contentLineRange.upperBound.utf16Offset(in: plainText)
+					if !updateBreadcrumbs {
+						textStorage?.addAttribute(.foregroundColor, value: style.commentColor, range: utf16LineRange)
 						
-						breadcrumbs!.commentLineRanges.append(lowerIndex ..< upperIndex)
-					}
-					
-					if let font = commentFont {
-						updateFont(font, utf16Range: utf16LineRange)
+						if let font = commentFont {
+							updateFont(font, utf16Range: utf16LineRange)
+						} else {
+							let font = ZGReadDefaultFont(userDefaults, ZGCommentsFontNameKey, ZGCommentsFontPointSizeKey)
+							updateFont(font, utf16Range: utf16LineRange)
+							commentFont = font
+						}
 					} else {
-						let font = ZGReadDefaultFont(userDefaults, ZGCommentsFontNameKey, ZGCommentsFontPointSizeKey)
-						updateFont(font, utf16Range: utf16LineRange)
-						commentFont = font
+						// Don't re-assign / make another copy of breadcrumbs
+						if breadcrumbs != nil {
+							let lowerIndex = contentLineRange.lowerBound.utf16Offset(in: plainText)
+							let upperIndex = contentLineRange.upperBound.utf16Offset(in: plainText)
+							
+							breadcrumbs!.commentLineRanges.append(lowerIndex ..< upperIndex)
+						}
 					}
 				} else {
-					textStorage?.removeAttribute(.foregroundColor, range: utf16LineRange)
+					if !updateBreadcrumbs {
+						textStorage?.removeAttribute(.foregroundColor, range: utf16LineRange)
+					}
 				}
 			}
 		}
 		
 		func updateForegroundColor(textStorage: NSTextStorage?, utf16Range: NSRange) {
+			guard !updateBreadcrumbs else {
+				return
+			}
+			
 			textStorage?.removeAttribute(.foregroundColor, range: utf16Range)
 			textStorage?.addAttribute(.foregroundColor, value: style.textColor, range: utf16Range)
 		}
@@ -645,7 +663,7 @@ enum VersionControlType {
 			updateForegroundColor(textStorage: textView.textStorage, utf16Range: NSMakeRange(0, plainText.utf16.count))
 		}
 		
-		if !usesTextKit2 {
+		if !usesTextKit2 && !updateBreadcrumbs {
 			// Sometimes the insertion point isn't properly updated after updating
 			// the comment attributes and content style.
 			// Force an update to get around this issue.
@@ -880,6 +898,12 @@ enum VersionControlType {
 	// MARK: Actions
 	
 	private func exit(status: Int32) -> Never {
+		if breadcrumbs != nil {
+			// We could do better by analyzing the attributes of each content line instead, but this is easier way to update
+			// the breadcrumbs for now
+			updateTextContent(updateBreadcrumbs: true)
+		}
+		
 		if var breadcrumbs = breadcrumbs, let breadcrumbsPath = ProcessInfo.processInfo.environment[ZGBreadcrumbsURLKey] {
 			let breadcrumbsURL = URL(fileURLWithPath: breadcrumbsPath, isDirectory: false)
 			breadcrumbs.exitStatus = status
@@ -1086,10 +1110,6 @@ enum VersionControlType {
 						let overflowAttributes: [NSAttributedString.Key: AnyObject] = [.font: contentFont, .backgroundColor: style.overflowColor]
 						
 						textWithDisplayAttributes.addAttributes(overflowAttributes, range: overflowUtf16Range)
-						
-						if breadcrumbs != nil {
-							breadcrumbs!.textOverflowRanges.append(range.location + overflowUtf16Range.location ..< range.location + NSMaxRange(overflowUtf16Range))
-						}
 					}
 				}
 			}
@@ -1103,10 +1123,6 @@ enum VersionControlType {
 			let textWithDisplayAttributes = NSMutableAttributedString(attributedString: originalText)
 			
 			textWithDisplayAttributes.addAttributes(displayAttributes, range: NSMakeRange(0, range.length))
-			
-			if !isCommentSection && breadcrumbs != nil {
-				breadcrumbs!.commentLineRanges.append(range.location ..< NSMaxRange(range))
-			}
 			
 			paragraphWithDisplayAttributes = NSTextParagraph(attributedString: textWithDisplayAttributes)
 		}
