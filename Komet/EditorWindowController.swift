@@ -628,8 +628,8 @@ enum VersionControlType {
 		}
 		
 		let versionControlledFile = userDefaults.bool(forKey: ZGAssumeVersionControlledFileKey)
-		
-		if versionControlledFile || usesTextKit2 || plainText.utf16.count < MAX_CHARACTER_COUNT_FOR_NON_VERSION_CONTROL_COMMENT_ATTRIBUTES {
+		// Note: we should do this test for non-version controllet files even when using TextKit2
+		if versionControlledFile || plainText.utf16.count < MAX_CHARACTER_COUNT_FOR_NON_VERSION_CONTROL_COMMENT_ATTRIBUTES {
 			let contentLineRanges = retrieveContentLineRanges()
 			
 			if versionControlledFile {
