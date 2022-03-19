@@ -24,13 +24,13 @@ jobs:
       - name: Build
         env:
           DEVELOPER_DIR: ${{ matrix.xcode-path }}
-          CODE_SIGN_IDENTITY: "-"
+          CODE_SIGN_IDENTITY: '-'
         run: |
           xcodebuild build-for-testing -target 'KometUITests' -scheme Komet -configuration Release -derivedDataPath build
       - name: Test
         env:
           DEVELOPER_DIR: ${{ matrix.xcode-path }}
-          CODE_SIGN_IDENTITY: "-"
+          CODE_SIGN_IDENTITY: '-'
         run: |
           xcodebuild test-without-building -target 'KometUITests' -scheme Komet -configuration Release -derivedDataPath build
       - name: Archive Test Results
