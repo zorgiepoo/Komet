@@ -910,7 +910,7 @@ enum VersionControlType {
 			
 			do {
 				let jsonData = try JSONEncoder().encode(breadcrumbs)
-				try jsonData.write(to: breadcrumbsURL)
+				try jsonData.write(to: breadcrumbsURL, options: .atomic)
 			} catch {
 				print("Failed to save breadcrumbs: \(error)")
 			}
