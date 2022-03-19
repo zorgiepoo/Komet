@@ -41,10 +41,6 @@ class KometApp {
 		
 		initialContent = try String(contentsOf: fileURL)
 		
-		let appIdentifier = "org.zgcoder.Komet"
-		
-		let runningApplications = NSRunningApplication.runningApplications(withBundleIdentifier: appIdentifier)
-		
 		let key = { (defaultName: String) in
 			return "-\(defaultName)"
 		}
@@ -82,13 +78,9 @@ class KometApp {
 		]
 		application.launch()
 		
-		let newRunningApplications = NSRunningApplication.runningApplications(withBundleIdentifier: appIdentifier)
-		
-		let runningApplication = newRunningApplications.first { newRunningApplication -> Bool in
-			!runningApplications.contains(newRunningApplication)
-		}!
-		
-		pid = runningApplication.processIdentifier
+		let appIdentifier = "org.zgcoder.Komet"
+		let runningApplications = NSRunningApplication.runningApplications(withBundleIdentifier: appIdentifier)
+		pid = runningApplications.first!.processIdentifier
 		textView = application.windows.textViews.element
 	}
 	
