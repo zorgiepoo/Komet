@@ -754,6 +754,10 @@ enum VersionControlType {
 		textView.textContainer?.widthTracksTextView = true
 		textView.allowsUndo = true
 		textView.isRichText = false
+		textView.usesRuler = false
+		textView.usesFindBar = true
+		textView.isIncrementalSearchingEnabled = false
+		textView.isAutomaticDataDetectionEnabled = false
 		// Keeping the font panel enabled can lead to a serious performance hit:
 		// https://christiantietze.de/posts/2021/09/nstextview-fontpanel-slowness/
 		// We don't want to use it anyway
