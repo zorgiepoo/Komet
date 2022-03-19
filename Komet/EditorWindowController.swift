@@ -713,6 +713,7 @@ enum VersionControlType {
 				var notificationToken: NSObjectProtocol?
 				let notificationCenter = NotificationCenter.default
 				// Use raw value of NSTextView.didSwitchToNSLayoutManagerNotification directly because I don't know how to weak-link the symbol in Swift
+				// It is supposed to have an availability decoration, but it doesn't
 				notificationToken = notificationCenter.addObserver(forName: .init(rawValue: "NSTextViewDidSwitchToNSLayoutManagerNotification") /* NSTextView.didSwitchToNSLayoutManagerNotification */, object: textView, queue: OperationQueue.main) { [weak self] _ in
 					
 					if let token = notificationToken {
