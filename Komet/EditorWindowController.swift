@@ -710,7 +710,8 @@ enum VersionControlType {
 				// Transition to TextKit 1 if the system cannot use TextKit2 for whatever reason in the future
 				var notificationToken: NSObjectProtocol?
 				let notificationCenter = NotificationCenter.default
-				notificationToken = notificationCenter.addObserver(forName: NSTextView.didSwitchToNSLayoutManagerNotification, object: textView, queue: OperationQueue.main) { [weak self] _ in
+				// Use raw value of NSTextView.didSwitchToNSLayoutManagerNotification directly because I don't know how to weak-link the symbol in Swift
+				notificationToken = notificationCenter.addObserver(forName: .init(rawValue: "NSTextViewDidSwitchToNSLayoutManagerNotification") /* NSTextView.didSwitchToNSLayoutManagerNotification */, object: textView, queue: OperationQueue.main) { [weak self] _ in
 					
 					if let token = notificationToken {
 						notificationCenter.removeObserver(token)
