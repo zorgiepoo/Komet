@@ -11,7 +11,7 @@
 				<key>com.apple.dt.XCTMetric_OSSignpost-ApplicationLaunch.duration</key>
 				<dict>
 					<key>baselineAverage</key>
-					<real>1.234900</real>
+					<real>1.110000</real>
 					<key>baselineIntegrationDisplayName</key>
 					<string>Local Baseline</string>
 				</dict>
@@ -21,7 +21,27 @@
 				<key>com.apple.dt.XCTMetric_OSSignpost-ApplicationLaunch.duration</key>
 				<dict>
 					<key>baselineAverage</key>
-					<real>0.823070</real>
+					<real>0.809000</real>
+					<key>baselineIntegrationDisplayName</key>
+					<string>Local Baseline</string>
+				</dict>
+			</dict>
+			<key>testLargeFileCommit()</key>
+			<dict>
+				<key>com.apple.XCTPerformanceMetric_WallClockTime</key>
+				<dict>
+					<key>baselineAverage</key>
+					<real>0.999338</real>
+					<key>baselineIntegrationDisplayName</key>
+					<string>Local Baseline</string>
+				</dict>
+			</dict>
+			<key>testLargeNonVersionControlledFileCommit()</key>
+			<dict>
+				<key>com.apple.XCTPerformanceMetric_WallClockTime</key>
+				<dict>
+					<key>baselineAverage</key>
+					<real>1.214366</real>
 					<key>baselineIntegrationDisplayName</key>
 					<string>Local Baseline</string>
 				</dict>
