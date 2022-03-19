@@ -824,8 +824,11 @@ enum VersionControlType {
 		
 		updateTextViewDrawingBackground()
 		
-		updateTextContent()
-		updateCommentSection()
+		// When using TextKit2 we will update the paragraphs during text view layout
+		if !usesTextKit2 {
+			updateTextContent()
+			updateCommentSection()
+		}
 		
 		// If we have a non-version controlled file, point selection at start of content
 		// Otherwise if we're resuming a canceled commit message, select all the contents
