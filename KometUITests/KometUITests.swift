@@ -215,6 +215,7 @@ class KometUITests: XCTestCase {
 		XCTAssertEqual(finalContent, newContent + app.initialContent)
 	}
 	
+	/*
 	func testCanceledNewCommit() throws {
 		let app = try KometApp(filename: "new-commit")
 
@@ -1207,4 +1208,5 @@ class KometUITests: XCTestCase {
 		XCTAssertEqual(breadcrumbs!.exitStatus, 0)
 		XCTAssertEqual(app.initialContent, finalContent)
 	}
+	 */
 }
