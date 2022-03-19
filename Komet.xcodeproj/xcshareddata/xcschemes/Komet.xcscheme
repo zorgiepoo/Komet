@@ -61,12 +61,6 @@
             ReferencedContainer = "container:Komet.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
-      <CommandLineArguments>
-         <CommandLineArgument
-            argument = "/Users/msp/Documents/Programming/Komet/KometUITests/Resources/linux-partial"
-            isEnabled = "YES">
-         </CommandLineArgument>
-      </CommandLineArguments>
    </LaunchAction>
    <ProfileAction
       buildConfiguration = "Release"
