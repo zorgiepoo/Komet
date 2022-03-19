@@ -673,6 +673,8 @@ enum VersionControlType {
 	
 	private func updateEditorStyle(_ style: WindowStyle) {
 		updateStyle(style)
+		// I wish I knew how to force re-layout in TextKit2 but this is as good as I'm going to get it
+		// Updating the text content and comment sections will incidentally propogate a re-layout on all paragraphs
 		updateTextContent()
 		updateCommentSection()
 		topBar.needsDisplay = true
