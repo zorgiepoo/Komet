@@ -18,7 +18,6 @@ class KometApp {
 	let initialContent: String
 	private let textView: XCUIElement
 	
-	private let pid: pid_t
 	private let application: XCUIApplication
 	private let fileURL: URL
 	private let tempDirectoryURL: URL
@@ -78,9 +77,6 @@ class KometApp {
 		]
 		application.launch()
 		
-		let appIdentifier = "org.zgcoder.Komet"
-		let runningApplications = NSRunningApplication.runningApplications(withBundleIdentifier: appIdentifier)
-		pid = runningApplications.first!.processIdentifier
 		textView = application.windows.textViews.element
 	}
 	
@@ -93,10 +89,23 @@ class KometApp {
 	}
 	
 	private func waitForExit() throws -> (Breadcrumbs?, String) {
-		var status: Int32 = 0
-		waitpid(pid, &status, 0)
+		// Wait for a while until the breadcrumbs file becomes available
+		var breadcrumbsDataCandidate: Data? = nil
+		var breadcrumbCandidateAttempts = 20
+		while breadcrumbsDataCandidate == nil && breadcrumbCandidateAttempts > 0 {
+			sleep(1)
+			breadcrumbsDataCandidate = try? Data(contentsOf: breadcrumbsURL)
+			breadcrumbCandidateAttempts -= 1
+		}
 		
-		let breadcrumbsData = try Data(contentsOf: breadcrumbsURL)
+		let breadcrumbsData: Data
+		if let breadcrumbsDataCandidate = breadcrumbsDataCandidate {
+			breadcrumbsData = breadcrumbsDataCandidate
+		} else {
+			// Try retrieving breadcrumbs one last time
+			breadcrumbsData = try Data(contentsOf: breadcrumbsURL)
+		}
+		
 		let breadcrumbs = try JSONDecoder().decode(Breadcrumbs.self, from: breadcrumbsData)
 		
 		let finalContent = try String(contentsOf: fileURL)
