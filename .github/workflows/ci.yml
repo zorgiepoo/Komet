@@ -16,21 +16,26 @@ jobs:
               xcode-path: '/Applications/Xcode_13.2.1.app/Contents/Developer'
     
     name: Build and Test Komet on macOS
-    runs-on: macos-latest
+    runs-on: macos-11
 
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      - name: Build
+      - name: Build Release
         env:
           DEVELOPER_DIR: ${{ matrix.xcode-path }}
         run: |
           xcodebuild build-for-testing -target 'KometUITests' -scheme Komet -configuration Release -derivedDataPath build CODE_SIGN_IDENTITY="-"
-      - name: Test
+      - name: Build Debug
         env:
           DEVELOPER_DIR: ${{ matrix.xcode-path }}
         run: |
-          xcodebuild test-without-building -target 'KometUITests' -scheme Komet -configuration Release -derivedDataPath build
+          xcodebuild build-for-testing -target 'KometUITests' -scheme Komet -configuration Debug -derivedDataPath build
+      - name: Test Debug
+        env:
+          DEVELOPER_DIR: ${{ matrix.xcode-path }}
+        run: |
+          xcodebuild test-without-building -target 'KometUITests' -scheme Komet -configuration Debug -derivedDataPath build
       - name: Archive Test Results
         if: failure()
         uses: actions/upload-artifact@v2
