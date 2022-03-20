@@ -461,29 +461,29 @@ enum VersionControlType {
 		textView.textStorage?.addAttribute(.foregroundColor, value: style.commentColor, range: commentRange)
 	}
 	
+	private func retrieveContentLineRanges(plainText: String) -> [Range<String.Index>] {
+		let utf16View = plainText.utf16
+		let commentIndex = commentSectionIndex(plainUTF16Text: utf16View)
+		
+		var lineRanges: [Range<String.Index>] = []
+		var characterIndex = plainText.startIndex
+		while characterIndex < commentIndex {
+			var lineStartIndex = String.Index(utf16Offset: 0, in: plainText)
+			var lineEndIndex = String.Index(utf16Offset: 0, in: plainText)
+			var contentEndIndex = String.Index(utf16Offset: 0, in: plainText)
+			
+			plainText.getLineStart(&lineStartIndex, end: &lineEndIndex, contentsEnd: &contentEndIndex, for: characterIndex ..< characterIndex)
+			
+			let lineRange = (lineStartIndex ..< contentEndIndex)
+			lineRanges.append(lineRange)
+			
+			characterIndex = lineEndIndex
+		}
+		return lineRanges
+	}
+	
 	private func updateTextContent(updateBreadcrumbs: Bool = false) {
 		let plainText = currentPlainText()
-		
-		func retrieveContentLineRanges() -> [Range<String.Index>] {
-			let utf16View = plainText.utf16
-			let commentIndex = commentSectionIndex(plainUTF16Text: utf16View)
-			
-			var lineRanges: [Range<String.Index>] = []
-			var characterIndex = plainText.startIndex
-			while characterIndex < commentIndex {
-				var lineStartIndex = String.Index(utf16Offset: 0, in: plainText)
-				var lineEndIndex = String.Index(utf16Offset: 0, in: plainText)
-				var contentEndIndex = String.Index(utf16Offset: 0, in: plainText)
-				
-				plainText.getLineStart(&lineStartIndex, end: &lineEndIndex, contentsEnd: &contentEndIndex, for: characterIndex ..< characterIndex)
-				
-				let lineRange = (lineStartIndex ..< contentEndIndex)
-				lineRanges.append(lineRange)
-				
-				characterIndex = lineEndIndex
-			}
-			return lineRanges
-		}
 		
 		let textStorage = textView.textStorage
 		
@@ -648,7 +648,7 @@ enum VersionControlType {
 		let versionControlledFile = userDefaults.bool(forKey: ZGAssumeVersionControlledFileKey)
 		// Note: we should do this test for non-version control files even when using TextKit2
 		if versionControlledFile || plainText.utf16.count < MAX_CHARACTER_COUNT_FOR_NON_VERSION_CONTROL_COMMENT_ATTRIBUTES {
-			let contentLineRanges = retrieveContentLineRanges()
+			let contentLineRanges = retrieveContentLineRanges(plainText: plainText)
 			
 			if versionControlledFile {
 				let subjectLengthLimit = Self.lengthLimitWarningEnabled(userDefaults: userDefaults, userDefaultKey: ZGEditorRecommendedSubjectLengthLimitEnabledKey) ? ZGReadDefaultLineLimit(userDefaults, ZGEditorRecommendedSubjectLengthLimitKey) : nil
@@ -914,9 +914,18 @@ enum VersionControlType {
 	
 	private func exit(status: Int32) -> Never {
 		if breadcrumbs != nil {
-			// We could do better by analyzing the attributes of each content line instead, but this is easier way to update
-			// the breadcrumbs for now
-			updateTextContent(updateBreadcrumbs: true)
+			// Update breadcrumbs
+			if usesTextKit2, #available(macOS 12.0, *), let textContentStorage = textView.textContentStorage {
+				let currentText = currentPlainText()
+				let contentLineRanges = retrieveContentLineRanges(plainText: currentText)
+				
+				for contentLineRange in contentLineRanges {
+					let utf16Range = convertToUTF16Range(range: contentLineRange, in: currentText)
+					let _ = newTextParagraph(textContentStorage, range: utf16Range, updateBreadcrumbs: true)
+				}
+			} else {
+				updateTextContent(updateBreadcrumbs: true)
+			}
 		}
 		
 		if var breadcrumbs = breadcrumbs, let breadcrumbsPath = ProcessInfo.processInfo.environment[ZGBreadcrumbsURLKey] {
@@ -1076,7 +1085,7 @@ enum VersionControlType {
 	}
 	
 	@available(macOS 12.0, *)
-	func textContentStorage(_ textContentStorage: NSTextContentStorage, textParagraphWith range: NSRange) -> NSTextParagraph? {
+	private func newTextParagraph(_ textContentStorage: NSTextContentStorage, range: NSRange, updateBreadcrumbs: Bool) -> NSTextParagraph? {
 		guard let originalText = textContentStorage.textStorage?.attributedSubstring(from: range) else {
 			return nil
 		}
@@ -1125,6 +1134,10 @@ enum VersionControlType {
 						let overflowAttributes: [NSAttributedString.Key: AnyObject] = [.font: contentFont, .backgroundColor: style.overflowColor]
 						
 						textWithDisplayAttributes.addAttributes(overflowAttributes, range: overflowUtf16Range)
+						
+						if updateBreadcrumbs && breadcrumbs != nil {
+							breadcrumbs!.textOverflowRanges.append(range.location + overflowUtf16Range.location ..< range.location + NSMaxRange(overflowUtf16Range))
+						}
 					}
 				}
 			}
@@ -1139,10 +1152,19 @@ enum VersionControlType {
 			
 			textWithDisplayAttributes.addAttributes(displayAttributes, range: NSMakeRange(0, range.length))
 			
+			if updateBreadcrumbs && !isCommentSection && breadcrumbs != nil {
+				breadcrumbs!.commentLineRanges.append(range.location ..< NSMaxRange(range))
+			}
+			
 			paragraphWithDisplayAttributes = NSTextParagraph(attributedString: textWithDisplayAttributes)
 		}
 		
 		return paragraphWithDisplayAttributes
+	}
+	
+	@available(macOS 12.0, *)
+	func textContentStorage(_ textContentStorage: NSTextContentStorage, textParagraphWith range: NSRange) -> NSTextParagraph? {
+		return newTextParagraph(textContentStorage, range: range, updateBreadcrumbs: false)
 	}
 	
 	@objc func textView(_ textView: NSTextView, shouldSetSpellingState value: Int, range affectedCharRange: NSRange) -> Int {
