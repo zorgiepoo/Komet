@@ -33,8 +33,12 @@ let ZGDetectHGCommentStyleForSquashesKey = "ZGDetectHGCommentStyleForSquashes"
 
 let ZGAssumeVersionControlledFileKey = "ZGAssumeVersionControlledFile"
 
-let ZGBreadcrumbsURLKey = "ZGBreadcrumbsURL"
-
 let ZGCommitTextViewContinuousSpellCheckingKey = "ZGCommitTextViewContinuousSpellChecking"
 let ZGCommitTextViewAutomaticSpellingCorrectionKey = "ZGCommitTextViewAutomaticSpellingCorrection"
 let ZGCommitTextViewAutomaticTextReplacementKey = "ZGCommitTextViewAutomaticTextReplacement"
+
+let ZGDisableTextKit2Key = "ZGDisableTextKit2"
+
+// Environment options for test automation
+let ZGBreadcrumbsURLKey = "ZGBreadcrumbsURL"
+let ZGProjectNameKey = "ZGProjectName"

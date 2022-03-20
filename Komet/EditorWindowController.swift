@@ -21,7 +21,7 @@ enum VersionControlType {
 	case svn
 }
 
-@objc class ZGEditorWindowController: NSWindowController, UserDefaultsEditorListener, NSTextStorageDelegate, NSLayoutManagerDelegate, NSTextViewDelegate, ZGCommitViewDelegate {
+@objc class ZGEditorWindowController: NSWindowController, UserDefaultsEditorListener, NSTextStorageDelegate, NSTextContentStorageDelegate, NSLayoutManagerDelegate, NSTextViewDelegate, ZGCommitViewDelegate {
 	
 	private let fileURL: URL
 	private let temporaryDirectoryURL: URL?
@@ -42,10 +42,14 @@ enum VersionControlType {
 	private var preventAccidentalNewline: Bool = false
 	private var effectiveAppearanceObserver: NSKeyValueObservation? = nil
 	
+	private var textView: ZGCommitTextView!
+	private var scrollView: NSScrollView!
+	
+	private var usesTextKit2: Bool
+	
 	@IBOutlet private var topBar: NSView!
 	@IBOutlet private var horizontalBarDivider: NSBox!
-	@IBOutlet private var textView: ZGCommitTextView!
-	@IBOutlet private var scrollView: NSScrollView!
+	@IBOutlet private var scrollViewContainer: NSView!
 	@IBOutlet private var contentView: NSVisualEffectView!
 	@IBOutlet private var commitLabelTextField: NSTextField!
 	@IBOutlet private var cancelButton: NSButtonCell!
@@ -165,10 +169,6 @@ enum VersionControlType {
 		return startIndex ..< bestEndCharacterIndex
 	}
 	
-	private static func projectName(fileManager: FileManager) -> String {
-		return URL(fileURLWithPath:fileManager.currentDirectoryPath).lastPathComponent
-	}
-	
 	private static func lengthLimitWarningEnabled(userDefaults: UserDefaults, userDefaultKey: String) -> Bool {
 		return userDefaults.bool(forKey: ZGAssumeVersionControlledFileKey) && userDefaults.bool(forKey: userDefaultKey)
 	}
@@ -196,7 +196,8 @@ enum VersionControlType {
 			ZGDisableSpellCheckingAndCorrectionForSquashesKey: true,
 			ZGDisableAutomaticNewlineInsertionAfterSubjectLineForSquashesKey: true,
 			ZGDetectHGCommentStyleForSquashesKey: true,
-			ZGAssumeVersionControlledFileKey: true
+			ZGAssumeVersionControlledFileKey: true,
+			ZGDisableTextKit2Key: false
 		])
 		
 		ZGCommitTextView.registerDefaults()
@@ -209,7 +210,18 @@ enum VersionControlType {
 		
 		let userDefaults = UserDefaults.standard
 		
-		breadcrumbs = (ZGReadDefaultURL(userDefaults, ZGBreadcrumbsURLKey) != nil) ? Breadcrumbs() : nil
+		if #available(macOS 12.0, *) {
+			usesTextKit2 = !userDefaults.bool(forKey: ZGDisableTextKit2Key)
+		} else {
+			usesTextKit2 = false
+		}
+		
+		let processInfo = ProcessInfo.processInfo
+		if let _ = processInfo.environment[ZGBreadcrumbsURLKey] {
+			breadcrumbs = Breadcrumbs()
+		} else {
+			breadcrumbs = nil
+		}
 		
 		style = WindowStyle.withTheme(Self.styleTheme(defaultTheme: ZGReadDefaultWindowStyleTheme(userDefaults, ZGWindowStyleThemeKey), effectiveAppearance: NSApp.effectiveAppearance))
 		
@@ -256,7 +268,11 @@ enum VersionControlType {
 				versionControlType = .git
 			}
 			
-			self.projectNameDisplay = Self.projectName(fileManager: fileManager)
+			if let projectNameFromEnvironment = processInfo.environment[ZGProjectNameKey] {
+				self.projectNameDisplay = projectNameFromEnvironment
+			} else {
+				self.projectNameDisplay = URL(fileURLWithPath: fileManager.currentDirectoryPath).lastPathComponent
+			}
 		}
 		
 		self.versionControlType = versionControlType
@@ -279,9 +295,8 @@ enum VersionControlType {
 		if !self.tutorialMode && userDefaults.bool(forKey: ZGAssumeVersionControlledFileKey) && userDefaults.bool(forKey: ZGResumeIncompleteSessionKey) {
 			if let applicationSupportURL = fileManager.urls(for: .applicationSupportDirectory, in: .userDomainMask).first {
 				let supportDirectory = applicationSupportURL.appendingPathComponent(APP_SUPPORT_DIRECTORY_NAME)
-				let projectName = Self.projectName(fileManager: fileManager)
 				
-				let lastCommitURL = supportDirectory.appendingPathComponent(projectName)
+				let lastCommitURL = supportDirectory.appendingPathComponent(projectNameDisplay)
 				
 				do {
 					let reachable = try lastCommitURL.checkResourceIsReachable()
@@ -436,46 +451,43 @@ enum VersionControlType {
 		return convertToUTF16Range(range: commentSectionIndex(plainUTF16Text: utf16View) ..< utf16View.endIndex, in: plainText)
 	}
 	
-	private func removeBackgroundColors() {
-		let plainText = currentPlainText()
-		textView.layoutManager?.removeTemporaryAttribute(.backgroundColor, forCharacterRange: NSMakeRange(0, plainText.endIndex.utf16Offset(in: plainText)))
-		breadcrumbs?.textOverflowRanges.removeAll()
-	}
-	
-	private func updateFont(_ font: NSFont, utf16Range: NSRange) {
-		textView.textStorage?.addAttribute(.font, value: font, range: utf16Range)
-		
-		// If we don't fix the font attributes, then attachments (like emoji) may become invisible and not show up
-		textView.textStorage?.fixFontAttribute(in: utf16Range)
-	}
-	
 	private func convertToUTF16Range(range: Range<String.Index>, in string: String) -> NSRange {
 		return NSRange(range, in: string)
 	}
 	
-	private func updateTextProcessing() {
+	private func updateCommentSection() {
+		let commentRange = commentUTF16Range(plainText: currentPlainText())
+		textView.textStorage?.removeAttribute(.foregroundColor, range: commentRange)
+		textView.textStorage?.addAttribute(.foregroundColor, value: style.commentColor, range: commentRange)
+	}
+	
+	private func retrieveContentLineRanges(plainText: String) -> [Range<String.Index>] {
+		let utf16View = plainText.utf16
+		let commentIndex = commentSectionIndex(plainUTF16Text: utf16View)
+		
+		var lineRanges: [Range<String.Index>] = []
+		var characterIndex = plainText.startIndex
+		while characterIndex < commentIndex {
+			var lineStartIndex = String.Index(utf16Offset: 0, in: plainText)
+			var lineEndIndex = String.Index(utf16Offset: 0, in: plainText)
+			var contentEndIndex = String.Index(utf16Offset: 0, in: plainText)
+			
+			plainText.getLineStart(&lineStartIndex, end: &lineEndIndex, contentsEnd: &contentEndIndex, for: characterIndex ..< characterIndex)
+			
+			let lineRange = (lineStartIndex ..< contentEndIndex)
+			lineRanges.append(lineRange)
+			
+			characterIndex = lineEndIndex
+		}
+		return lineRanges
+	}
+	
+	private func updateTextContent(updateBreadcrumbs: Bool = false) {
 		let plainText = currentPlainText()
 		
-		func retrieveContentLineRanges() -> [Range<String.Index>] {
-			let utf16View = plainText.utf16
-			let commentIndex = commentSectionIndex(plainUTF16Text: utf16View)
-			
-			var lineRanges: [Range<String.Index>] = []
-			var characterIndex = plainText.startIndex
-			while characterIndex < commentIndex {
-				var lineStartIndex = String.Index(utf16Offset: 0, in: plainText)
-				var lineEndIndex = String.Index(utf16Offset: 0, in: plainText)
-				var contentEndIndex = String.Index(utf16Offset: 0, in: plainText)
-				
-				plainText.getLineStart(&lineStartIndex, end: &lineEndIndex, contentsEnd: &contentEndIndex, for: characterIndex ..< characterIndex)
-				
-				let lineRange = (lineStartIndex ..< contentEndIndex)
-				lineRanges.append(lineRange)
-				
-				characterIndex = lineEndIndex
-			}
-			return lineRanges
-		}
+		let textStorage = textView.textStorage
+		
+		let userDefaults = UserDefaults.standard
 		
 		func updateHighlightOverflowing(lineRange: Range<String.Index>, limit: Int) {
 			let distance = plainText.distance(from: lineRange.lowerBound, to: lineRange.upperBound)
@@ -484,19 +496,48 @@ enum VersionControlType {
 			}
 			
 			let overflowRange = plainText.index(lineRange.lowerBound, offsetBy: limit) ..< lineRange.upperBound
-			do {
+			if !updateBreadcrumbs {
 				let utf16Range = convertToUTF16Range(range: overflowRange, in: plainText)
 				
-				textView.layoutManager?.addTemporaryAttribute(.backgroundColor, value: style.overflowColor, forCharacterRange: utf16Range)
+				if usesTextKit2 {
+					textStorage?.addAttribute(.backgroundColor, value: style.overflowColor, range: utf16Range)
+				} else {
+					textView.layoutManager?.addTemporaryAttribute(.backgroundColor, value: style.overflowColor, forCharacterRange: utf16Range)
+				}
+			} else {
+				// Don't re-assign / make another copy of breadcrumbs
+				if breadcrumbs != nil {
+					let lowerIndex = overflowRange.lowerBound.utf16Offset(in: plainText)
+					let upperIndex = overflowRange.upperBound.utf16Offset(in: plainText)
+					
+					breadcrumbs!.textOverflowRanges.append(lowerIndex ..< upperIndex)
+				}
+			}
+		}
+		
+		func removeBackgroundColors() {
+			let plainText = currentPlainText()
+			
+			if !updateBreadcrumbs {
+				if usesTextKit2 {
+					textStorage?.removeAttribute(.backgroundColor, range: NSMakeRange(0, plainText.endIndex.utf16Offset(in: plainText)))
+				} else {
+					textView.layoutManager?.removeTemporaryAttribute(.backgroundColor, forCharacterRange: NSMakeRange(0, plainText.endIndex.utf16Offset(in: plainText)))
+				}
+			} else {
+				breadcrumbs?.textOverflowRanges.removeAll()
+			}
+		}
+		
+		func updateFont(_ font: NSFont, utf16Range: NSRange) {
+			guard !updateBreadcrumbs else {
+				return
 			}
 			
-			// Don't re-assign / make another copy of breadcrumbs
-			if breadcrumbs != nil {
-				let lowerIndex = overflowRange.lowerBound.utf16Offset(in: plainText)
-				let upperIndex = overflowRange.upperBound.utf16Offset(in: plainText)
-				
-				breadcrumbs!.textOverflowRanges.append(lowerIndex ..< upperIndex)
-			}
+			textView.textStorage?.addAttribute(.font, value: font, range: utf16Range)
+			
+			// If we don't fix the font attributes, then attachments (like emoji) may become invisible and not show up
+			textView.textStorage?.fixFontAttribute(in: utf16Range)
 		}
 		
 		func updateHighlighting(contentLineRanges: [Range<String.Index>], subjectLengthLimit: Int?, bodyLengthLimit: Int?) {
@@ -505,7 +546,7 @@ enum VersionControlType {
 			}
 			
 			// Remove the attribute everywhere. Might be "inefficient" but it's the easiest most reliable approach I know how to do
-			self.removeBackgroundColors()
+			removeBackgroundColors()
 			
 			for contentLineRange in contentLineRanges {
 				if contentLineRange.lowerBound == plainText.startIndex {
@@ -543,9 +584,10 @@ enum VersionControlType {
 			let userDefaults = UserDefaults.standard
 			let messageFont = ZGReadDefaultFont(userDefaults, ZGMessageFontNameKey, ZGMessageFontPointSizeKey)
 			updateFont(messageFont, utf16Range: contentUTFRange)
-			breadcrumbs?.commentLineRanges.removeAll()
 			
-			let textStorage = textView.textStorage
+			if updateBreadcrumbs {
+				breadcrumbs?.commentLineRanges.removeAll()
+			}
 			
 			var commentFont: NSFont? = nil
 			for contentLineRange in contentLineRanges {
@@ -554,30 +596,38 @@ enum VersionControlType {
 				if contentLineRange.upperBound > contentLineRange.lowerBound &&
 					Self.isCommentLine(String(plainText[contentLineRange.lowerBound ..< contentLineRange.upperBound]), versionControlType: commentVersionControlType) {
 					
-					textStorage?.addAttribute(.foregroundColor, value: style.commentColor, range: utf16LineRange)
-					
-					// Don't re-assign / make another copy of breadcrumbs
-					if breadcrumbs != nil {
-						let lowerIndex = contentLineRange.lowerBound.utf16Offset(in: plainText)
-						let upperIndex = contentLineRange.upperBound.utf16Offset(in: plainText)
+					if !updateBreadcrumbs {
+						textStorage?.addAttribute(.foregroundColor, value: style.commentColor, range: utf16LineRange)
 						
-						breadcrumbs!.commentLineRanges.append(lowerIndex ..< upperIndex)
-					}
-					
-					if let font = commentFont {
-						updateFont(font, utf16Range: utf16LineRange)
+						if let font = commentFont {
+							updateFont(font, utf16Range: utf16LineRange)
+						} else {
+							let font = ZGReadDefaultFont(userDefaults, ZGCommentsFontNameKey, ZGCommentsFontPointSizeKey)
+							updateFont(font, utf16Range: utf16LineRange)
+							commentFont = font
+						}
 					} else {
-						let font = ZGReadDefaultFont(userDefaults, ZGCommentsFontNameKey, ZGCommentsFontPointSizeKey)
-						updateFont(font, utf16Range: utf16LineRange)
-						commentFont = font
+						// Don't re-assign / make another copy of breadcrumbs
+						if breadcrumbs != nil {
+							let lowerIndex = contentLineRange.lowerBound.utf16Offset(in: plainText)
+							let upperIndex = contentLineRange.upperBound.utf16Offset(in: plainText)
+							
+							breadcrumbs!.commentLineRanges.append(lowerIndex ..< upperIndex)
+						}
 					}
 				} else {
-					textStorage?.removeAttribute(.foregroundColor, range: utf16LineRange)
+					if !updateBreadcrumbs {
+						textStorage?.removeAttribute(.foregroundColor, range: utf16LineRange)
+					}
 				}
 			}
 		}
 		
 		func updateForegroundColor(textStorage: NSTextStorage?, utf16Range: NSRange) {
+			guard !updateBreadcrumbs else {
+				return
+			}
+			
 			textStorage?.removeAttribute(.foregroundColor, range: utf16Range)
 			textStorage?.addAttribute(.foregroundColor, value: style.textColor, range: utf16Range)
 		}
@@ -595,16 +645,17 @@ enum VersionControlType {
 			}
 		}
 		
-		let userDefaults = UserDefaults.standard
 		let versionControlledFile = userDefaults.bool(forKey: ZGAssumeVersionControlledFileKey)
-		
+		// Note: we should do this test for non-version control files even when using TextKit2
 		if versionControlledFile || plainText.utf16.count < MAX_CHARACTER_COUNT_FOR_NON_VERSION_CONTROL_COMMENT_ATTRIBUTES {
-			let contentLineRanges = retrieveContentLineRanges()
+			let contentLineRanges = retrieveContentLineRanges(plainText: plainText)
 			
-			let subjectLengthLimit = Self.lengthLimitWarningEnabled(userDefaults: userDefaults, userDefaultKey: ZGEditorRecommendedSubjectLengthLimitEnabledKey) ? ZGReadDefaultLineLimit(userDefaults, ZGEditorRecommendedSubjectLengthLimitKey) : nil
-			let bodyLengthLimit = Self.lengthLimitWarningEnabled(userDefaults: userDefaults, userDefaultKey: ZGEditorRecommendedBodyLineLengthLimitEnabledKey) ? ZGReadDefaultLineLimit(userDefaults, ZGEditorRecommendedBodyLineLengthLimitKey) : nil
-			
-			updateHighlighting(contentLineRanges: contentLineRanges, subjectLengthLimit: subjectLengthLimit, bodyLengthLimit: bodyLengthLimit)
+			if versionControlledFile {
+				let subjectLengthLimit = Self.lengthLimitWarningEnabled(userDefaults: userDefaults, userDefaultKey: ZGEditorRecommendedSubjectLengthLimitEnabledKey) ? ZGReadDefaultLineLimit(userDefaults, ZGEditorRecommendedSubjectLengthLimitKey) : nil
+				let bodyLengthLimit = Self.lengthLimitWarningEnabled(userDefaults: userDefaults, userDefaultKey: ZGEditorRecommendedBodyLineLengthLimitEnabledKey) ? ZGReadDefaultLineLimit(userDefaults, ZGEditorRecommendedBodyLineLengthLimitKey) : nil
+				
+				updateHighlighting(contentLineRanges: contentLineRanges, subjectLengthLimit: subjectLengthLimit, bodyLengthLimit: bodyLengthLimit)
+			}
 			
 			updateCommentAttributes(contentLineRanges: contentLineRanges)
 			updateContentStyle(contentLineRanges: contentLineRanges)
@@ -612,45 +663,112 @@ enum VersionControlType {
 			updateForegroundColor(textStorage: textView.textStorage, utf16Range: NSMakeRange(0, plainText.utf16.count))
 		}
 		
-		// Sometimes the insertion point isn't properly updated after updating
-		// the comment attributes and content style.
-		// Force an update to get around this issue.
-		textView.updateInsertionPointStateAndRestartTimer(true)
+		if !usesTextKit2 && !updateBreadcrumbs {
+			// Sometimes the insertion point isn't properly updated after updating
+			// the comment attributes and content style.
+			// Force an update to get around this issue.
+			textView.updateInsertionPointStateAndRestartTimer(true)
+		}
 	}
 	
 	private func updateEditorStyle(_ style: WindowStyle) {
 		updateStyle(style)
-		updateTextProcessing()
+		// I wish I knew how to force re-layout in TextKit2 but this is as good as I'm going to get it
+		// Updating the text content and comment sections will incidentally propogate a re-layout on all paragraphs
+		updateTextContent()
+		updateCommentSection()
 		topBar.needsDisplay = true
 		contentView.needsDisplay = true
-		
-		// The comment section isn't updated by setting the editor style elsewhere, since it's not editable.
-		let commentRange = commentUTF16Range(plainText: currentPlainText())
-		textView.textStorage?.removeAttribute(.foregroundColor, range: commentRange)
-		textView.textStorage?.addAttribute(.foregroundColor, value: style.commentColor, range: commentRange)
-	}
-	
-	private func updateEditorMessageFont(userDefaults: UserDefaults) {
-		let plainText = currentPlainText()
-		let utf16View = plainText.utf16
-		
-		let commentIndex = commentSectionIndex(plainUTF16Text: utf16View)
-		
-		let messageFont = ZGReadDefaultFont(userDefaults, ZGMessageFontNameKey, ZGMessageFontPointSizeKey)
-		updateFont(messageFont, utf16Range: convertToUTF16Range(range: utf16View.startIndex ..< commentIndex, in: plainText))
-	}
-	
-	private func updateEditorCommentsFont(userDefaults: UserDefaults) {
-		let commentsFont = ZGReadDefaultFont(userDefaults, ZGCommentsFontNameKey, ZGCommentsFontPointSizeKey)
-		updateFont(commentsFont, utf16Range: commentUTF16Range(plainText: currentPlainText()))
 	}
 	
 	@objc override func windowDidLoad() {
+		// Following these steps to set up scroll view and text view
+		// https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/TextUILayer/Tasks/TextInScrollView.html#//apple_ref/doc/uid/20000938-CJBBIAAF
+		scrollView = NSScrollView(frame: scrollViewContainer.frame)
+		scrollView.borderType = .noBorder
+		scrollView.hasVerticalScroller = true
+		scrollView.hasHorizontalScroller = false
+		scrollView.autoresizingMask = .init(rawValue: NSView.AutoresizingMask.width.rawValue | NSView.AutoresizingMask.height.rawValue)
+		
+		let scrollViewContentSize = scrollView.contentSize
+		let textContainerSize = NSMakeSize(scrollViewContentSize.width, CGFloat(Float.greatestFiniteMagnitude))
+		
+		let userDefaults = UserDefaults.standard
+		
+		// Initialize NSTextView via code snippets from https://developer.apple.com/documentation/appkit/nstextview/1449347-initwithframe
+		if usesTextKit2 {
+			if #available(macOS 12.0, *) {
+				let textLayoutManager = NSTextLayoutManager()
+				
+				let textContainer = NSTextContainer(size: textContainerSize)
+				textLayoutManager.textContainer = textContainer
+				
+				let textContentStorage = NSTextContentStorage()
+				textContentStorage.addTextLayoutManager(textLayoutManager)
+				textContentStorage.delegate = self
+				
+				textView = ZGCommitTextView(frame: NSMakeRect(0.0, 0.0, scrollViewContentSize.width, scrollViewContentSize.height), textContainer: textLayoutManager.textContainer)
+				
+				// Transition to TextKit 1 if the system cannot use TextKit2 for whatever reason in the future
+				var notificationToken: NSObjectProtocol?
+				let notificationCenter = NotificationCenter.default
+				// Use raw value of NSTextView.didSwitchToNSLayoutManagerNotification directly because I don't know how to weak-link the symbol in Swift
+				// It is supposed to have an availability decoration, but it doesn't
+				notificationToken = notificationCenter.addObserver(forName: .init(rawValue: "NSTextViewDidSwitchToNSLayoutManagerNotification") /* NSTextView.didSwitchToNSLayoutManagerNotification */, object: textView, queue: OperationQueue.main) { [weak self] _ in
+					
+					if let token = notificationToken {
+						notificationCenter.removeObserver(token)
+					}
+					
+					guard let self = self else {
+						return
+					}
+					
+					assertionFailure("TextView should not be switching to TextKit 1 layout manager")
+					
+					self.usesTextKit2 = false
+					self.textView.layoutManager?.delegate = self
+					self.updateTextContent()
+				}
+			} else {
+				// This should not be possible
+				assertionFailure("If we're using TextKit2, we must be on macOS 12 or later")
+			}
+		} else {
+			let textContainer = NSTextContainer(size: textContainerSize)
+			let layoutManager = NSLayoutManager()
+			
+			layoutManager.addTextContainer(textContainer)
+			
+			let textStorage = NSTextStorage()
+			textStorage.addLayoutManager(layoutManager)
+			
+			textView = ZGCommitTextView(frame: NSMakeRect(0.0, 0.0, scrollViewContentSize.width, scrollViewContentSize.height), textContainer: textContainer)
+		}
+		
+		textView.minSize = NSMakeSize(0.0, scrollViewContentSize.height)
+		textView.maxSize = NSMakeSize(CGFloat(Float.greatestFiniteMagnitude), CGFloat(Float.greatestFiniteMagnitude))
+		textView.isVerticallyResizable = true
+		textView.isHorizontallyResizable = false
+		textView.autoresizingMask = .width
+		textView.textContainer?.widthTracksTextView = true
+		textView.allowsUndo = true
+		textView.isRichText = false
+		textView.usesRuler = false
+		textView.usesFindBar = true
+		textView.isIncrementalSearchingEnabled = false
+		textView.isAutomaticDataDetectionEnabled = false
+		// Keeping the font panel enabled can lead to a serious performance hit:
+		// https://christiantietze.de/posts/2021/09/nstextview-fontpanel-slowness/
+		// We don't want to use it anyway
+		textView.usesFontPanel = false
+		
+		scrollView.documentView = textView
+		scrollViewContainer.addSubview(scrollView)
+		
 		self.window?.setFrameUsingName(ZGEditorWindowFrameNameKey)
 
 		self.updateCurrentStyle()
-		
-		let userDefaults = UserDefaults.standard
 		
 		// Update style when user changes the system appearance
 		self.effectiveAppearanceObserver = NSApp.observe(\.effectiveAppearance, options: [.old, .new]) { [weak self] (application, change) in
@@ -689,7 +807,10 @@ enum VersionControlType {
 		
 		// Set textview delegates
 		textView.textStorage?.delegate = self
-		textView.layoutManager?.delegate = self
+		
+		if !usesTextKit2 {
+			textView.layoutManager?.delegate = self
+		}
 		textView.delegate = self
 		textView.zgCommitViewDelegate = self
 		
@@ -714,11 +835,11 @@ enum VersionControlType {
 		
 		updateTextViewDrawingBackground()
 		
-		updateEditorMessageFont(userDefaults: userDefaults)
-		updateEditorCommentsFont(userDefaults: userDefaults)
-		
-		// Necessary to update text processing otherwise colors may not be right
-		updateTextProcessing()
+		// When using TextKit2 we will update the paragraphs during text view layout
+		if !usesTextKit2 {
+			updateTextContent()
+			updateCommentSection()
+		}
 		
 		// If we have a non-version controlled file, point selection at start of content
 		// Otherwise if we're resuming a canceled commit message, select all the contents
@@ -792,12 +913,28 @@ enum VersionControlType {
 	// MARK: Actions
 	
 	private func exit(status: Int32) -> Never {
-		if var breadcrumbs = breadcrumbs, let breadcrumbsURL = ZGReadDefaultURL(UserDefaults.standard, ZGBreadcrumbsURLKey) {
+		if breadcrumbs != nil {
+			// Update breadcrumbs
+			if usesTextKit2, #available(macOS 12.0, *), let textContentStorage = textView.textContentStorage {
+				let currentText = currentPlainText()
+				let contentLineRanges = retrieveContentLineRanges(plainText: currentText)
+				
+				for contentLineRange in contentLineRanges {
+					let utf16Range = convertToUTF16Range(range: contentLineRange, in: currentText)
+					let _ = newTextParagraph(textContentStorage, range: utf16Range, updateBreadcrumbs: true)
+				}
+			} else {
+				updateTextContent(updateBreadcrumbs: true)
+			}
+		}
+		
+		if var breadcrumbs = breadcrumbs, let breadcrumbsPath = ProcessInfo.processInfo.environment[ZGBreadcrumbsURLKey] {
+			let breadcrumbsURL = URL(fileURLWithPath: breadcrumbsPath, isDirectory: false)
 			breadcrumbs.exitStatus = status
 			
 			do {
 				let jsonData = try JSONEncoder().encode(breadcrumbs)
-				try jsonData.write(to: breadcrumbsURL)
+				try jsonData.write(to: breadcrumbsURL, options: .atomic)
 			} catch {
 				print("Failed to save breadcrumbs: \(error)")
 			}
@@ -840,7 +977,7 @@ enum VersionControlType {
 							
 							try fileManager.createDirectory(at: supportDirectory, withIntermediateDirectories: true, attributes: nil)
 							
-							let lastCommitURL = supportDirectory.appendingPathComponent(Self.projectName(fileManager: fileManager))
+							let lastCommitURL = supportDirectory.appendingPathComponent(projectNameDisplay)
 							
 							try trimmedContent.write(to: lastCommitURL, atomically: true, encoding: .utf8)
 						} catch {
@@ -942,7 +1079,92 @@ enum VersionControlType {
 	}
 	
 	@objc func textDidChange(_ notification: Notification) {
-		updateTextProcessing()
+		if !usesTextKit2 {
+			updateTextContent()
+		}
+	}
+	
+	@available(macOS 12.0, *)
+	private func newTextParagraph(_ textContentStorage: NSTextContentStorage, range: NSRange, updateBreadcrumbs: Bool) -> NSTextParagraph? {
+		guard let originalText = textContentStorage.textStorage?.attributedSubstring(from: range) else {
+			return nil
+		}
+		
+		let originalTextString = originalText.string
+		
+		let commentRange: NSRange
+		do {
+			let plainText = currentPlainText()
+			commentRange = commentUTF16Range(plainText: plainText)
+		}
+		
+		let paragraphWithDisplayAttributes: NSTextParagraph?
+		let isCommentSection = (range.location >= commentRange.location)
+		let isCommentParagraph = isCommentSection || Self.isCommentLine(originalTextString, versionControlType: versionControlType)
+
+		let userDefaults = UserDefaults.standard
+		
+		if !isCommentParagraph {
+			let contentFont = ZGReadDefaultFont(userDefaults, ZGMessageFontNameKey, ZGMessageFontPointSizeKey)
+			
+			let displayAttributes: [NSAttributedString.Key: AnyObject] = [.font: contentFont, .foregroundColor: style.textColor]
+			
+			let textWithDisplayAttributes = NSMutableAttributedString(attributedString: originalText)
+			
+			textWithDisplayAttributes.addAttributes(displayAttributes, range: NSMakeRange(0, range.length))
+			
+			let versionControlledFile = userDefaults.bool(forKey: ZGAssumeVersionControlledFileKey)
+			
+			if versionControlledFile {
+				let lengthLimit: Int?
+				if range.location == 0 {
+					lengthLimit = Self.lengthLimitWarningEnabled(userDefaults: userDefaults, userDefaultKey: ZGEditorRecommendedSubjectLengthLimitEnabledKey) ? ZGReadDefaultLineLimit(userDefaults, ZGEditorRecommendedSubjectLengthLimitKey) : nil
+				} else {
+					lengthLimit = Self.lengthLimitWarningEnabled(userDefaults: userDefaults, userDefaultKey: ZGEditorRecommendedBodyLineLengthLimitEnabledKey) ? ZGReadDefaultLineLimit(userDefaults, ZGEditorRecommendedBodyLineLengthLimitKey) : nil
+				}
+				
+				if let lengthLimit = lengthLimit {
+					let distance = originalTextString.distance(from: originalTextString.startIndex, to: originalTextString.endIndex)
+					
+					if distance > lengthLimit {
+						let overflowRange = originalTextString.index(originalTextString.startIndex, offsetBy: lengthLimit) ..< originalTextString.endIndex
+						
+						let overflowUtf16Range = convertToUTF16Range(range: overflowRange, in: originalTextString)
+						
+						let overflowAttributes: [NSAttributedString.Key: AnyObject] = [.font: contentFont, .backgroundColor: style.overflowColor]
+						
+						textWithDisplayAttributes.addAttributes(overflowAttributes, range: overflowUtf16Range)
+						
+						if updateBreadcrumbs && breadcrumbs != nil {
+							breadcrumbs!.textOverflowRanges.append(range.location + overflowUtf16Range.location ..< range.location + NSMaxRange(overflowUtf16Range))
+						}
+					}
+				}
+			}
+			
+			paragraphWithDisplayAttributes = NSTextParagraph(attributedString: textWithDisplayAttributes)
+		} else {
+			let commentFont = ZGReadDefaultFont(userDefaults, ZGCommentsFontNameKey, ZGCommentsFontPointSizeKey)
+			
+			let displayAttributes: [NSAttributedString.Key: AnyObject] = [.font: commentFont, .foregroundColor: style.commentColor]
+			
+			let textWithDisplayAttributes = NSMutableAttributedString(attributedString: originalText)
+			
+			textWithDisplayAttributes.addAttributes(displayAttributes, range: NSMakeRange(0, range.length))
+			
+			if updateBreadcrumbs && !isCommentSection && breadcrumbs != nil {
+				breadcrumbs!.commentLineRanges.append(range.location ..< NSMaxRange(range))
+			}
+			
+			paragraphWithDisplayAttributes = NSTextParagraph(attributedString: textWithDisplayAttributes)
+		}
+		
+		return paragraphWithDisplayAttributes
+	}
+	
+	@available(macOS 12.0, *)
+	func textContentStorage(_ textContentStorage: NSTextContentStorage, textParagraphWith range: NSRange) -> NSTextParagraph? {
+		return newTextParagraph(textContentStorage, range: range, updateBreadcrumbs: false)
 	}
 	
 	@objc func textView(_ textView: NSTextView, shouldSetSpellingState value: Int, range affectedCharRange: NSRange) -> Int {
@@ -1060,25 +1282,15 @@ enum VersionControlType {
 	// MARK: ZGCommitViewDelegate
 	
 	@objc func userDefaultsChangedMessageFont() {
-		updateEditorMessageFont(userDefaults: UserDefaults.standard)
+		updateTextContent()
 	}
 	
 	@objc func userDefaultsChangedCommentsFont() {
-		updateEditorCommentsFont(userDefaults: UserDefaults.standard)
+		updateCommentSection()
 	}
 	
 	@objc func userDefaultsChangedRecommendedLineLengthLimits() {
-		let userDefaults = UserDefaults.standard
-		
-		let hasSubjectLimit = Self.lengthLimitWarningEnabled(userDefaults: userDefaults, userDefaultKey: ZGEditorRecommendedSubjectLengthLimitEnabledKey)
-		let hasBodyLineLimit = Self.lengthLimitWarningEnabled(userDefaults: userDefaults, userDefaultKey: ZGEditorRecommendedBodyLineLengthLimitEnabledKey)
-		
-		if !hasSubjectLimit && !hasBodyLineLimit {
-			// Remove all background color highlighting in case any text is currently highlighted
-			removeBackgroundColors()
-		} else {
-			updateTextProcessing()
-		}
+		updateTextContent()
 	}
 	
 	func zgCommitViewSelectAll() {
