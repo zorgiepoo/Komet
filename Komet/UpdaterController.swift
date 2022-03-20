@@ -33,6 +33,11 @@ private let USER_AUTHORIZATION_ERROR_CODE = 1
 			break
 		}
 	}
+	
+	func allowedChannels(for updater: SPUUpdater) -> Set<String> {
+		let betaUpdatesEnabled = UserDefaults.standard.bool(forKey: ZGEnableBetaUpdatesKey)
+		return betaUpdatesEnabled ? ["beta"] : []
+	}
 }
 
 class UpdaterController: UpdaterSettingsListener {
