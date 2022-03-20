@@ -121,7 +121,7 @@ import Sparkle
 		// Do nothing
 	}
 	
-	func showInstallingUpdate() {
+	func showInstallingUpdate(withApplicationTerminated applicationTerminated: Bool) {
 		// Do nothing
 	}
 	
