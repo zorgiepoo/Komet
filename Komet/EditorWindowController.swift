@@ -650,7 +650,7 @@ enum VersionControlType {
 		if versionControlledFile || plainText.utf16.count < MAX_CHARACTER_COUNT_FOR_NON_VERSION_CONTROL_COMMENT_ATTRIBUTES {
 			let contentLineRanges = retrieveContentLineRanges(plainText: plainText)
 			
-			if versionControlledFile {
+			if versionControlledFile && !isSquashMessage {
 				let subjectLengthLimit = Self.lengthLimitWarningEnabled(userDefaults: userDefaults, userDefaultKey: ZGEditorRecommendedSubjectLengthLimitEnabledKey) ? ZGReadDefaultLineLimit(userDefaults, ZGEditorRecommendedSubjectLengthLimitKey) : nil
 				let bodyLengthLimit = Self.lengthLimitWarningEnabled(userDefaults: userDefaults, userDefaultKey: ZGEditorRecommendedBodyLineLengthLimitEnabledKey) ? ZGReadDefaultLineLimit(userDefaults, ZGEditorRecommendedBodyLineLengthLimitKey) : nil
 				
@@ -1114,7 +1114,7 @@ enum VersionControlType {
 			
 			let versionControlledFile = userDefaults.bool(forKey: ZGAssumeVersionControlledFileKey)
 			
-			if versionControlledFile {
+			if versionControlledFile && !isSquashMessage {
 				let lengthLimit: Int?
 				if range.location == 0 {
 					lengthLimit = Self.lengthLimitWarningEnabled(userDefaults: userDefaults, userDefaultKey: ZGEditorRecommendedSubjectLengthLimitEnabledKey) ? ZGReadDefaultLineLimit(userDefaults, ZGEditorRecommendedSubjectLengthLimitKey) : nil

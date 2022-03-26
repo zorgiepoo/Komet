@@ -1102,6 +1102,7 @@ class KometUITests: XCTestCase {
 		
 		let (breadcrumbs, finalContent) = try app.commit()
 		XCTAssertEqual(breadcrumbs!.exitStatus, 0)
+		XCTAssertEqual(breadcrumbs!.textOverflowRanges.count, 0)
 		
 		let initialLines = app.initialContent.components(separatedBy: "\n")
 		XCTAssertTrue(initialLines[4].hasPrefix("# Rebase"), "\(initialLines[4]) does not have rebase comment prefix")
