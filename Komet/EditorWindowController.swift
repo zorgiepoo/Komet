@@ -416,6 +416,22 @@ enum VersionControlType {
 			// As fallback, use NSColor.selectedControlColor. Note NSColor.selectedTextColor does not give right results.
 			let textHighlightColor = style.textHighlightColor ?? NSColor.selectedControlColor
 			textView.selectedTextAttributes = [.backgroundColor: textHighlightColor, .foregroundColor: style.barTextColor]
+			
+			if usesTextKit2 {
+				// Changing NSTextView selection color doesn't quite work correctly when using TextKit2 by itself
+				// So we apply an additional workaround to get NSTextView to update the selection text color for real
+				// Unfortunately we will need to deselect any selected text ranges as well
+				// Workaround found here: https://github.com/ChimeHQ/TextViewPlus
+				// Filed FB9967570
+				
+				let selectedTextRange = textView.selectedRange()
+				if selectedTextRange.length > 0 {
+					textView.setSelectedRange(NSMakeRange(selectedTextRange.location, 0))
+				}
+				
+				textView.rotate(byDegrees: 1.0)
+				textView.rotate(byDegrees: -1.0)
+			}
 		}
 		
 		// Style content view
