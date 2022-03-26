@@ -417,7 +417,7 @@ enum VersionControlType {
 			let textHighlightColor = style.textHighlightColor ?? NSColor.selectedControlColor
 			textView.selectedTextAttributes = [.backgroundColor: textHighlightColor, .foregroundColor: style.barTextColor]
 			
-			if usesTextKit2 {
+			if usesTextKit2, let window = window, window.isVisible {
 				// Changing NSTextView selection color doesn't quite work correctly when using TextKit2 by itself
 				// So we apply an additional workaround to get NSTextView to update the selection text color for real
 				// Unfortunately we will need to deselect any selected text ranges as well
