@@ -744,6 +744,7 @@ enum VersionControlType {
 					
 					self.usesTextKit2 = false
 					self.textView.layoutManager?.delegate = self
+					self.updateTextContent()
 				}
 			} else {
 				// This should not be possible
