@@ -10,13 +10,20 @@ jobs:
   build:
     strategy:
       matrix:
-        xcode: ['xcode13.2.1']
+        macos: ['12', '11']
         include:
-            - xcode: 'xcode13.2.1'
+            - macos: '12'
+              macos-runner: 'macos-12'
+              xcode-path: '/Applications/Xcode_13.3.app/Contents/Developer'
+              upload-name: 'build-logs-macos12'
+        include:
+            - macos: '11'
+              macos-runner: 'macos-11'
               xcode-path: '/Applications/Xcode_13.2.1.app/Contents/Developer'
+              upload-name: 'build-logs-macos11'
     
     name: Build and Test Komet on macOS
-    runs-on: macos-11
+    runs-on: ${{ matrix.macos-runner }}
 
     steps:
       - name: Checkout
@@ -40,5 +47,5 @@ jobs:
         if: failure()
         uses: actions/upload-artifact@v2
         with:
-          name: build-logs
+          name: ${{ matrix.upload-name }}
           path: build/Logs
