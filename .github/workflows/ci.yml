@@ -10,14 +10,13 @@ jobs:
   build:
     strategy:
       matrix:
-        os: ['12', '11']
+        config: ['12', '11']
         include:
-            - os: '12'
+            - config: '12'
               runner: 'macos-12'
               xcode-path: '/Applications/Xcode_13.3.app/Contents/Developer'
               upload-name: 'build-logs-macos12'
-        include:
-            - os: '11'
+            - config: '11'
               runner: 'macos-11'
               xcode-path: '/Applications/Xcode_13.2.1.app/Contents/Developer'
               upload-name: 'build-logs-macos11'
