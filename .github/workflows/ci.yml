@@ -10,20 +10,20 @@ jobs:
   build:
     strategy:
       matrix:
-        macos: ['12', '11']
+        os: ['12', '11']
         include:
-            - macos: '12'
-              macos-runner: 'macos-12'
+            - os: '12'
+              runner: 'macos-12'
               xcode-path: '/Applications/Xcode_13.3.app/Contents/Developer'
               upload-name: 'build-logs-macos12'
         include:
-            - macos: '11'
-              macos-runner: 'macos-11'
+            - os: '11'
+              runner: 'macos-11'
               xcode-path: '/Applications/Xcode_13.2.1.app/Contents/Developer'
               upload-name: 'build-logs-macos11'
     
     name: Build and Test Komet on macOS
-    runs-on: ${{ matrix.macos-runner }}
+    runs-on: ${{ matrix.runner }}
 
     steps:
       - name: Checkout
