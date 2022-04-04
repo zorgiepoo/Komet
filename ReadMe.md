@@ -3,8 +3,8 @@
 A Cocoa text editor designed for creating commit messages.
 
 <p float="left">
-  <img src="screenshots/light.png" width="400 alt="Light version of Komet" />
-  <img src="screenshots/dark.png" width="400" alt="Dark version of Komet" />
+  <img src="screenshots/light.png" width="500 alt="Light version of Komet" />
+  <img src="screenshots/dark.png" width="500" alt="Dark version of Komet" />
 </p>
 
 [Download Komet](https://zgcoder.net/software/komet/Komet.dmg)
@@ -53,3 +53,10 @@ Pull requests will also need to pass Komet's set of automated UI tests. New feat
 
 ### Localizations
 Komet can be translated to other languages. To translate Komet go in the Xcode Project settings and add a new language in the Localizations section. After the localization files have been created, modify the string values in each one. Skip translating string values in xibs that are underscored like  `project_name`. Finally, test the translation by changing your system language in System Preferences and by building and running Komet.
+
+## Other Platforms
+
+Komet has inspired developers to make commit editors for other platforms. While I have not tried them out myself, you may want to check them out:
+
+* [Commit](https://github.com/sonnyp/Commit) for Linux by Sonny Piers
+* [Comet](https://github.com/small-tech/comet) for elementary OS by Aral Balkan

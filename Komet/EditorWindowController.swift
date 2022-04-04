@@ -471,10 +471,22 @@ enum VersionControlType {
 		return NSRange(range, in: string)
 	}
 	
+	func updateFont(_ font: NSFont, utf16Range: NSRange) {
+		textView.textStorage?.addAttribute(.font, value: font, range: utf16Range)
+		
+		// If we don't fix the font attributes, then attachments (like emoji) may become invisible and not show up
+		textView.textStorage?.fixFontAttribute(in: utf16Range)
+	}
+	
 	private func updateCommentSection() {
 		let commentRange = commentUTF16Range(plainText: currentPlainText())
+		
 		textView.textStorage?.removeAttribute(.foregroundColor, range: commentRange)
 		textView.textStorage?.addAttribute(.foregroundColor, value: style.commentColor, range: commentRange)
+		
+		let userDefaults = UserDefaults.standard
+		let commentsFont = ZGReadDefaultFont(userDefaults, ZGCommentsFontNameKey, ZGCommentsFontPointSizeKey)
+		updateFont(commentsFont, utf16Range: commentRange)
 	}
 	
 	private func retrieveContentLineRanges(plainText: String) -> [Range<String.Index>] {
@@ -545,17 +557,6 @@ enum VersionControlType {
 			}
 		}
 		
-		func updateFont(_ font: NSFont, utf16Range: NSRange) {
-			guard !updateBreadcrumbs else {
-				return
-			}
-			
-			textView.textStorage?.addAttribute(.font, value: font, range: utf16Range)
-			
-			// If we don't fix the font attributes, then attachments (like emoji) may become invisible and not show up
-			textView.textStorage?.fixFontAttribute(in: utf16Range)
-		}
-		
 		func updateHighlighting(contentLineRanges: [Range<String.Index>], subjectLengthLimit: Int?, bodyLengthLimit: Int?) {
 			guard subjectLengthLimit != nil || bodyLengthLimit != nil, contentLineRanges.count > 0 else {
 				return
@@ -598,10 +599,11 @@ enum VersionControlType {
 			
 			// First assume all content has no comment lines
 			let userDefaults = UserDefaults.standard
-			let messageFont = ZGReadDefaultFont(userDefaults, ZGMessageFontNameKey, ZGMessageFontPointSizeKey)
-			updateFont(messageFont, utf16Range: contentUTFRange)
 			
-			if updateBreadcrumbs {
+			if !updateBreadcrumbs {
+				let messageFont = ZGReadDefaultFont(userDefaults, ZGMessageFontNameKey, ZGMessageFontPointSizeKey)
+				updateFont(messageFont, utf16Range: contentUTFRange)
+			} else {
 				breadcrumbs?.commentLineRanges.removeAll()
 			}
 			
@@ -745,6 +747,7 @@ enum VersionControlType {
 					self.usesTextKit2 = false
 					self.textView.layoutManager?.delegate = self
 					self.updateTextContent()
+					self.updateCommentSection()
 				}
 			} else {
 				// This should not be possible
