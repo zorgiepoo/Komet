@@ -745,7 +745,10 @@ enum VersionControlType {
 					assertionFailure("TextView should not be switching to TextKit 1 layout manager")
 					
 					self.usesTextKit2 = false
-					self.textView.layoutManager?.delegate = self
+					if let layoutManager = self.textView.layoutManager {
+						layoutManager.delegate = self
+						layoutManager.allowsNonContiguousLayout = true
+					}
 					self.updateTextContent()
 					self.updateCommentSection()
 				}
@@ -756,6 +759,8 @@ enum VersionControlType {
 		} else {
 			let textContainer = NSTextContainer(size: textContainerSize)
 			let layoutManager = NSLayoutManager()
+			// This is necessary otherwise text may not render on update correctly
+			layoutManager.allowsNonContiguousLayout = true
 			
 			layoutManager.addTextContainer(textContainer)
 			
