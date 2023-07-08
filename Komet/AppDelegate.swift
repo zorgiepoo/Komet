@@ -24,7 +24,12 @@ typealias StatFS = statfs
 	}
 	
 	@objc func applicationDidFinishLaunching(_ notification: Notification) {
-		NSApp.activate(ignoringOtherApps: true)
+		if #available(macOS 14.0, *) {
+			NSApp.activate()
+		} else {
+			NSApp.activate(ignoringOtherApps: true)
+		}
+		
 		NSApp.isAutomaticCustomizeTouchBarMenuItemEnabled = true
 		
 		guard let executableURL = Bundle.main.executableURL else {
