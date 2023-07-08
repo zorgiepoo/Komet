@@ -12,7 +12,7 @@ jobs:
       matrix:
         config: ['13']
         include:
-          - config: '13'
+            - config: '13'
               runner: 'macos-13'
               xcode-path: '/Applications/Xcode_15.app/Contents/Developer'
               upload-name: 'build-logs-macos13'
