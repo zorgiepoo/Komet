@@ -14,7 +14,7 @@ jobs:
         include:
             - config: '13'
               runner: 'macos-13'
-              xcode-path: '/Applications/Xcode_15.app/Contents/Developer'
+              xcode-path: '/Applications/Xcode_15.0.app/Contents/Developer'
               upload-name: 'build-logs-macos13'
     
     name: Build and Test Komet on macOS
