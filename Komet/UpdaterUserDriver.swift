@@ -28,7 +28,10 @@ import Sparkle
 			alert.informativeText = informativeText
 			alert.messageText = NSLocalizedString("updaterNewUpdateAlert", tableName: nil, comment: "")
 			alert.addButton(withTitle: NSLocalizedString("updaterInstallOnQuit", tableName: nil, comment: ""))
-			alert.addButton(withTitle: NSLocalizedString("updaterCancel", tableName: nil, comment: ""))
+			
+			if stage != .installing {
+				alert.addButton(withTitle: NSLocalizedString("updaterCancel", tableName: nil, comment: ""))
+			}
 			
 			switch alert.runModal() {
 			case .alertFirstButtonReturn:
