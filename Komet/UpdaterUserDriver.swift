@@ -55,8 +55,6 @@ import Sparkle
 			
 			reply(.dismiss)
 		} else {
-			let appcastItemDisplayVersion = appcastItem.displayVersionString ?? ""
-			
 			let newUpdateLocalizedKey: String
 			switch state.stage {
 			case .notDownloaded:
@@ -69,7 +67,7 @@ import Sparkle
 				newUpdateLocalizedKey = "updaterNewUpdateAvailableFormat"
 			}
 			
-			let informativeText = String(format: NSLocalizedString(newUpdateLocalizedKey, tableName: nil, comment: ""), appcastItemDisplayVersion)
+			let informativeText = String(format: NSLocalizedString(newUpdateLocalizedKey, tableName: nil, comment: ""), appcastItem.displayVersionString)
 			
 			promptUpdate(userInitiated: state.userInitiated, informativeText: informativeText, stage: state.stage, response: reply)
 		}
@@ -121,7 +119,7 @@ import Sparkle
 		// Do nothing
 	}
 	
-	func showInstallingUpdate(withApplicationTerminated applicationTerminated: Bool) {
+	func showInstallingUpdate(withApplicationTerminated applicationTerminated: Bool, retryTerminatingApplication: @escaping () -> Void) {
 		// Do nothing
 	}
 	
