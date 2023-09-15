@@ -68,8 +68,7 @@ class KometApp {
 			 key(ZGAssumeVersionControlledFileKey), String(versionControlledFile),
 			 key(ZGCommitTextViewContinuousSpellCheckingKey), String(true),
 			 key(ZGCommitTextViewAutomaticSpellingCorrectionKey), String(false),
-			 key(ZGCommitTextViewAutomaticTextReplacementKey), String(false),
-			 key(ZGDisableTextKit2Key), String(false)]
+			 key(ZGCommitTextViewAutomaticTextReplacementKey), String(false)]
 		
 		application.launchEnvironment = [
 			ZGBreadcrumbsURLKey: breadcrumbsURL.path,

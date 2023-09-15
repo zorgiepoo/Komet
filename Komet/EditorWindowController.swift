@@ -45,8 +45,6 @@ enum VersionControlType {
 	private var textView: ZGCommitTextView!
 	private var scrollView: NSScrollView!
 	
-	private var usesTextKit2: Bool
-	
 	@IBOutlet private var topBar: NSView!
 	@IBOutlet private var horizontalBarDivider: NSBox!
 	@IBOutlet private var scrollViewContainer: NSView!
@@ -196,8 +194,7 @@ enum VersionControlType {
 			ZGDisableSpellCheckingAndCorrectionForSquashesKey: true,
 			ZGDisableAutomaticNewlineInsertionAfterSubjectLineForSquashesKey: true,
 			ZGDetectHGCommentStyleForSquashesKey: true,
-			ZGAssumeVersionControlledFileKey: true,
-			ZGDisableTextKit2Key: false
+			ZGAssumeVersionControlledFileKey: true
 		])
 		
 		ZGCommitTextView.registerDefaults()
@@ -209,12 +206,6 @@ enum VersionControlType {
 		self.tutorialMode = tutorialMode
 		
 		let userDefaults = UserDefaults.standard
-		
-		if #available(macOS 12.0, *) {
-			usesTextKit2 = !userDefaults.bool(forKey: ZGDisableTextKit2Key)
-		} else {
-			usesTextKit2 = false
-		}
 		
 		let processInfo = ProcessInfo.processInfo
 		if let _ = processInfo.environment[ZGBreadcrumbsURLKey] {
@@ -418,7 +409,7 @@ enum VersionControlType {
 			textView.selectedTextAttributes = [.backgroundColor: textHighlightColor, .foregroundColor: style.barTextColor]
 			
 			if #unavailable(macOS 13) {
-				if usesTextKit2, let window = window, window.isVisible {
+				if let window = window, window.isVisible {
 					// Changing NSTextView selection color doesn't quite work correctly when using TextKit2 by itself
 					// So we apply an additional workaround to get NSTextView to update the selection text color for real
 					// Unfortunately we will need to deselect any selected text ranges as well
@@ -512,7 +503,7 @@ enum VersionControlType {
 		return lineRanges
 	}
 	
-	private func updateTextContent(updateBreadcrumbs: Bool = false) {
+	private func updateTextContent() {
 		let plainText = currentPlainText()
 		
 		let textStorage = textView.textStorage
@@ -526,37 +517,16 @@ enum VersionControlType {
 			}
 			
 			let overflowRange = plainText.index(lineRange.lowerBound, offsetBy: limit) ..< lineRange.upperBound
-			if !updateBreadcrumbs {
-				let utf16Range = convertToUTF16Range(range: overflowRange, in: plainText)
-				
-				if usesTextKit2 {
-					textStorage?.addAttribute(.backgroundColor, value: style.overflowColor, range: utf16Range)
-				} else {
-					textView.layoutManager?.addTemporaryAttribute(.backgroundColor, value: style.overflowColor, forCharacterRange: utf16Range)
-				}
-			} else {
-				// Don't re-assign / make another copy of breadcrumbs
-				if breadcrumbs != nil {
-					let lowerIndex = overflowRange.lowerBound.utf16Offset(in: plainText)
-					let upperIndex = overflowRange.upperBound.utf16Offset(in: plainText)
-					
-					breadcrumbs!.textOverflowRanges.append(lowerIndex ..< upperIndex)
-				}
-			}
+			
+			let utf16Range = convertToUTF16Range(range: overflowRange, in: plainText)
+			
+			textStorage?.addAttribute(.backgroundColor, value: style.overflowColor, range: utf16Range)
 		}
 		
 		func removeBackgroundColors() {
 			let plainText = currentPlainText()
 			
-			if !updateBreadcrumbs {
-				if usesTextKit2 {
-					textStorage?.removeAttribute(.backgroundColor, range: NSMakeRange(0, plainText.endIndex.utf16Offset(in: plainText)))
-				} else {
-					textView.layoutManager?.removeTemporaryAttribute(.backgroundColor, forCharacterRange: NSMakeRange(0, plainText.endIndex.utf16Offset(in: plainText)))
-				}
-			} else {
-				breadcrumbs?.textOverflowRanges.removeAll()
-			}
+			textStorage?.removeAttribute(.backgroundColor, range: NSMakeRange(0, plainText.endIndex.utf16Offset(in: plainText)))
 		}
 		
 		func updateHighlighting(contentLineRanges: [Range<String.Index>], subjectLengthLimit: Int?, bodyLengthLimit: Int?) {
@@ -602,12 +572,8 @@ enum VersionControlType {
 			// First assume all content has no comment lines
 			let userDefaults = UserDefaults.standard
 			
-			if !updateBreadcrumbs {
-				let messageFont = ZGReadDefaultFont(userDefaults, ZGMessageFontNameKey, ZGMessageFontPointSizeKey)
-				updateFont(messageFont, utf16Range: contentUTFRange)
-			} else {
-				breadcrumbs?.commentLineRanges.removeAll()
-			}
+			let messageFont = ZGReadDefaultFont(userDefaults, ZGMessageFontNameKey, ZGMessageFontPointSizeKey)
+			updateFont(messageFont, utf16Range: contentUTFRange)
 			
 			var commentFont: NSFont? = nil
 			for contentLineRange in contentLineRanges {
@@ -616,38 +582,22 @@ enum VersionControlType {
 				if contentLineRange.upperBound > contentLineRange.lowerBound &&
 					Self.isCommentLine(String(plainText[contentLineRange.lowerBound ..< contentLineRange.upperBound]), versionControlType: commentVersionControlType) {
 					
-					if !updateBreadcrumbs {
-						textStorage?.addAttribute(.foregroundColor, value: style.commentColor, range: utf16LineRange)
-						
-						if let font = commentFont {
-							updateFont(font, utf16Range: utf16LineRange)
-						} else {
-							let font = ZGReadDefaultFont(userDefaults, ZGCommentsFontNameKey, ZGCommentsFontPointSizeKey)
-							updateFont(font, utf16Range: utf16LineRange)
-							commentFont = font
-						}
+					textStorage?.addAttribute(.foregroundColor, value: style.commentColor, range: utf16LineRange)
+					
+					if let font = commentFont {
+						updateFont(font, utf16Range: utf16LineRange)
 					} else {
-						// Don't re-assign / make another copy of breadcrumbs
-						if breadcrumbs != nil {
-							let lowerIndex = contentLineRange.lowerBound.utf16Offset(in: plainText)
-							let upperIndex = contentLineRange.upperBound.utf16Offset(in: plainText)
-							
-							breadcrumbs!.commentLineRanges.append(lowerIndex ..< upperIndex)
-						}
+						let font = ZGReadDefaultFont(userDefaults, ZGCommentsFontNameKey, ZGCommentsFontPointSizeKey)
+						updateFont(font, utf16Range: utf16LineRange)
+						commentFont = font
 					}
 				} else {
-					if !updateBreadcrumbs {
-						textStorage?.removeAttribute(.foregroundColor, range: utf16LineRange)
-					}
+					textStorage?.removeAttribute(.foregroundColor, range: utf16LineRange)
 				}
 			}
 		}
 		
 		func updateForegroundColor(textStorage: NSTextStorage?, utf16Range: NSRange) {
-			guard !updateBreadcrumbs else {
-				return
-			}
-			
 			textStorage?.removeAttribute(.foregroundColor, range: utf16Range)
 			textStorage?.addAttribute(.foregroundColor, value: style.textColor, range: utf16Range)
 		}
@@ -682,13 +632,6 @@ enum VersionControlType {
 		} else {
 			updateForegroundColor(textStorage: textView.textStorage, utf16Range: NSMakeRange(0, plainText.utf16.count))
 		}
-		
-		if !usesTextKit2 && !updateBreadcrumbs {
-			// Sometimes the insertion point isn't properly updated after updating
-			// the comment attributes and content style.
-			// Force an update to get around this issue.
-			textView.updateInsertionPointStateAndRestartTimer(true)
-		}
 	}
 	
 	private func updateEditorStyle(_ style: WindowStyle) {
@@ -716,58 +659,24 @@ enum VersionControlType {
 		let userDefaults = UserDefaults.standard
 		
 		// Initialize NSTextView via code snippets from https://developer.apple.com/documentation/appkit/nstextview/1449347-initwithframe
-		if usesTextKit2 {
-			if #available(macOS 12.0, *) {
-				let textLayoutManager = NSTextLayoutManager()
-				
-				let textContainer = NSTextContainer(size: textContainerSize)
-				textLayoutManager.textContainer = textContainer
-				
-				let textContentStorage = NSTextContentStorage()
-				textContentStorage.addTextLayoutManager(textLayoutManager)
-				textContentStorage.delegate = self
-				
-				textView = ZGCommitTextView(frame: NSMakeRect(0.0, 0.0, scrollViewContentSize.width, scrollViewContentSize.height), textContainer: textLayoutManager.textContainer)
-				
-				// Transition to TextKit 1 if the system cannot use TextKit2 for whatever reason in the future
-				var notificationToken: NSObjectProtocol?
-				let notificationCenter = NotificationCenter.default
-				notificationToken = notificationCenter.addObserver(forName: NSTextView.didSwitchToNSLayoutManagerNotification, object: textView, queue: OperationQueue.main) { [weak self] _ in
-					
-					if let token = notificationToken {
-						notificationCenter.removeObserver(token)
-					}
-					
-					guard let self = self else {
-						return
-					}
-					
-					assertionFailure("TextView should not be switching to TextKit 1 layout manager")
-					
-					self.usesTextKit2 = false
-					if let layoutManager = self.textView.layoutManager {
-						layoutManager.delegate = self
-						layoutManager.allowsNonContiguousLayout = true
-					}
-					self.updateTextContent()
-					self.updateCommentSection()
-				}
-			} else {
-				// This should not be possible
-				assertionFailure("If we're using TextKit2, we must be on macOS 12 or later")
-			}
-		} else {
+		do {
+			let textLayoutManager = NSTextLayoutManager()
+			
 			let textContainer = NSTextContainer(size: textContainerSize)
-			let layoutManager = NSLayoutManager()
-			// This is necessary otherwise text may not render on update correctly
-			layoutManager.allowsNonContiguousLayout = true
+			textLayoutManager.textContainer = textContainer
 			
-			layoutManager.addTextContainer(textContainer)
+			let textContentStorage = NSTextContentStorage()
+			textContentStorage.addTextLayoutManager(textLayoutManager)
+			textContentStorage.delegate = self
 			
-			let textStorage = NSTextStorage()
-			textStorage.addLayoutManager(layoutManager)
+			textView = ZGCommitTextView(frame: NSMakeRect(0.0, 0.0, scrollViewContentSize.width, scrollViewContentSize.height), textContainer: textLayoutManager.textContainer)
 			
-			textView = ZGCommitTextView(frame: NSMakeRect(0.0, 0.0, scrollViewContentSize.width, scrollViewContentSize.height), textContainer: textContainer)
+#if DEBUG
+			NotificationCenter.default.addObserver(forName: NSTextView.didSwitchToNSLayoutManagerNotification, object: textView, queue: OperationQueue.main) { _ in
+				
+				assertionFailure("TextView should not be switching to TextKit 1 layout manager")
+			}
+#endif
 		}
 		
 		textView.minSize = NSMakeSize(0.0, scrollViewContentSize.height)
@@ -832,9 +741,6 @@ enum VersionControlType {
 		// Set textview delegates
 		textView.textStorage?.delegate = self
 		
-		if !usesTextKit2 {
-			textView.layoutManager?.delegate = self
-		}
 		textView.delegate = self
 		textView.zgCommitViewDelegate = self
 		
@@ -858,12 +764,6 @@ enum VersionControlType {
 		textView.textStorage?.replaceCharacters(in: NSMakeRange(0, 0), with: plainAttributedString)
 		
 		updateTextViewDrawingBackground()
-		
-		// When using TextKit2 we will update the paragraphs during text view layout
-		if !usesTextKit2 {
-			updateTextContent()
-			updateCommentSection()
-		}
 		
 		// If we have a non-version controlled file, point selection at start of content
 		// Otherwise if we're resuming a canceled commit message, select all the contents
@@ -939,7 +839,7 @@ enum VersionControlType {
 	private func exit(status: Int32) -> Never {
 		if breadcrumbs != nil {
 			// Update breadcrumbs
-			if usesTextKit2, #available(macOS 12.0, *), let textContentStorage = textView.textContentStorage {
+			if let textContentStorage = textView.textContentStorage {
 				let currentText = currentPlainText()
 				let contentLineRanges = retrieveContentLineRanges(plainText: currentText)
 				
@@ -947,8 +847,6 @@ enum VersionControlType {
 					let utf16Range = convertToUTF16Range(range: contentLineRange, in: currentText)
 					let _ = newTextParagraph(textContentStorage, range: utf16Range, updateBreadcrumbs: true)
 				}
-			} else {
-				updateTextContent(updateBreadcrumbs: true)
 			}
 		}
 		
@@ -1100,12 +998,6 @@ enum VersionControlType {
 		}
 		
 		return true
-	}
-	
-	@objc func textDidChange(_ notification: Notification) {
-		if !usesTextKit2 {
-			updateTextContent()
-		}
 	}
 	
 	@available(macOS 12.0, *)

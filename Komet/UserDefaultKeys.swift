@@ -37,8 +37,6 @@ let ZGCommitTextViewContinuousSpellCheckingKey = "ZGCommitTextViewContinuousSpel
 let ZGCommitTextViewAutomaticSpellingCorrectionKey = "ZGCommitTextViewAutomaticSpellingCorrection"
 let ZGCommitTextViewAutomaticTextReplacementKey = "ZGCommitTextViewAutomaticTextReplacement"
 
-let ZGDisableTextKit2Key = "ZGDisableTextKit2"
-
 let ZGEnableBetaUpdatesKey = "ZGEnableBetaUpdates"
 
 // Environment options for test automation
