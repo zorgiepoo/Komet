@@ -359,17 +359,7 @@ enum VersionControlType {
 	}
 	
 	private func updateTextViewDrawingBackground() {
-		let plainText = currentPlainText()
-		
-		if #available(macOS 10.15.7, *) {
-			textView.drawsBackground = false
-		} else {
-			// Having drawBackgrounds set to NO appears to cause issues when there is a lot of content.
-			// Work around this by setting drawBackgrounds to YES in such cases.
-			// In some themes the visual look may not be too different.
-			// Note: I cannot reproduce this issue on 10.15.7, so I'm assuming this is no longer an issue there
-			textView.drawsBackground = (plainText.utf16.count > MAX_CHARACTER_COUNT_FOR_NOT_DRAWING_BACKGROUND)
-		}
+		textView.drawsBackground = false
 	}
 	
 	private func updateCurrentStyle() {
