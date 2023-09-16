@@ -1000,7 +1000,6 @@ enum VersionControlType {
 		return true
 	}
 	
-	@available(macOS 12.0, *)
 	private func newTextParagraph(_ textContentStorage: NSTextContentStorage, range: NSRange, updateBreadcrumbs: Bool) -> NSTextParagraph? {
 		guard let originalText = textContentStorage.textStorage?.attributedSubstring(from: range) else {
 			return nil
@@ -1078,7 +1077,6 @@ enum VersionControlType {
 		return paragraphWithDisplayAttributes
 	}
 	
-	@available(macOS 12.0, *)
 	func textContentStorage(_ textContentStorage: NSTextContentStorage, textParagraphWith range: NSRange) -> NSTextParagraph? {
 		return newTextParagraph(textContentStorage, range: range, updateBreadcrumbs: false)
 	}
