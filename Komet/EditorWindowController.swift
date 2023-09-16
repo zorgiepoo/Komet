@@ -460,176 +460,19 @@ enum VersionControlType {
 		// If we don't fix the font attributes, then attachments (like emoji) may become invisible and not show up
 		textView.textStorage?.fixFontAttribute(in: utf16Range)
 	}
-	
-	private func updateCommentSection() {
-		let commentRange = commentUTF16Range(plainText: currentPlainText())
 		
-		textView.textStorage?.removeAttribute(.foregroundColor, range: commentRange)
-		textView.textStorage?.addAttribute(.foregroundColor, value: style.commentColor, range: commentRange)
-		
-		let userDefaults = UserDefaults.standard
-		let commentsFont = ZGReadDefaultFont(userDefaults, ZGCommentsFontNameKey, ZGCommentsFontPointSizeKey)
-		updateFont(commentsFont, utf16Range: commentRange)
-	}
-	
-	private func retrieveContentLineRanges(plainText: String) -> [Range<String.Index>] {
-		let utf16View = plainText.utf16
-		let commentIndex = commentSectionIndex(plainUTF16Text: utf16View)
-		
-		var lineRanges: [Range<String.Index>] = []
-		var characterIndex = plainText.startIndex
-		while characterIndex < commentIndex {
-			var lineStartIndex = String.Index(utf16Offset: 0, in: plainText)
-			var lineEndIndex = String.Index(utf16Offset: 0, in: plainText)
-			var contentEndIndex = String.Index(utf16Offset: 0, in: plainText)
-			
-			plainText.getLineStart(&lineStartIndex, end: &lineEndIndex, contentsEnd: &contentEndIndex, for: characterIndex ..< characterIndex)
-			
-			let lineRange = (lineStartIndex ..< contentEndIndex)
-			lineRanges.append(lineRange)
-			
-			characterIndex = lineEndIndex
-		}
-		return lineRanges
-	}
-	
-	private func updateTextContent() {
-		let plainText = currentPlainText()
-		
-		let textStorage = textView.textStorage
-		
-		let userDefaults = UserDefaults.standard
-		
-		func updateHighlightOverflowing(lineRange: Range<String.Index>, limit: Int) {
-			let distance = plainText.distance(from: lineRange.lowerBound, to: lineRange.upperBound)
-			guard distance > limit else {
-				return
-			}
-			
-			let overflowRange = plainText.index(lineRange.lowerBound, offsetBy: limit) ..< lineRange.upperBound
-			
-			let utf16Range = convertToUTF16Range(range: overflowRange, in: plainText)
-			
-			textStorage?.addAttribute(.backgroundColor, value: style.overflowColor, range: utf16Range)
-		}
-		
-		func removeBackgroundColors() {
-			let plainText = currentPlainText()
-			
-			textStorage?.removeAttribute(.backgroundColor, range: NSMakeRange(0, plainText.endIndex.utf16Offset(in: plainText)))
-		}
-		
-		func updateHighlighting(contentLineRanges: [Range<String.Index>], subjectLengthLimit: Int?, bodyLengthLimit: Int?) {
-			guard subjectLengthLimit != nil || bodyLengthLimit != nil, contentLineRanges.count > 0 else {
-				return
-			}
-			
-			// Remove the attribute everywhere. Might be "inefficient" but it's the easiest most reliable approach I know how to do
-			removeBackgroundColors()
-			
-			for contentLineRange in contentLineRanges {
-				if contentLineRange.lowerBound == plainText.startIndex {
-					if let subjectLengthLimit = subjectLengthLimit {
-						let substring = String(plainText[contentLineRange.lowerBound ..< contentLineRange.upperBound])
-						if !Self.isCommentLine(substring, versionControlType: commentVersionControlType) {
-							updateHighlightOverflowing(lineRange: contentLineRange, limit: subjectLengthLimit)
-						}
-					}
-					
-					if bodyLengthLimit == nil {
-						break
-					}
-				} else {
-					assert(bodyLengthLimit != nil, "Body limit is nil but we should have breaked out earlier")
-					if let bodyLengthLimit = bodyLengthLimit {
-						let substring = String(plainText[contentLineRange.lowerBound ..< contentLineRange.upperBound])
-						if !Self.isCommentLine(substring, versionControlType: commentVersionControlType) {
-							updateHighlightOverflowing(lineRange: contentLineRange, limit: bodyLengthLimit)
-						}
-					}
-				}
-			}
-		}
-		
-		func updateCommentAttributes(contentLineRanges: [Range<String.Index>]) {
-			guard !Self.hasSingleCommentLineMarker(versionControlType: commentVersionControlType) else {
-				return
-			}
-			
-			let commentUTFRange = commentUTF16Range(plainText: currentPlainText())
-			let contentUTFRange = NSMakeRange(0, commentUTFRange.location)
-			
-			// First assume all content has no comment lines
-			let userDefaults = UserDefaults.standard
-			
-			let messageFont = ZGReadDefaultFont(userDefaults, ZGMessageFontNameKey, ZGMessageFontPointSizeKey)
-			updateFont(messageFont, utf16Range: contentUTFRange)
-			
-			var commentFont: NSFont? = nil
-			for contentLineRange in contentLineRanges {
-				let utf16LineRange = convertToUTF16Range(range: contentLineRange, in: plainText)
-				
-				if contentLineRange.upperBound > contentLineRange.lowerBound &&
-					Self.isCommentLine(String(plainText[contentLineRange.lowerBound ..< contentLineRange.upperBound]), versionControlType: commentVersionControlType) {
-					
-					textStorage?.addAttribute(.foregroundColor, value: style.commentColor, range: utf16LineRange)
-					
-					if let font = commentFont {
-						updateFont(font, utf16Range: utf16LineRange)
-					} else {
-						let font = ZGReadDefaultFont(userDefaults, ZGCommentsFontNameKey, ZGCommentsFontPointSizeKey)
-						updateFont(font, utf16Range: utf16LineRange)
-						commentFont = font
-					}
-				} else {
-					textStorage?.removeAttribute(.foregroundColor, range: utf16LineRange)
-				}
-			}
-		}
-		
-		func updateForegroundColor(textStorage: NSTextStorage?, utf16Range: NSRange) {
-			textStorage?.removeAttribute(.foregroundColor, range: utf16Range)
-			textStorage?.addAttribute(.foregroundColor, value: style.textColor, range: utf16Range)
-		}
-		
-		func updateContentStyle(contentLineRanges: [Range<String.Index>]) {
-			let textStorage = textView.textStorage
-			
-			for contentLineRange in contentLineRanges {
-				let utf16LineRange = convertToUTF16Range(range: contentLineRange, in: plainText)
-				
-				if contentLineRange.upperBound > contentLineRange.lowerBound &&
-					!Self.isCommentLine(String(plainText[contentLineRange.lowerBound ..< contentLineRange.upperBound]), versionControlType: commentVersionControlType) {
-					updateForegroundColor(textStorage: textStorage, utf16Range: utf16LineRange)
-				}
-			}
-		}
-		
-		let versionControlledFile = userDefaults.bool(forKey: ZGAssumeVersionControlledFileKey)
-		// Note: we should do this test for non-version control files even when using TextKit2
-		if versionControlledFile || plainText.utf16.count < MAX_CHARACTER_COUNT_FOR_NON_VERSION_CONTROL_COMMENT_ATTRIBUTES {
-			let contentLineRanges = retrieveContentLineRanges(plainText: plainText)
-			
-			if versionControlledFile && !isSquashMessage {
-				let subjectLengthLimit = Self.lengthLimitWarningEnabled(userDefaults: userDefaults, userDefaultKey: ZGEditorRecommendedSubjectLengthLimitEnabledKey) ? ZGReadDefaultLineLimit(userDefaults, ZGEditorRecommendedSubjectLengthLimitKey) : nil
-				let bodyLengthLimit = Self.lengthLimitWarningEnabled(userDefaults: userDefaults, userDefaultKey: ZGEditorRecommendedBodyLineLengthLimitEnabledKey) ? ZGReadDefaultLineLimit(userDefaults, ZGEditorRecommendedBodyLineLengthLimitKey) : nil
-				
-				updateHighlighting(contentLineRanges: contentLineRanges, subjectLengthLimit: subjectLengthLimit, bodyLengthLimit: bodyLengthLimit)
-			}
-			
-			updateCommentAttributes(contentLineRanges: contentLineRanges)
-			updateContentStyle(contentLineRanges: contentLineRanges)
-		} else {
-			updateForegroundColor(textStorage: textView.textStorage, utf16Range: NSMakeRange(0, plainText.utf16.count))
+	private func reloadTextAttributes() {
+		// Replacing all the characters will force all the text attributes to be re-computed
+		// I wonder if there is a better way of doing this
+		if let textStorage = textView.textStorage {
+			textStorage.setAttributedString(textStorage)
 		}
 	}
 	
 	private func updateEditorStyle(_ style: WindowStyle) {
 		updateStyle(style)
-		// I wish I knew how to force re-layout in TextKit2 but this is as good as I'm going to get it
-		// Updating the text content and comment sections will incidentally propogate a re-layout on all paragraphs
-		updateTextContent()
-		updateCommentSection()
+		reloadTextAttributes()
+		
 		topBar.needsDisplay = true
 		contentView.needsDisplay = true
 	}
@@ -743,11 +586,7 @@ enum VersionControlType {
 		
 		breadcrumbs?.spellChecking = textView.isContinuousSpellCheckingEnabled
 		
-		// Set comment section attributes
 		let plainAttributedString = NSMutableAttributedString(string: initialPlainText)
-		if commentSectionLength != 0 {
-			plainAttributedString.addAttribute(.foregroundColor, value: style.commentColor, range: commentUTF16Range(plainText: initialPlainText))
-		}
 		
 		// I don't think we want to invoke beginEditing/endEditing, etc, events because we are setting the textview content for the first time,
 		// and we don't want anything to register as user-editable yet or have undo activated yet
@@ -828,6 +667,27 @@ enum VersionControlType {
 	
 	private func exit(status: Int32) -> Never {
 		if breadcrumbs != nil {
+			func retrieveContentLineRanges(plainText: String) -> [Range<String.Index>] {
+				let utf16View = plainText.utf16
+				let commentIndex = commentSectionIndex(plainUTF16Text: utf16View)
+				
+				var lineRanges: [Range<String.Index>] = []
+				var characterIndex = plainText.startIndex
+				while characterIndex < commentIndex {
+					var lineStartIndex = String.Index(utf16Offset: 0, in: plainText)
+					var lineEndIndex = String.Index(utf16Offset: 0, in: plainText)
+					var contentEndIndex = String.Index(utf16Offset: 0, in: plainText)
+					
+					plainText.getLineStart(&lineStartIndex, end: &lineEndIndex, contentsEnd: &contentEndIndex, for: characterIndex ..< characterIndex)
+					
+					let lineRange = (lineStartIndex ..< contentEndIndex)
+					lineRanges.append(lineRange)
+					
+					characterIndex = lineEndIndex
+				}
+				return lineRanges
+			}
+			
 			// Update breadcrumbs
 			if let textContentStorage = textView.textContentStorage {
 				let currentText = currentPlainText()
@@ -1164,15 +1024,15 @@ enum VersionControlType {
 	// MARK: ZGCommitViewDelegate
 	
 	@objc func userDefaultsChangedMessageFont() {
-		updateTextContent()
+		reloadTextAttributes()
 	}
 	
 	@objc func userDefaultsChangedCommentsFont() {
-		updateCommentSection()
+		reloadTextAttributes()
 	}
 	
 	@objc func userDefaultsChangedRecommendedLineLengthLimits() {
-		updateTextContent()
+		reloadTextAttributes()
 	}
 	
 	func zgCommitViewSelectAll() {
