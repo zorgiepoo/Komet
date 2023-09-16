@@ -34,9 +34,11 @@ The [Options](https://github.com/zorgiepoo/Komet/wiki/Options) page elaborates o
 
 **System Version**:
 
-1.0 onwards supports macOS 10.14.4 or later
+1.2 onwards supports macOS 12.4 or later
 
-0.9.1 is the last version to support macOS 10.10 - 10.13
+1.1 is the last version to support macOS 10.14.4 or later
+
+0.9.1 is the last version to support macOS 10.10 or later
 
 **Version Control**:
 
