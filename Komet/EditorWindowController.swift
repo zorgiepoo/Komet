@@ -1173,28 +1173,6 @@ enum VersionControlType {
 		return true
 	}
 	
-	@objc func layoutManager(_ layoutManager: NSLayoutManager, shouldUseTemporaryAttributes attributes: [NSAttributedString.Key : Any] = [:], forDrawingToScreen toScreen: Bool, atCharacterIndex charIndex: Int, effectiveRange effectiveCharRange: NSRangePointer?) -> [NSAttributedString.Key : Any]? {
-		guard toScreen else {
-			return nil
-		}
-		
-		let plainText = currentPlainText()
-		guard let range = Range(NSMakeRange(charIndex, 0), in: plainText) else {
-			return attributes
-		}
-		
-		var lineStartIndex = String.Index(utf16Offset: 0, in: plainText)
-		var lineEndIndex = String.Index(utf16Offset: 0, in: plainText)
-		var contentEndIndex = String.Index(utf16Offset: 0, in: plainText)
-		
-		plainText.getLineStart(&lineStartIndex, end: &lineEndIndex, contentsEnd: &contentEndIndex, for: range)
-		
-		let line = String(plainText[lineStartIndex ..< contentEndIndex])
-		
-		// Disable temporary attributes like spell checking if they are in a comment line
-		return Self.isCommentLine(line, versionControlType: commentVersionControlType) ? nil : attributes
-	}
-	
 	// MARK: ZGCommitViewDelegate
 	
 	@objc func userDefaultsChangedMessageFont() {
