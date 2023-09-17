@@ -464,8 +464,8 @@ enum VersionControlType {
 	private func reloadTextAttributes() {
 		// Replacing all the characters will force all the text attributes to be re-computed
 		// I wonder if there is a better way of doing this
-		if let textStorage = textView.textStorage {
-			textStorage.setAttributedString(textStorage)
+		if let textStorage = textView.textStorage, let attributedCopy = textStorage.copy() as? NSAttributedString {
+			textStorage.setAttributedString(attributedCopy)
 		}
 	}
 	
