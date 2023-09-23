@@ -6,7 +6,7 @@
 	<dict>
 		<key>Resources/Info.plist</key>
 		<data>
-		26gFtHucbmoDut0f9g/1WyTTuuE=
+		zTcSMsErG6jwCZUfY/7+Gg25vj4=
 		</data>
 	</dict>
 	<key>files2</key>
@@ -15,10 +15,10 @@
 		<dict>
 			<key>cdhash</key>
 			<data>
-			ECfWZQsDnAuPZqPM1gbOSmwv8HE=
+			Rdgne/p0JitJaZu2dDEfqpN5C38=
 			</data>
 			<key>requirement</key>
-			<string>cdhash H"1027d6650b039c0b8f66a3ccd606ce4a6c2ff071" or cdhash H"1d1b1e901c8acd53a2517d3fa7b81ded3a2473ce"</string>
+			<string>cdhash H"45d8277bfa74262b49699bb674311faa93790b7f" or cdhash H"f1161a4e6bb9f3403a7a4a91abaf6ea468f2ad7a"</string>
 		</dict>
 		<key>Headers/SPUDownloadData.h</key>
 		<dict>
@@ -178,7 +178,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			1TF+JZkzFr6n8oH4WItto+C5Vf3K12f0H9KjqD0A5QU=
+			K8rh62bVXcSfWKz+hWN1pbvJHG6DvbKY0ZRCrmJkz6Y=
 			</data>
 		</dict>
 		<key>PrivateHeaders/SPUAppcastItemStateResolver.h</key>
@@ -234,17 +234,17 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			DLkOZvTvea8gLFV4aVmkOr5ufrsZwZ3zjokudxJ8JD8=
+			sc6w/hJ9Bmq4VpxY7aJnK5H48ADFY9qpf/x8MhpZk+w=
 			</data>
 		</dict>
 		<key>Updater.app</key>
 		<dict>
 			<key>cdhash</key>
 			<data>
-			+V0pm8zwg+PgXx5YBBpvKvebEx0=
+			EDYzAAVaczxFjFLX9JwDMn1apcI=
 			</data>
 			<key>requirement</key>
-			<string>cdhash H"f95d299bccf083e3e05f1e58041a6f2af79b131d" or cdhash H"659812dcce00bc5e4e5b588208a82f7a91a4a9da"</string>
+			<string>cdhash H"10363300055a733c458c52d7f49c03327d5aa5c2" or cdhash H"10c45b3fce4424c342a9776c6f30d946152613a0"</string>
 		</dict>
 	</dict>
 	<key>rules</key>
