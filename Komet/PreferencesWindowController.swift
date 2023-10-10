@@ -69,7 +69,17 @@ enum FontType {
 	private func changeToolbarItem(contentView: NSView, toolbarIdentifier: String) {
 		if let window = self.window {
 			window.contentView = contentView
-			window.toolbar?.selectedItemIdentifier = NSToolbarItem.Identifier(rawValue: toolbarIdentifier)
+			if let toolbar = window.toolbar {
+				let itemIdentifier = NSToolbarItem.Identifier(rawValue: toolbarIdentifier)
+				toolbar.selectedItemIdentifier = itemIdentifier
+				
+				// Update title of window
+				if let toolbarItem = toolbar.items.first(where: { toolbarItem in
+					return toolbarItem.itemIdentifier == itemIdentifier
+				}) {
+					window.title = toolbarItem.label
+				}
+			}
 		}
 	}
 	
