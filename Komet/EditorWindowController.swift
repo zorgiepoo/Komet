@@ -564,6 +564,11 @@ enum VersionControlType {
 			window.standardWindowButton(.closeButton)?.isHidden = true
 			window.standardWindowButton(.miniaturizeButton)?.isHidden = true
 			window.standardWindowButton(.zoomButton)?.isHidden = true
+			
+			if #available(macOS 13, *) {
+				// Make window join stage manager spaces
+				window.collectionBehavior = .canJoinAllApplications;
+			}
 		}
 		
 		// Nobody ever wants these;
