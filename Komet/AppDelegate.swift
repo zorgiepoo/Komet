@@ -178,10 +178,11 @@ typealias StatFS = statfs
 			}
 		}
 		
-		editorWindowController = ZGEditorWindowController(fileURL: commitFileURL, temporaryDirectoryURL: tempDirectoryURL, tutorialMode: tutorialMode)
-		editorWindowController?.showWindow(nil)
+		let editorWindowController = ZGEditorWindowController(fileURL: commitFileURL, temporaryDirectoryURL: tempDirectoryURL, tutorialMode: tutorialMode)
+		self.editorWindowController = editorWindowController
+		editorWindowController.showWindow(nil)
 		
-		updaterController = UpdaterController()
+		updaterController = UpdaterController(checkForUpdatesProgressIndicator: editorWindowController.checkForUpdatesProgressIndicator)
 	}
 	
 	@objc func applicationWillTerminate(_ notification: Notification) {

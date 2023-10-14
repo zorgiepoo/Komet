@@ -52,6 +52,7 @@ enum VersionControlType {
 	@IBOutlet private var commitLabelTextField: NSTextField!
 	@IBOutlet private var cancelButton: NSButtonCell!
 	@IBOutlet private var commitButton: NSButton!
+	@IBOutlet var checkForUpdatesProgressIndicator: NSProgressIndicator!
 	
 	// MARK: Static functions
 	

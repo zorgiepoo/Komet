@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import AppKit
 import Sparkle
 
 private let KOMET_ERROR_DOMAIN = "KometErrorDomain"
@@ -45,10 +46,10 @@ class UpdaterController: UpdaterSettingsListener {
 	let userDriver: ZGUpdaterUserDriver
 	let updaterDelegate: SPUUpdaterDelegate
 	
-	init() {
+	init(checkForUpdatesProgressIndicator: NSProgressIndicator) {
 		let mainBundle = Bundle.main
 		
-		userDriver = ZGUpdaterUserDriver()
+		userDriver = ZGUpdaterUserDriver(checkForUpdatesProgressIndicator: checkForUpdatesProgressIndicator)
 		
 		updaterDelegate = ZGUpdaterDelegate()
 		updater = SPUUpdater(hostBundle: mainBundle, applicationBundle: mainBundle, userDriver: userDriver, delegate: updaterDelegate)

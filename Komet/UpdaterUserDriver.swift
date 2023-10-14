@@ -10,13 +10,26 @@ import Cocoa
 import Sparkle
 
 @objc class ZGUpdaterUserDriver: NSObject, SPUUserDriver {
+	let checkForUpdatesProgressIndicator: NSProgressIndicator
+	
+	init(checkForUpdatesProgressIndicator: NSProgressIndicator) {
+		self.checkForUpdatesProgressIndicator = checkForUpdatesProgressIndicator
+		super.init()
+	}
+	
 	func show(_ request: SPUUpdatePermissionRequest, reply: @escaping (SUUpdatePermissionResponse) -> Void) {
 		// Our application is not set to prompt, but just reply anyway
 		reply(SUUpdatePermissionResponse(automaticUpdateChecks: true, sendSystemProfile: false))
 	}
 	
+	private func disableCheckForUpdatesProgressIndicator() {
+		checkForUpdatesProgressIndicator.stopAnimation(nil)
+		checkForUpdatesProgressIndicator.isHidden = true
+	}
+	
 	func showUserInitiatedUpdateCheck(cancellation: @escaping () -> Void) {
-		// Ideally we should show progress but do nothing for now
+		checkForUpdatesProgressIndicator.isHidden = false
+		checkForUpdatesProgressIndicator.startAnimation(nil)
 	}
 	
 	private func promptUpdate(userInitiated: Bool, informativeText: String, stage: SPUUserUpdateStage, response: (SPUUserUpdateChoice) -> ()) {
@@ -51,6 +64,8 @@ import Sparkle
 	}
 	
 	func showUpdateFound(with appcastItem: SUAppcastItem, state: SPUUserUpdateState, reply: @escaping (SPUUserUpdateChoice) -> Void) {
+		disableCheckForUpdatesProgressIndicator()
+		
 		if appcastItem.isInformationOnlyUpdate {
 			if let infoURL = appcastItem.infoURL, state.userInitiated {
 				NSWorkspace.shared.open(infoURL)
@@ -85,6 +100,8 @@ import Sparkle
 	}
 	
 	func showUpdateNotFoundWithError(_ error: Error, acknowledgement: @escaping () -> Void) {
+		disableCheckForUpdatesProgressIndicator()
+		
 		let alert = NSAlert()
 		alert.alertStyle = .informational
 		alert.informativeText = NSLocalizedString("updaterLatestVersionInstalled", tableName: nil, comment: "")
@@ -96,6 +113,8 @@ import Sparkle
 	}
 	
 	func showUpdaterError(_ error: Error, acknowledgement: @escaping () -> Void) {
+		disableCheckForUpdatesProgressIndicator()
+		
 		let alert = NSAlert(error: error)
 		alert.runModal()
 		
@@ -144,7 +163,7 @@ import Sparkle
 	}
 	
 	func dismissUpdateInstallation() {
-		// No need to do anything
+		disableCheckForUpdatesProgressIndicator()
 	}
 	
 }

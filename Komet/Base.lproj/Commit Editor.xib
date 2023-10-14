@@ -9,6 +9,7 @@
         <customObject id="-2" userLabel="File's Owner" customClass="ZGEditorWindowController">
             <connections>
                 <outlet property="cancelButton" destination="eoZ-dv-vM8" id="nut-R3-GfT"/>
+                <outlet property="checkForUpdatesProgressIndicator" destination="Jez-Ap-eCY" id="gd6-oJ-Alk"/>
                 <outlet property="commitButton" destination="SIQ-xl-8MY" id="hx9-Vx-VqX"/>
                 <outlet property="commitLabelTextField" destination="vV7-fu-K3M" id="cY8-MU-xAx"/>
                 <outlet property="contentView" destination="5Ms-NX-CHZ" id="a5v-Qc-MbF"/>
@@ -24,7 +25,7 @@
             <windowStyleMask key="styleMask" titled="YES" resizable="YES" fullSizeContentView="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="205" y="188" width="500" height="329"/>
-            <rect key="screenRect" x="0.0" y="0.0" width="2560" height="1415"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1440" height="875"/>
             <value key="minSize" type="size" width="300" height="200"/>
             <view key="contentView" id="UXa-uU-h9N">
                 <rect key="frame" x="0.0" y="0.0" width="500" height="329"/>
@@ -68,11 +69,16 @@ DQ
                                     <action selector="cancelCommit:" target="-2" id="LiY-IP-jEq"/>
                                 </connections>
                             </button>
+                            <progressIndicator hidden="YES" maxValue="100" indeterminate="YES" controlSize="small" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="Jez-Ap-eCY" userLabel="Updater Check Progress Indicator">
+                                <rect key="frame" x="364" y="4" width="16" height="16"/>
+                            </progressIndicator>
                         </subviews>
                         <constraints>
                             <constraint firstAttribute="trailing" secondItem="SIQ-xl-8MY" secondAttribute="trailing" constant="4" id="3NE-gx-ypR"/>
                             <constraint firstItem="bxH-iH-acy" firstAttribute="width" secondItem="SIQ-xl-8MY" secondAttribute="width" id="7HF-9A-aNd"/>
                             <constraint firstItem="bxH-iH-acy" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="iuq-58-oil" secondAttribute="leading" constant="20" symbolic="YES" id="Bvc-PM-QB9"/>
+                            <constraint firstItem="Jez-Ap-eCY" firstAttribute="centerY" secondItem="bxH-iH-acy" secondAttribute="centerY" id="CFL-ev-jpg"/>
+                            <constraint firstItem="bxH-iH-acy" firstAttribute="leading" secondItem="Jez-Ap-eCY" secondAttribute="trailing" constant="1" id="FkP-dp-dAg"/>
                             <constraint firstItem="vV7-fu-K3M" firstAttribute="top" secondItem="iuq-58-oil" secondAttribute="top" constant="4" id="M4R-xS-gaA"/>
                             <constraint firstItem="vV7-fu-K3M" firstAttribute="leading" secondItem="iuq-58-oil" secondAttribute="leading" constant="5" id="MdF-kS-11o"/>
                             <constraint firstItem="SIQ-xl-8MY" firstAttribute="leading" secondItem="bxH-iH-acy" secondAttribute="trailing" constant="5" id="m6Z-bI-oOF"/>
