@@ -18,6 +18,7 @@ enum FontType {
 	private weak var updaterListener: UpdaterSettingsListener?
 	
 	private var selectedFontType: FontType? = nil
+	private var themeObservation: NSKeyValueObservation? = nil
 	
 	@IBOutlet private var fontsView: NSView!
 	@IBOutlet private var warningsView: NSView!
@@ -25,6 +26,7 @@ enum FontType {
 	
 	@IBOutlet private var messageFontTextField: NSTextField!
 	@IBOutlet private var commentsFontTextField: NSTextField!
+	@IBOutlet private var themePopUpButton: NSPopUpButton!
 	
 	@IBOutlet private var recommendedSubjectLengthLimitTextField: NSTextField!
 	@IBOutlet private var recommendedSubjectLengthLimitEnabledCheckbox: NSButton!
@@ -94,6 +96,21 @@ enum FontType {
 		
 		updateFont(messageFont, textField: messageFontTextField)
 		updateFont(commentsFont, textField: commentsFontTextField)
+		
+		if themeObservation == nil {
+			themeObservation = UserDefaults.standard.observe(\.ZGWindowStyleTheme, options: [.initial, .new]) { [weak self] userDefaults, change in
+				guard let self else {
+					return
+				}
+				
+				let newTheme = userDefaults.ZGWindowStyleTheme
+				if let newThemeTag = newTheme as? Int {
+					self.themePopUpButton.selectItem(withTag: newThemeTag)
+				} else {
+					self.themePopUpButton.selectItem(withTag: WindowStyleAutomaticTag)
+				}
+			}
+		}
 	}
 	
 	private func showFontPrompt(selectedFont: NSFont, fontType: FontType) {

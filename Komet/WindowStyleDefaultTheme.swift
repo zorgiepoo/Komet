@@ -6,7 +6,7 @@
 //  Copyright © 2020 zgcoder. All rights reserved.
 //
 
-private let WindowStyleAutomaticTag = -1
+let WindowStyleAutomaticTag = -1
 
 enum WindowStyleDefaultTheme: Equatable {
 	case theme(WindowStyleTheme)

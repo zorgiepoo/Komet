@@ -44,8 +44,8 @@
 /* Class = "NSToolbarItem"; paletteLabel = "Warnings"; ObjectID = "YxA-vf-ITa"; */
 "YxA-vf-ITa.paletteLabel" = "Warnings";
 
-/* Class = "NSToolbarItem"; label = "Fonts"; ObjectID = "ZSv-XI-2jR"; */
-"ZSv-XI-2jR.label" = "Fonts";
+/* Class = "NSToolbarItem"; label = "Fonts & Colors"; ObjectID = "ZSv-XI-2jR"; */
+"ZSv-XI-2jR.label" = "Fonts & Colors";
 
 /* Class = "NSToolbarItem"; paletteLabel = "Fonts"; ObjectID = "ZSv-XI-2jR"; */
 "ZSv-XI-2jR.paletteLabel" = "Fonts";
@@ -64,3 +64,27 @@
 
 /* Class = "NSTextFieldCell"; title = "Message"; ObjectID = "xwO-UY-was"; */
 "xwO-UY-was.title" = "Message";
+
+/* Class = "NSTextFieldCell"; title = "Theme"; ObjectID = "JhO-zr-VqE"; */
+"JhO-zr-VqE.title" = "Theme";
+
+/* Class = "NSTextFieldCell"; title = "Theme"; ObjectID = "eny-3O-HDr"; */
+"eny-3O-HDr.title" = "Automatic";
+
+/* Class = "NSTextFieldCell"; title = "Theme"; ObjectID = "d7N-1r-ySK"; */
+"d7N-1r-ySK.title" = "Plain";
+
+/* Class = "NSTextFieldCell"; title = "Theme"; ObjectID = "6lU-S5-kLe"; */
+"6lU-S5-kLe.title" = "Dark";
+
+/* Class = "NSTextFieldCell"; title = "Theme"; ObjectID = "KkY-HU-i20"; */
+"KkY-HU-i20.title" = "Papyrus";
+
+/* Class = "NSTextFieldCell"; title = "Theme"; ObjectID = "eKr-Da-lCS"; */
+"eKr-Da-lCS.title" = "Collegiate";
+
+/* Class = "NSTextFieldCell"; title = "Theme"; ObjectID = "p1I-p2-dtJ"; */
+"p1I-p2-dtJ.title" = "Kyoto";
+
+/* Class = "NSTextFieldCell"; title = "Theme"; ObjectID = "teb-8m-Fcb"; */
+"teb-8m-Fcb.title" = "Mordor";
