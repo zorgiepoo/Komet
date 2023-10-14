@@ -27,3 +27,4 @@
 "updaterOK" = "OK";
 "updaterLatestVersionInstalled" = "You have the latest version installed.";
 "updaterNoUpdateAvailable" = "No Update Available";
+"updaterVersionHistory" = "Version History";

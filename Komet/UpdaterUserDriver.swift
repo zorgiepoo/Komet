@@ -9,6 +9,8 @@
 import Cocoa
 import Sparkle
 
+let RELEASES_URL = "https://github.com/zorgiepoo/Komet/releases"
+
 @objc class ZGUpdaterUserDriver: NSObject, SPUUserDriver {
 	let checkForUpdatesProgressIndicator: NSProgressIndicator
 	
@@ -107,7 +109,11 @@ import Sparkle
 		alert.informativeText = NSLocalizedString("updaterLatestVersionInstalled", tableName: nil, comment: "")
 		alert.messageText = NSLocalizedString("updaterNoUpdateAvailable", tableName: nil, comment: "")
 		alert.addButton(withTitle: NSLocalizedString("updaterOK", tableName: nil, comment: ""))
-		alert.runModal()
+		alert.addButton(withTitle: NSLocalizedString("updaterVersionHistory", tableName: nil, comment: ""))
+		let response = alert.runModal()
+		if response == .alertSecondButtonReturn, let releasesURL = URL(string: RELEASES_URL) {
+			NSWorkspace.shared.open(releasesURL)
+		}
 		
 		acknowledgement()
 	}
