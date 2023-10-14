@@ -11,6 +11,7 @@
                 <outlet property="advancedView" destination="E8X-F5-Lbv" id="eSc-C3-Tf7"/>
                 <outlet property="automaticNewlineInsertionAfterSubjectLineCheckbox" destination="c3p-Oz-hOG" id="gWa-yX-v9f"/>
                 <outlet property="automaticallyInstallUpdatesCheckbox" destination="4aw-Oh-wqh" id="8Rs-mV-xgE"/>
+                <outlet property="betaUpdatesCheckbox" destination="9b3-lV-9TN" id="iyQ-Lb-UUs"/>
                 <outlet property="commentsFontTextField" destination="f8W-g8-7pY" id="yPa-5W-ONe"/>
                 <outlet property="fontsView" destination="h9g-vJ-Iwb" id="RgO-IB-3QL"/>
                 <outlet property="messageFontTextField" destination="P9V-1A-nFH" id="LoL-bq-j46"/>
@@ -31,7 +32,7 @@
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="855" y="378" width="317" height="191"/>
-            <rect key="screenRect" x="0.0" y="0.0" width="2560" height="1415"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1440" height="875"/>
             <view key="contentView" id="bQ0-fo-hiP">
                 <rect key="frame" x="0.0" y="0.0" width="317" height="191"/>
                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -80,7 +81,7 @@
             <point key="canvasLocation" x="270" y="-80.5"/>
         </window>
         <customView id="h9g-vJ-Iwb" userLabel="Fonts View">
-            <rect key="frame" x="0.0" y="2" width="268" height="135"/>
+            <rect key="frame" x="0.0" y="0.0" width="268" height="135"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <subviews>
                 <textField focusRingType="none" horizontalHuggingPriority="249" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" verticalCompressionResistancePriority="800" translatesAutoresizingMaskIntoConstraints="NO" id="P9V-1A-nFH">
@@ -275,11 +276,11 @@
             <point key="canvasLocation" x="273.5" y="333"/>
         </customView>
         <customView id="E8X-F5-Lbv" userLabel="Advanced View">
-            <rect key="frame" x="0.0" y="-2" width="296" height="96"/>
+            <rect key="frame" x="0.0" y="0.0" width="296" height="116"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <subviews>
                 <button translatesAutoresizingMaskIntoConstraints="NO" id="c3p-Oz-hOG">
-                    <rect key="frame" x="18" y="61" width="258" height="16"/>
+                    <rect key="frame" x="18" y="81" width="258" height="16"/>
                     <buttonCell key="cell" type="check" title="insert_double_newline" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="b0o-CE-9us">
                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                         <font key="font" metaFont="system"/>
@@ -292,7 +293,7 @@
                     </connections>
                 </button>
                 <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="JJc-Hj-X94">
-                    <rect key="frame" x="18" y="39" width="258" height="18"/>
+                    <rect key="frame" x="18" y="59" width="258" height="18"/>
                     <buttonCell key="cell" type="check" title="resume_last_session" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="G3b-Vh-CFP">
                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                         <font key="font" metaFont="system"/>
@@ -302,7 +303,7 @@
                     </connections>
                 </button>
                 <button translatesAutoresizingMaskIntoConstraints="NO" id="4aw-Oh-wqh">
-                    <rect key="frame" x="18" y="19" width="258" height="16"/>
+                    <rect key="frame" x="18" y="39" width="258" height="16"/>
                     <buttonCell key="cell" type="check" title="install_updates_automatically" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="COk-1k-1eI">
                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                         <font key="font" metaFont="system"/>
@@ -314,22 +315,38 @@
                         <action selector="changeAutomaticallyInstallUpdates:" target="-2" id="rK1-NU-jso"/>
                     </connections>
                 </button>
+                <button translatesAutoresizingMaskIntoConstraints="NO" id="9b3-lV-9TN">
+                    <rect key="frame" x="18" y="19" width="147" height="16"/>
+                    <buttonCell key="cell" type="check" title="allow_beta_updates" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="nY6-qx-yAO">
+                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                        <font key="font" metaFont="system"/>
+                    </buttonCell>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="14" id="FED-kH-a60"/>
+                    </constraints>
+                    <connections>
+                        <action selector="changeBetaUpdatesState:" target="-2" id="qng-Vu-G5F"/>
+                    </connections>
+                </button>
             </subviews>
             <constraints>
+                <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="9b3-lV-9TN" secondAttribute="trailing" constant="20" id="0x9-EL-3pl"/>
                 <constraint firstItem="JJc-Hj-X94" firstAttribute="leading" secondItem="c3p-Oz-hOG" secondAttribute="leading" id="27R-HH-opG"/>
+                <constraint firstItem="9b3-lV-9TN" firstAttribute="leading" secondItem="E8X-F5-Lbv" secondAttribute="leading" constant="20" id="4PS-Nf-JWs"/>
                 <constraint firstItem="4aw-Oh-wqh" firstAttribute="top" secondItem="JJc-Hj-X94" secondAttribute="bottom" constant="6" id="7rg-Pr-643"/>
+                <constraint firstAttribute="bottom" secondItem="9b3-lV-9TN" secondAttribute="bottom" constant="20" id="9YT-Bp-PLG"/>
                 <constraint firstItem="JJc-Hj-X94" firstAttribute="leading" secondItem="E8X-F5-Lbv" secondAttribute="leading" constant="20" id="9zB-mO-Qro"/>
                 <constraint firstAttribute="trailing" secondItem="4aw-Oh-wqh" secondAttribute="trailing" constant="20" id="Fau-Tj-2Vf"/>
                 <constraint firstAttribute="trailing" secondItem="JJc-Hj-X94" secondAttribute="trailing" constant="20" id="HBP-UL-FfF"/>
+                <constraint firstItem="9b3-lV-9TN" firstAttribute="top" secondItem="4aw-Oh-wqh" secondAttribute="bottom" constant="6" id="LM5-BM-CEy"/>
                 <constraint firstItem="c3p-Oz-hOG" firstAttribute="top" secondItem="E8X-F5-Lbv" secondAttribute="top" constant="20" id="YN8-rw-rd2"/>
-                <constraint firstAttribute="bottom" secondItem="4aw-Oh-wqh" secondAttribute="bottom" constant="20" id="ibm-MI-IbW"/>
                 <constraint firstItem="4aw-Oh-wqh" firstAttribute="leading" secondItem="c3p-Oz-hOG" secondAttribute="leading" id="jSk-rt-eXH"/>
                 <constraint firstItem="4aw-Oh-wqh" firstAttribute="leading" secondItem="E8X-F5-Lbv" secondAttribute="leading" constant="20" id="kRa-dn-eAL"/>
                 <constraint firstItem="JJc-Hj-X94" firstAttribute="top" secondItem="c3p-Oz-hOG" secondAttribute="bottom" constant="6" id="o5W-Rb-2VI"/>
                 <constraint firstItem="c3p-Oz-hOG" firstAttribute="leading" secondItem="E8X-F5-Lbv" secondAttribute="leading" constant="20" id="wDD-HI-rZA"/>
                 <constraint firstAttribute="trailing" secondItem="c3p-Oz-hOG" secondAttribute="trailing" constant="20" id="xAF-3v-FgK"/>
             </constraints>
-            <point key="canvasLocation" x="258" y="498"/>
+            <point key="canvasLocation" x="258" y="504.5"/>
         </customView>
     </objects>
     <resources>

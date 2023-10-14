@@ -37,6 +37,7 @@ enum FontType {
 	@IBOutlet private var automaticNewlineInsertionAfterSubjectLineCheckbox: NSButton!
 	@IBOutlet private var resumeLastIncompleteSessionCheckbox: NSButton!
 	@IBOutlet private var automaticallyInstallUpdatesCheckbox: NSButton!
+	@IBOutlet private var betaUpdatesCheckbox: NSButton!
 	
 	private let ZGToolbarFontsIdentifier = "fonts"
 	private let ZGToolbarWarningsIdentifier = "warnings"
@@ -211,6 +212,7 @@ enum FontType {
 		
 		automaticallyInstallUpdatesCheckbox.state = (canWriteToApp && updaterSettings.automaticallyChecksForUpdates) ? .on : .off
 		automaticallyInstallUpdatesCheckbox.isEnabled = canWriteToApp
+		betaUpdatesCheckbox.state = UserDefaults.standard.bool(forKey: ZGEnableBetaUpdatesKey) ? .on : .off
 	}
 	
 	@IBAction func changeAutomaticNewlineInsertionAfterSubjectLine(_ sender: Any) {
@@ -223,5 +225,11 @@ enum FontType {
 	
 	@IBAction func changeAutomaticallyInstallUpdates(_ sender: Any) {
 		updaterListener?.updaterSettingsChangedAutomaticallyInstallingUpdates(automaticallyInstallUpdatesCheckbox.state == .on)
+	}
+	
+	@IBAction func changeBetaUpdatesState(_ sender: Any) {
+		let allowBetaUpdates = (betaUpdatesCheckbox.state == .on)
+		UserDefaults.standard.set(allowBetaUpdates, forKey:ZGEnableBetaUpdatesKey)
+		updaterListener?.updaterSettingsChangedAllowingBetaUpdates()
 	}
 }

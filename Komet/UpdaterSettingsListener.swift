@@ -8,4 +8,6 @@
 
 protocol UpdaterSettingsListener: AnyObject {
 	func updaterSettingsChangedAutomaticallyInstallingUpdates(_ automaticallyInstallUpdates: Bool)
+	
+	func updaterSettingsChangedAllowingBetaUpdates()
 }

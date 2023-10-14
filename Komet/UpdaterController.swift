@@ -70,4 +70,8 @@ class UpdaterController: UpdaterSettingsListener {
 	func updaterSettingsChangedAutomaticallyInstallingUpdates(_ automaticallyInstallUpdates: Bool) {
 		updater.automaticallyChecksForUpdates = automaticallyInstallUpdates
 	}
+	
+	func updaterSettingsChangedAllowingBetaUpdates() {
+		updater.resetUpdateCycleAfterShortDelay()
+	}
 }

@@ -14,6 +14,9 @@
 /* Class = "NSButtonCell"; title = "Install updates automatically"; ObjectID = "COk-1k-1eI"; */
 "COk-1k-1eI.title" = "Install updates automatically";
 
+/* Class = "NSButtonCell"; title = "Allow beta updates"; ObjectID = "nY6-qx-yAO"; */
+"nY6-qx-yAO.title" = "Allow beta updates";
+
 /* Class = "NSButtonCell"; title = "Restore canceled messages"; ObjectID = "G3b-Vh-CFP"; */
 "G3b-Vh-CFP.title" = "Restore canceled messages";
 
