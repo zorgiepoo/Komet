@@ -42,17 +42,3 @@ let ZGEnableBetaUpdatesKey = "ZGEnableBetaUpdates"
 // Environment options for test automation
 let ZGBreadcrumbsURLKey = "ZGBreadcrumbsURL"
 let ZGProjectNameKey = "ZGProjectName"
-
-// This extension is for creating a KeyPath for Preferences to observe if the window style changes
-extension UserDefaults
-{
-	@objc dynamic var ZGWindowStyleTheme: Any?
-	{
-		get {
-			return object(forKey: ZGWindowStyleThemeKey)
-		}
-		set {
-			set(newValue, forKey: ZGWindowStyleThemeKey)
-		}
-	}
-}

@@ -13,6 +13,20 @@ enum FontType {
 	case comments
 }
 
+// This extension is for creating a KeyPath for Preferences to observe if the window style changes
+extension UserDefaults
+{
+	@objc dynamic var ZGWindowStyleTheme: Any?
+	{
+		get {
+			return object(forKey: ZGWindowStyleThemeKey)
+		}
+		set {
+			set(newValue, forKey: ZGWindowStyleThemeKey)
+		}
+	}
+}
+
 @objc class ZGPreferencesWindowController: NSWindowController {
 	private weak var editorListener: UserDefaultsEditorListener?
 	private weak var updaterListener: UpdaterSettingsListener?
