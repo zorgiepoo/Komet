@@ -6,7 +6,7 @@
 	<dict>
 		<key>Resources/Info.plist</key>
 		<data>
-		zTcSMsErG6jwCZUfY/7+Gg25vj4=
+		Oj9t0uFEmiF+Y1d82vXJC5Vv3Bw=
 		</data>
 	</dict>
 	<key>files2</key>
@@ -15,10 +15,10 @@
 		<dict>
 			<key>cdhash</key>
 			<data>
-			Rdgne/p0JitJaZu2dDEfqpN5C38=
+			aPs2RNliiSWaTERvqwPAvJsMmr8=
 			</data>
 			<key>requirement</key>
-			<string>cdhash H"45d8277bfa74262b49699bb674311faa93790b7f" or cdhash H"f1161a4e6bb9f3403a7a4a91abaf6ea468f2ad7a"</string>
+			<string>cdhash H"68fb3644d96289259a4c446fab03c0bc9b0c9abf" or cdhash H"01eb079233f3e4527ec2d8423071274652f9e109"</string>
 		</dict>
 		<key>Headers/SPUDownloadData.h</key>
 		<dict>
@@ -31,7 +31,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			+3I+CmUwJuOPUMU9MsBJW4BZNzMkjeJjyYVSGAFGKh8=
+			gf8QsQfI+rsdQIHZdznFSFICnui4Oavnhgn9ybmv6Hs=
 			</data>
 		</dict>
 		<key>Headers/SPUStandardUserDriver.h</key>
@@ -66,14 +66,14 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			2RfJYG0mMGzLSAP82wi9XHEFSfkoBc22JiIik4SObd0=
+			gHf2JF29zPpLfNllC9hyoYGyZVO9xJ0wNDCZNd65+hQ=
 			</data>
 		</dict>
 		<key>Headers/SPUUpdaterDelegate.h</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			LHjSN/efNGASgXqi8P76eNivCLV2QZxP2/rvDMLcKyU=
+			A7Rnysd5Q/yqhviRSeLa7hyuJQcqe4eRb+qxnUx7S9g=
 			</data>
 		</dict>
 		<key>Headers/SPUUpdaterSettings.h</key>
@@ -87,7 +87,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			FZyzRoNn6SIm0ugYRKGMzlmq0C60WknB8YHjZtfmmYw=
+			6/byufu2xa4bjEdEwfuFxkHUiYnK9gbYEtplebyvTSY=
 			</data>
 		</dict>
 		<key>Headers/SPUUserUpdateState.h</key>
@@ -143,14 +143,14 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			8BXIwn75UYazfTyDZklTch+t6AlsOxNdTI/bNj/qx1I=
+			lvb1mNWCyofJ0X88zXvMsK5PBXrG6Pr7hUrY0E3jNvY=
 			</data>
 		</dict>
 		<key>Headers/SUUpdaterDelegate.h</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			XRFzmZB3ShVUFY8JAvcjptVwxLmD/VL5rwnFoy5rSlc=
+			oaCMM/1B690QWRbYGB0iJBf5/toBzcQq+moxURBs3jY=
 			</data>
 		</dict>
 		<key>Headers/SUVersionComparisonProtocol.h</key>
@@ -220,7 +220,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			760gwh52KqECJ9eZ1qZ6YyaaFHNHaEFf9mel5xnG4aE=
+			9H7OIT9nEoYXUBBcvTZdSOzlq81uWIUS8Mqjuhfz9Ww=
 			</data>
 		</dict>
 		<key>PrivateHeaders/SUInstallerLauncher+Private.h</key>
@@ -234,17 +234,17 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			sc6w/hJ9Bmq4VpxY7aJnK5H48ADFY9qpf/x8MhpZk+w=
+			G230xmNLGj9q7JqJu98YjcFpiNWEpgcOwF1EZq3gnF0=
 			</data>
 		</dict>
 		<key>Updater.app</key>
 		<dict>
 			<key>cdhash</key>
 			<data>
-			EDYzAAVaczxFjFLX9JwDMn1apcI=
+			ZoVL6SW56B83E2KeNR77xvTZGZw=
 			</data>
 			<key>requirement</key>
-			<string>cdhash H"10363300055a733c458c52d7f49c03327d5aa5c2" or cdhash H"10c45b3fce4424c342a9776c6f30d946152613a0"</string>
+			<string>cdhash H"66854be925b9e81f3713629e351efbc6f4d9199c" or cdhash H"720891e9ad32a77f0d40f7cf8d5122b19cd57dd6"</string>
 		</dict>
 	</dict>
 	<key>rules</key>
