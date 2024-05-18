@@ -10,7 +10,7 @@
 "tutorialDefaultSvnEditorRecommendation" = "For svn, you will want to set the SVN_EDITOR environment variable.";
 "tutorialConsultEditorDocumentation" = "Please consult their documentation for more information.";
 "tutorialMoreThemes" = "More themes can be found under View → Theme";
-"tutorialAutomaticUpdates" = "Automatic updates can be toggled in Komet → Preferences";
+"tutorialAutomaticUpdates" = "Automatic updates can be toggled in Komet → Settings…";
 "tutorialProjectFileName" = "Tutorial";
 
 /* Touch Bar */
