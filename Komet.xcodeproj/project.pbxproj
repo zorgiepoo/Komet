@@ -266,7 +266,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = YES;
 				LastSwiftUpdateCheck = 1220;
-				LastUpgradeCheck = 1510;
+				LastUpgradeCheck = 1540;
 				ORGANIZATIONNAME = zgcoder;
 				TargetAttributes = {
 					720DF188252AE3F7003AD7FB = {
