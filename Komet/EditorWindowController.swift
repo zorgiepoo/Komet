@@ -597,15 +597,6 @@ enum VersionControlType {
 		textView.delegate = self
 		textView.zgCommitViewDelegate = self
 		
-		// If this is a squash, just turn off spell checking and automatic spell correction as it's more likely to annoy the user
-		if isSquashMessage && userDefaults.bool(forKey: ZGDisableSpellCheckingAndCorrectionForSquashesKey) {
-			textView.zgDisableContinuousSpellingAndAutomaticSpellingCorrection()
-		} else {
-			textView.zgLoadDefaults()
-		}
-		
-		breadcrumbs?.spellChecking = textView.isContinuousSpellCheckingEnabled
-		
 		let plainAttributedString = NSMutableAttributedString(string: initialPlainText)
 		
 		// I don't think we want to invoke beginEditing/endEditing, etc, events because we are setting the textview content for the first time,
@@ -627,6 +618,17 @@ enum VersionControlType {
 				textView.setSelectedRange(convertToUTF16Range(range: initialCommitTextRange.upperBound ..< initialCommitTextRange.upperBound, in: initialPlainText))
 			}
 		}
+		
+		// If this is a squash, just turn off spell checking and automatic spell correction as it's more likely to annoy the user
+		// Make sure to disable this after setting the text storage content because spell checking detection
+		// depends on that being initially set
+		if isSquashMessage && userDefaults.bool(forKey: ZGDisableSpellCheckingAndCorrectionForSquashesKey) {
+			textView.zgDisableContinuousSpellingAndAutomaticSpellingCorrection()
+		} else {
+			textView.zgLoadDefaults()
+		}
+		
+		breadcrumbs?.spellChecking = textView.isContinuousSpellCheckingEnabled
 		
 		func showBranchName() {
 			let toolName: String
