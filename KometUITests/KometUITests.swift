@@ -111,13 +111,10 @@ class KometApp {
 		return (breadcrumbs, finalContent)
 	}
 	
-	func commit() throws -> (Breadcrumbs?, String) {
+	func commit(expectingError: Bool = false) throws -> (Breadcrumbs?, String) {
 		application.menuBars.menuBarItems["File"].menuItems["Commit"].click()
 		
-		// For some reason we need to send activate message before querying the application's sheets
-		// Otherwise it may fail to retrieve a snapshot
-		application.activate()
-		if application.sheets.count > 0 {
+		if expectingError && application.sheets.count > 0 {
 			// The error we supply doesn't really matter
 			throw NSError(domain: KOMET_ERROR_DOMAIN, code: KOMET_COMMIT_ERROR, userInfo: nil)
 		} else {
@@ -259,13 +256,35 @@ class KometUITests: XCTestCase {
 		app.removeTemporaryDirectory()
 		
 		do {
-			let _ = try app.commit()
+			let _ = try app.commit(expectingError: true)
 			XCTFail("Commit passed but should have failed")
 		} catch {
 			let kometError = error as NSError
 			XCTAssertEqual(kometError.domain, KOMET_ERROR_DOMAIN)
 			XCTAssertEqual(kometError.code, KOMET_COMMIT_ERROR)
 		}
+	}
+	
+	func testNewCommitWithScizzor() throws {
+		let app = try KometApp(filename: "new-commit-scizzor")
+	
+		let newContent = "Hello there"
+		app.typeText(newContent)
+	
+		let (breadcrumbs, finalContent) = try app.commit()
+		XCTAssertEqual(breadcrumbs!.exitStatus, 0, "commit failed with non-zero status")
+		XCTAssertEqual(finalContent, newContent + app.initialContent)
+	}
+	
+	func testCanceledAmendedCommitWithScizzor() throws {
+		let app = try KometApp(filename: "amended-commit-scizzor")
+
+		let newContent = "\nHello there"
+		app.typeText(newContent)
+
+		let (breadcrumbs, finalContent) = try app.cancel()
+		XCTAssertNotEqual(breadcrumbs!.exitStatus, 0, "commit canceled amended message with zero exit status")
+		XCTAssertEqual(finalContent, app.initialContent)
 	}
 	
 	// MARK: Empty file

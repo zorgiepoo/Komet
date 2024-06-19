@@ -1,0 +1,35 @@
+
+# Please enter the commit message for your changes. Lines starting
+# with '#' will be ignored, and an empty message aborts the commit.
+#
+# On branch main
+# Changes to be committed:
+#	deleted:    anotherfile
+#	modified:   foobar
+#
+# ------------------------ >8 ------------------------
+# Do not modify or remove the line above.
+# Everything below it will be ignored.
+diff --git a/anotherfile b/anotherfile
+deleted file mode 100644
+index 55e6a06..0000000
+--- a/anotherfile
++++ /dev/null
+@@ -1,5 +0,0 @@
+-That is really nice
+-
+-Here is some test connent
+-
+-Okay.
+diff --git a/foobar b/foobar
+index f75d507..f3d3463 100644
+--- a/foobar
++++ b/foobar
+@@ -1,5 +1,5 @@
+ here is some content
+ 
+-Okay
++Then it was really nice
+ 
+-Then that is cool
++Then that is cook

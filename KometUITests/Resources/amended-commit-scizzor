@@ -1,0 +1,28 @@
+Okay cool
+
+# Please enter the commit message for your changes. Lines starting
+# with '#' will be ignored, and an empty message aborts the commit.
+#
+# Date:      Tue Jun 18 21:58:38 2024 -0700
+#
+# On branch main
+#
+# Initial commit
+#
+# Changes to be committed:
+#	new file:   foobar
+#
+# ------------------------ >8 ------------------------
+# Do not modify or remove the line above.
+# Everything below it will be ignored.
+diff --git a/foobar b/foobar
+new file mode 100644
+index 0000000..f3d3463
+--- /dev/null
++++ b/foobar
+@@ -0,0 +1,5 @@
++here is some content
++
++Then it was really nice
++
++Then that is cook

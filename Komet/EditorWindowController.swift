@@ -88,6 +88,14 @@ enum VersionControlType {
 		return line.hasPrefix(prefix) && line.hasSuffix(suffix) && line.count >= prefix.count + suffix.count
 	}
 	
+	private static func isScizzorLine(_ line: String, versionControlType: VersionControlType) -> Bool {
+		guard versionControlType == .git else {
+			return false
+		}
+		
+		return line.hasPrefix("# --") && line.hasSuffix("--") && line.contains(">8")
+	}
+	
 	private static func hasSingleCommentLineMarker(versionControlType: VersionControlType) -> Bool {
 		switch versionControlType {
 		case .git:
@@ -123,12 +131,18 @@ enum VersionControlType {
 			if !commentLine && foundCommentSection && line.trimmingCharacters(in: .whitespacesAndNewlines).count > 0 {
 				// If we found a content line that is not empty, then we have to find a better starting point for the comment section
 				foundCommentSection = false
-			} else if commentLine && !foundCommentSection {
-				foundCommentSection = true
-				commentSectionCharacterIndex = characterIndex
-				
-				// If there's only a single comment line marker, then we're done'
-				if hasSingleCommentLineMarker(versionControlType: versionControlType) {
+			} else if commentLine {
+				if !foundCommentSection {
+					foundCommentSection = true
+					commentSectionCharacterIndex = characterIndex
+					
+					// If there's only a single comment line marker, then we're done'
+					if hasSingleCommentLineMarker(versionControlType: versionControlType) {
+						break
+					}
+				} else if isScizzorLine(line, versionControlType: versionControlType) {
+					// Everything below the scizzor line is non-editable content which will be part of the comment section
+					// Content bellow the scizzor line may include lines that show a diff of a commit message and aren't prefixed by a comment character
 					break
 				}
 			}
@@ -939,6 +953,13 @@ enum VersionControlType {
 	
 	@objc func textView(_ textView: NSTextView, shouldSetSpellingState value: Int, range affectedCharRange: NSRange) -> Int {
 		let plainText = currentPlainText()
+		
+		let commentRange = commentUTF16Range(plainText: plainText)
+		
+		// Check if affected character range is in the comment section (which includes scizzored content)
+		if affectedCharRange.location >= commentRange.location {
+			return 0
+		}
 		
 		guard let affectedRange = Range(affectedCharRange, in: plainText) else {
 			return value
