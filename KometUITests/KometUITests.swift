@@ -265,8 +265,8 @@ class KometUITests: XCTestCase {
 		}
 	}
 	
-	func testNewCommitWithScizzor() throws {
-		let app = try KometApp(filename: "new-commit-scizzor")
+	func testNewCommitWithScissor() throws {
+		let app = try KometApp(filename: "new-commit-scissor")
 	
 		let newContent = "Hello there"
 		app.typeText(newContent)
@@ -276,8 +276,8 @@ class KometUITests: XCTestCase {
 		XCTAssertEqual(finalContent, newContent + app.initialContent)
 	}
 	
-	func testCanceledAmendedCommitWithScizzor() throws {
-		let app = try KometApp(filename: "amended-commit-scizzor")
+	func testCanceledAmendedCommitWithScissor() throws {
+		let app = try KometApp(filename: "amended-commit-scissor")
 
 		let newContent = "\nHello there"
 		app.typeText(newContent)

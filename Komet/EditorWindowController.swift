@@ -88,7 +88,7 @@ enum VersionControlType {
 		return line.hasPrefix(prefix) && line.hasSuffix(suffix) && line.count >= prefix.count + suffix.count
 	}
 	
-	private static func isScizzorLine(_ line: String, versionControlType: VersionControlType) -> Bool {
+	private static func isScissorLine(_ line: String, versionControlType: VersionControlType) -> Bool {
 		guard versionControlType == .git else {
 			return false
 		}
@@ -140,9 +140,9 @@ enum VersionControlType {
 					if hasSingleCommentLineMarker(versionControlType: versionControlType) {
 						break
 					}
-				} else if isScizzorLine(line, versionControlType: versionControlType) {
-					// Everything below the scizzor line is non-editable content which will be part of the comment section
-					// Content bellow the scizzor line may include lines that show a diff of a commit message and aren't prefixed by a comment character
+				} else if isScissorLine(line, versionControlType: versionControlType) {
+					// Everything below the scissor line is non-editable content which will be part of the comment section
+					// Content bellow the scissor line may include lines that show a diff of a commit message and aren't prefixed by a comment character
 					break
 				}
 			}
@@ -890,7 +890,7 @@ enum VersionControlType {
 		let isCommentLine = Self.isCommentLine(originalTextString, versionControlType: commentVersionControlType)
 		let hasSingleCommentLineMarker = Self.hasSingleCommentLineMarker(versionControlType: commentVersionControlType)
 		// For svn we want to test isCommentSection
-		// For git, we want to test isCommentLine. Scizzored content may be in the comment section but
+		// For git, we want to test isCommentLine. Scissored content may be in the comment section but
 		// we don't want to format those lines as comments
 		let isCommentParagraph = isCommentLine || (hasSingleCommentLineMarker && isCommentSection)
 
@@ -996,7 +996,7 @@ enum VersionControlType {
 		
 		let commentRange = commentUTF16Range(plainText: plainText)
 		
-		// Check if affected character range is in the comment section (which includes scizzored content)
+		// Check if affected character range is in the comment section (which includes scissored content)
 		if affectedCharRange.location >= commentRange.location {
 			return 0
 		}
