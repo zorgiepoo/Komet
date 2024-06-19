@@ -25,6 +25,16 @@ extension UserDefaults
 			set(newValue, forKey: ZGWindowStyleThemeKey)
 		}
 	}
+	
+	@objc dynamic var ZGWindowVibrancy: Bool
+	{
+		get {
+			return bool(forKey: ZGWindowVibrancyKey)
+		}
+		set {
+			set(newValue, forKey: ZGWindowVibrancyKey)
+		}
+	}
 }
 
 @objc class ZGPreferencesWindowController: NSWindowController {
@@ -33,6 +43,7 @@ extension UserDefaults
 	
 	private var selectedFontType: FontType? = nil
 	private var themeObservation: NSKeyValueObservation? = nil
+	private var vibrancyObservation: NSKeyValueObservation? = nil
 	
 	@IBOutlet private var fontsView: NSView!
 	@IBOutlet private var warningsView: NSView!
@@ -41,6 +52,7 @@ extension UserDefaults
 	@IBOutlet private var messageFontTextField: NSTextField!
 	@IBOutlet private var commentsFontTextField: NSTextField!
 	@IBOutlet private var themePopUpButton: NSPopUpButton!
+	@IBOutlet private var vibrancyCheckBoxButton: NSButton!
 	
 	@IBOutlet private var recommendedSubjectLengthLimitTextField: NSTextField!
 	@IBOutlet private var recommendedSubjectLengthLimitEnabledCheckbox: NSButton!
@@ -76,6 +88,13 @@ extension UserDefaults
 	
 	@objc override func windowDidLoad() {
 		showFonts(nil)
+	}
+	
+	@objc func validateMenuItem(_ menuItem: NSMenuItem) -> Bool {
+		if menuItem.action == #selector(changeVibrancy(_:)) {
+			return false
+		}
+		return true
 	}
 	
 	private func updateFont(_ font: NSFont, textField: NSTextField) {
@@ -125,6 +144,17 @@ extension UserDefaults
 				}
 			}
 		}
+		
+		if vibrancyObservation == nil {
+			vibrancyObservation = UserDefaults.standard.observe(\.ZGWindowVibrancy, options: [.initial, .new]) { [weak self] userDefaults, change in
+				guard let self else {
+					return
+				}
+				
+				let newVibrancy = userDefaults.ZGWindowVibrancy
+				vibrancyCheckBoxButton.state = newVibrancy ? .on : .off
+			}
+		}
 	}
 	
 	private func showFontPrompt(selectedFont: NSFont, fontType: FontType) {
@@ -164,6 +194,12 @@ extension UserDefaults
 			updateFont(convertedFont, textField: commentsFontTextField)
 			break
 		}
+	}
+	
+	@IBAction @objc func changeVibrancy(_ sender: Any) {
+		let newVibrancy = (vibrancyCheckBoxButton.state == .on)
+		UserDefaults.standard.set(newVibrancy, forKey: ZGWindowVibrancyKey)
+		editorListener?.userDefaultsChangedVibrancy()
 	}
 	
 	private func setDescriptionTextField(_ textField: NSTextField, enabled: Bool) {

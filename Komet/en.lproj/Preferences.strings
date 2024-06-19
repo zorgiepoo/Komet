@@ -88,3 +88,6 @@
 
 /* Class = "NSTextFieldCell"; title = "Theme"; ObjectID = "teb-8m-Fcb"; */
 "teb-8m-Fcb.title" = "Mordor";
+
+/* Class = "NSButtonCell"; title = "translucency"; ObjectID = "jcP-l7-zTW"; */
+"jcP-l7-zTW.title" = "Translucency";

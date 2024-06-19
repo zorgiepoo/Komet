@@ -1102,6 +1102,10 @@ enum VersionControlType {
 		reloadTextAttributes()
 	}
 	
+	@objc func userDefaultsChangedVibrancy() {
+		updateCurrentStyle()
+	}
+	
 	func zgCommitViewSelectAll() {
 		let plainText = currentPlainText()
 		if commentSectionLength > 0 {

@@ -10,4 +10,5 @@ protocol UserDefaultsEditorListener: AnyObject {
 	func userDefaultsChangedMessageFont()
 	func userDefaultsChangedCommentsFont()
 	func userDefaultsChangedRecommendedLineLengthLimits()
+	func userDefaultsChangedVibrancy()
 }
