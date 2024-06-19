@@ -215,4 +215,8 @@ typealias StatFS = statfs
 			NSWorkspace.shared.open(issuesURL)
 		}
 	}
+	
+	func applicationSupportsSecureRestorableState(_ app: NSApplication) -> Bool {
+		return true
+	}
 }
