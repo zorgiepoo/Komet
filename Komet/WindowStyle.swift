@@ -52,7 +52,7 @@ struct WindowStyle {
 					textHighlightColor: NSColor(deviceRed: 0.0, green: 0.0, blue: 1.0, alpha: 0.75),
 					commentColor: NSColor(deviceWhite: 1.0, alpha: 0.7),
 					overflowColor: NSColor(deviceRed: 1.0, green: 0.690, blue: 0.231, alpha: 0.3),
-					fallbackBackgroundColor: NSColor(deviceRed: 0.0, green: 0.0, blue: 0.0, alpha: 0.9),
+					fallbackBackgroundColor: NSColor(deviceRed: 0.0, green: 0.0, blue: 0.0, alpha: 0.6),
 					diffHeaderColor: NSColor(deviceRed: 0.0, green: 0.0, blue: 0.8, alpha: 0.7),
 					diffAddColor: NSColor(deviceRed: 0.0, green: 0.8, blue: 0.0, alpha: 0.7),
 					diffRemoveColor: NSColor(deviceRed: 0.8, green: 0.0, blue: 0.0, alpha: 0.7),
