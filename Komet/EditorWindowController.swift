@@ -885,7 +885,12 @@ enum VersionControlType {
 		
 		let paragraphWithDisplayAttributes: NSTextParagraph?
 		let isCommentSection = (range.location >= commentRange.location)
-		let isCommentParagraph = isCommentSection || Self.isCommentLine(originalTextString, versionControlType: versionControlType)
+		let isCommentLine = Self.isCommentLine(originalTextString, versionControlType: versionControlType)
+		let hasSingleCommentLineMarker = Self.hasSingleCommentLineMarker(versionControlType: versionControlType)
+		// For svn we want to test isCommentSection
+		// For git, we want to test isCommentLine. Scizzored content may be in the comment section but
+		// we don't want to format those lines as comments
+		let isCommentParagraph = isCommentLine || (hasSingleCommentLineMarker && isCommentSection)
 
 		let userDefaults = UserDefaults.standard
 		
@@ -900,7 +905,7 @@ enum VersionControlType {
 			
 			let versionControlledFile = userDefaults.bool(forKey: ZGAssumeVersionControlledFileKey)
 			
-			if versionControlledFile && !isSquashMessage {
+			if versionControlledFile && !isSquashMessage && !isCommentSection {
 				let lengthLimit: Int?
 				if range.location == 0 {
 					lengthLimit = Self.lengthLimitWarningEnabled(userDefaults: userDefaults, userDefaultKey: ZGEditorRecommendedSubjectLengthLimitEnabledKey) ? ZGReadDefaultLineLimit(userDefaults, ZGEditorRecommendedSubjectLengthLimitKey) : nil
