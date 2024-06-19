@@ -18,6 +18,9 @@ struct WindowStyle {
 	let commentColor: NSColor
 	let overflowColor: NSColor
 	let fallbackBackgroundColor: NSColor
+	let diffHeaderColor: NSColor
+	let diffAddColor: NSColor
+	let diffRemoveColor: NSColor
 	let scrollerKnobStyle: NSScroller.KnobStyle
 	
 	static func withTheme(_ theme: WindowStyleTheme) -> WindowStyle {
@@ -34,6 +37,9 @@ struct WindowStyle {
 					commentColor: NSColor.darkGray,
 					overflowColor: NSColor(deviceRed: 1.0, green: 1.0, blue: 0.0, alpha: 0.3),
 					fallbackBackgroundColor: NSColor(deviceRed: 1.0, green: 1.0, blue: 1.0, alpha: 0.95),
+					diffHeaderColor: NSColor(deviceRed: 0.0, green: 0.0, blue: 1.0, alpha: 0.3),
+					diffAddColor: NSColor(deviceRed: 0.0, green: 1.0, blue: 0.0, alpha: 0.3),
+					diffRemoveColor: NSColor(deviceRed: 1.0, green: 0.0, blue: 0.0, alpha: 0.3),
 					scrollerKnobStyle: .dark)
 		case .dark:
 			return
@@ -47,6 +53,9 @@ struct WindowStyle {
 					commentColor: NSColor(deviceWhite: 1.0, alpha: 0.7),
 					overflowColor: NSColor(deviceRed: 1.0, green: 0.690, blue: 0.231, alpha: 0.3),
 					fallbackBackgroundColor: NSColor(deviceRed: 0.0, green: 0.0, blue: 0.0, alpha: 0.9),
+					diffHeaderColor: NSColor(deviceRed: 0.0, green: 0.0, blue: 0.8, alpha: 0.7),
+					diffAddColor: NSColor(deviceRed: 0.0, green: 0.8, blue: 0.0, alpha: 0.7),
+					diffRemoveColor: NSColor(deviceRed: 0.8, green: 0.0, blue: 0.0, alpha: 0.7),
 					scrollerKnobStyle: .light)
 		case .papyrus:
 			return
@@ -60,6 +69,9 @@ struct WindowStyle {
 					commentColor: NSColor(deviceRed: 0.714, green: 0.286, blue: 0.149, alpha: 1.0),
 					overflowColor: NSColor(deviceRed: 1.0, green: 0.690, blue: 0.231, alpha: 0.5),
 					fallbackBackgroundColor: NSColor(deviceRed: 1.0, green: 0.941, blue: 0.647, alpha: 0.9),
+					diffHeaderColor: NSColor(deviceRed: 0.0, green: 0.0, blue: 1.0, alpha: 0.3),
+					diffAddColor: NSColor(deviceRed: 0.0, green: 1.0, blue: 0.0, alpha: 0.3),
+					diffRemoveColor: NSColor(deviceRed: 1.0, green: 0.0, blue: 0.0, alpha: 0.3),
 					scrollerKnobStyle: .dark)
 		case .blue:
 			let barAndTextHighlightColor = NSColor(deviceRed: 0.204, green: 0.596, blue: 0.859, alpha: 1.0)
@@ -74,6 +86,9 @@ struct WindowStyle {
 					commentColor: NSColor(deviceRed: 0.161, green: 0.502, blue: 0.725, alpha: 1.0),
 					overflowColor: NSColor(deviceRed: 0.831, green: 0.753, blue: 0.169, alpha: 0.3),
 					fallbackBackgroundColor: NSColor(deviceRed: 0.925, green: 0.941, blue: 0.945, alpha: 0.9),
+					diffHeaderColor: NSColor(deviceRed: 0.0, green: 0.0, blue: 1.0, alpha: 0.3),
+					diffAddColor: NSColor(deviceRed: 0.0, green: 1.0, blue: 0.0, alpha: 0.3),
+					diffRemoveColor: NSColor(deviceRed: 1.0, green: 0.0, blue: 0.0, alpha: 0.3),
 					scrollerKnobStyle: .dark)
 		case .green:
 			let barAndTextHighlightColor = NSColor(deviceRed: 0.361, green: 0.514, blue: 0.184, alpha: 1.0)
@@ -88,6 +103,9 @@ struct WindowStyle {
 					commentColor: NSColor(deviceRed: 0.361, green: 0.514, blue: 0.184, alpha: 1.0),
 					overflowColor: NSColor(deviceRed: 0.831, green: 0.753, blue: 0.169, alpha: 0.5),
 					fallbackBackgroundColor: NSColor(deviceRed: 0.847, green: 0.792, blue: 0.659, alpha: 0.9),
+					diffHeaderColor: NSColor(deviceRed: 0.0, green: 0.0, blue: 1.0, alpha: 0.3),
+					diffAddColor: NSColor(deviceRed: 0.0, green: 1.0, blue: 0.0, alpha: 0.3),
+					diffRemoveColor: NSColor(deviceRed: 1.0, green: 0.0, blue: 0.0, alpha: 0.3),
 					scrollerKnobStyle: .dark)
 		case .red:
 			let barAndTextHighlightColor = NSColor(deviceRed: 0.863, green: 0.208, blue: 0.133, alpha: 1.0)
@@ -102,6 +120,9 @@ struct WindowStyle {
 					commentColor: NSColor(deviceRed: 0.863, green: 0.208, blue: 0.133, alpha: 1.0),
 					overflowColor: NSColor(deviceRed: 1.0, green: 0.690, blue: 0.231, alpha: 0.3),
 					fallbackBackgroundColor: NSColor(deviceRed: 0.165, green: 0.173, blue: 0.169, alpha: 0.95),
+					diffHeaderColor: NSColor(deviceRed: 0.0, green: 0.0, blue: 0.5, alpha: 1.0),
+					diffAddColor: NSColor(deviceRed: 0.0, green: 0.5, blue: 0.0, alpha: 1.0),
+					diffRemoveColor: NSColor(deviceRed: 0.5, green: 0.0, blue: 0.0, alpha: 1.0),
 					scrollerKnobStyle: .light)
 		}
 	}

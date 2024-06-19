@@ -903,32 +903,65 @@ enum VersionControlType {
 			
 			let textWithDisplayAttributes = NSMutableAttributedString(attributedString: originalText)
 			
-			textWithDisplayAttributes.addAttributes(displayAttributes, range: NSMakeRange(0, range.length))
+			let fullTextRange = NSMakeRange(0, range.length)
+			textWithDisplayAttributes.addAttributes(displayAttributes, range: fullTextRange)
 			
 			let versionControlledFile = userDefaults.bool(forKey: ZGAssumeVersionControlledFileKey)
 			
-			if versionControlledFile && !isSquashMessage && !isCommentSection {
-				let lengthLimit: Int?
-				if range.location == 0 {
-					lengthLimit = Self.lengthLimitWarningEnabled(userDefaults: userDefaults, userDefaultKey: ZGEditorRecommendedSubjectLengthLimitEnabledKey) ? ZGReadDefaultLineLimit(userDefaults, ZGEditorRecommendedSubjectLengthLimitKey) : nil
-				} else {
-					lengthLimit = Self.lengthLimitWarningEnabled(userDefaults: userDefaults, userDefaultKey: ZGEditorRecommendedBodyLineLengthLimitEnabledKey) ? ZGReadDefaultLineLimit(userDefaults, ZGEditorRecommendedBodyLineLengthLimitKey) : nil
-				}
-				
-				if let lengthLimit = lengthLimit {
-					let distance = originalTextString.distance(from: originalTextString.startIndex, to: originalTextString.endIndex)
+			if versionControlledFile {
+				if commentVersionControlType == .git && isCommentSection {
+					// Handle highlighting diffs
 					
-					if distance > lengthLimit {
-						let overflowRange = originalTextString.index(originalTextString.startIndex, offsetBy: lengthLimit) ..< originalTextString.endIndex
+					// https://git-scm.com/docs/git-diff-index documents the possible header line prefixes
+					if originalTextString.hasPrefix("@@") ||
+						originalTextString.hasPrefix("+++") ||
+						originalTextString.hasPrefix("---") ||
+						originalTextString.hasPrefix("diff ") ||
+						(originalTextString.hasPrefix("index ") && originalTextString.contains("..")) ||
+						originalTextString.hasPrefix("deleted file mode") ||
+						originalTextString.hasPrefix("new file mode") ||
+						originalTextString.hasPrefix("copy from") ||
+						originalTextString.hasPrefix("copy to") ||
+						originalTextString.hasPrefix("rename from") ||
+						originalTextString.hasPrefix("rename to") ||
+						originalTextString.hasPrefix("similarity index") ||
+						originalTextString.hasPrefix("dissimilarity index") ||
+						originalTextString.hasPrefix("old mode") ||
+						originalTextString.hasPrefix("new mode") {
+						let headerAttributes: [NSAttributedString.Key: AnyObject] = [.font: contentFont, .backgroundColor: style.diffHeaderColor]
+						textWithDisplayAttributes.addAttributes(headerAttributes, range: fullTextRange)
+					} else if originalTextString.hasPrefix("+") {
+						let addLineAttributes: [NSAttributedString.Key: AnyObject] = [.font: contentFont, .backgroundColor: style.diffAddColor]
+						textWithDisplayAttributes.addAttributes(addLineAttributes, range: fullTextRange)
+					} else if originalTextString.hasPrefix("-") {
+						let removeLineAttributes: [NSAttributedString.Key: AnyObject] = [.font: contentFont, .backgroundColor: style.diffRemoveColor]
+						textWithDisplayAttributes.addAttributes(removeLineAttributes, range: fullTextRange)
+					}
+				} else if !isSquashMessage {
+					// Render text overflow highlights
+					
+					let lengthLimit: Int?
+					if range.location == 0 {
+						lengthLimit = Self.lengthLimitWarningEnabled(userDefaults: userDefaults, userDefaultKey: ZGEditorRecommendedSubjectLengthLimitEnabledKey) ? ZGReadDefaultLineLimit(userDefaults, ZGEditorRecommendedSubjectLengthLimitKey) : nil
+					} else {
+						lengthLimit = Self.lengthLimitWarningEnabled(userDefaults: userDefaults, userDefaultKey: ZGEditorRecommendedBodyLineLengthLimitEnabledKey) ? ZGReadDefaultLineLimit(userDefaults, ZGEditorRecommendedBodyLineLengthLimitKey) : nil
+					}
+					
+					if let lengthLimit = lengthLimit {
+						let distance = originalTextString.distance(from: originalTextString.startIndex, to: originalTextString.endIndex)
 						
-						let overflowUtf16Range = convertToUTF16Range(range: overflowRange, in: originalTextString)
-						
-						let overflowAttributes: [NSAttributedString.Key: AnyObject] = [.font: contentFont, .backgroundColor: style.overflowColor]
-						
-						textWithDisplayAttributes.addAttributes(overflowAttributes, range: overflowUtf16Range)
-						
-						if updateBreadcrumbs && breadcrumbs != nil {
-							breadcrumbs!.textOverflowRanges.append(range.location + overflowUtf16Range.location ..< range.location + NSMaxRange(overflowUtf16Range))
+						if distance > lengthLimit {
+							let overflowRange = originalTextString.index(originalTextString.startIndex, offsetBy: lengthLimit) ..< originalTextString.endIndex
+							
+							let overflowUtf16Range = convertToUTF16Range(range: overflowRange, in: originalTextString)
+							
+							let overflowAttributes: [NSAttributedString.Key: AnyObject] = [.font: contentFont, .backgroundColor: style.overflowColor]
+							
+							textWithDisplayAttributes.addAttributes(overflowAttributes, range: overflowUtf16Range)
+							
+							if updateBreadcrumbs && breadcrumbs != nil {
+								breadcrumbs!.textOverflowRanges.append(range.location + overflowUtf16Range.location ..< range.location + NSMaxRange(overflowUtf16Range))
+							}
 						}
 					}
 				}
