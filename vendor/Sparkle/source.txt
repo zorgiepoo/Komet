@@ -1,3 +1,3 @@
 Git: https://github.com/sparkle-project/Sparkle.git
-Commit: 9d6e8c24b5746bbaaf3998fd1e6e4771bc252c17
+Commit: 2.6.3
 Configuration: Set MACOSX_DEPLOYMENT_TARGET to 12.4 and disable pretty much everything

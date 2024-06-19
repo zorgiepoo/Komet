@@ -6,7 +6,7 @@
 	<dict>
 		<key>Resources/Info.plist</key>
 		<data>
-		Oj9t0uFEmiF+Y1d82vXJC5Vv3Bw=
+		ScC5x/wGoZumBdiF0SJ9ptFLN/Y=
 		</data>
 	</dict>
 	<key>files2</key>
@@ -234,17 +234,17 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			G230xmNLGj9q7JqJu98YjcFpiNWEpgcOwF1EZq3gnF0=
+			XyNbmhUEtDbjqaox15XvhHb3n4w5fJvUw6wHCjV8KA0=
 			</data>
 		</dict>
 		<key>Updater.app</key>
 		<dict>
 			<key>cdhash</key>
 			<data>
-			ZoVL6SW56B83E2KeNR77xvTZGZw=
+			Tr8Hgh+wMhLmoUN+tAGTvdlGf7k=
 			</data>
 			<key>requirement</key>
-			<string>cdhash H"66854be925b9e81f3713629e351efbc6f4d9199c" or cdhash H"720891e9ad32a77f0d40f7cf8d5122b19cd57dd6"</string>
+			<string>cdhash H"4ebf07821fb03212e6a1437eb40193bdd9467fb9" or cdhash H"16318d8486dd75f8e52cdc57c3bbdc59103f12a8"</string>
 		</dict>
 	</dict>
 	<key>rules</key>
