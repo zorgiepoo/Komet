@@ -887,8 +887,8 @@ enum VersionControlType {
 		
 		let paragraphWithDisplayAttributes: NSTextParagraph?
 		let isCommentSection = (range.location >= commentRange.location)
-		let isCommentLine = Self.isCommentLine(originalTextString, versionControlType: versionControlType)
-		let hasSingleCommentLineMarker = Self.hasSingleCommentLineMarker(versionControlType: versionControlType)
+		let isCommentLine = Self.isCommentLine(originalTextString, versionControlType: commentVersionControlType)
+		let hasSingleCommentLineMarker = Self.hasSingleCommentLineMarker(versionControlType: commentVersionControlType)
 		// For svn we want to test isCommentSection
 		// For git, we want to test isCommentLine. Scizzored content may be in the comment section but
 		// we don't want to format those lines as comments
