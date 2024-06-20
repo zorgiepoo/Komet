@@ -209,7 +209,7 @@ class KometUITests: XCTestCase {
 	
 		let (breadcrumbs, finalContent) = try app.commit()
 		XCTAssertEqual(breadcrumbs!.exitStatus, 0, "commit failed with non-zero status")
-		XCTAssertEqual(finalContent, newContent + app.initialContent)
+		XCTAssertEqual(finalContent, newContent + app.initialContent + "foo")
 	}
 	
 	func testCanceledNewCommit() throws {
