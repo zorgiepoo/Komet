@@ -10,19 +10,19 @@ jobs:
   build:
     strategy:
       matrix:
-        config: ['13']
+        config: ['14']
         include:
-            - config: '13'
-              runner: 'macos-13'
-              xcode-path: '/Applications/Xcode_15.0.app/Contents/Developer'
-              upload-name: 'build-logs-macos13'
+            - config: '14'
+              runner: 'macos-14'
+              xcode-path: '/Applications/Xcode_15.4.app/Contents/Developer'
+              upload-name: 'build-logs-macos14'
     
     name: Build and Test Komet on macOS
     runs-on: ${{ matrix.runner }}
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
       - name: Build Release
         env:
           DEVELOPER_DIR: ${{ matrix.xcode-path }}
@@ -40,7 +40,7 @@ jobs:
           xcodebuild test-without-building -target 'KometUITests' -scheme Komet -configuration Debug -derivedDataPath build
       - name: Archive Test Results
         if: failure()
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.upload-name }}
           path: build/Logs
