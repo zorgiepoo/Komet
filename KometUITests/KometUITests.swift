@@ -133,12 +133,14 @@ class KometApp {
 	
 	func typeText(_ text: String) {
 		// Make sure we type newline characters separately to avoid them being typed too fast
+		// We will also put a half second sleep before a newline is typed
 		var currentText = text
 		while let newlineIndex = currentText.firstIndex(of: "\n") {
 			let line = currentText[currentText.startIndex ..< newlineIndex]
 			if line.count > 0 {
 				typeRawText(String(line))
 			}
+			usleep(500000)
 			typeRawText("\n")
 			currentText = String(currentText[currentText.index(newlineIndex, offsetBy: 1) ..< currentText.endIndex])
 		}
