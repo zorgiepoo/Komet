@@ -689,6 +689,34 @@ class KometUITests: XCTestCase {
 		XCTAssertEqual(overflowRanges[0], location ..< location + 1)
 	}
 	
+	// MARK: Scissor Line Diffs
+	
+	func testNewCommitWithScissorDiff() throws {
+		let app = try KometApp(filename: "new-commit-scissor")
+	
+		let newContent = "Hello there"
+		app.typeText(newContent)
+	
+		let (breadcrumbs, _) = try app.commit()
+		XCTAssertEqual(breadcrumbs!.exitStatus, 0, "commit failed with non-zero status")
+		XCTAssertEqual(breadcrumbs!.diffHeaderLineRanges.count, 11)
+		XCTAssertEqual(breadcrumbs!.diffAddLineRanges.count, 2)
+		XCTAssertEqual(breadcrumbs!.diffRemoveLineRanges.count, 7)
+	}
+	
+	func testAmmendCommitWithScissorDiff() throws {
+		let app = try KometApp(filename: "amended-commit-scissor")
+	
+		let newContent = "\nHello there"
+		app.typeText(newContent)
+	
+		let (breadcrumbs, _) = try app.commit()
+		XCTAssertEqual(breadcrumbs!.exitStatus, 0, "commit failed with non-zero status")
+		XCTAssertEqual(breadcrumbs!.diffHeaderLineRanges.count, 6)
+		XCTAssertEqual(breadcrumbs!.diffAddLineRanges.count, 5)
+		XCTAssertEqual(breadcrumbs!.diffRemoveLineRanges.count, 0)
+	}
+	
 	// MARK: Comments
 	
 	func testNoEditingBeginningOfComments() throws {

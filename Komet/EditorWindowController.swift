@@ -689,13 +689,10 @@ enum VersionControlType {
 	
 	private func exit(status: Int32) -> Never {
 		if breadcrumbs != nil {
-			func retrieveContentLineRanges(plainText: String) -> [Range<String.Index>] {
-				let utf16View = plainText.utf16
-				let commentIndex = commentSectionIndex(plainUTF16Text: utf16View)
-				
+			func retrieveLineRanges(plainText: String) -> [Range<String.Index>] {
 				var lineRanges: [Range<String.Index>] = []
 				var characterIndex = plainText.startIndex
-				while characterIndex < commentIndex {
+				while characterIndex < plainText.endIndex {
 					var lineStartIndex = String.Index(utf16Offset: 0, in: plainText)
 					var lineEndIndex = String.Index(utf16Offset: 0, in: plainText)
 					var contentEndIndex = String.Index(utf16Offset: 0, in: plainText)
@@ -713,7 +710,7 @@ enum VersionControlType {
 			// Update breadcrumbs
 			if let textContentStorage = textView.textContentStorage {
 				let currentText = currentPlainText()
-				let contentLineRanges = retrieveContentLineRanges(plainText: currentText)
+				let contentLineRanges = retrieveLineRanges(plainText: currentText)
 				
 				for contentLineRange in contentLineRanges {
 					let utf16Range = convertToUTF16Range(range: contentLineRange, in: currentText)
@@ -930,12 +927,24 @@ enum VersionControlType {
 						originalTextString.hasPrefix("new mode") {
 						let headerAttributes: [NSAttributedString.Key: AnyObject] = [.font: contentFont, .backgroundColor: style.diffHeaderColor]
 						textWithDisplayAttributes.addAttributes(headerAttributes, range: fullTextRange)
+						
+						if updateBreadcrumbs && breadcrumbs != nil {
+							breadcrumbs!.diffHeaderLineRanges.append(fullTextRange.location ..< NSMaxRange(fullTextRange))
+						}
 					} else if originalTextString.hasPrefix("+") {
 						let addLineAttributes: [NSAttributedString.Key: AnyObject] = [.font: contentFont, .backgroundColor: style.diffAddColor]
 						textWithDisplayAttributes.addAttributes(addLineAttributes, range: fullTextRange)
+						
+						if updateBreadcrumbs && breadcrumbs != nil {
+							breadcrumbs!.diffAddLineRanges.append(fullTextRange.location ..< NSMaxRange(fullTextRange))
+						}
 					} else if originalTextString.hasPrefix("-") {
 						let removeLineAttributes: [NSAttributedString.Key: AnyObject] = [.font: contentFont, .backgroundColor: style.diffRemoveColor]
 						textWithDisplayAttributes.addAttributes(removeLineAttributes, range: fullTextRange)
+						
+						if updateBreadcrumbs && breadcrumbs != nil {
+							breadcrumbs!.diffRemoveLineRanges.append(fullTextRange.location ..< NSMaxRange(fullTextRange))
+						}
 					}
 				} else if !isSquashMessage {
 					// Render text overflow highlights
