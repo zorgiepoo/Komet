@@ -909,6 +909,10 @@ enum VersionControlType {
 				if commentVersionControlType == .git && isCommentSection {
 					// Handle highlighting diffs
 					
+					let diffAttributeKey = style.diffHighlightsBackground ? NSAttributedString.Key.backgroundColor : NSAttributedString.Key.foregroundColor
+					
+					let diffAttributeColor: NSColor?
+					
 					// https://git-scm.com/docs/git-diff-index documents the possible header line prefixes
 					if originalTextString.hasPrefix("@@") ||
 						originalTextString.hasPrefix("+++") ||
@@ -925,26 +929,31 @@ enum VersionControlType {
 						originalTextString.hasPrefix("dissimilarity index") ||
 						originalTextString.hasPrefix("old mode") ||
 						originalTextString.hasPrefix("new mode") {
-						let headerAttributes: [NSAttributedString.Key: AnyObject] = [.font: contentFont, .backgroundColor: style.diffHeaderColor]
-						textWithDisplayAttributes.addAttributes(headerAttributes, range: fullTextRange)
+						diffAttributeColor = style.diffHeaderColor
 						
 						if updateBreadcrumbs && breadcrumbs != nil {
 							breadcrumbs!.diffHeaderLineRanges.append(fullTextRange.location ..< NSMaxRange(fullTextRange))
 						}
 					} else if originalTextString.hasPrefix("+") {
-						let addLineAttributes: [NSAttributedString.Key: AnyObject] = [.font: contentFont, .backgroundColor: style.diffAddColor]
-						textWithDisplayAttributes.addAttributes(addLineAttributes, range: fullTextRange)
+						diffAttributeColor = style.diffAddColor
 						
 						if updateBreadcrumbs && breadcrumbs != nil {
 							breadcrumbs!.diffAddLineRanges.append(fullTextRange.location ..< NSMaxRange(fullTextRange))
 						}
 					} else if originalTextString.hasPrefix("-") {
-						let removeLineAttributes: [NSAttributedString.Key: AnyObject] = [.font: contentFont, .backgroundColor: style.diffRemoveColor]
-						textWithDisplayAttributes.addAttributes(removeLineAttributes, range: fullTextRange)
+						diffAttributeColor = style.diffRemoveColor
 						
 						if updateBreadcrumbs && breadcrumbs != nil {
 							breadcrumbs!.diffRemoveLineRanges.append(fullTextRange.location ..< NSMaxRange(fullTextRange))
 						}
+					} else {
+						diffAttributeColor = nil
+					}
+					
+					if let diffAttributeColor {
+						let diffAttributes: [NSAttributedString.Key : AnyObject] = [.font: contentFont, diffAttributeKey: diffAttributeColor]
+						
+						textWithDisplayAttributes.addAttributes(diffAttributes, range: fullTextRange)
 					}
 				} else if !isSquashMessage {
 					// Render text overflow highlights
