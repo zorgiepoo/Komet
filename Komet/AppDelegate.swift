@@ -131,6 +131,11 @@ typealias StatFS = statfs
 				}
 			}
 			
+			let escapedEditorPathToUse =
+				editorPathToUse
+					.escapingGitConfigBreakingCharacters // escape for parsing by Git
+					.doubleQuoteDelimited // escape for parsing by shell
+			
 			let editorConfigurationRecommendation: String
 			do {
 				let tutorialDefaultGitEditorRecommendation = NSLocalizedString("tutorialDefaultGitEditorRecommendation", tableName: nil, comment: "")
@@ -144,7 +149,7 @@ typealias StatFS = statfs
 				#
 				# \(tutorialDefaultGitEditorRecommendation)
 				#
-				# git config --global core.editor "\(editorPathToUse)"
+				# git config --global core.editor \(escapedEditorPathToUse)
 				#
 				# \(tutorialDefaultHgEditorRecommendation)
 				# \(tutorialDefaultSvnEditorRecommendation)

@@ -45,6 +45,7 @@
 		72D3BE86254FDB6A0051914F /* UpdaterSettingsListener.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72D3BE85254FDB6A0051914F /* UpdaterSettingsListener.swift */; };
 		72D3BE8A25564D420051914F /* UpdaterUserDriver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72D3BE8925564D420051914F /* UpdaterUserDriver.swift */; };
 		72D3BE8E25565CDC0051914F /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72D3BE8D25565CDC0051914F /* main.swift */; };
+		A79E145C2D7C53F300F93FD1 /* String+escaping.swift in Sources */ = {isa = PBXBuildFile; fileRef = A79E145B2D7C536A00F93FD1 /* String+escaping.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -116,6 +117,7 @@
 		72D3BE8D25565CDC0051914F /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		772B7CCB21437E2500E993B2 /* Komet.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Komet.entitlements; sourceTree = "<group>"; };
 		77C23E5E232CB41800F5BC6C /* KometDebug.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = KometDebug.entitlements; sourceTree = "<group>"; };
+		A79E145B2D7C536A00F93FD1 /* String+escaping.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+escaping.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -212,6 +214,7 @@
 				726F32F51DE27AB7004FB4AF /* Credits.rtf */,
 				723606B01FC630C400BDD6E9 /* Localizable.strings */,
 				72B72C981D63EFF90096365F /* Supporting Files */,
+				A79E145B2D7C536A00F93FD1 /* String+escaping.swift */,
 			);
 			path = Komet;
 			sourceTree = "<group>";
@@ -375,6 +378,7 @@
 				72D3BE8E25565CDC0051914F /* main.swift in Sources */,
 				72D3BE79254F24CF0051914F /* WindowStyleTheme.swift in Sources */,
 				7272EB4D25588DC900C78C4D /* WindowStyleDefaultTheme.swift in Sources */,
+				A79E145C2D7C53F300F93FD1 /* String+escaping.swift in Sources */,
 				72D3BE81254FD56F0051914F /* UpdaterController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
