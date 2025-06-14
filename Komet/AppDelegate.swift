@@ -25,7 +25,11 @@ typealias StatFS = statfs
 	
 	@objc func applicationDidFinishLaunching(_ notification: Notification) {
 		if #available(macOS 14.0, *) {
-			NSApp.activate()
+			if !UserDefaults.standard.bool(forKey: ZGUseLegacyAppActivationKey) {
+				NSApp.activate()
+			} else {
+				NSApp.activate(ignoringOtherApps: true)
+			}
 		} else {
 			NSApp.activate(ignoringOtherApps: true)
 		}

@@ -39,6 +39,8 @@ let ZGCommitTextViewAutomaticTextReplacementKey = "ZGCommitTextViewAutomaticText
 
 let ZGEnableBetaUpdatesKey = "ZGEnableBetaUpdates"
 
+let ZGUseLegacyAppActivationKey = "ZGUseLegacyAppActivation"
+
 // Environment options for test automation
 let ZGBreadcrumbsURLKey = "ZGBreadcrumbsURL"
 let ZGProjectNameKey = "ZGProjectName"
