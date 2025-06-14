@@ -1,0 +1,101 @@
+{
+  "fill-specializations" : [
+    {
+      "value" : {
+        "automatic-gradient" : "srgb:0.00486,0.09609,0.57499,1.00000"
+      }
+    },
+    {
+      "appearance" : "dark",
+      "value" : {
+        "automatic-gradient" : "display-p3:0.01082,0.04265,0.25178,1.00000"
+      }
+    }
+  ],
+  "groups" : [
+    {
+      "blur-material" : 0,
+      "layers" : [
+        {
+          "fill" : "automatic",
+          "glass" : false,
+          "image-name" : "Comet.png",
+          "name" : "Comet",
+          "position" : {
+            "scale" : 1.25,
+            "translation-in-points" : [
+              26,
+              105
+            ]
+          }
+        },
+        {
+          "fill" : {
+            "linear-gradient" : [
+              "display-p3:0.82353,0.62745,0.25490,1.00000",
+              "display-p3:0.86275,0.19608,0.14510,1.00000"
+            ]
+          },
+          "glass" : true,
+          "hidden" : false,
+          "image-name" : "Vector 1.svg",
+          "name" : "Vector 1",
+          "position" : {
+            "scale" : 2.5,
+            "translation-in-points" : [
+              49.86943363104096,
+              -77.72941428104482
+            ]
+          }
+        }
+      ],
+      "lighting" : "combined",
+      "shadow" : {
+        "kind" : "layer-color",
+        "opacity" : 0.5
+      },
+      "specular" : true,
+      "translucency" : {
+        "enabled" : true,
+        "value" : 0.5
+      }
+    },
+    {
+      "blend-mode" : "normal",
+      "layers" : [
+        {
+          "fill" : {
+            "solid" : "display-p3:0.97647,0.86275,0.29020,1.00000"
+          },
+          "glass" : false,
+          "hidden" : false,
+          "image-name" : "Stars.svg",
+          "name" : "Stars",
+          "position" : {
+            "scale" : 2.5,
+            "translation-in-points" : [
+              -260,
+              -350
+            ]
+          }
+        }
+      ],
+      "lighting" : "individual",
+      "opacity" : 1,
+      "shadow" : {
+        "kind" : "none",
+        "opacity" : 0.5
+      },
+      "specular" : true,
+      "translucency" : {
+        "enabled" : false,
+        "value" : 0.5
+      }
+    }
+  ],
+  "supported-platforms" : {
+    "squares" : [
+      "macOS"
+    ]
+  }
+}
