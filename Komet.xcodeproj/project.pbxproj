@@ -45,6 +45,7 @@
 		72D3BE86254FDB6A0051914F /* UpdaterSettingsListener.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72D3BE85254FDB6A0051914F /* UpdaterSettingsListener.swift */; };
 		72D3BE8A25564D420051914F /* UpdaterUserDriver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72D3BE8925564D420051914F /* UpdaterUserDriver.swift */; };
 		72D3BE8E25565CDC0051914F /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72D3BE8D25565CDC0051914F /* main.swift */; };
+		72DA1C452DFD0D2800BF585A /* KometAppIcon.icon in Resources */ = {isa = PBXBuildFile; fileRef = 72DA1C442DFD0D2800BF585A /* KometAppIcon.icon */; };
 		A79E145C2D7C53F300F93FD1 /* String+escaping.swift in Sources */ = {isa = PBXBuildFile; fileRef = A79E145B2D7C536A00F93FD1 /* String+escaping.swift */; };
 /* End PBXBuildFile section */
 
@@ -115,6 +116,7 @@
 		72D3BE85254FDB6A0051914F /* UpdaterSettingsListener.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdaterSettingsListener.swift; sourceTree = "<group>"; };
 		72D3BE8925564D420051914F /* UpdaterUserDriver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdaterUserDriver.swift; sourceTree = "<group>"; };
 		72D3BE8D25565CDC0051914F /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
+		72DA1C442DFD0D2800BF585A /* KometAppIcon.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = KometAppIcon.icon; sourceTree = "<group>"; };
 		772B7CCB21437E2500E993B2 /* Komet.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Komet.entitlements; sourceTree = "<group>"; };
 		77C23E5E232CB41800F5BC6C /* KometDebug.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = KometDebug.entitlements; sourceTree = "<group>"; };
 		A79E145B2D7C536A00F93FD1 /* String+escaping.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+escaping.swift"; sourceTree = "<group>"; };
@@ -209,6 +211,7 @@
 				723606A81FC6222000BDD6E9 /* Commit Editor.xib */,
 				723606AD1FC6235200BDD6E9 /* Preferences.xib */,
 				72B72C9B1D63EFF90096365F /* Assets.xcassets */,
+				72DA1C442DFD0D2800BF585A /* KometAppIcon.icon */,
 				72B72C9D1D63EFF90096365F /* MainMenu.xib */,
 				72B72CA01D63EFF90096365F /* Info.plist */,
 				726F32F51DE27AB7004FB4AF /* Credits.rtf */,
@@ -343,6 +346,7 @@
 				72B72C9C1D63EFF90096365F /* Assets.xcassets in Resources */,
 				723606AB1FC6235200BDD6E9 /* Preferences.xib in Resources */,
 				72B72C9F1D63EFF90096365F /* MainMenu.xib in Resources */,
+				72DA1C452DFD0D2800BF585A /* KometAppIcon.icon in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -653,7 +657,7 @@
 		72B72CA41D63EFF90096365F /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = KometAppIcon;
 				ASSETCATALOG_COMPILER_STANDALONE_ICON_BEHAVIOR = none;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Komet/KometDebug.entitlements;
@@ -689,7 +693,7 @@
 		72B72CA51D63EFF90096365F /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = KometAppIcon;
 				ASSETCATALOG_COMPILER_STANDALONE_ICON_BEHAVIOR = none;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "Developer ID Application";
