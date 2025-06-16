@@ -9,6 +9,7 @@
 import Foundation
 import AppKit
 import Sparkle
+import Sparkle_Private.SUInstallerLauncher
 
 private let KOMET_ERROR_DOMAIN = "KometErrorDomain"
 private let USER_AUTHORIZATION_ERROR_CODE = 1

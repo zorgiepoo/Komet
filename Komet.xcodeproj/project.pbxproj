@@ -81,7 +81,6 @@
 		7211A973253BB68A00F95773 /* hg-new-commit */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "hg-new-commit"; sourceTree = "<group>"; };
 		7211A977253BBBBB00F95773 /* svn-new-commit */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "svn-new-commit"; sourceTree = "<group>"; };
 		7211A97F253BC29E00F95773 /* hg-histedit */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "hg-histedit"; sourceTree = "<group>"; };
-		7211A984253BCF1500F95773 /* Komet-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Komet-Bridging-Header.h"; sourceTree = "<group>"; };
 		7211A985253BCF1600F95773 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		7211A995253C06F200F95773 /* EditorWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorWindowController.swift; sourceTree = "<group>"; };
 		7211A9AB2546170800F95773 /* empty */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = empty; sourceTree = "<group>"; };
@@ -193,7 +192,6 @@
 			children = (
 				77C23E5E232CB41800F5BC6C /* KometDebug.entitlements */,
 				772B7CCB21437E2500E993B2 /* Komet.entitlements */,
-				7211A984253BCF1500F95773 /* Komet-Bridging-Header.h */,
 				7211A985253BCF1600F95773 /* AppDelegate.swift */,
 				72D3BE64254E8BE00051914F /* CommitTextView.swift */,
 				7211A9B02546704C00F95773 /* Breadcrumbs.swift */,
@@ -679,7 +677,6 @@
 				OTHER_SWIFT_FLAGS = "-D DEBUG";
 				PRODUCT_BUNDLE_IDENTIFIER = org.zgcoder.Komet;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_OBJC_BRIDGING_HEADER = "Komet/Komet-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				WARNING_CFLAGS = (
 					"-Weverything",
@@ -715,7 +712,6 @@
 				OTHER_SWIFT_FLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = org.zgcoder.Komet;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_OBJC_BRIDGING_HEADER = "Komet/Komet-Bridging-Header.h";
 				WARNING_CFLAGS = (
 					"-Weverything",
 					"-Wno-direct-ivar-access",
