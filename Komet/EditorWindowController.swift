@@ -380,12 +380,6 @@ enum VersionControlType {
 	private func updateCurrentStyle() {
 		// Style top bar
 		do {
-#if canImport(AppKit, _version: "2665.8")
-			if #available(macOS 26, *) {
-				topBar.prefersCompactControlSizeMetrics = true
-			}
-#endif
-			
 			topBar.wantsLayer = true
 			topBar.layer?.backgroundColor = style.barColor.cgColor
 			
