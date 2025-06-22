@@ -12,16 +12,7 @@ import AppKit
 private let ZGEditorWindowFrameNameKey = "ZGEditorWindowFrame"
 private let APP_SUPPORT_DIRECTORY_NAME = "Komet"
 
-private let MAX_CHARACTER_COUNT_FOR_NOT_DRAWING_BACKGROUND = 132690
-private let MAX_CHARACTER_COUNT_FOR_NON_VERSION_CONTROL_COMMENT_ATTRIBUTES = 10000
-
-enum VersionControlType {
-	case git
-	case hg
-	case svn
-}
-
-@objc class ZGEditorWindowController: NSWindowController, UserDefaultsEditorListener, NSTextStorageDelegate, NSTextContentStorageDelegate, NSTextViewDelegate, ZGCommitViewDelegate {
+@objc class ZGEditorWindowController: NSWindowController, UserDefaultsEditorListener {
 	
 	private let fileURL: URL
 	private let temporaryDirectoryURL: URL?
@@ -29,30 +20,16 @@ enum VersionControlType {
 	private var breadcrumbs: Breadcrumbs?
 	
 	private let initiallyContainedEmptyContent: Bool
-	private let isSquashMessage: Bool
-	private let commentSectionLength: Int
 	private let versionControlType: VersionControlType
 	private let commentVersionControlType: VersionControlType
 	private let projectNameDisplay: String
-	private let initialPlainText: String
-	private let initialCommitTextRange: Range<String.UTF16View.Index>
-	private let resumedFromSavedCommit: Bool
 	
 	private var style: WindowStyle
-	private var preventAccidentalNewline: Bool = false
 	private var effectiveAppearanceObserver: NSKeyValueObservation? = nil
 	
-	private var textView: ZGCommitTextView!
-	private var scrollView: NSScrollView!
-	
-	@IBOutlet private var topBar: NSView!
-	@IBOutlet private var horizontalBarDivider: NSBox!
-	@IBOutlet private var scrollViewContainer: NSView!
-	@IBOutlet private var contentView: NSVisualEffectView!
-	@IBOutlet private var commitLabelTextField: NSTextField!
-	@IBOutlet private var cancelButton: NSButtonCell!
-	@IBOutlet private var commitButton: NSButton!
-	@IBOutlet var checkForUpdatesProgressIndicator: NSProgressIndicator!
+	let topBarViewController: TopBarViewController
+	private let commitContentViewController: ContentViewController
+	private let horizontalLineDivider: ColoredDivider!
 	
 	// MARK: Static functions
 	
@@ -66,124 +43,6 @@ enum VersionControlType {
 		case .theme(let theme):
 			return theme
 		}
-	}
-	
-	private static func isCommentLine(_ line: String, versionControlType: VersionControlType) -> Bool {
-		let prefix: String
-		let suffix: String
-		
-		switch versionControlType {
-		case .git:
-			prefix = "#"
-			suffix = ""
-		case .hg:
-			prefix = "HG:"
-			suffix = ""
-		case .svn:
-			prefix = "--"
-			suffix = "--"
-		}
-		
-		// Note a line that is "--" could have the prefix and suffix the same, but we want to make sure it's at least "--...--" length long
-		return line.hasPrefix(prefix) && line.hasSuffix(suffix) && line.count >= prefix.count + suffix.count
-	}
-	
-	private static func isScissorLine(_ line: String, versionControlType: VersionControlType) -> Bool {
-		guard versionControlType == .git else {
-			return false
-		}
-		
-		return line.hasPrefix("# --") && line.hasSuffix("--") && line.contains(">8")
-	}
-	
-	private static func hasSingleCommentLineMarker(versionControlType: VersionControlType) -> Bool {
-		switch versionControlType {
-		case .git:
-			return false
-		case .hg:
-			return false
-		case .svn:
-			return true
-		}
-	}
-	
-	// The comment range should begin at the line that starts with a comment string and extend to the end of the file.
-	// Additionally, there should be no content lines (i.e, non comment lines) within this section
-	// (exception: unless we're dealing with svn which only has a starting point for comments)
-	// This should only be computed once, before the user gets a chance to edit the content
-	private static func commentSectionLength(plainText: String, versionControlType: VersionControlType) -> Int {
-		let plainTextEndIndex = plainText.endIndex
-		var characterIndex = String.Index(utf16Offset: 0, in: plainText)
-		var lineStartIndex = String.Index(utf16Offset: 0, in: plainText)
-		var lineEndIndex = String.Index(utf16Offset: 0, in: plainText)
-		var contentEndIndex = String.Index(utf16Offset: 0, in: plainText)
-		
-		var foundCommentSection: Bool = false
-		var commentSectionCharacterIndex: String.Index = String.Index(utf16Offset: 0, in: plainText)
-		
-		while characterIndex < plainTextEndIndex {
-			plainText.getLineStart(&lineStartIndex, end: &lineEndIndex, contentsEnd: &contentEndIndex, for: characterIndex ..< characterIndex)
-			
-			let line = String(plainText[lineStartIndex ..< contentEndIndex])
-			
-			let commentLine = isCommentLine(line, versionControlType: versionControlType)
-			
-			if !commentLine && foundCommentSection && line.trimmingCharacters(in: .whitespacesAndNewlines).count > 0 {
-				// If we found a content line that is not empty, then we have to find a better starting point for the comment section
-				foundCommentSection = false
-			} else if commentLine {
-				if !foundCommentSection {
-					foundCommentSection = true
-					commentSectionCharacterIndex = characterIndex
-					
-					// If there's only a single comment line marker, then we're done'
-					if hasSingleCommentLineMarker(versionControlType: versionControlType) {
-						break
-					}
-				} else if isScissorLine(line, versionControlType: versionControlType) {
-					// Everything below the scissor line is non-editable content which will be part of the comment section
-					// Content bellow the scissor line may include lines that show a diff of a commit message and aren't prefixed by a comment character
-					break
-				}
-			}
-			
-			characterIndex = lineEndIndex
-		}
-		
-		return foundCommentSection ? (plainText.utf16.count - commentSectionCharacterIndex.utf16Offset(in: plainText)) : 0
-	}
-	
-	// The content range should extend to before the comments, only allowing one trailing newline in between the comments and content
-	// Make sure to scan from the bottom to top
-	private static func commitTextRange(plainText: String, commentLength: Int) -> Range<String.UTF16View.Index> {
-		let utf16View = plainText.utf16
-		var bestEndCharacterIndex = utf16View.index(utf16View.endIndex, offsetBy: -commentLength)
-		
-		var passedNewline = false
-		
-		let startIndex = utf16View.startIndex
-		while bestEndCharacterIndex > startIndex {
-			let priorCharacterIndex = plainText.index(before: bestEndCharacterIndex)
-			
-			let character = plainText[priorCharacterIndex]
-			if character == "\n" {
-				bestEndCharacterIndex = priorCharacterIndex
-				
-				if passedNewline {
-					break;
-				} else {
-					passedNewline = true
-				}
-			} else {
-				break
-			}
-		}
-
-		return startIndex ..< bestEndCharacterIndex
-	}
-	
-	private static func lengthLimitWarningEnabled(userDefaults: UserDefaults, userDefaultKey: String) -> Bool {
-		return userDefaults.bool(forKey: ZGAssumeVersionControlledFileKey) && userDefaults.bool(forKey: userDefaultKey)
 	}
 	
 	// MARK: Initialization
@@ -232,6 +91,7 @@ enum VersionControlType {
 		style = WindowStyle.withTheme(Self.styleTheme(defaultTheme: ZGReadDefaultWindowStyleTheme(userDefaults, ZGWindowStyleThemeKey), effectiveAppearance: NSApp.effectiveAppearance))
 		
 		// Detect squash message
+		let isSquashMessage: Bool
 		let loadedPlainString: String
 		do {
 			let plainStringCandidate = try String(contentsOf: self.fileURL, encoding: .utf8)
@@ -288,8 +148,8 @@ enum VersionControlType {
 			.git : versionControlType
 		
 		// Detect if there's empty content
-		let loadedCommentSectionLength = !versionControlledFile ? 0 : Self.commentSectionLength(plainText: loadedPlainString, versionControlType: commentVersionControlType)
-		let loadedCommitRange = Self.commitTextRange(plainText: loadedPlainString, commentLength: loadedCommentSectionLength)
+		let loadedCommentSectionLength = !versionControlledFile ? 0 : TextProcessor.commentSectionLength(plainText: loadedPlainString, versionControlType: commentVersionControlType)
+		let loadedCommitRange = TextProcessor.commitTextRange(plainText: loadedPlainString, commentLength: loadedCommentSectionLength)
 		
 		let loadedContent = loadedPlainString[loadedCommitRange.lowerBound ..< loadedCommitRange.upperBound]
 		
@@ -341,10 +201,15 @@ enum VersionControlType {
 			lastSavedCommitMessage = nil
 		}
 		
+		let initialPlainText: String
+		let initialCommitTextRange: Range<String.UTF16View.Index>
+		let resumedFromSavedCommit: Bool
+		let commentSectionLength: Int
+		
 		if let savedCommitMessage = lastSavedCommitMessage {
 			initialPlainText = savedCommitMessage.appending(loadedPlainString)
-			commentSectionLength = !versionControlledFile ? 0 : Self.commentSectionLength(plainText: initialPlainText, versionControlType: commentVersionControlType)
-			initialCommitTextRange = Self.commitTextRange(plainText: initialPlainText, commentLength: commentSectionLength)
+			commentSectionLength = !versionControlledFile ? 0 : TextProcessor.commentSectionLength(plainText: initialPlainText, versionControlType: commentVersionControlType)
+			initialCommitTextRange = TextProcessor.commitTextRange(plainText: initialPlainText, commentLength: commentSectionLength)
 			resumedFromSavedCommit = true
 		} else {
 			initialPlainText = loadedPlainString
@@ -352,6 +217,10 @@ enum VersionControlType {
 			initialCommitTextRange = loadedCommitRange
 			resumedFromSavedCommit = false
 		}
+		
+		topBarViewController = TopBarViewController()
+		commitContentViewController = ContentViewController(initialPlainText: initialPlainText, commentSectionLength: commentSectionLength, commentVersionControlType: commentVersionControlType, resumedFromSavedCommit: resumedFromSavedCommit, initialCommitTextRange: initialCommitTextRange, isSquashMessage: isSquashMessage, breadcrumbs: breadcrumbs)
+		horizontalLineDivider = ColoredDivider()
 		
 		super.init(window: nil)
 	}
@@ -368,87 +237,10 @@ enum VersionControlType {
 		return "Commit Editor"
 	}
 	
-	private func currentPlainText() -> String {
-		let textStorage = textView.textStorage
-		return textStorage?.string ?? ""
-	}
-	
-	private func updateTextViewDrawingBackground() {
-		textView.drawsBackground = false
-	}
-	
 	private func updateCurrentStyle() {
-		// Style top bar
-		do {
-			topBar.wantsLayer = true
-			topBar.layer?.backgroundColor = style.barColor.cgColor
-			
-			// Setting the top bar appearance will provide us a proper border for the commit button in dark and light themes
-			topBar.appearance = style.appearance
-		}
-		
-		// Style top bar buttons
-		do {
-			commitLabelTextField.textColor = style.barTextColor
-			
-			let commitTitle = NSMutableAttributedString(attributedString: commitButton.attributedTitle)
-			commitTitle.addAttribute(.foregroundColor, value: style.barTextColor, range: NSMakeRange(0, commitTitle.length))
-			commitButton.attributedTitle = commitTitle
-			
-			let cancelTitle = NSMutableAttributedString(attributedString: cancelButton.attributedTitle)
-			cancelTitle.addAttribute(.foregroundColor, value: style.barTextColor, range: NSMakeRange(0, cancelTitle.length))
-			cancelButton.attributedTitle = cancelTitle
-		}
-		
-		// Horizontal line bar divider
-		horizontalBarDivider.fillColor = style.dividerLineColor
-		
-		// Style text
-		do {
-			textView.wantsLayer = true
-			updateTextViewDrawingBackground()
-			textView.insertionPointColor = style.textColor
-			
-			// As fallback, use NSColor.selectedControlColor. Note NSColor.selectedTextColor does not give right results.
-			let textHighlightColor = style.textHighlightColor ?? NSColor.selectedControlColor
-			textView.selectedTextAttributes = [.backgroundColor: textHighlightColor, .foregroundColor: style.barTextColor]
-			
-			if #unavailable(macOS 13) {
-				if let window = window, window.isVisible {
-					// Changing NSTextView selection color doesn't quite work correctly when using TextKit2 by itself
-					// So we apply an additional workaround to get NSTextView to update the selection text color for real
-					// Unfortunately we will need to deselect any selected text ranges as well
-					// Workaround found here: https://github.com/ChimeHQ/TextViewPlus
-					// Filed FB9967570. Note this is fixed in macOS 13 and later.
-					
-					let selectedTextRange = textView.selectedRange()
-					if selectedTextRange.length > 0 {
-						textView.setSelectedRange(NSMakeRange(selectedTextRange.location, 0))
-					}
-					
-					textView.rotate(byDegrees: 1.0)
-					textView.rotate(byDegrees: -1.0)
-				}
-			}
-		}
-		
-		// Style content view
-		let vibrant = UserDefaults.standard.bool(forKey: ZGWindowVibrancyKey)
-		do {
-			contentView.state = vibrant ? .followsWindowActiveState : .inactive
-			contentView.appearance = style.appearance
-		}
-		
-		// Style scroll view
-		do {
-			scrollView.scrollerKnobStyle = style.scrollerKnobStyle
-			if vibrant {
-				scrollView.drawsBackground = false
-			} else {
-				scrollView.drawsBackground = true
-				scrollView.backgroundColor = style.fallbackBackgroundColor
-			}
-		}
+		topBarViewController.style = style
+		commitContentViewController.style = style
+		horizontalLineDivider.fillColor = style.dividerLineColor
 	}
 	
 	private func updateStyle(_ newStyle: WindowStyle) {
@@ -456,100 +248,71 @@ enum VersionControlType {
 		updateCurrentStyle()
 	}
 	
-	private func commentSectionIndex(plainUTF16Text: String.UTF16View) -> String.UTF16View.Index {
-		return plainUTF16Text.index(plainUTF16Text.endIndex, offsetBy: -commentSectionLength)
-	}
-	
-	private func commentUTF16Range(plainText: String) -> NSRange {
-		let utf16View = plainText.utf16
-		return convertToUTF16Range(range: commentSectionIndex(plainUTF16Text: utf16View) ..< utf16View.endIndex, in: plainText)
-	}
-	
-	private func convertToUTF16Range(range: Range<String.Index>, in string: String) -> NSRange {
-		return NSRange(range, in: string)
-	}
-	
-	func updateFont(_ font: NSFont, utf16Range: NSRange) {
-		textView.textStorage?.addAttribute(.font, value: font, range: utf16Range)
-		
-		// If we don't fix the font attributes, then attachments (like emoji) may become invisible and not show up
-		textView.textStorage?.fixFontAttribute(in: utf16Range)
-	}
-		
-	private func reloadTextAttributes() {
-		// Replacing all the characters will force all the text attributes to be re-computed
-		// I wonder if there is a better way of doing this
-		if let textStorage = textView.textStorage, let attributedCopy = textStorage.copy() as? NSAttributedString {
-			textStorage.setAttributedString(attributedCopy)
-		}
-	}
-	
 	private func updateEditorStyle(_ style: WindowStyle) {
 		updateStyle(style)
-		reloadTextAttributes()
+		commitContentViewController.reloadTextAttributes()
 		
-		topBar.needsDisplay = true
-		contentView.needsDisplay = true
+		topBarViewController.view.needsDisplay = true
+		commitContentViewController.view.needsDisplay = true
 	}
 	
 	@objc override func windowDidLoad() {
-		// Following these steps to set up scroll view and text view
-		// https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/TextUILayer/Tasks/TextInScrollView.html#//apple_ref/doc/uid/20000938-CJBBIAAF
-		scrollView = NSScrollView(frame: scrollViewContainer.frame)
-		scrollView.borderType = .noBorder
-		scrollView.hasVerticalScroller = true
-		scrollView.hasHorizontalScroller = false
-		scrollView.autoresizingMask = .init(rawValue: NSView.AutoresizingMask.width.rawValue | NSView.AutoresizingMask.height.rawValue)
+		let commitHandler: () -> () = { [weak self] in
+			self?.commit()
+		}
 		
-		let scrollViewContentSize = scrollView.contentSize
-		let textContainerSize = NSMakeSize(scrollViewContentSize.width, CGFloat(Float.greatestFiniteMagnitude))
+		let cancelHandler: () -> () = { [weak self] in
+			self?.cancelCommit()
+		}
+		
+		topBarViewController.commitHandler = commitHandler
+		topBarViewController.cancelHandler = cancelHandler
+		
+		commitContentViewController.commitHandler = commitHandler
+		commitContentViewController.cancelHandler = cancelHandler
+		
+		// Set up views
+		if let contentView = self.window?.contentView {
+			do {
+				contentView.addSubview(topBarViewController.view)
+				
+				topBarViewController.view.translatesAutoresizingMaskIntoConstraints = false
+				NSLayoutConstraint.activate([
+					topBarViewController.view.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+					topBarViewController.view.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+					topBarViewController.view.topAnchor.constraint(equalTo: contentView.topAnchor),
+				])
+			}
+			
+			do {
+				contentView.addSubview(horizontalLineDivider)
+				
+				horizontalLineDivider.translatesAutoresizingMaskIntoConstraints = false
+				NSLayoutConstraint.activate([
+					horizontalLineDivider.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+					horizontalLineDivider.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+					horizontalLineDivider.topAnchor.constraint(equalTo: topBarViewController.view.bottomAnchor),
+				])
+			}
+			
+			do {
+				contentView.addSubview(commitContentViewController.view)
+				
+				commitContentViewController.view.translatesAutoresizingMaskIntoConstraints = false
+				NSLayoutConstraint.activate([
+					commitContentViewController.view.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+					commitContentViewController.view.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+					commitContentViewController.view.topAnchor.constraint(equalTo: horizontalLineDivider.bottomAnchor),
+					commitContentViewController.view.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+				])
+			}
+		}
+		
+		self.updateCurrentStyle()
 		
 		let userDefaults = UserDefaults.standard
 		
-		// Initialize NSTextView via code snippets from https://developer.apple.com/documentation/appkit/nstextview/1449347-initwithframe
-		do {
-			let textLayoutManager = NSTextLayoutManager()
-			
-			let textContainer = NSTextContainer(size: textContainerSize)
-			textLayoutManager.textContainer = textContainer
-			
-			let textContentStorage = NSTextContentStorage()
-			textContentStorage.addTextLayoutManager(textLayoutManager)
-			textContentStorage.delegate = self
-			
-			textView = ZGCommitTextView(frame: NSMakeRect(0.0, 0.0, scrollViewContentSize.width, scrollViewContentSize.height), textContainer: textLayoutManager.textContainer)
-			
-#if DEBUG
-			NotificationCenter.default.addObserver(forName: NSTextView.didSwitchToNSLayoutManagerNotification, object: textView, queue: OperationQueue.main) { _ in
-				
-				assertionFailure("TextView should not be switching to TextKit 1 layout manager")
-			}
-#endif
-		}
-		
-		textView.minSize = NSMakeSize(0.0, scrollViewContentSize.height)
-		textView.maxSize = NSMakeSize(CGFloat(Float.greatestFiniteMagnitude), CGFloat(Float.greatestFiniteMagnitude))
-		textView.isVerticallyResizable = true
-		textView.isHorizontallyResizable = false
-		textView.autoresizingMask = .width
-		textView.textContainer?.widthTracksTextView = true
-		textView.allowsUndo = true
-		textView.isRichText = false
-		textView.usesRuler = false
-		textView.usesFindBar = true
-		textView.isIncrementalSearchingEnabled = false
-		textView.isAutomaticDataDetectionEnabled = false
-		// Keeping the font panel enabled can lead to a serious performance hit:
-		// https://christiantietze.de/posts/2021/09/nstextview-fontpanel-slowness/
-		// We don't want to use it anyway
-		textView.usesFontPanel = false
-		
-		scrollView.documentView = textView
-		scrollViewContainer.addSubview(scrollView)
-		
 		self.window?.setFrameUsingName(ZGEditorWindowFrameNameKey)
-
-		self.updateCurrentStyle()
 		
 		// Update style when user changes the system appearance
 		self.effectiveAppearanceObserver = NSApp.observe(\.effectiveAppearance, options: [.old, .new]) { [weak self] (application, change) in
@@ -565,12 +328,7 @@ enum VersionControlType {
 			}
 		}
 		
-		commitLabelTextField.stringValue = projectNameDisplay
-		
-		// Give a little vertical padding between the text and the top of the text view container
-		let textContainerInset = textView.textContainerInset
-		textView.textContainerInset = NSMakeSize(textContainerInset.width, textContainerInset.height + 2)
-		
+		// Customize window
 		if let window = window {
 			window.titlebarAppearsTransparent = true
 			
@@ -586,49 +344,8 @@ enum VersionControlType {
 			}
 		}
 		
-		// Nobody ever wants these;
-		// Because macOS may have some of these settings globally in System Preferences, I don't trust IB very much..
-		textView.isAutomaticDashSubstitutionEnabled = false
-		textView.isAutomaticQuoteSubstitutionEnabled = false
-		
-		// Set textview delegates
-		textView.textStorage?.delegate = self
-		
-		textView.delegate = self
-		textView.zgCommitViewDelegate = self
-		
-		let plainAttributedString = NSMutableAttributedString(string: initialPlainText)
-		
-		// I don't think we want to invoke beginEditing/endEditing, etc, events because we are setting the textview content for the first time,
-		// and we don't want anything to register as user-editable yet or have undo activated yet
-		textView.textStorage?.replaceCharacters(in: NSMakeRange(0, 0), with: plainAttributedString)
-		
-		updateTextViewDrawingBackground()
-		
-		// If we have a non-version controlled file, point selection at start of content
-		// Otherwise if we're resuming a canceled commit message, select all the contents
-		// Otherwise point the selection at the end of the message contents
-		let versionControlledFile = userDefaults.bool(forKey: ZGAssumeVersionControlledFileKey)
-		if !versionControlledFile {
-			textView.setSelectedRange(NSMakeRange(0, 0))
-		} else {
-			if resumedFromSavedCommit {
-				textView.setSelectedRange(convertToUTF16Range(range: initialCommitTextRange, in: initialPlainText))
-			} else {
-				textView.setSelectedRange(convertToUTF16Range(range: initialCommitTextRange.upperBound ..< initialCommitTextRange.upperBound, in: initialPlainText))
-			}
-		}
-		
-		// If this is a squash, just turn off spell checking and automatic spell correction as it's more likely to annoy the user
-		// Make sure to disable this after setting the text storage content because spell checking detection
-		// depends on that being initially set
-		if isSquashMessage && userDefaults.bool(forKey: ZGDisableSpellCheckingAndCorrectionForSquashesKey) {
-			textView.zgDisableContinuousSpellingAndAutomaticSpellingCorrection()
-		} else {
-			textView.zgLoadDefaults()
-		}
-		
-		breadcrumbs?.spellChecking = textView.isContinuousSpellCheckingEnabled
+		// Show project name
+		topBarViewController.updateProjectName(projectNameDisplay)
 		
 		func showBranchName() {
 			let toolName: String
@@ -668,7 +385,7 @@ enum VersionControlType {
 							if let branchName = String(data: data, encoding: .utf8)?.trimmingCharacters(in: .whitespacesAndNewlines), branchName.count > 0 {
 								DispatchQueue.main.async {
 									let projectNameWithBranch = "\(self.projectNameDisplay) (\(branchName))"
-									self.commitLabelTextField.stringValue = projectNameWithBranch
+									self.topBarViewController.updateProjectName(projectNameWithBranch)
 								}
 							}
 						}
@@ -680,6 +397,7 @@ enum VersionControlType {
 		}
 		
 		// Show branch name if available
+		let versionControlledFile = userDefaults.bool(forKey: ZGAssumeVersionControlledFileKey)
 		if !tutorialMode && versionControlledFile {
 			showBranchName()
 		}
@@ -688,36 +406,7 @@ enum VersionControlType {
 	// MARK: Actions
 	
 	private func exit(status: Int32) -> Never {
-		if breadcrumbs != nil {
-			func retrieveLineRanges(plainText: String) -> [Range<String.Index>] {
-				var lineRanges: [Range<String.Index>] = []
-				var characterIndex = plainText.startIndex
-				while characterIndex < plainText.endIndex {
-					var lineStartIndex = String.Index(utf16Offset: 0, in: plainText)
-					var lineEndIndex = String.Index(utf16Offset: 0, in: plainText)
-					var contentEndIndex = String.Index(utf16Offset: 0, in: plainText)
-					
-					plainText.getLineStart(&lineStartIndex, end: &lineEndIndex, contentsEnd: &contentEndIndex, for: characterIndex ..< characterIndex)
-					
-					let lineRange = (lineStartIndex ..< contentEndIndex)
-					lineRanges.append(lineRange)
-					
-					characterIndex = lineEndIndex
-				}
-				return lineRanges
-			}
-			
-			// Update breadcrumbs
-			if let textContentStorage = textView.textContentStorage {
-				let currentText = currentPlainText()
-				let contentLineRanges = retrieveLineRanges(plainText: currentText)
-				
-				for contentLineRange in contentLineRanges {
-					let utf16Range = convertToUTF16Range(range: contentLineRange, in: currentText)
-					let _ = newTextParagraph(textContentStorage, range: utf16Range, updateBreadcrumbs: true)
-				}
-			}
-		}
+		commitContentViewController.updateBreadcrumbsIfNeeded()
 		
 		if var breadcrumbs = breadcrumbs, let breadcrumbsPath = ProcessInfo.processInfo.environment[ZGBreadcrumbsURLKey] {
 			let breadcrumbsURL = URL(fileURLWithPath: breadcrumbsPath, isDirectory: false)
@@ -755,12 +444,8 @@ enum VersionControlType {
 				// If we initially had no content and wrote an incomplete commit message,
 				// then save the commit message in case we may want to resume from it later
 				if userDefaults.bool(forKey: ZGResumeIncompleteSessionKey) {
-					let plainText = currentPlainText()
-					let commitRange = Self.commitTextRange(plainText: plainText, commentLength: commentSectionLength)
-					
-					let content = plainText[commitRange.lowerBound ..< commitRange.upperBound]
-					let trimmedContent = content.trimmingCharacters(in: .newlines)
-					if trimmedContent.count > 0 {
+					let commitMessageContent = commitContentViewController.commitMessageContent()
+					if commitMessageContent.count > 0 {
 						do {
 							let applicationSupportURL = try fileManager.url(for: .applicationSupportDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
 							
@@ -770,7 +455,7 @@ enum VersionControlType {
 							
 							let lastCommitURL = supportDirectory.appendingPathComponent(projectNameDisplay)
 							
-							try trimmedContent.write(to: lastCommitURL, atomically: true, encoding: .utf8)
+							try commitMessageContent.write(to: lastCommitURL, atomically: true, encoding: .utf8)
 						} catch {
 							print("Failed to save incomplete commit: \(error)")
 						}
@@ -784,8 +469,8 @@ enum VersionControlType {
 		}
 	}
 	
-	@IBAction @objc func commit(_ sender: Any?) {
-		let plainText = currentPlainText()
+	private func commit() {
+		let plainText = commitContentViewController.currentPlainText()
 		
 		do {
 			try plainText.write(to: fileURL, atomically: true, encoding: .utf8)
@@ -802,7 +487,7 @@ enum VersionControlType {
 		}
 	}
 	
-	@IBAction @objc func cancelCommit(_ sender: Any?) {
+	private func cancelCommit() {
 		exit(success: false)
 	}
 	
@@ -849,298 +534,21 @@ enum VersionControlType {
 		return true
 	}
 	
-	// MARK: Text View Delegates
-	
-	@objc func textView(_ textView: NSTextView, shouldChangeTextInRanges affectedRanges: [NSValue], replacementStrings: [String]?) -> Bool {
-		let commentRange = commentUTF16Range(plainText: currentPlainText())
-		
-		// Don't allow editing the comment section
-		// Make sure to also check we have a comment section, otherwise we would be
-		// not allowing to insert text at the end of the document for no reason
-		if commentRange.length > 0 {
-			for rangeValue in affectedRanges {
-				let range = rangeValue.rangeValue
-				if range.location + range.length >= commentRange.location {
-					return false
-				}
-			}
-		}
-		
-		return true
-	}
-	
-	private func newTextParagraph(_ textContentStorage: NSTextContentStorage, range: NSRange, updateBreadcrumbs: Bool) -> NSTextParagraph? {
-		guard let originalText = textContentStorage.textStorage?.attributedSubstring(from: range) else {
-			return nil
-		}
-		
-		let originalTextString = originalText.string
-		
-		let commentRange: NSRange
-		do {
-			let plainText = currentPlainText()
-			commentRange = commentUTF16Range(plainText: plainText)
-		}
-		
-		let paragraphWithDisplayAttributes: NSTextParagraph?
-		let isCommentSection = (range.location >= commentRange.location)
-		let isCommentLine = Self.isCommentLine(originalTextString, versionControlType: commentVersionControlType)
-		let hasSingleCommentLineMarker = Self.hasSingleCommentLineMarker(versionControlType: commentVersionControlType)
-		// For svn we want to test isCommentSection
-		// For git, we want to test isCommentLine. Scissored content may be in the comment section but
-		// we don't want to format those lines as comments
-		let isCommentParagraph = isCommentLine || (hasSingleCommentLineMarker && isCommentSection)
-
-		let userDefaults = UserDefaults.standard
-		
-		if !isCommentParagraph {
-			let contentFont = ZGReadDefaultFont(userDefaults, ZGMessageFontNameKey, ZGMessageFontPointSizeKey)
-			
-			let displayAttributes: [NSAttributedString.Key: AnyObject] = [.font: contentFont, .foregroundColor: style.textColor]
-			
-			let textWithDisplayAttributes = NSMutableAttributedString(attributedString: originalText)
-			
-			let fullTextRange = NSMakeRange(0, range.length)
-			textWithDisplayAttributes.addAttributes(displayAttributes, range: fullTextRange)
-			
-			let versionControlledFile = userDefaults.bool(forKey: ZGAssumeVersionControlledFileKey)
-			
-			if versionControlledFile {
-				if commentVersionControlType == .git && isCommentSection {
-					// Handle highlighting diffs
-					
-					let diffAttributeKey = style.diffHighlightsBackground ? NSAttributedString.Key.backgroundColor : NSAttributedString.Key.foregroundColor
-					
-					let diffAttributeColor: NSColor?
-					
-					// https://git-scm.com/docs/git-diff-index documents the possible header line prefixes
-					if originalTextString.hasPrefix("@@") ||
-						originalTextString.hasPrefix("+++") ||
-						originalTextString.hasPrefix("---") ||
-						originalTextString.hasPrefix("diff ") ||
-						(originalTextString.hasPrefix("index ") && originalTextString.contains("..")) ||
-						originalTextString.hasPrefix("deleted file mode") ||
-						originalTextString.hasPrefix("new file mode") ||
-						originalTextString.hasPrefix("copy from") ||
-						originalTextString.hasPrefix("copy to") ||
-						originalTextString.hasPrefix("rename from") ||
-						originalTextString.hasPrefix("rename to") ||
-						originalTextString.hasPrefix("similarity index") ||
-						originalTextString.hasPrefix("dissimilarity index") ||
-						originalTextString.hasPrefix("old mode") ||
-						originalTextString.hasPrefix("new mode") {
-						diffAttributeColor = style.diffHeaderColor
-						
-						if updateBreadcrumbs && breadcrumbs != nil {
-							breadcrumbs!.diffHeaderLineRanges.append(fullTextRange.location ..< NSMaxRange(fullTextRange))
-						}
-					} else if originalTextString.hasPrefix("+") {
-						diffAttributeColor = style.diffAddColor
-						
-						if updateBreadcrumbs && breadcrumbs != nil {
-							breadcrumbs!.diffAddLineRanges.append(fullTextRange.location ..< NSMaxRange(fullTextRange))
-						}
-					} else if originalTextString.hasPrefix("-") {
-						diffAttributeColor = style.diffRemoveColor
-						
-						if updateBreadcrumbs && breadcrumbs != nil {
-							breadcrumbs!.diffRemoveLineRanges.append(fullTextRange.location ..< NSMaxRange(fullTextRange))
-						}
-					} else {
-						diffAttributeColor = nil
-					}
-					
-					if let diffAttributeColor {
-						let diffAttributes: [NSAttributedString.Key : AnyObject] = [.font: contentFont, diffAttributeKey: diffAttributeColor]
-						
-						textWithDisplayAttributes.addAttributes(diffAttributes, range: fullTextRange)
-					}
-				} else if !isSquashMessage {
-					// Render text overflow highlights
-					
-					let lengthLimit: Int?
-					if range.location == 0 {
-						lengthLimit = Self.lengthLimitWarningEnabled(userDefaults: userDefaults, userDefaultKey: ZGEditorRecommendedSubjectLengthLimitEnabledKey) ? ZGReadDefaultLineLimit(userDefaults, ZGEditorRecommendedSubjectLengthLimitKey) : nil
-					} else {
-						lengthLimit = Self.lengthLimitWarningEnabled(userDefaults: userDefaults, userDefaultKey: ZGEditorRecommendedBodyLineLengthLimitEnabledKey) ? ZGReadDefaultLineLimit(userDefaults, ZGEditorRecommendedBodyLineLengthLimitKey) : nil
-					}
-					
-					if let lengthLimit = lengthLimit {
-						let distance = originalTextString.distance(from: originalTextString.startIndex, to: originalTextString.endIndex)
-						
-						if distance > lengthLimit {
-							let overflowRange = originalTextString.index(originalTextString.startIndex, offsetBy: lengthLimit) ..< originalTextString.endIndex
-							
-							let overflowUtf16Range = convertToUTF16Range(range: overflowRange, in: originalTextString)
-							
-							let overflowAttributes: [NSAttributedString.Key: AnyObject] = [.font: contentFont, .backgroundColor: style.overflowColor]
-							
-							textWithDisplayAttributes.addAttributes(overflowAttributes, range: overflowUtf16Range)
-							
-							if updateBreadcrumbs && breadcrumbs != nil {
-								breadcrumbs!.textOverflowRanges.append(range.location + overflowUtf16Range.location ..< range.location + NSMaxRange(overflowUtf16Range))
-							}
-						}
-					}
-				}
-			}
-			
-			paragraphWithDisplayAttributes = NSTextParagraph(attributedString: textWithDisplayAttributes)
-		} else {
-			let commentFont = ZGReadDefaultFont(userDefaults, ZGCommentsFontNameKey, ZGCommentsFontPointSizeKey)
-			
-			let displayAttributes: [NSAttributedString.Key: AnyObject] = [.font: commentFont, .foregroundColor: style.commentColor]
-			
-			let textWithDisplayAttributes = NSMutableAttributedString(attributedString: originalText)
-			
-			textWithDisplayAttributes.addAttributes(displayAttributes, range: NSMakeRange(0, range.length))
-			
-			if updateBreadcrumbs && !isCommentSection && breadcrumbs != nil {
-				breadcrumbs!.commentLineRanges.append(range.location ..< NSMaxRange(range))
-			}
-			
-			paragraphWithDisplayAttributes = NSTextParagraph(attributedString: textWithDisplayAttributes)
-		}
-		
-		return paragraphWithDisplayAttributes
-	}
-	
-	func textContentStorage(_ textContentStorage: NSTextContentStorage, textParagraphWith range: NSRange) -> NSTextParagraph? {
-		return newTextParagraph(textContentStorage, range: range, updateBreadcrumbs: false)
-	}
-	
-	@objc func textView(_ textView: NSTextView, shouldSetSpellingState value: Int, range affectedCharRange: NSRange) -> Int {
-		let plainText = currentPlainText()
-		
-		let commentRange = commentUTF16Range(plainText: plainText)
-		
-		// Check if affected character range is in the comment section (which includes scissored content)
-		if affectedCharRange.location >= commentRange.location {
-			return 0
-		}
-		
-		guard let affectedRange = Range(affectedCharRange, in: plainText) else {
-			return value
-		}
-		
-		var lineStartIndex = String.Index(utf16Offset: 0, in: plainText)
-		var lineEndIndex = String.Index(utf16Offset: 0, in: plainText)
-		var contentEndIndex = String.Index(utf16Offset: 0, in: plainText)
-		
-		plainText.getLineStart(&lineStartIndex, end: &lineEndIndex, contentsEnd: &contentEndIndex, for: affectedRange)
-		let line = String(plainText[lineStartIndex ..< contentEndIndex])
-		
-		return Self.isCommentLine(line, versionControlType: commentVersionControlType) ? 0 : value
-	}
-	
-	@objc func textView(_ textView: NSTextView, doCommandBy commandSelector: Selector) -> Bool {
-		// After the user enters a new line in the first line, we want to insert another newline due to commit'ing conventions
-		
-		guard commandSelector == #selector(insertNewline(_:)) else {
-			return false
-		}
-		
-		// Bail if automatic newline insertion is disabled or if we are dealing with a squash message
-		let userDefaults = UserDefaults.standard
-		guard userDefaults.bool(forKey: ZGAssumeVersionControlledFileKey) && userDefaults.bool(forKey: ZGEditorAutomaticNewlineInsertionAfterSubjectKey) && (!userDefaults.bool(forKey: ZGDisableAutomaticNewlineInsertionAfterSubjectLineForSquashesKey) || !isSquashMessage) else {
-			return false
-		}
-		
-		// We will have some prevention if the user performs a new line more than once consecutively
-		guard !preventAccidentalNewline else {
-			return true
-		}
-		
-		let selectedUTF16Ranges = textView.selectedRanges.map({ $0.rangeValue })
-		guard selectedUTF16Ranges.count == 1 else {
-			return false
-		}
-		
-		let utf16Range = selectedUTF16Ranges[0]
-		
-		do {
-			let plainText = currentPlainText()
-			guard let range = Range(utf16Range, in: plainText) else {
-				return false
-			}
-			
-			var lineStartIndex = String.Index(utf16Offset: 0, in: plainText)
-			var lineEndIndex = String.Index(utf16Offset: 0, in: plainText)
-			var contentEndIndex = String.Index(utf16Offset: 0, in: plainText)
-			
-			plainText.getLineStart(&lineStartIndex, end: &lineEndIndex, contentsEnd: &contentEndIndex, for: range)
-			
-			// We must be at the first (subject) line and there must be some content
-			guard lineStartIndex == plainText.startIndex, contentEndIndex > lineStartIndex else {
-				return false
-			}
-			
-			// Line must be at beginning of comment section or must be newline character
-			let utf16View = plainText.utf16
-			guard lineEndIndex == commentSectionIndex(plainUTF16Text: utf16View) || plainText[lineEndIndex].isNewline else {
-				return false
-			}
-		}
-		
-		let replacement = "\n\n"
-		guard textView.shouldChangeText(in: utf16Range, replacementString: replacement), let textStorage = textView.textStorage else {
-			return false
-		}
-		
-		// We need to invoke these methods to get proper undo support
-		// http://lists.apple.com/archives/cocoa-dev/2004/Jan/msg01925.html
-		
-		textStorage.beginEditing()
-		
-		textStorage.replaceCharacters(in: utf16Range, with: replacement)
-		
-		textStorage.endEditing()
-		textView.didChangeText()
-		
-		preventAccidentalNewline = true
-		
-		DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-			self.preventAccidentalNewline = false
-		}
-		
-		return true
-	}
-	
-	// MARK: ZGCommitViewDelegate
+	// MARK: UserDefaultsEditorListener
 	
 	@objc func userDefaultsChangedMessageFont() {
-		reloadTextAttributes()
+		commitContentViewController.reloadTextAttributes()
 	}
 	
 	@objc func userDefaultsChangedCommentsFont() {
-		reloadTextAttributes()
+		commitContentViewController.reloadTextAttributes()
 	}
 	
 	@objc func userDefaultsChangedRecommendedLineLengthLimits() {
-		reloadTextAttributes()
+		commitContentViewController.reloadTextAttributes()
 	}
 	
 	@objc func userDefaultsChangedVibrancy() {
 		updateCurrentStyle()
-	}
-	
-	func zgCommitViewSelectAll() {
-		let plainText = currentPlainText()
-		if commentSectionLength > 0 {
-			// Select only the commit text range
-			let commitRange = Self.commitTextRange(plainText: plainText, commentLength: commentSectionLength)
-			textView.setSelectedRange(convertToUTF16Range(range: commitRange, in: plainText))
-		} else {
-			// Select everything
-			textView.setSelectedRange(NSMakeRange(0, plainText.utf16.count))
-		}
-	}
-	
-	@objc func zgCommitViewTouchCommit(_ sender: Any) {
-		commit(nil)
-	}
-	
-	@objc func zgCommitViewTouchCancel(_ sender: Any) {
-		cancelCommit(nil)
 	}
 }

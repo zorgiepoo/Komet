@@ -13,6 +13,10 @@
 "tutorialAutomaticUpdates" = "Automatic updates can be toggled in Komet → Settings…";
 "tutorialProjectFileName" = "Tutorial";
 
+/* Top Bar */
+"topBarCancel" = "Cancel";
+"topBarCommit" = "Commit";
+
 /* Touch Bar */
 "touchBarCancel" = "Cancel";
 "touchBarCommit" = "Commit";
@@ -28,3 +32,4 @@
 "updaterLatestVersionInstalled" = "You have the latest version installed.";
 "updaterNoUpdateAvailable" = "No Update Available";
 "updaterVersionHistory" = "Version History";
+

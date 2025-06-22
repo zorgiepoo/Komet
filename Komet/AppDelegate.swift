@@ -191,7 +191,7 @@ typealias StatFS = statfs
 		self.editorWindowController = editorWindowController
 		editorWindowController.showWindow(nil)
 		
-		updaterController = UpdaterController(checkForUpdatesProgressIndicator: editorWindowController.checkForUpdatesProgressIndicator)
+		updaterController = UpdaterController(checkForUpdatesProgressIndicator: editorWindowController.topBarViewController.checkForUpdatesProgressIndicator)
 	}
 	
 	@objc func applicationWillTerminate(_ notification: Notification) {
