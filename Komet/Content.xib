@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="24093.7" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+    <dependencies>
+        <deployment identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="24093.7"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <customObject id="-2" userLabel="File's Owner" customClass="ContentViewController" customModule="Komet" customModuleProvider="target">
+            <connections>
+                <outlet property="scrollViewContainer" destination="B1h-Qf-hGq" id="JzI-Ra-u6j"/>
+                <outlet property="view" destination="nYA-J6-XAL" id="WSH-Xz-Vyk"/>
+            </connections>
+        </customObject>
+        <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
+        <customObject id="-3" userLabel="Application" customClass="NSObject"/>
+        <customView id="nYA-J6-XAL" userLabel="Content" customClass="NSVisualEffectView">
+            <rect key="frame" x="0.0" y="0.0" width="500" height="300"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+            <subviews>
+                <customView translatesAutoresizingMaskIntoConstraints="NO" id="B1h-Qf-hGq" userLabel="Scroll view container">
+                    <rect key="frame" x="0.0" y="0.0" width="500" height="300"/>
+                </customView>
+            </subviews>
+            <constraints>
+                <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="300" placeholder="YES" id="3rd-ay-vvN"/>
+                <constraint firstAttribute="trailing" secondItem="B1h-Qf-hGq" secondAttribute="trailing" id="5XZ-Cf-5a3"/>
+                <constraint firstItem="B1h-Qf-hGq" firstAttribute="top" secondItem="nYA-J6-XAL" secondAttribute="top" id="Paq-Md-au8"/>
+                <constraint firstItem="B1h-Qf-hGq" firstAttribute="leading" secondItem="nYA-J6-XAL" secondAttribute="leading" id="QqL-d7-9Sm"/>
+                <constraint firstAttribute="bottom" secondItem="B1h-Qf-hGq" secondAttribute="bottom" id="lwG-Jw-PFR"/>
+            </constraints>
+            <point key="canvasLocation" x="139" y="-197"/>
+        </customView>
+    </objects>
+</document>

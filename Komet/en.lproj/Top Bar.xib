@@ -1,0 +1,9 @@
+
+/* Class = "NSTextFieldCell"; title = "project_name"; ObjectID = "Yi1-b8-NCB"; */
+"Yi1-b8-NCB.title" = "project_name";
+
+/* Class = "NSButtonCell"; title = "commit"; ObjectID = "n9Q-dk-3iT"; */
+"n9Q-dk-3iT.title" = "Commit";
+
+/* Class = "NSButtonCell"; title = "cancel"; ObjectID = "xU2-2T-xm9"; */
+"xU2-2T-xm9.title" = "Cancel";

@@ -1,21 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="22154" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="24093.7" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="22154"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="24093.7"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="ZGEditorWindowController">
             <connections>
-                <outlet property="cancelButton" destination="eoZ-dv-vM8" id="nut-R3-GfT"/>
-                <outlet property="checkForUpdatesProgressIndicator" destination="Jez-Ap-eCY" id="gd6-oJ-Alk"/>
-                <outlet property="commitButton" destination="SIQ-xl-8MY" id="hx9-Vx-VqX"/>
-                <outlet property="commitLabelTextField" destination="vV7-fu-K3M" id="cY8-MU-xAx"/>
-                <outlet property="contentView" destination="5Ms-NX-CHZ" id="a5v-Qc-MbF"/>
-                <outlet property="horizontalBarDivider" destination="iBM-Yy-b1k" id="mfH-98-euX"/>
-                <outlet property="scrollViewContainer" destination="38p-dz-bpP" id="OpB-79-CzB"/>
-                <outlet property="topBar" destination="iuq-58-oil" id="in9-OF-xMR"/>
                 <outlet property="window" destination="4Y4-O8-fQs" id="9cp-uO-prZ"/>
             </connections>
         </customObject>
@@ -25,110 +17,13 @@
             <windowStyleMask key="styleMask" titled="YES" resizable="YES" fullSizeContentView="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="205" y="188" width="500" height="329"/>
-            <rect key="screenRect" x="0.0" y="0.0" width="1440" height="875"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="2560" height="1409"/>
             <value key="minSize" type="size" width="300" height="200"/>
             <view key="contentView" id="UXa-uU-h9N">
                 <rect key="frame" x="0.0" y="0.0" width="500" height="329"/>
-                <autoresizingMask key="autoresizingMask"/>
-                <subviews>
-                    <customView translatesAutoresizingMaskIntoConstraints="NO" id="iuq-58-oil" userLabel="Top Bar">
-                        <rect key="frame" x="0.0" y="306" width="500" height="23"/>
-                        <subviews>
-                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="vV7-fu-K3M">
-                                <rect key="frame" x="3" y="5" width="77" height="14"/>
-                                <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="project_name" id="rGL-rv-935">
-                                    <font key="font" metaFont="smallSystem"/>
-                                    <color key="textColor" name="disabledControlTextColor" catalog="System" colorSpace="catalog"/>
-                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                                </textFieldCell>
-                            </textField>
-                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="SIQ-xl-8MY">
-                                <rect key="frame" x="441" y="3" width="55" height="17"/>
-                                <buttonCell key="cell" type="roundRect" title="commit" bezelStyle="roundedRect" alignment="center" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="1Ko-YJ-eJd">
-                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" metaFont="smallSystem"/>
-                                    <string key="keyEquivalent" base64-UTF8="YES">
-DQ
-</string>
-                                    <modifierMask key="keyEquivalentModifierMask" command="YES"/>
-                                </buttonCell>
-                                <constraints>
-                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="55" id="AiN-eL-Kf8"/>
-                                </constraints>
-                                <connections>
-                                    <action selector="commit:" target="-2" id="m6a-Bk-PW7"/>
-                                </connections>
-                            </button>
-                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="bxH-iH-acy">
-                                <rect key="frame" x="381" y="5" width="55" height="14"/>
-                                <buttonCell key="cell" type="roundRect" title="cancel" bezelStyle="roundedRect" alignment="center" controlSize="small" lineBreakMode="truncatingTail" state="on" imageScaling="proportionallyDown" inset="2" id="eoZ-dv-vM8">
-                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" metaFont="smallSystem"/>
-                                </buttonCell>
-                                <connections>
-                                    <action selector="cancelCommit:" target="-2" id="LiY-IP-jEq"/>
-                                </connections>
-                            </button>
-                            <progressIndicator hidden="YES" maxValue="100" indeterminate="YES" controlSize="small" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="Jez-Ap-eCY" userLabel="Updater Check Progress Indicator">
-                                <rect key="frame" x="364" y="4" width="16" height="16"/>
-                            </progressIndicator>
-                        </subviews>
-                        <constraints>
-                            <constraint firstAttribute="trailing" secondItem="SIQ-xl-8MY" secondAttribute="trailing" constant="4" id="3NE-gx-ypR"/>
-                            <constraint firstItem="bxH-iH-acy" firstAttribute="width" secondItem="SIQ-xl-8MY" secondAttribute="width" id="7HF-9A-aNd"/>
-                            <constraint firstItem="bxH-iH-acy" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="iuq-58-oil" secondAttribute="leading" constant="20" symbolic="YES" id="Bvc-PM-QB9"/>
-                            <constraint firstItem="Jez-Ap-eCY" firstAttribute="centerY" secondItem="bxH-iH-acy" secondAttribute="centerY" id="CFL-ev-jpg"/>
-                            <constraint firstItem="bxH-iH-acy" firstAttribute="leading" secondItem="Jez-Ap-eCY" secondAttribute="trailing" constant="1" id="FkP-dp-dAg"/>
-                            <constraint firstItem="vV7-fu-K3M" firstAttribute="top" secondItem="iuq-58-oil" secondAttribute="top" constant="4" id="M4R-xS-gaA"/>
-                            <constraint firstItem="vV7-fu-K3M" firstAttribute="leading" secondItem="iuq-58-oil" secondAttribute="leading" constant="5" id="MdF-kS-11o"/>
-                            <constraint firstItem="SIQ-xl-8MY" firstAttribute="leading" secondItem="bxH-iH-acy" secondAttribute="trailing" constant="5" id="m6Z-bI-oOF"/>
-                            <constraint firstAttribute="height" constant="23" id="rOk-2H-52N"/>
-                            <constraint firstItem="bxH-iH-acy" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="vV7-fu-K3M" secondAttribute="trailing" constant="100" id="upt-Vq-e3o"/>
-                            <constraint firstItem="SIQ-xl-8MY" firstAttribute="top" secondItem="iuq-58-oil" secondAttribute="top" constant="3" id="wwO-fz-HIK"/>
-                            <constraint firstItem="bxH-iH-acy" firstAttribute="top" secondItem="iuq-58-oil" secondAttribute="top" constant="4" id="zlE-qN-ZEz"/>
-                        </constraints>
-                    </customView>
-                    <customView translatesAutoresizingMaskIntoConstraints="NO" id="5Ms-NX-CHZ" userLabel="Content" customClass="NSVisualEffectView">
-                        <rect key="frame" x="0.0" y="0.0" width="500" height="307"/>
-                        <subviews>
-                            <box boxType="custom" borderType="line" borderWidth="0.0" titlePosition="noTitle" translatesAutoresizingMaskIntoConstraints="NO" id="iBM-Yy-b1k" userLabel="Horizontal line box">
-                                <rect key="frame" x="0.0" y="306" width="500" height="1"/>
-                                <view key="contentView" focusRingType="none" id="96R-M0-ubo">
-                                    <rect key="frame" x="0.0" y="0.0" width="500" height="1"/>
-                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                </view>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="1" id="czF-x6-q6B"/>
-                                </constraints>
-                                <color key="fillColor" red="0.83529411764705885" green="0.83529411764705885" blue="0.83529411764705885" alpha="1" colorSpace="calibratedRGB"/>
-                            </box>
-                            <customView translatesAutoresizingMaskIntoConstraints="NO" id="38p-dz-bpP" userLabel="Scroll view container">
-                                <rect key="frame" x="0.0" y="0.0" width="500" height="306"/>
-                            </customView>
-                        </subviews>
-                        <constraints>
-                            <constraint firstItem="38p-dz-bpP" firstAttribute="top" secondItem="iBM-Yy-b1k" secondAttribute="bottom" id="7WF-AP-64p"/>
-                            <constraint firstAttribute="bottom" secondItem="38p-dz-bpP" secondAttribute="bottom" id="Krf-MX-B3l"/>
-                            <constraint firstAttribute="trailing" secondItem="38p-dz-bpP" secondAttribute="trailing" id="OYP-vE-Enf"/>
-                            <constraint firstAttribute="trailing" secondItem="iBM-Yy-b1k" secondAttribute="trailing" id="WLf-xu-CEj"/>
-                            <constraint firstItem="38p-dz-bpP" firstAttribute="leading" secondItem="5Ms-NX-CHZ" secondAttribute="leading" id="uOB-4j-jJm"/>
-                            <constraint firstItem="iBM-Yy-b1k" firstAttribute="leading" secondItem="5Ms-NX-CHZ" secondAttribute="leading" id="xeu-UR-M2U"/>
-                            <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="300" id="zfz-rS-Fcw"/>
-                        </constraints>
-                    </customView>
-                </subviews>
-                <constraints>
-                    <constraint firstAttribute="trailing" secondItem="5Ms-NX-CHZ" secondAttribute="trailing" id="9OK-gU-PPN"/>
-                    <constraint firstAttribute="bottom" secondItem="5Ms-NX-CHZ" secondAttribute="bottom" id="KFf-3F-pnF"/>
-                    <constraint firstAttribute="trailing" secondItem="iuq-58-oil" secondAttribute="trailing" id="Xvh-XO-J9E"/>
-                    <constraint firstItem="iuq-58-oil" firstAttribute="leading" secondItem="UXa-uU-h9N" secondAttribute="leading" id="bB6-6f-jHC"/>
-                    <constraint firstItem="5Ms-NX-CHZ" firstAttribute="leading" secondItem="UXa-uU-h9N" secondAttribute="leading" id="jYA-wZ-ELG"/>
-                    <constraint firstItem="iBM-Yy-b1k" firstAttribute="top" secondItem="iuq-58-oil" secondAttribute="bottom" constant="-1" id="mXj-JT-aR1"/>
-                    <constraint firstItem="iuq-58-oil" firstAttribute="top" secondItem="UXa-uU-h9N" secondAttribute="top" id="pFE-wr-iC0"/>
-                    <constraint firstItem="5Ms-NX-CHZ" firstAttribute="top" secondItem="UXa-uU-h9N" secondAttribute="top" constant="22" id="szM-oz-msK"/>
-                </constraints>
+                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             </view>
-            <point key="canvasLocation" x="137" y="-93.5"/>
+            <point key="canvasLocation" x="325" y="33.5"/>
         </window>
     </objects>
 </document>

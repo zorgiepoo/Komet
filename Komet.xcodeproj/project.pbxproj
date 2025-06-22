@@ -26,11 +26,17 @@
 		723606B21FC630C400BDD6E9 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 723606B01FC630C400BDD6E9 /* Localizable.strings */; };
 		725148EC266DC2C000247C9C /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 725148EA266DC2B000247C9C /* Sparkle.framework */; };
 		725148ED266DC2C000247C9C /* Sparkle.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 725148EA266DC2B000247C9C /* Sparkle.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		72535B862E04D40D00EC4C35 /* Content.xib in Resources */ = {isa = PBXBuildFile; fileRef = 72535B852E04D40D00EC4C35 /* Content.xib */; };
+		72535B872E04D40D00EC4C35 /* ContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72535B842E04D40D00EC4C35 /* ContentViewController.swift */; };
+		72535BA12E07569000EC4C35 /* ColoredDividerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72535BA02E07569000EC4C35 /* ColoredDividerView.swift */; };
+		72535BA32E07578200EC4C35 /* TextProcessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72535BA22E07578200EC4C35 /* TextProcessor.swift */; };
 		726F32F71DE27AB7004FB4AF /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 726F32F51DE27AB7004FB4AF /* Credits.rtf */; };
 		726FC0982C229E0800177986 /* new-commit-scissor in Resources */ = {isa = PBXBuildFile; fileRef = 726FC0962C229E0800177986 /* new-commit-scissor */; };
 		726FC0992C229E0800177986 /* amended-commit-scissor in Resources */ = {isa = PBXBuildFile; fileRef = 726FC0972C229E0800177986 /* amended-commit-scissor */; };
 		7272EB4A25588D4300C78C4D /* WindowStyleTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72D3BE78254F24CF0051914F /* WindowStyleTheme.swift */; };
 		7272EB4D25588DC900C78C4D /* WindowStyleDefaultTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7272EB4C25588DC900C78C4D /* WindowStyleDefaultTheme.swift */; };
+		7290A9E82E04A6C800A30BC0 /* TopBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7290A9E52E04A6C800A30BC0 /* TopBarViewController.swift */; };
+		7290A9EB2E04A88200A30BC0 /* Top Bar.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7290A9EA2E04A88200A30BC0 /* Top Bar.xib */; };
 		72B72C9C1D63EFF90096365F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 72B72C9B1D63EFF90096365F /* Assets.xcassets */; };
 		72B72C9F1D63EFF90096365F /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 72B72C9D1D63EFF90096365F /* MainMenu.xib */; };
 		72D3BE58254E37B70051914F /* PreferencesWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72D3BE57254E37B70051914F /* PreferencesWindowController.swift */; };
@@ -91,15 +97,20 @@
 		72120FD12533F91D0018201E /* interactive-rebase-2 */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "interactive-rebase-2"; sourceTree = "<group>"; };
 		723606A51FC61ECB00BDD6E9 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/MainMenu.strings; sourceTree = "<group>"; };
 		723606A71FC6222000BDD6E9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = "Base.lproj/Commit Editor.xib"; sourceTree = "<group>"; };
-		723606AA1FC6222300BDD6E9 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = "en.lproj/Commit Editor.strings"; sourceTree = "<group>"; };
 		723606AC1FC6235200BDD6E9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/Preferences.xib; sourceTree = "<group>"; };
 		723606AF1FC6235400BDD6E9 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Preferences.strings; sourceTree = "<group>"; };
 		723606B11FC630C400BDD6E9 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		725148EA266DC2B000247C9C /* Sparkle.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Sparkle.framework; path = vendor/Sparkle/Sparkle.framework; sourceTree = SOURCE_ROOT; };
+		72535B842E04D40D00EC4C35 /* ContentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentViewController.swift; sourceTree = "<group>"; };
+		72535B852E04D40D00EC4C35 /* Content.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = Content.xib; sourceTree = "<group>"; };
+		72535BA02E07569000EC4C35 /* ColoredDividerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColoredDividerView.swift; sourceTree = "<group>"; };
+		72535BA22E07578200EC4C35 /* TextProcessor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextProcessor.swift; sourceTree = "<group>"; };
 		726F32F61DE27AB7004FB4AF /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = Base; path = Base.lproj/Credits.rtf; sourceTree = "<group>"; };
 		726FC0962C229E0800177986 /* new-commit-scissor */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "new-commit-scissor"; sourceTree = "<group>"; };
 		726FC0972C229E0800177986 /* amended-commit-scissor */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "amended-commit-scissor"; sourceTree = "<group>"; };
 		7272EB4C25588DC900C78C4D /* WindowStyleDefaultTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowStyleDefaultTheme.swift; sourceTree = "<group>"; };
+		7290A9E52E04A6C800A30BC0 /* TopBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopBarViewController.swift; sourceTree = "<group>"; };
+		7290A9E92E04A88200A30BC0 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = "Base.lproj/Top Bar.xib"; sourceTree = "<group>"; };
 		72B72C921D63EFF90096365F /* Komet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Komet.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		72B72C9B1D63EFF90096365F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		72B72C9E1D63EFF90096365F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MainMenu.xib; sourceTree = "<group>"; };
@@ -196,6 +207,10 @@
 				72D3BE64254E8BE00051914F /* CommitTextView.swift */,
 				7211A9B02546704C00F95773 /* Breadcrumbs.swift */,
 				7211A995253C06F200F95773 /* EditorWindowController.swift */,
+				7290A9E52E04A6C800A30BC0 /* TopBarViewController.swift */,
+				72535B842E04D40D00EC4C35 /* ContentViewController.swift */,
+				72535BA02E07569000EC4C35 /* ColoredDividerView.swift */,
+				72535BA22E07578200EC4C35 /* TextProcessor.swift */,
 				72D3BE6F254E9A590051914F /* WindowStyle.swift */,
 				72D3BE78254F24CF0051914F /* WindowStyleTheme.swift */,
 				7272EB4C25588DC900C78C4D /* WindowStyleDefaultTheme.swift */,
@@ -207,6 +222,8 @@
 				72D3BE80254FD56F0051914F /* UpdaterController.swift */,
 				72D3BE8925564D420051914F /* UpdaterUserDriver.swift */,
 				723606A81FC6222000BDD6E9 /* Commit Editor.xib */,
+				72535B852E04D40D00EC4C35 /* Content.xib */,
+				7290A9EA2E04A88200A30BC0 /* Top Bar.xib */,
 				723606AD1FC6235200BDD6E9 /* Preferences.xib */,
 				72B72C9B1D63EFF90096365F /* Assets.xcassets */,
 				72DA1C442DFD0D2800BF585A /* KometAppIcon.icon */,
@@ -338,7 +355,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7290A9EB2E04A88200A30BC0 /* Top Bar.xib in Resources */,
 				726F32F71DE27AB7004FB4AF /* Credits.rtf in Resources */,
+				72535B862E04D40D00EC4C35 /* Content.xib in Resources */,
 				723606A61FC6222000BDD6E9 /* Commit Editor.xib in Resources */,
 				723606B21FC630C400BDD6E9 /* Localizable.strings in Resources */,
 				72B72C9C1D63EFF90096365F /* Assets.xcassets in Resources */,
@@ -370,9 +389,12 @@
 				7211A996253C06F200F95773 /* EditorWindowController.swift in Sources */,
 				72D3BE58254E37B70051914F /* PreferencesWindowController.swift in Sources */,
 				7211A986253BCF1600F95773 /* AppDelegate.swift in Sources */,
+				72535B872E04D40D00EC4C35 /* ContentViewController.swift in Sources */,
 				72D3BE5D254E6E3F0051914F /* UserDefaults.swift in Sources */,
 				72D3BE8A25564D420051914F /* UpdaterUserDriver.swift in Sources */,
+				7290A9E82E04A6C800A30BC0 /* TopBarViewController.swift in Sources */,
 				7211A9B12546704C00F95773 /* Breadcrumbs.swift in Sources */,
+				72535BA32E07578200EC4C35 /* TextProcessor.swift in Sources */,
 				72D3BE6A254E93E90051914F /* UserDefaultKeys.swift in Sources */,
 				72D3BE65254E8BE00051914F /* CommitTextView.swift in Sources */,
 				72D3BE86254FDB6A0051914F /* UpdaterSettingsListener.swift in Sources */,
@@ -381,6 +403,7 @@
 				72D3BE79254F24CF0051914F /* WindowStyleTheme.swift in Sources */,
 				7272EB4D25588DC900C78C4D /* WindowStyleDefaultTheme.swift in Sources */,
 				A79E145C2D7C53F300F93FD1 /* String+escaping.swift in Sources */,
+				72535BA12E07569000EC4C35 /* ColoredDividerView.swift in Sources */,
 				72D3BE81254FD56F0051914F /* UpdaterController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -400,7 +423,6 @@
 			isa = PBXVariantGroup;
 			children = (
 				723606A71FC6222000BDD6E9 /* Base */,
-				723606AA1FC6222300BDD6E9 /* en */,
 			);
 			name = "Commit Editor.xib";
 			sourceTree = "<group>";
@@ -428,6 +450,14 @@
 				726F32F61DE27AB7004FB4AF /* Base */,
 			);
 			name = Credits.rtf;
+			sourceTree = "<group>";
+		};
+		7290A9EA2E04A88200A30BC0 /* Top Bar.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				7290A9E92E04A88200A30BC0 /* Base */,
+			);
+			name = "Top Bar.xib";
 			sourceTree = "<group>";
 		};
 		72B72C9D1D63EFF90096365F /* MainMenu.xib */ = {
