@@ -258,11 +258,11 @@ private let APP_SUPPORT_DIRECTORY_NAME = "Komet"
 	
 	@objc override func windowDidLoad() {
 		let commitHandler: () -> () = { [weak self] in
-			self?.commit()
+			self?.commit(nil)
 		}
 		
 		let cancelHandler: () -> () = { [weak self] in
-			self?.cancelCommit()
+			self?.cancelCommit(nil)
 		}
 		
 		topBarViewController.commitHandler = commitHandler
@@ -469,7 +469,7 @@ private let APP_SUPPORT_DIRECTORY_NAME = "Komet"
 		}
 	}
 	
-	private func commit() {
+	@IBAction @objc func commit(_ sender: Any?) {
 		let plainText = commitContentViewController.currentPlainText()
 		
 		do {
@@ -487,7 +487,7 @@ private let APP_SUPPORT_DIRECTORY_NAME = "Komet"
 		}
 	}
 	
-	private func cancelCommit() {
+	@IBAction @objc func cancelCommit(_ sender: Any?) {
 		exit(success: false)
 	}
 	
