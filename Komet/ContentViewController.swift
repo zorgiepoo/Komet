@@ -20,9 +20,10 @@ class ContentViewController: NSViewController, NSTextStorageDelegate, NSTextCont
 	private let resumedFromSavedCommit: Bool
 	private let initialCommitTextRange: Range<String.UTF16View.Index>
 	private let isSquashMessage: Bool
-	private var breadcrumbs: Breadcrumbs?
 	
 	private var preventAccidentalNewline: Bool = false
+	
+	var breadcrumbs: Breadcrumbs?
 	
 	var commitHandler: (() -> ())? = nil
 	var cancelHandler: (() -> ())? = nil

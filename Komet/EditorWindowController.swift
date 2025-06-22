@@ -17,7 +17,6 @@ private let APP_SUPPORT_DIRECTORY_NAME = "Komet"
 	private let fileURL: URL
 	private let temporaryDirectoryURL: URL?
 	private let tutorialMode: Bool
-	private var breadcrumbs: Breadcrumbs?
 	
 	private let initiallyContainedEmptyContent: Bool
 	private let versionControlType: VersionControlType
@@ -82,6 +81,7 @@ private let APP_SUPPORT_DIRECTORY_NAME = "Komet"
 		let userDefaults = UserDefaults.standard
 		
 		let processInfo = ProcessInfo.processInfo
+		let breadcrumbs: Breadcrumbs?
 		if let _ = processInfo.environment[ZGBreadcrumbsURLKey] {
 			breadcrumbs = Breadcrumbs()
 		} else {
@@ -408,7 +408,7 @@ private let APP_SUPPORT_DIRECTORY_NAME = "Komet"
 	private func exit(status: Int32) -> Never {
 		commitContentViewController.updateBreadcrumbsIfNeeded()
 		
-		if var breadcrumbs = breadcrumbs, let breadcrumbsPath = ProcessInfo.processInfo.environment[ZGBreadcrumbsURLKey] {
+		if var breadcrumbs = commitContentViewController.breadcrumbs, let breadcrumbsPath = ProcessInfo.processInfo.environment[ZGBreadcrumbsURLKey] {
 			let breadcrumbsURL = URL(fileURLWithPath: breadcrumbsPath, isDirectory: false)
 			breadcrumbs.exitStatus = status
 			
