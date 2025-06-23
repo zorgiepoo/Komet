@@ -65,7 +65,6 @@ DQ
                 <constraint firstItem="zn7-nG-YEr" firstAttribute="centerY" secondItem="Xbe-BU-bfD" secondAttribute="centerY" id="Fro-8Y-4A4"/>
                 <constraint firstItem="LA4-2H-9rP" firstAttribute="centerY" secondItem="Xbe-BU-bfD" secondAttribute="centerY" id="Llq-1z-td3"/>
                 <constraint firstAttribute="trailing" secondItem="zn7-nG-YEr" secondAttribute="trailing" constant="4" id="TKF-VJ-mB1"/>
-                <constraint firstAttribute="height" constant="30" id="WnQ-5b-jTy"/>
                 <constraint firstItem="gZM-K9-1TQ" firstAttribute="leading" secondItem="Xbe-BU-bfD" secondAttribute="leading" constant="5" id="fmm-vt-ori"/>
                 <constraint firstItem="GTR-zR-Hnl" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="gZM-K9-1TQ" secondAttribute="trailing" constant="100" id="hUR-ew-Akd"/>
                 <constraint firstItem="gZM-K9-1TQ" firstAttribute="centerY" secondItem="Xbe-BU-bfD" secondAttribute="centerY" id="kiq-8t-AEI"/>

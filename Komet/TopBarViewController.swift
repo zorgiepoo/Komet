@@ -8,7 +8,7 @@
 
 import Cocoa
 
-class TopBarViewController: NSViewController {
+class TopBarViewController: NSTitlebarAccessoryViewController {
 	@IBOutlet private var commitLabelTextField: NSTextField!
 	@IBOutlet private var cancelButton: NSButton!
 	@IBOutlet private var commitButton: NSButton!

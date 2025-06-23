@@ -277,27 +277,41 @@ private let APP_SUPPORT_DIRECTORY_NAME = "Komet"
 		
 		// Set up views
 		if let contentView = self.window?.contentView {
-			do {
-				contentView.addSubview(topBarViewController.view)
-				
-				topBarViewController.view.translatesAutoresizingMaskIntoConstraints = false
-				NSLayoutConstraint.activate([
-					topBarViewController.view.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-					topBarViewController.view.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-					topBarViewController.view.topAnchor.constraint(equalTo: contentView.topAnchor),
-				])
-			}
+//			do {
+//				contentView.addSubview(topBarViewController.view)
+//				
+//				topBarViewController.view.translatesAutoresizingMaskIntoConstraints = false
+//				NSLayoutConstraint.activate([
+//					topBarViewController.view.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+//					topBarViewController.view.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+//					topBarViewController.view.topAnchor.constraint(equalTo: contentView.topAnchor),
+//				])
+//			}
 			
 			do {
-				contentView.addSubview(horizontalLineDivider)
+				topBarViewController.layoutAttribute = .top
+				window?.addTitlebarAccessoryViewController(topBarViewController)
 				
-				horizontalLineDivider.translatesAutoresizingMaskIntoConstraints = false
-				NSLayoutConstraint.activate([
-					horizontalLineDivider.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-					horizontalLineDivider.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-					horizontalLineDivider.topAnchor.constraint(equalTo: topBarViewController.view.bottomAnchor),
-				])
+				let topBarView = topBarViewController.view
+				if let superview = topBarView.superview {
+					NSLayoutConstraint.activate([
+						topBarView.leadingAnchor.constraint(equalTo: superview.leadingAnchor),
+						topBarView.trailingAnchor.constraint(equalTo: superview.trailingAnchor),
+						topBarView.topAnchor.constraint(equalTo: superview.topAnchor),
+					])
+				}
 			}
+			
+//			do {
+//				contentView.addSubview(horizontalLineDivider)
+//				
+//				horizontalLineDivider.translatesAutoresizingMaskIntoConstraints = false
+//				NSLayoutConstraint.activate([
+//					horizontalLineDivider.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+//					horizontalLineDivider.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+//					horizontalLineDivider.topAnchor.constraint(equalTo: topBarViewController.view.bottomAnchor),
+//				])
+//			}
 			
 			do {
 				contentView.addSubview(commitContentViewController.view)
@@ -306,7 +320,8 @@ private let APP_SUPPORT_DIRECTORY_NAME = "Komet"
 				NSLayoutConstraint.activate([
 					commitContentViewController.view.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
 					commitContentViewController.view.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-					commitContentViewController.view.topAnchor.constraint(equalTo: horizontalLineDivider.bottomAnchor),
+//					commitContentViewController.view.topAnchor.constraint(equalTo: horizontalLineDivider.bottomAnchor),
+					commitContentViewController.view.topAnchor.constraint(equalTo: contentView.topAnchor),
 					commitContentViewController.view.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
 				])
 			}
@@ -335,6 +350,7 @@ private let APP_SUPPORT_DIRECTORY_NAME = "Komet"
 		// Customize window
 		if let window = window {
 			window.titlebarAppearsTransparent = true
+			window.titleVisibility = .hidden
 			
 			// Hide the window titlebar buttons
 			// We still want the resize functionality to work even though the button is hidden
