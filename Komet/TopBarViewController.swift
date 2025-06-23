@@ -10,7 +10,7 @@ import Cocoa
 
 class TopBarViewController: NSViewController {
 	@IBOutlet private var commitLabelTextField: NSTextField!
-	@IBOutlet private var cancelButton: NSButtonCell!
+	@IBOutlet private var cancelButton: NSButton!
 	@IBOutlet private var commitButton: NSButton!
 	@IBOutlet var checkForUpdatesProgressIndicator: NSProgressIndicator!
 	

@@ -8,7 +8,7 @@
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="TopBarViewController" customModule="Komet" customModuleProvider="target">
             <connections>
-                <outlet property="cancelButton" destination="xU2-2T-xm9" id="9yx-wU-ush"/>
+                <outlet property="cancelButton" destination="LA4-2H-9rP" id="Nl5-10-R0B"/>
                 <outlet property="checkForUpdatesProgressIndicator" destination="GTR-zR-Hnl" id="HnF-DX-b0W"/>
                 <outlet property="commitButton" destination="zn7-nG-YEr" id="gkN-Ap-0u1"/>
                 <outlet property="commitLabelTextField" destination="gZM-K9-1TQ" id="63d-co-uNX"/>
