@@ -23,6 +23,8 @@ private let APP_SUPPORT_DIRECTORY_NAME = "Komet"
 	private let commentVersionControlType: VersionControlType
 	private let projectNameDisplay: String
 	
+	private let breadcrumbsPath: String?
+	
 	private var style: WindowStyle
 	private var effectiveAppearanceObserver: NSKeyValueObservation? = nil
 	
@@ -81,8 +83,10 @@ private let APP_SUPPORT_DIRECTORY_NAME = "Komet"
 		let userDefaults = UserDefaults.standard
 		
 		let processInfo = ProcessInfo.processInfo
+		breadcrumbsPath = processInfo.environment[ZGBreadcrumbsURLKey]
+		
 		let breadcrumbs: Breadcrumbs?
-		if let _ = processInfo.environment[ZGBreadcrumbsURLKey] {
+		if breadcrumbsPath != nil {
 			breadcrumbs = Breadcrumbs()
 		} else {
 			breadcrumbs = nil
@@ -406,17 +410,21 @@ private let APP_SUPPORT_DIRECTORY_NAME = "Komet"
 	// MARK: Actions
 	
 	private func exit(status: Int32) -> Never {
-		commitContentViewController.updateBreadcrumbsIfNeeded()
-		
-		if var breadcrumbs = commitContentViewController.breadcrumbs, let breadcrumbsPath = ProcessInfo.processInfo.environment[ZGBreadcrumbsURLKey] {
-			let breadcrumbsURL = URL(fileURLWithPath: breadcrumbsPath, isDirectory: false)
-			breadcrumbs.exitStatus = status
+		if let breadcrumbsPath = breadcrumbsPath {
+			if let enableContentsBreadcrumbs = ProcessInfo.processInfo.environment[ZGBreadcrumbsEnableContentKey], enableContentsBreadcrumbs == "true" || enableContentsBreadcrumbs == "1" {
+				commitContentViewController.updateBreadcrumbsIfNeeded()
+			}
 			
-			do {
-				let jsonData = try JSONEncoder().encode(breadcrumbs)
-				try jsonData.write(to: breadcrumbsURL, options: .atomic)
-			} catch {
-				print("Failed to save breadcrumbs: \(error)")
+			if var breadcrumbs = commitContentViewController.breadcrumbs {
+				let breadcrumbsURL = URL(fileURLWithPath: breadcrumbsPath, isDirectory: false)
+				breadcrumbs.exitStatus = status
+				
+				do {
+					let jsonData = try JSONEncoder().encode(breadcrumbs)
+					try jsonData.write(to: breadcrumbsURL, options: .atomic)
+				} catch {
+					print("Failed to save breadcrumbs: \(error)")
+				}
 			}
 		}
 		

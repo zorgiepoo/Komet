@@ -43,4 +43,5 @@ let ZGUseLegacyAppActivationKey = "ZGUseLegacyAppActivation"
 
 // Environment options for test automation
 let ZGBreadcrumbsURLKey = "ZGBreadcrumbsURL"
+let ZGBreadcrumbsEnableContentKey = "ZGBreadcrumbsEnableContent"
 let ZGProjectNameKey = "ZGProjectName"

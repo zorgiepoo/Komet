@@ -23,7 +23,7 @@ class KometApp {
 	private let tempDirectoryURL: URL
 	private let breadcrumbsURL: URL
 	
-	init(filename: String, automicNewlineInsertion: Bool = true, resumeIncompleteSession: Bool = false, versionControlledFile: Bool = true) throws {
+	init(filename: String, automicNewlineInsertion: Bool = true, resumeIncompleteSession: Bool = false, versionControlledFile: Bool = true, enableContentBreadcrumbs: Bool = true) throws {
 		let bundle = Bundle(for: Self.self)
 		let resourceURL = bundle.url(forResource: filename, withExtension: "")!
 		
@@ -72,7 +72,8 @@ class KometApp {
 		
 		application.launchEnvironment = [
 			ZGBreadcrumbsURLKey: breadcrumbsURL.path,
-			ZGProjectNameKey: tempDirectoryURL.lastPathComponent
+			ZGBreadcrumbsEnableContentKey: String(enableContentBreadcrumbs),
+			ZGProjectNameKey: tempDirectoryURL.lastPathComponent,
 		]
 		application.launch()
 		
@@ -1092,7 +1093,7 @@ class KometUITests: XCTestCase {
 	// MARK: Performance
 	
 	func testLargeFileCommit() throws {
-		let app = try KometApp(filename: "linux-partial")
+		let app = try KometApp(filename: "linux-partial", enableContentBreadcrumbs: false)
 		
 		let subject = "Hello there!"
 		let body = "I hope this works pretty well!!!!"
@@ -1108,7 +1109,7 @@ class KometUITests: XCTestCase {
 	}
 	
 	func testLargeNonVersionControlledFileCommit() throws {
-		let app = try KometApp(filename: "linux-partial", versionControlledFile: false)
+		let app = try KometApp(filename: "linux-partial", versionControlledFile: false, enableContentBreadcrumbs: false)
 		
 		let subject = "Hello there!"
 		let body = "I hope this works pretty well!!!!"
