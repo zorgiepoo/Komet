@@ -65,10 +65,10 @@ class TopBarViewController: NSViewController {
 	}
     
 	@IBAction @objc func cancelCommit(_ sender: Any?) {
-		commitHandler?()
+		cancelHandler?()
 	}
 	
 	@IBAction @objc func commit(_ sender: Any?) {
-		cancelHandler?()
+		commitHandler?()
 	}
 }
