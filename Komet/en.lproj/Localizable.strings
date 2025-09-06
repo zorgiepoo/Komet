@@ -5,7 +5,9 @@
 "tutorialCommitShortcut" = "Commit: ⌘return";
 "tutorialCancelShortcut" = "Cancel: ⌘Q";
 "tutorialMoveAppSuggestion" = "You should first move Komet to somewhere persistent like";
-"tutorialDefaultGitEditorRecommendation" = "You may want to set Komet as your default git editor:";
+"tutorialDefaultEditorRecommendation" = "You may want to set Komet as your default editor.";
+"tutorialDefaultGitEditorRecommendation" = "For git:";
+"tutorialDefaultJJEditorRecommendation" = "For jj:";
 "tutorialDefaultHgEditorRecommendation" = "For hg, you will want to set the HGEDITOR environment variable.";
 "tutorialDefaultSvnEditorRecommendation" = "For svn, you will want to set the SVN_EDITOR environment variable.";
 "tutorialConsultEditorDocumentation" = "Please consult their documentation for more information.";

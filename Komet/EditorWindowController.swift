@@ -19,6 +19,7 @@ private let APP_SUPPORT_DIRECTORY_NAME = "Komet"
 	private let tutorialMode: Bool
 	
 	private let initiallyContainedEmptyContent: Bool
+	private let initiallyContainedEmptyCommentIntroLine: Bool
 	private let versionControlType: VersionControlType
 	private let commentVersionControlType: VersionControlType
 	private let projectNameDisplay: String
@@ -94,8 +95,6 @@ private let APP_SUPPORT_DIRECTORY_NAME = "Komet"
 		
 		style = WindowStyle.withTheme(Self.styleTheme(defaultTheme: ZGReadDefaultWindowStyleTheme(userDefaults, ZGWindowStyleThemeKey), effectiveAppearance: NSApp.effectiveAppearance))
 		
-		// Detect squash message
-		let isSquashMessage: Bool
 		let loadedPlainString: String
 		do {
 			let plainStringCandidate = try String(contentsOf: self.fileURL, encoding: .utf8)
@@ -104,11 +103,6 @@ private let APP_SUPPORT_DIRECTORY_NAME = "Komet"
 			// just insert a newline character because Komet won't be able to deal with the content otherwise
 			let lineCount = plainStringCandidate.components(separatedBy: .newlines).count
 			loadedPlainString = (lineCount <= 1) ? "\n" : plainStringCandidate
-			
-			// Detect heuristically if this is a squash/rebase in git or hg
-			// Scan the entire string contents for simplicity and handle both git and hg (with histedit extension)
-			// Also test if the filename contains "rebase"
-			isSquashMessage = fileURL.lastPathComponent.contains("rebase") || loadedPlainString.contains("= use commit")
 		} catch {
 			fatalError("Failed to parse commit data: \(error)")
 		}
@@ -129,13 +123,17 @@ private let APP_SUPPORT_DIRECTORY_NAME = "Komet"
 			versionControlType = .git
 			self.projectNameDisplay = parentURL.deletingLastPathComponent().lastPathComponent
 		} else {
-			let lastPathComponent = self.fileURL.lastPathComponent
-			if lastPathComponent.hasPrefix("hg-") {
-				versionControlType = .hg
-			} else if lastPathComponent.hasPrefix("svn-") {
-				versionControlType = .svn
+			if self.fileURL.pathExtension == "jjdescription" {
+				versionControlType = .jj
 			} else {
-				versionControlType = .git
+				let lastPathComponent = self.fileURL.lastPathComponent
+				if lastPathComponent.hasPrefix("hg-") {
+					versionControlType = .hg
+				} else if lastPathComponent.hasPrefix("svn-") {
+					versionControlType = .svn
+				} else {
+					versionControlType = .git
+				}
 			}
 			
 			if let projectNameFromEnvironment = processInfo.environment[ZGProjectNameKey] {
@@ -147,6 +145,21 @@ private let APP_SUPPORT_DIRECTORY_NAME = "Komet"
 		
 		self.versionControlType = versionControlType
 		
+		// Detect heuristically if this is a squash/rebase in git or hg
+		// Scan the entire string contents for simplicity and handle both git and hg (with histedit extension)
+		// Also test if the filename contains "rebase"
+		let isSquashMessage: Bool
+		switch versionControlType {
+		case .hg:
+			fallthrough
+		case .git:
+			isSquashMessage = fileURL.lastPathComponent.contains("rebase") || loadedPlainString.contains("= use commit")
+		case .svn:
+			fallthrough
+		case .jj:
+			isSquashMessage = false
+		}
+		
 		commentVersionControlType =
 			(isSquashMessage && versionControlType == .hg && userDefaults.bool(forKey: ZGDetectHGCommentStyleForSquashesKey)) ?
 			.git : versionControlType
@@ -157,7 +170,22 @@ private let APP_SUPPORT_DIRECTORY_NAME = "Komet"
 		
 		let loadedContent = loadedPlainString[loadedCommitRange.lowerBound ..< loadedCommitRange.upperBound]
 		
-		initiallyContainedEmptyContent = (loadedContent.trimmingCharacters(in: .newlines).count == 0)
+		// Note: Some jj message templates have a comment intro (like 'split')
+		// In these cases, we track these messages as not having empty content initially,
+		// but also track it as initially containing just an intro comment line and nothing else
+		let trimmedLoadedContent = loadedContent.trimmingCharacters(in: .newlines)
+		if trimmedLoadedContent.count == 0 {
+			initiallyContainedEmptyContent = true
+			initiallyContainedEmptyCommentIntroLine = false
+		} else if trimmedLoadedContent.contains(where: { $0.isNewline }) {
+			// There must be more non-empty content after the newline
+			initiallyContainedEmptyContent = false
+			initiallyContainedEmptyCommentIntroLine = false
+		} else {
+			let hasIntroCommentLine = TextProcessor.isCommentLine(trimmedLoadedContent, versionControlType: commentVersionControlType)
+			initiallyContainedEmptyContent = hasIntroCommentLine
+			initiallyContainedEmptyCommentIntroLine = hasIntroCommentLine
+		}
 		
 		// Check if we have any incomplete commit message available
 		// Load the incomplete commit message contents if our content is initially empty
@@ -185,7 +213,7 @@ private let APP_SUPPORT_DIRECTORY_NAME = "Komet"
 						let timeoutInterval = ZGReadDefaultTimeoutInterval(userDefaults, ZGResumeIncompleteSessionTimeoutIntervalKey, maxTimeout)
 						let intervalSinceLastSavedCommitMessage = lastModifiedDate.flatMap({ Date().timeIntervalSince($0) }) ?? 0.0
 						
-						if initiallyContainedEmptyContent && intervalSinceLastSavedCommitMessage >= 0.0 && intervalSinceLastSavedCommitMessage <= timeoutInterval {
+						if initiallyContainedEmptyContent && !initiallyContainedEmptyCommentIntroLine && intervalSinceLastSavedCommitMessage >= 0.0 && intervalSinceLastSavedCommitMessage <= timeoutInterval {
 							lastSavedCommitMessage = try String(contentsOf: lastCommitURL, encoding: .utf8)
 						} else {
 							lastSavedCommitMessage = nil
@@ -364,6 +392,8 @@ private let APP_SUPPORT_DIRECTORY_NAME = "Komet"
 				toolArguments = ["branch"]
 			case .svn:
 				return
+			case .jj:
+				return
 			}
 			
 			if let toolURL = ProcessInfo.processInfo.environment["PATH"]?.components(separatedBy: ":").map({ parentDirectoryPath -> URL in
@@ -451,7 +481,7 @@ private let APP_SUPPORT_DIRECTORY_NAME = "Komet"
 			} else {
 				// If we initially had no content and wrote an incomplete commit message,
 				// then save the commit message in case we may want to resume from it later
-				if userDefaults.bool(forKey: ZGResumeIncompleteSessionKey) {
+				if !initiallyContainedEmptyCommentIntroLine && userDefaults.bool(forKey: ZGResumeIncompleteSessionKey) {
 					let commitMessageContent = commitContentViewController.commitMessageContent()
 					if commitMessageContent.count > 0 {
 						do {

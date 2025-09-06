@@ -1,0 +1,7 @@
+JJ: Enter a description for the selected changes.
+Some existing content
+
+JJ: This commit contains the following changes:
+JJ:     M MyVersionControlTest/AppDelegate.m
+JJ:
+JJ: Lines starting with "JJ:" (like this one) will be removed.

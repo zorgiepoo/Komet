@@ -1,0 +1,19 @@
+Some existing content
+
+JJ: This commit contains the following changes:
+JJ:     M MyVersionControlTest/AppDelegate.m
+JJ:     M MyVersionControlTest/main.m
+JJ:
+JJ: Lines starting with "JJ:" (like this one) will be removed.
+JJ: ignore-rest
+diff --git a/foobar b/foobar
+new file mode 100644
+index 0000000..f3d3463
+--- /dev/null
++++ b/foobar
+@@ -0,0 +1,5 @@
++here is some content
++
++Then it was really nice
++
++Then that is cook
