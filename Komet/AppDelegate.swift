@@ -50,16 +50,29 @@ typealias StatFS = statfs
 		let inputFileURL: URL? = (arguments.count >= 2) ? URL(fileURLWithPath: arguments[1]) : nil
 		
 		let tutorialMode: Bool
-		let commitFileURL: URL
-		let tempDirectoryURL: URL?
+		var commitFileURL: URL?
+		var tempDirectoryURL: URL?
 		
-		if let fileURL = inputFileURL, let reachable = try? fileURL.checkResourceIsReachable(), reachable {
-			tutorialMode = false
-			commitFileURL = fileURL
-			tempDirectoryURL = nil
+		if let fileURL = inputFileURL {
+			if let reachable = try? fileURL.checkResourceIsReachable(), reachable {
+				commitFileURL = fileURL
+				tutorialMode = false
+			} else if TextProcessor.isConfigFile(fileURL) {
+				// Some configuration files may not exist yet, create the config file in this case
+				if fileManager.createFile(atPath: fileURL.path, contents: nil), let reachable = try? fileURL.checkResourceIsReachable(), reachable {
+					commitFileURL = fileURL
+					tutorialMode = false
+				} else {
+					tutorialMode = true
+				}
+			} else {
+				tutorialMode = true
+			}
 		} else {
 			tutorialMode = true
-			
+		}
+		
+		if tutorialMode {
 			let executableIsOnReadOnlyMount = executableURL.withUnsafeFileSystemRepresentation { fileSystemRepresentation -> Bool in
 				var statInfo = StatFS()
 				let result = statfs(fileSystemRepresentation, &statInfo)
@@ -184,13 +197,19 @@ typealias StatFS = statfs
 			}
 			
 			let tutorialProjectFileName = NSLocalizedString("tutorialProjectFileName", tableName: nil, comment: "")
-			commitFileURL = localTempDirectoryURL.appendingPathComponent(tutorialProjectFileName)
+			let localCommitFileURL = localTempDirectoryURL.appendingPathComponent(tutorialProjectFileName)
+			
+			commitFileURL = localCommitFileURL
 			
 			do {
-				try finalMessage.write(to: commitFileURL, atomically: false, encoding: .utf8)
+				try finalMessage.write(to: localCommitFileURL, atomically: false, encoding: .utf8)
 			} catch {
 				fatalError("Failed to write temporary greetings file with error \(error)")
 			}
+		}
+		
+		guard let commitFileURL else {
+			fatalError("Failed to retrieve commit file URL to edit")
 		}
 		
 		let editorWindowController = ZGEditorWindowController(fileURL: commitFileURL, temporaryDirectoryURL: tempDirectoryURL, tutorialMode: tutorialMode)

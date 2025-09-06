@@ -885,9 +885,9 @@ class KometUITests: XCTestCase {
 		let subject = "Hello there!"
 		app.typeText(subject)
 		
-		// Canceling a non-version controlled file commit should result in a exit(1)
+		// Canceling a non-version controlled file commit should result in a exit(0)
 		let (cancelBreadcrumbs, _) = try app.cancel()
-		XCTAssertNotEqual(cancelBreadcrumbs!.exitStatus, 0)
+		XCTAssertEqual(cancelBreadcrumbs!.exitStatus, 0)
 		
 		// Test that the content was not restored and we can commit an empty messsage
 		app.relaunch()

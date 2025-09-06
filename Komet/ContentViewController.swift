@@ -20,6 +20,7 @@ class ContentViewController: NSViewController, NSTextStorageDelegate, NSTextCont
 	private let resumedFromSavedCommit: Bool
 	private let initialCommitTextRange: Range<String.UTF16View.Index>
 	private let isSquashMessage: Bool
+	private let versionControlledFile: Bool
 	
 	private var preventAccidentalNewline: Bool = false
 	
@@ -28,13 +29,14 @@ class ContentViewController: NSViewController, NSTextStorageDelegate, NSTextCont
 	var commitHandler: (() -> ())? = nil
 	var cancelHandler: (() -> ())? = nil
 	
-	init(initialPlainText: String, commentSectionLength: Int, commentVersionControlType: VersionControlType, resumedFromSavedCommit: Bool, initialCommitTextRange: Range<String.UTF16View.Index>, isSquashMessage: Bool, breadcrumbs: Breadcrumbs?) {
+	init(initialPlainText: String, commentSectionLength: Int, commentVersionControlType: VersionControlType, resumedFromSavedCommit: Bool, initialCommitTextRange: Range<String.UTF16View.Index>, isSquashMessage: Bool, versionControlledFile: Bool, breadcrumbs: Breadcrumbs?) {
 		self.initialPlainText = initialPlainText
 		self.commentSectionLength = commentSectionLength
 		self.commentVersionControlType = commentVersionControlType
 		self.resumedFromSavedCommit = resumedFromSavedCommit
 		self.initialCommitTextRange = initialCommitTextRange
 		self.isSquashMessage = isSquashMessage
+		self.versionControlledFile = versionControlledFile
 		self.breadcrumbs = breadcrumbs
 		
 		super.init(nibName: "Content", bundle: Bundle.main)
@@ -44,8 +46,8 @@ class ContentViewController: NSViewController, NSTextStorageDelegate, NSTextCont
 		fatalError("init(coder:) has not been implemented")
 	}
 	
-	private static func lengthLimitWarningEnabled(userDefaults: UserDefaults, userDefaultKey: String) -> Bool {
-		return userDefaults.bool(forKey: ZGAssumeVersionControlledFileKey) && userDefaults.bool(forKey: userDefaultKey)
+	private static func lengthLimitWarningEnabled(userDefaults: UserDefaults, userDefaultKey: String, versionControlledFile: Bool) -> Bool {
+		return versionControlledFile && userDefaults.bool(forKey: userDefaultKey)
 	}
 	
 	var style: WindowStyle? {
@@ -185,8 +187,6 @@ class ContentViewController: NSViewController, NSTextStorageDelegate, NSTextCont
 		// If we have a non-version controlled file, point selection at start of content
 		// Otherwise if we're resuming a canceled commit message, select all the contents
 		// Otherwise point the selection at the end of the message contents
-		let userDefaults = UserDefaults.standard
-		let versionControlledFile = userDefaults.bool(forKey: ZGAssumeVersionControlledFileKey)
 		if !versionControlledFile {
 			textView.setSelectedRange(NSMakeRange(0, 0))
 		} else {
@@ -200,6 +200,7 @@ class ContentViewController: NSViewController, NSTextStorageDelegate, NSTextCont
 		// If this is a squash, just turn off spell checking and automatic spell correction as it's more likely to annoy the user
 		// Make sure to disable this after setting the text storage content because spell checking detection
 		// depends on that being initially set
+		let userDefaults = UserDefaults.standard
 		if isSquashMessage && userDefaults.bool(forKey: ZGDisableSpellCheckingAndCorrectionForSquashesKey) {
 			textView.zgDisableContinuousSpellingAndAutomaticSpellingCorrection()
 		} else {
@@ -347,8 +348,6 @@ class ContentViewController: NSViewController, NSTextStorageDelegate, NSTextCont
 			let fullTextRange = NSMakeRange(0, range.length)
 			textWithDisplayAttributes.addAttributes(displayAttributes, range: fullTextRange)
 			
-			let versionControlledFile = userDefaults.bool(forKey: ZGAssumeVersionControlledFileKey)
-			
 			if versionControlledFile {
 				let handleScissoredLineDiffing: Bool
 				switch commentVersionControlType {
@@ -416,9 +415,9 @@ class ContentViewController: NSViewController, NSTextStorageDelegate, NSTextCont
 					
 					let lengthLimit: Int?
 					if range.location == 0 {
-						lengthLimit = Self.lengthLimitWarningEnabled(userDefaults: userDefaults, userDefaultKey: ZGEditorRecommendedSubjectLengthLimitEnabledKey) ? ZGReadDefaultLineLimit(userDefaults, ZGEditorRecommendedSubjectLengthLimitKey) : nil
+						lengthLimit = Self.lengthLimitWarningEnabled(userDefaults: userDefaults, userDefaultKey: ZGEditorRecommendedSubjectLengthLimitEnabledKey, versionControlledFile: versionControlledFile) ? ZGReadDefaultLineLimit(userDefaults, ZGEditorRecommendedSubjectLengthLimitKey) : nil
 					} else {
-						lengthLimit = Self.lengthLimitWarningEnabled(userDefaults: userDefaults, userDefaultKey: ZGEditorRecommendedBodyLineLengthLimitEnabledKey) ? ZGReadDefaultLineLimit(userDefaults, ZGEditorRecommendedBodyLineLengthLimitKey) : nil
+						lengthLimit = Self.lengthLimitWarningEnabled(userDefaults: userDefaults, userDefaultKey: ZGEditorRecommendedBodyLineLengthLimitEnabledKey, versionControlledFile: versionControlledFile) ? ZGReadDefaultLineLimit(userDefaults, ZGEditorRecommendedBodyLineLengthLimitKey) : nil
 					}
 					
 					if let lengthLimit = lengthLimit {
@@ -498,7 +497,7 @@ class ContentViewController: NSViewController, NSTextStorageDelegate, NSTextCont
 		
 		// Bail if automatic newline insertion is disabled or if we are dealing with a squash message
 		let userDefaults = UserDefaults.standard
-		guard userDefaults.bool(forKey: ZGAssumeVersionControlledFileKey) && userDefaults.bool(forKey: ZGEditorAutomaticNewlineInsertionAfterSubjectKey) && (!userDefaults.bool(forKey: ZGDisableAutomaticNewlineInsertionAfterSubjectLineForSquashesKey) || !isSquashMessage) else {
+		guard versionControlledFile && userDefaults.bool(forKey: ZGEditorAutomaticNewlineInsertionAfterSubjectKey) && (!userDefaults.bool(forKey: ZGDisableAutomaticNewlineInsertionAfterSubjectLineForSquashesKey) || !isSquashMessage) else {
 			return false
 		}
 		

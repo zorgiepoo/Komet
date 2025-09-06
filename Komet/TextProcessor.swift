@@ -16,6 +16,13 @@ enum VersionControlType {
 }
 
 struct TextProcessor {
+	static func isConfigFile(_ fileURL: URL) -> Bool {
+		let filePathExtension = fileURL.pathExtension
+		let fileLastPathComponent = fileURL.lastPathComponent
+		
+		return filePathExtension == "toml" || fileLastPathComponent == ".gitconfig" || fileLastPathComponent == ".hgrc"
+	}
+	
 	static func isCommentLine(_ line: String, versionControlType: VersionControlType) -> Bool {
 		let prefix: String
 		let suffix: String

@@ -8,8 +8,8 @@
 "tutorialDefaultEditorRecommendation" = "You may want to set Komet as your default editor.";
 "tutorialDefaultGitEditorRecommendation" = "For git:";
 "tutorialDefaultJJEditorRecommendation" = "For jj:";
-"tutorialDefaultHgEditorRecommendation" = "For hg, you will want to set the HGEDITOR environment variable.";
-"tutorialDefaultSvnEditorRecommendation" = "For svn, you will want to set the SVN_EDITOR environment variable.";
+"tutorialDefaultHgEditorRecommendation" = "For hg, you may want to set the HGEDITOR environment variable.";
+"tutorialDefaultSvnEditorRecommendation" = "For svn, you may want to set the SVN_EDITOR environment variable.";
 "tutorialConsultEditorDocumentation" = "Please consult their documentation for more information.";
 "tutorialMoreThemes" = "More themes can be found under View → Theme";
 "tutorialAutomaticUpdates" = "Automatic updates can be toggled in Komet → Settings…";

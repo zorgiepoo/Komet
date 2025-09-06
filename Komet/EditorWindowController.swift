@@ -24,6 +24,8 @@ private let APP_SUPPORT_DIRECTORY_NAME = "Komet"
 	private let commentVersionControlType: VersionControlType
 	private let projectNameDisplay: String
 	
+	private let versionControlledFile: Bool
+	
 	private let breadcrumbsPath: String?
 	
 	private var style: WindowStyle
@@ -110,7 +112,16 @@ private let APP_SUPPORT_DIRECTORY_NAME = "Komet"
 		// Detect version control type
 		let fileManager = FileManager()
 		let parentURL = self.fileURL.deletingLastPathComponent()
-		let versionControlledFile = userDefaults.bool(forKey: ZGAssumeVersionControlledFileKey)
+		let versionControlledFileFromEnvironment = userDefaults.bool(forKey: ZGAssumeVersionControlledFileKey)
+		
+		// Detect if user is editing a config file
+		if !versionControlledFileFromEnvironment {
+			versionControlledFile = false
+		} else if TextProcessor.isConfigFile(self.fileURL) {
+			versionControlledFile = false
+		} else {
+			versionControlledFile = true
+		}
 		
 		let versionControlType: VersionControlType
 		if tutorialMode || !versionControlledFile {
@@ -190,7 +201,7 @@ private let APP_SUPPORT_DIRECTORY_NAME = "Komet"
 		// Check if we have any incomplete commit message available
 		// Load the incomplete commit message contents if our content is initially empty
 		let lastSavedCommitMessage: String?
-		if !self.tutorialMode && userDefaults.bool(forKey: ZGAssumeVersionControlledFileKey) && userDefaults.bool(forKey: ZGResumeIncompleteSessionKey) {
+		if !self.tutorialMode && versionControlledFile && userDefaults.bool(forKey: ZGResumeIncompleteSessionKey) {
 			if let applicationSupportURL = fileManager.urls(for: .applicationSupportDirectory, in: .userDomainMask).first {
 				let supportDirectory = applicationSupportURL.appendingPathComponent(APP_SUPPORT_DIRECTORY_NAME)
 				
@@ -251,7 +262,7 @@ private let APP_SUPPORT_DIRECTORY_NAME = "Komet"
 		}
 		
 		topBarViewController = TopBarViewController()
-		commitContentViewController = ContentViewController(initialPlainText: initialPlainText, commentSectionLength: commentSectionLength, commentVersionControlType: commentVersionControlType, resumedFromSavedCommit: resumedFromSavedCommit, initialCommitTextRange: initialCommitTextRange, isSquashMessage: isSquashMessage, breadcrumbs: breadcrumbs)
+		commitContentViewController = ContentViewController(initialPlainText: initialPlainText, commentSectionLength: commentSectionLength, commentVersionControlType: commentVersionControlType, resumedFromSavedCommit: resumedFromSavedCommit, initialCommitTextRange: initialCommitTextRange, isSquashMessage: isSquashMessage, versionControlledFile: versionControlledFile, breadcrumbs: breadcrumbs)
 		horizontalLineDivider = ColoredDivider()
 		
 		super.init(window: nil)
@@ -431,7 +442,6 @@ private let APP_SUPPORT_DIRECTORY_NAME = "Komet"
 		}
 		
 		// Show branch name if available
-		let versionControlledFile = userDefaults.bool(forKey: ZGAssumeVersionControlledFileKey)
 		if !tutorialMode && versionControlledFile {
 			showBranchName()
 		}
@@ -473,14 +483,16 @@ private let APP_SUPPORT_DIRECTORY_NAME = "Komet"
 			// We should have wrote to the commit file successfully
 			exit(status: EXIT_SUCCESS)
 		} else {
-			let userDefaults = UserDefaults.standard
-			let versionControlledFile = userDefaults.bool(forKey: ZGAssumeVersionControlledFileKey)
-			if !versionControlledFile || !initiallyContainedEmptyContent {
-				// If we aren't dealing with a version controlled file or are amending an existing commit for example, we should fail and not create another change
+			if !versionControlledFile {
+				// Non version controlled files don't need a failure exit status
+				exit(status: EXIT_SUCCESS)
+			} else if !initiallyContainedEmptyContent {
+				// If we're amending an existing commit for example, we should fail and not create another change
 				exit(status: EXIT_FAILURE)
 			} else {
 				// If we initially had no content and wrote an incomplete commit message,
 				// then save the commit message in case we may want to resume from it later
+				let userDefaults = UserDefaults.standard
 				if !initiallyContainedEmptyCommentIntroLine && userDefaults.bool(forKey: ZGResumeIncompleteSessionKey) {
 					let commitMessageContent = commitContentViewController.commitMessageContent()
 					if commitMessageContent.count > 0 {
