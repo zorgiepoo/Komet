@@ -350,7 +350,19 @@ class ContentViewController: NSViewController, NSTextStorageDelegate, NSTextCont
 			let versionControlledFile = userDefaults.bool(forKey: ZGAssumeVersionControlledFileKey)
 			
 			if versionControlledFile {
-				if commentVersionControlType == .git && isCommentSection {
+				let handleScissoredLineDiffing: Bool
+				switch commentVersionControlType {
+				case .jj:
+					fallthrough
+				case .git:
+					handleScissoredLineDiffing = true
+				case .svn:
+					fallthrough
+				case .hg:
+					handleScissoredLineDiffing = false
+				}
+				
+				if handleScissoredLineDiffing && isCommentSection {
 					// Handle highlighting diffs
 					
 					let diffAttributeKey = style.diffHighlightsBackground ? NSAttributedString.Key.backgroundColor : NSAttributedString.Key.foregroundColor
@@ -508,6 +520,10 @@ class ContentViewController: NSViewController, NSTextStorageDelegate, NSTextCont
 				return false
 			}
 			
+			guard let startContentLineIndex = TextProcessor.firstContentLineIndex(plainText: plainText, versionControlType: commentVersionControlType) else {
+				return false
+			}
+			
 			var lineStartIndex = String.Index(utf16Offset: 0, in: plainText)
 			var lineEndIndex = String.Index(utf16Offset: 0, in: plainText)
 			var contentEndIndex = String.Index(utf16Offset: 0, in: plainText)
@@ -515,7 +531,7 @@ class ContentViewController: NSViewController, NSTextStorageDelegate, NSTextCont
 			plainText.getLineStart(&lineStartIndex, end: &lineEndIndex, contentsEnd: &contentEndIndex, for: range)
 			
 			// We must be at the first (subject) line and there must be some content
-			guard lineStartIndex == plainText.startIndex, contentEndIndex > lineStartIndex else {
+			guard lineStartIndex == startContentLineIndex, contentEndIndex > lineStartIndex else {
 				return false
 			}
 			

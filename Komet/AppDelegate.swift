@@ -99,7 +99,7 @@ typealias StatFS = statfs
 				\(tutorialCommitMessage)
 				
 				# \(tutorialWelcome)
-				
+				#
 				# \(tutorialShortcutsLabel)
 				#    \(tutorialCommitShortcut)
 				#    \(tutorialCancelShortcut)
@@ -142,7 +142,9 @@ typealias StatFS = statfs
 			
 			let editorConfigurationRecommendation: String
 			do {
+				let tutorialDefaultEditorRecommendation = NSLocalizedString("tutorialDefaultEditorRecommendation", tableName: nil, comment: "")
 				let tutorialDefaultGitEditorRecommendation = NSLocalizedString("tutorialDefaultGitEditorRecommendation", tableName: nil, comment: "")
+				let tutorialDefaultJJEditorRecommendation = NSLocalizedString("tutorialDefaultJJEditorRecommendation", tableName: nil, comment: "")
 				let tutorialDefaultHgEditorRecommendation = NSLocalizedString("tutorialDefaultHgEditorRecommendation", tableName: nil, comment: "")
 				let tutorialDefaultSvnEditorRecommendation = NSLocalizedString("tutorialDefaultSvnEditorRecommendation", tableName: nil, comment: "")
 				let tutorialConsultEditorDocumentation = NSLocalizedString("tutorialConsultEditorDocumentation", tableName: nil, comment: "")
@@ -151,9 +153,13 @@ typealias StatFS = statfs
 				
 				editorConfigurationRecommendation = """
 				#
-				# \(tutorialDefaultGitEditorRecommendation)
+				# \(tutorialDefaultEditorRecommendation)
 				#
+				# \(tutorialDefaultGitEditorRecommendation)
 				# git config --global core.editor \(escapedEditorPathToUse)
+				#
+				# \(tutorialDefaultJJEditorRecommendation)
+				# jj config set --user ui.editor \(escapedEditorPathToUse)
 				#
 				# \(tutorialDefaultHgEditorRecommendation)
 				# \(tutorialDefaultSvnEditorRecommendation)

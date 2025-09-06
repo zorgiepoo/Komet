@@ -12,6 +12,7 @@ enum VersionControlType {
 	case git
 	case hg
 	case svn
+	case jj
 }
 
 struct TextProcessor {
@@ -29,6 +30,9 @@ struct TextProcessor {
 		case .svn:
 			prefix = "--"
 			suffix = "--"
+		case .jj:
+			prefix = "JJ:"
+			suffix = ""
 		}
 		
 		// Note a line that is "--" could have the prefix and suffix the same, but we want to make sure it's at least "--...--" length long
@@ -36,11 +40,16 @@ struct TextProcessor {
 	}
 
 	static func isScissorLine(_ line: String, versionControlType: VersionControlType) -> Bool {
-		guard versionControlType == .git else {
+		switch versionControlType {
+		case .git:
+			return line.hasPrefix("# --") && line.hasSuffix("--") && line.contains(">8")
+		case .hg:
 			return false
+		case .svn:
+			return false
+		case .jj:
+			return line == "JJ: ignore-rest"
 		}
-		
-		return line.hasPrefix("# --") && line.hasSuffix("--") && line.contains(">8")
 	}
 
 	static func hasSingleCommentLineMarker(versionControlType: VersionControlType) -> Bool {
@@ -51,6 +60,8 @@ struct TextProcessor {
 			return false
 		case .svn:
 			return true
+		case .jj:
+			return false
 		}
 	}
 
@@ -75,15 +86,16 @@ struct TextProcessor {
 			
 			let commentLine = isCommentLine(line, versionControlType: versionControlType)
 			
-			if !commentLine && foundCommentSection && line.trimmingCharacters(in: .whitespacesAndNewlines).count > 0 {
-				// If we found a content line that is not empty, then we have to find a better starting point for the comment section
+			if !commentLine && foundCommentSection && (lineEndIndex != plainTextEndIndex || line.trimmingCharacters(in: .whitespacesAndNewlines).count > 0) {
+				// If we found a non-comment line, then we have to find a better starting point for the comment section
+				// If an empty line is at the end of the file and we've found a comment section, it's not too interesting
 				foundCommentSection = false
 			} else if commentLine {
 				if !foundCommentSection {
 					foundCommentSection = true
 					commentSectionCharacterIndex = characterIndex
 					
-					// If there's only a single comment line marker, then we're done'
+					// If there's only a single comment line marker, then we're done
 					if hasSingleCommentLineMarker(versionControlType: versionControlType) {
 						break
 					}
@@ -98,6 +110,29 @@ struct TextProcessor {
 		}
 		
 		return foundCommentSection ? (plainText.utf16.count - commentSectionCharacterIndex.utf16Offset(in: plainText)) : 0
+	}
+	
+	// Find the first commit line. The first lines may be comment lines, which
+	// we'll need to skip
+	static func firstContentLineIndex(plainText: String, versionControlType: VersionControlType) -> String.Index? {
+		let plainTextEndIndex = plainText.endIndex
+		var characterIndex = String.Index(utf16Offset: 0, in: plainText)
+		var lineStartIndex = String.Index(utf16Offset: 0, in: plainText)
+		var lineEndIndex = String.Index(utf16Offset: 0, in: plainText)
+		var contentEndIndex = String.Index(utf16Offset: 0, in: plainText)
+		
+		while characterIndex < plainTextEndIndex {
+			plainText.getLineStart(&lineStartIndex, end: &lineEndIndex, contentsEnd: &contentEndIndex, for: characterIndex ..< characterIndex)
+			
+			let line = String(plainText[lineStartIndex ..< contentEndIndex])
+			guard isCommentLine(line, versionControlType: versionControlType) else {
+				return lineStartIndex
+			}
+			
+			characterIndex = lineEndIndex
+		}
+		
+		return nil
 	}
 
 	// The content range should extend to before the comments, only allowing one trailing newline in between the comments and content

@@ -990,6 +990,167 @@ class KometUITests: XCTestCase {
 		XCTAssertEqual(initialLineComponents[1 ..< initialLineComponents.count], finalLineComponents[1 ..< initialLineComponents.count])
 	}
 	
+	// MARK: Jujutsu (jj)
+	
+	func testNewJJDescription() throws {
+		let app = try KometApp(filename: "new-description.jjdescription")
+		
+		let subject = "Hello there"
+		app.typeText(subject)
+		
+		app.moveCursorDown(count: 6)
+		app.typeText("test")
+		
+		app.moveCursorRight(count: 4)
+		app.typeText("blah")
+		
+		let (breadcrumbs, finalContent) = try app.commit()
+		XCTAssertEqual(breadcrumbs!.exitStatus, 0)
+		
+		let finalLineComponents = finalContent.components(separatedBy: "\n")
+		let initialLineComponents = app.initialContent.components(separatedBy: "\n")
+		
+		XCTAssertEqual(finalLineComponents[0], subject)
+		XCTAssertEqual(initialLineComponents[1 ..< initialLineComponents.count], finalLineComponents[1 ..< initialLineComponents.count])
+	}
+	
+	func testAddingJJCommentContent() throws {
+		let app = try KometApp(filename: "new-description.jjdescription")
+		
+		let subject = "Hello there"
+		app.typeText(subject + "\n")
+		
+		let commentLine = "JJ: Here is a comment line"
+		app.typeText(commentLine + "\n")
+		
+		let secondLine = "Here is a normal line"
+		app.typeText(secondLine)
+		
+		let (breadcrumbs, finalContent) = try app.commit()
+		XCTAssertEqual(breadcrumbs!.exitStatus, 0)
+		
+		let commentLineRanges = breadcrumbs!.commentLineRanges
+		XCTAssertEqual(commentLineRanges.count, 1)
+		
+		let commentLineLocation = subject.count + "\n\n".count
+		XCTAssertEqual(commentLineRanges[0], commentLineLocation ..< commentLineLocation + commentLine.count)
+		
+		let finalLineComponents = finalContent.components(separatedBy: "\n")
+		let initialLineComponents = app.initialContent.components(separatedBy: "\n")
+		
+		XCTAssertEqual(finalLineComponents[0], subject)
+		XCTAssertEqual(finalLineComponents[1], "")
+		XCTAssertEqual(finalLineComponents[2], commentLine)
+		XCTAssertEqual(finalLineComponents[3], secondLine)
+		
+		XCTAssertEqual(initialLineComponents[1 ..< initialLineComponents.count], finalLineComponents[4 ..< finalLineComponents.count])
+	}
+	
+	func testNewJJSplitDescription() throws {
+		let app = try KometApp(filename: "split.jjdescription")
+		
+		let subject = "Hello there"
+		app.typeText(subject)
+		
+		app.moveCursorDown(count: 6)
+		app.typeText("test")
+		
+		app.moveCursorRight(count: 4)
+		app.typeText("blah")
+		
+		let (breadcrumbs, finalContent) = try app.commit()
+		XCTAssertEqual(breadcrumbs!.exitStatus, 0)
+		
+		let finalLineComponents = finalContent.components(separatedBy: "\n")
+		let initialLineComponents = app.initialContent.components(separatedBy: "\n")
+		
+		XCTAssertEqual(finalLineComponents[1], subject)
+		XCTAssertEqual(initialLineComponents[2 ..< initialLineComponents.count], finalLineComponents[2 ..< initialLineComponents.count])
+	}
+	
+	func testNewJJSplitDescriptionWithAutomaticNewlineInsertion() throws {
+		let app = try KometApp(filename: "split.jjdescription")
+
+		let subjectContent = "Hello there"
+		app.typeText(subjectContent + "\n")
+		
+		let bodyContent = "I am doing well"
+		app.typeText(bodyContent)
+
+		let (breadcrumbs, finalContent) = try app.commit()
+		XCTAssertEqual(breadcrumbs!.exitStatus, 0, "commit failed with non-zero status")
+		
+		let initialLines = app.initialContent.components(separatedBy: "\n")
+		let intro = initialLines[0]
+		let body = initialLines[1 ..< initialLines.count].joined(separator: "\n")
+		
+		XCTAssertEqual(finalContent, intro + "\n" + subjectContent + "\n\n" + bodyContent + body)
+	}
+	
+	func testJJSplitSubjectSelection() throws {
+		let app = try KometApp(filename: "split.jjdescription")
+
+		do {
+			let newContent = "Hello there"
+			app.typeText(newContent)
+		}
+
+		app.selectAll()
+
+		let newContent = "Hi!"
+		app.typeText(newContent)
+
+		let (breadcrumbs, finalContent) = try app.commit()
+		XCTAssertEqual(breadcrumbs!.exitStatus, 0, "commit failed with non-zero status")
+		
+		let initialLineComponents = app.initialContent.components(separatedBy: "\n")
+		XCTAssertEqual(finalContent, newContent + initialLineComponents[1 ..< initialLineComponents.count].joined(separator: "\n"))
+	}
+	
+	func testJJSplitEmptyCancelExitStatus() throws {
+		let app = try KometApp(filename: "split.jjdescription")
+
+		let newContent = "Hi!"
+		app.typeText(newContent)
+
+		let (breadcrumbs, _) = try app.cancel()
+		XCTAssertEqual(breadcrumbs!.exitStatus, 0, "commit failed with non-zero status")
+	}
+	
+	func testJJDescriptionAmmendCancelExitStatus() throws {
+		let app = try KometApp(filename: "new-description-amend-scissor.jjdescription")
+
+		let newContent = "Hi!"
+		app.typeText(newContent)
+
+		let (breadcrumbs, _) = try app.cancel()
+		XCTAssertEqual(breadcrumbs!.exitStatus, 1, "commit failed with non-failure status")
+	}
+	
+	func testJJSplitAmmendCancelExitStatus() throws {
+		let app = try KometApp(filename: "split-amend.jjdescription")
+
+		let newContent = "Hi!"
+		app.typeText(newContent)
+
+		let (breadcrumbs, _) = try app.cancel()
+		XCTAssertEqual(breadcrumbs!.exitStatus, 1, "commit failed with non-failure status")
+	}
+	
+	func testJJSplitAmmendWithScissorDiff() throws {
+		let app = try KometApp(filename: "new-description-amend-scissor.jjdescription")
+	
+		let newContent = "Hello there"
+		app.selectAll()
+		app.typeText(newContent)
+	
+		let (breadcrumbs, _) = try app.commit()
+		XCTAssertEqual(breadcrumbs!.exitStatus, 0, "commit failed with non-zero status")
+		XCTAssertEqual(breadcrumbs!.diffHeaderLineRanges.count, 6)
+		XCTAssertEqual(breadcrumbs!.diffAddLineRanges.count, 5)
+		XCTAssertEqual(breadcrumbs!.diffRemoveLineRanges.count, 0)
+	}
+	
 	// MARK: Emoji
 	
 	func testInsertingEmoji() throws {
