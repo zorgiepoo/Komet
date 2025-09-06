@@ -112,8 +112,12 @@ class KometApp {
 		return (breadcrumbs, finalContent)
 	}
 	
-	func commit(expectingError: Bool = false) throws -> (Breadcrumbs?, String) {
-		application.menuBars.menuBarItems["File"].menuItems["Commit"].click()
+	func commit(expectingError: Bool = false, usingButton: Bool = false) throws -> (Breadcrumbs?, String) {
+		if !usingButton {
+			application.menuBars.menuBarItems["File"].menuItems["Commit"].click()
+		} else {
+			application.buttons["ZGCommitButtonIdentifier"].firstMatch.click()
+		}
 		
 		if expectingError && application.sheets.count > 0 {
 			// The error we supply doesn't really matter
@@ -123,8 +127,12 @@ class KometApp {
 		}
 	}
 	
-	func cancel() throws -> (Breadcrumbs?, String) {
-		application.menuBars.menuBarItems["File"].menuItems["Cancel"].click()
+	func cancel(usingButton: Bool = false) throws -> (Breadcrumbs?, String) {
+		if !usingButton {
+			application.menuBars.menuBarItems["File"].menuItems["Cancel"].click()
+		} else {
+			application.buttons["ZGCancelButtonIdentifier"].firstMatch.click()
+		}
 		return try waitForExit()
 	}
 	
@@ -215,6 +223,17 @@ class KometUITests: XCTestCase {
 		XCTAssertEqual(finalContent, newContent + app.initialContent)
 	}
 	
+	func testNewCommitWithButton() throws {
+		let app = try KometApp(filename: "new-commit")
+	
+		let newContent = "Hello there"
+		app.typeText(newContent)
+	
+		let (breadcrumbs, finalContent) = try app.commit(usingButton: true)
+		XCTAssertEqual(breadcrumbs!.exitStatus, 0, "commit failed with non-zero status")
+		XCTAssertEqual(finalContent, newContent + app.initialContent)
+	}
+	
 	func testCanceledNewCommit() throws {
 		let app = try KometApp(filename: "new-commit")
 
@@ -222,6 +241,17 @@ class KometUITests: XCTestCase {
 		app.typeText(newContent)
 
 		let (breadcrumbs, finalContent) = try app.cancel()
+		XCTAssertEqual(breadcrumbs!.exitStatus, 0, "commit canceled empty message with non-zero exit status")
+		XCTAssertEqual(finalContent, app.initialContent)
+	}
+	
+	func testCanceledNewCommitWithButton() throws {
+		let app = try KometApp(filename: "new-commit")
+
+		let newContent = "Hello there"
+		app.typeText(newContent)
+
+		let (breadcrumbs, finalContent) = try app.cancel(usingButton: true)
 		XCTAssertEqual(breadcrumbs!.exitStatus, 0, "commit canceled empty message with non-zero exit status")
 		XCTAssertEqual(finalContent, app.initialContent)
 	}
