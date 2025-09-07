@@ -512,9 +512,19 @@ private let APP_SUPPORT_DIRECTORY_NAME = "Komet"
 					}
 				}
 				
-				// Empty commits should be treated as a success
-				// Version control software will be able to handle it as an abort
-				exit(status: EXIT_SUCCESS)
+				// Some VCS (git, hg) will abort on empty commit messages
+				// In these cases it may be more graceful to exit with status 0,
+				// if there was initially no empty content
+				switch versionControlType {
+				case .hg:
+					fallthrough
+				case .git:
+					exit(status: EXIT_SUCCESS)
+				case .svn:
+					fallthrough
+				case .jj:
+					exit(status: EXIT_FAILURE)
+				}
 			}
 		}
 	}

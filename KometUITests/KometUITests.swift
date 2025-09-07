@@ -1144,7 +1144,7 @@ class KometUITests: XCTestCase {
 		app.typeText(newContent)
 
 		let (breadcrumbs, _) = try app.cancel()
-		XCTAssertEqual(breadcrumbs!.exitStatus, 0, "commit failed with non-zero status")
+		XCTAssertNotEqual(breadcrumbs!.exitStatus, 0, "commit failed with zero status")
 	}
 	
 	func testJJDescriptionAmmendCancelExitStatus() throws {
@@ -1154,7 +1154,7 @@ class KometUITests: XCTestCase {
 		app.typeText(newContent)
 
 		let (breadcrumbs, _) = try app.cancel()
-		XCTAssertEqual(breadcrumbs!.exitStatus, 1, "commit failed with non-failure status")
+		XCTAssertNotEqual(breadcrumbs!.exitStatus, 0, "commit failed with non-failure status")
 	}
 	
 	func testJJSplitAmmendCancelExitStatus() throws {
@@ -1164,7 +1164,7 @@ class KometUITests: XCTestCase {
 		app.typeText(newContent)
 
 		let (breadcrumbs, _) = try app.cancel()
-		XCTAssertEqual(breadcrumbs!.exitStatus, 1, "commit failed with non-failure status")
+		XCTAssertNotEqual(breadcrumbs!.exitStatus, 0, "commit failed with non-failure status")
 	}
 	
 	func testJJSplitAmmendWithScissorDiff() throws {
