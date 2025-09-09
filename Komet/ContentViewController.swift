@@ -197,11 +197,11 @@ class ContentViewController: NSViewController, NSTextStorageDelegate, NSTextCont
 			}
 		}
 		
-		// If this is a squash, just turn off spell checking and automatic spell correction as it's more likely to annoy the user
+		// If this is a squash or non-version controlled file, just turn off spell checking and automatic spell correction as it's more likely to annoy the user
 		// Make sure to disable this after setting the text storage content because spell checking detection
 		// depends on that being initially set
 		let userDefaults = UserDefaults.standard
-		if isSquashMessage && userDefaults.bool(forKey: ZGDisableSpellCheckingAndCorrectionForSquashesKey) {
+		if (isSquashMessage || !versionControlledFile) && userDefaults.bool(forKey: ZGDisableSpellCheckingAndCorrectionForSquashesKey) {
 			textView.zgDisableContinuousSpellingAndAutomaticSpellingCorrection()
 		} else {
 			textView.zgLoadDefaults()
