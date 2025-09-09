@@ -86,6 +86,8 @@ struct TextProcessor {
 		var foundCommentSection: Bool = false
 		var commentSectionCharacterIndex: String.Index = String.Index(utf16Offset: 0, in: plainText)
 		
+		var passedIntroCommentSection = false
+		
 		while characterIndex < plainTextEndIndex {
 			plainText.getLineStart(&lineStartIndex, end: &lineEndIndex, contentsEnd: &contentEndIndex, for: characterIndex ..< characterIndex)
 			
@@ -93,11 +95,15 @@ struct TextProcessor {
 			
 			let commentLine = isCommentLine(line, versionControlType: versionControlType)
 			
-			if !commentLine && foundCommentSection && (lineEndIndex != plainTextEndIndex || line.trimmingCharacters(in: .whitespacesAndNewlines).count > 0) {
-				// If we found a non-comment line, then we have to find a better starting point for the comment section
-				// If an empty line is at the end of the file and we've found a comment section, it's not too interesting
-				foundCommentSection = false
-			} else if commentLine {
+			if !commentLine {
+				if foundCommentSection && (!passedIntroCommentSection || line.trimmingCharacters(in: .whitespacesAndNewlines).count > 0) {
+					// If we found a non-comment line that is not empty, then we have to find a better starting point for the comment section
+					// If we found an empty line but have only just passed the intro comment section, then we need to find a better starting point for the comment section
+					foundCommentSection = false
+				}
+				
+				passedIntroCommentSection = true
+			} else {
 				if !foundCommentSection {
 					foundCommentSection = true
 					commentSectionCharacterIndex = characterIndex

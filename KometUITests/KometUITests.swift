@@ -320,6 +320,20 @@ class KometUITests: XCTestCase {
 		XCTAssertEqual(finalContent, app.initialContent)
 	}
 	
+	func testCherryPickConflict() throws {
+		let app = try KometApp(filename: "cherry-pick-conflict")
+		
+		let newContent = "Hello there"
+		app.typeText("\n" + newContent)
+		
+		let (breadcrumbs, finalContent) = try app.commit()
+		XCTAssertEqual(breadcrumbs!.exitStatus, 0, "commit failed with non-zero status")
+		
+		let initialContentLines = app.initialContent.split(separator: "\n")
+		let prefix = initialContentLines[0] + "\n\n" + newContent + "\n\n# Conflicts:\n"
+		XCTAssertTrue(finalContent.hasPrefix(prefix), "\(finalContent) does not have prefix: \(prefix)")
+	}
+	
 	// MARK: Empty file
 	
 	func testEmptyCommitWithSubject() throws {

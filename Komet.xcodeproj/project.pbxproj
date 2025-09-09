@@ -28,6 +28,7 @@
 		723C85852E67F2300002B660 /* split.jjdescription in Resources */ = {isa = PBXBuildFile; fileRef = 723C85842E67F2300002B660 /* split.jjdescription */; };
 		723C85872E6CB1880002B660 /* split-amend.jjdescription in Resources */ = {isa = PBXBuildFile; fileRef = 723C85862E6CB1880002B660 /* split-amend.jjdescription */; };
 		723C85892E6CB2450002B660 /* new-description-amend-scissor.jjdescription in Resources */ = {isa = PBXBuildFile; fileRef = 723C85882E6CB2450002B660 /* new-description-amend-scissor.jjdescription */; };
+		723C858B2E6FD4100002B660 /* cherry-pick-conflict in Resources */ = {isa = PBXBuildFile; fileRef = 723C858A2E6FD4100002B660 /* cherry-pick-conflict */; };
 		725148EC266DC2C000247C9C /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 725148EA266DC2B000247C9C /* Sparkle.framework */; };
 		725148ED266DC2C000247C9C /* Sparkle.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 725148EA266DC2B000247C9C /* Sparkle.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		72535B862E04D40D00EC4C35 /* Content.xib in Resources */ = {isa = PBXBuildFile; fileRef = 72535B852E04D40D00EC4C35 /* Content.xib */; };
@@ -108,6 +109,7 @@
 		723C85842E67F2300002B660 /* split.jjdescription */ = {isa = PBXFileReference; lastKnownFileType = text; path = split.jjdescription; sourceTree = "<group>"; };
 		723C85862E6CB1880002B660 /* split-amend.jjdescription */ = {isa = PBXFileReference; lastKnownFileType = text; path = "split-amend.jjdescription"; sourceTree = "<group>"; };
 		723C85882E6CB2450002B660 /* new-description-amend-scissor.jjdescription */ = {isa = PBXFileReference; lastKnownFileType = text; path = "new-description-amend-scissor.jjdescription"; sourceTree = "<group>"; };
+		723C858A2E6FD4100002B660 /* cherry-pick-conflict */ = {isa = PBXFileReference; lastKnownFileType = text; path = "cherry-pick-conflict"; sourceTree = "<group>"; };
 		725148EA266DC2B000247C9C /* Sparkle.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Sparkle.framework; path = vendor/Sparkle/Sparkle.framework; sourceTree = SOURCE_ROOT; };
 		72535B842E04D40D00EC4C35 /* ContentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentViewController.swift; sourceTree = "<group>"; };
 		72535B852E04D40D00EC4C35 /* Content.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = Content.xib; sourceTree = "<group>"; };
@@ -186,6 +188,7 @@
 				72120FC32533EC570018201E /* linux-partial */,
 				72120FC72533F7650018201E /* interactive-rebase */,
 				72120FD12533F91D0018201E /* interactive-rebase-2 */,
+				723C858A2E6FD4100002B660 /* cherry-pick-conflict */,
 				7211A9AB2546170800F95773 /* empty */,
 			);
 			path = Resources;
@@ -355,6 +358,7 @@
 				72120FD22533F91D0018201E /* interactive-rebase-2 in Resources */,
 				7211A978253BBBBB00F95773 /* svn-new-commit in Resources */,
 				723C85892E6CB2450002B660 /* new-description-amend-scissor.jjdescription in Resources */,
+				723C858B2E6FD4100002B660 /* cherry-pick-conflict in Resources */,
 				723C85872E6CB1880002B660 /* split-amend.jjdescription in Resources */,
 				7211A974253BB68A00F95773 /* hg-new-commit in Resources */,
 				723C85832E67E0F10002B660 /* new-description.jjdescription in Resources */,

@@ -112,7 +112,7 @@ typealias StatFS = statfs
 				\(tutorialCommitMessage)
 				
 				# \(tutorialWelcome)
-				#
+				
 				# \(tutorialShortcutsLabel)
 				#    \(tutorialCommitShortcut)
 				#    \(tutorialCancelShortcut)
