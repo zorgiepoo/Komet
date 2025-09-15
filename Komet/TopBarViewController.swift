@@ -49,13 +49,26 @@ class TopBarViewController: NSViewController {
 			do {
 				commitLabelTextField.textColor = style.barTextColor
 				
-				let commitTitle = NSMutableAttributedString(attributedString: commitButton.attributedTitle)
-				commitTitle.addAttribute(.foregroundColor, value: style.barTextColor, range: NSMakeRange(0, commitTitle.length))
-				commitButton.attributedTitle = commitTitle
+				if #available(macOS 26.0, *) {
+					commitButton.borderShape = .capsule
+					commitButton.tintProminence = .primary
+					commitButton.bezelColor = style.primaryBarButtonColor
+				} else {
+					let commitTitle = NSMutableAttributedString(attributedString: commitButton.attributedTitle)
+					commitTitle.addAttribute(.foregroundColor, value: style.barTextColor, range: NSMakeRange(0, commitTitle.length))
+					commitButton.attributedTitle = commitTitle
+				}
 				
-				let cancelTitle = NSMutableAttributedString(attributedString: cancelButton.attributedTitle)
-				cancelTitle.addAttribute(.foregroundColor, value: style.barTextColor, range: NSMakeRange(0, cancelTitle.length))
-				cancelButton.attributedTitle = cancelTitle
+				if #available(macOS 26.0, *) {
+					cancelButton.borderShape = .capsule
+					cancelButton.isBordered = true
+					cancelButton.tintProminence = .primary
+					cancelButton.bezelColor = style.secondaryBarButtonColor
+				} else {
+					let cancelTitle = NSMutableAttributedString(attributedString: cancelButton.attributedTitle)
+					cancelTitle.addAttribute(.foregroundColor, value: style.barTextColor, range: NSMakeRange(0, cancelTitle.length))
+					cancelButton.attributedTitle = cancelTitle
+				}
 			}
 		}
 	}

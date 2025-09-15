@@ -11,6 +11,8 @@ import Cocoa
 struct WindowStyle {
 	let barColor: NSColor
 	let barTextColor: NSColor
+	let primaryBarButtonColor: NSColor
+	let secondaryBarButtonColor: NSColor
 	let dividerLineColor: NSColor
 	let appearance: NSAppearance?
 	let textColor: NSColor
@@ -31,6 +33,8 @@ struct WindowStyle {
 				WindowStyle(
 					barColor: NSColor(deviceWhite: 0.9, alpha: 1.0),
 					barTextColor: NSColor(deviceRed: 0.0, green: 0.0, blue: 0.0, alpha: 1.0),
+					primaryBarButtonColor: NSColor(deviceWhite: 0.8, alpha: 1.0),
+					secondaryBarButtonColor: NSColor(deviceWhite: 0.8, alpha: 0.3),
 					dividerLineColor: NSColor(deviceRed: 205.0 / 255.0, green: 205.0 / 255.0, blue: 205.0 / 255.0, alpha: 1.0),
 					appearance: NSAppearance(named: .aqua),
 					textColor: NSColor(deviceRed: 0.0, green: 0.0, blue: 0.0, alpha: 1.0),
@@ -48,6 +52,8 @@ struct WindowStyle {
 				WindowStyle(
 					barColor: NSColor(deviceRed: 0.0, green: 0.0, blue: 0.0, alpha: 1.0),
 					barTextColor: NSColor(deviceRed: 1.0, green: 1.0, blue: 1.0, alpha: 1.0),
+					primaryBarButtonColor: NSColor(deviceRed: 80.0 / 255.0, green: 80.0 / 255.0, blue: 80.0 / 255.0, alpha: 1.0),
+					secondaryBarButtonColor: NSColor(deviceRed: 80.0 / 255.0, green: 80.0 / 255.0, blue: 80.0 / 255.0, alpha: 0.3),
 					dividerLineColor: NSColor(deviceRed: 0.0, green: 0.0, blue: 0.0, alpha: 1.0),
 					appearance: NSAppearance(named: .darkAqua),
 					textColor: NSColor(deviceRed: 1.0, green: 1.0, blue: 1.0, alpha: 1.0),
@@ -65,6 +71,8 @@ struct WindowStyle {
 				WindowStyle(
 					barColor: NSColor(deviceRed: 1.0, green: 0.941, blue: 0.647, alpha: 0.95),
 					barTextColor: NSColor(deviceRed: 0.714, green: 0.286, blue: 0.149, alpha: 1.0),
+					primaryBarButtonColor: NSColor(deviceRed: 1.0 / 1.2, green: 0.941 / 1.2, blue: 0.647 / 1.2, alpha: 0.95),
+					secondaryBarButtonColor: NSColor(deviceRed: 1.0 / 1.2, green: 0.941 / 1.2, blue: 0.647 / 1.2, alpha: 0.95 * 0.3),
 					dividerLineColor: NSColor(deviceRed: 188.0 / 255.0, green: 169.0 / 255.0, blue: 57.0 / 255.0, alpha: 0.55),
 					appearance: NSAppearance(named: .aqua),
 					textColor: NSColor(deviceRed: 0.557, green: 0.157, blue: 0.0, alpha: 1.0),
@@ -83,6 +91,8 @@ struct WindowStyle {
 				WindowStyle(
 					barColor: barAndTextHighlightColor,
 					barTextColor: NSColor(deviceRed: 0.925, green: 0.941, blue: 0.945, alpha: 1.0),
+					primaryBarButtonColor: NSColor(deviceRed: 0.204 * 1.2, green: 0.596 * 1.2, blue: 0.859 * 1.2, alpha: 1.0),
+					secondaryBarButtonColor: NSColor(deviceRed: 0.204 * 1.2, green: 0.596 * 1.2, blue: 0.859 * 1.2, alpha: 0.3),
 					dividerLineColor: barAndTextHighlightColor,
 					appearance: NSAppearance(named: .aqua),
 					textColor: NSColor(deviceRed: 0.173, green: 0.243, blue: 0.314, alpha: 1.0),
@@ -101,6 +111,8 @@ struct WindowStyle {
 				WindowStyle(
 					barColor: barAndTextHighlightColor,
 					barTextColor: NSColor(deviceRed: 0.847, green: 0.792, blue: 0.659, alpha: 1.0),
+					primaryBarButtonColor: NSColor(deviceRed: 0.361 * 1.2, green: 0.514 * 1.2, blue: 0.184 * 1.2, alpha: 1.0),
+					secondaryBarButtonColor: NSColor(deviceRed: 0.361 * 1.2, green: 0.514 * 1.2, blue: 0.184 * 1.2, alpha: 0.3),
 					dividerLineColor: barAndTextHighlightColor,
 					appearance: NSAppearance(named: .aqua),
 					textColor: NSColor(deviceRed: 0.157, green: 0.286, blue: 0.027, alpha: 1.0),
@@ -118,7 +130,9 @@ struct WindowStyle {
 			return
 				WindowStyle(
 					barColor: barAndTextHighlightColor,
-					barTextColor: NSColor(deviceRed: 0.118, green: 0.118, blue: 0.125, alpha: 1.0),
+					barTextColor: NSColor(deviceRed: 1.0, green: 1.0, blue: 1.0, alpha: 1.0),
+					primaryBarButtonColor: NSColor(deviceRed: 0.863 * 1.3, green: 0.208 * 1.3, blue: 0.133 * 1.3, alpha: 1.0),
+					secondaryBarButtonColor: NSColor(deviceRed: 0.863 * 1.3, green: 0.208 * 1.3, blue: 0.133 * 1.3, alpha: 0.3),
 					dividerLineColor: barAndTextHighlightColor,
 					appearance: NSAppearance(named: .darkAqua),
 					textColor: NSColor(deviceRed: 0.963, green: 0.308, blue: 0.233, alpha: 1.0),

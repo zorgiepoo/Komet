@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="24123.1" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="24127" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="24123.1"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="24127"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -29,7 +29,7 @@
                     </textFieldCell>
                 </textField>
                 <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="zn7-nG-YEr">
-                    <rect key="frame" x="441" y="6" width="55" height="17"/>
+                    <rect key="frame" x="437" y="5" width="59" height="20"/>
                     <buttonCell key="cell" type="roundRect" title="commit" bezelStyle="roundedRect" alignment="center" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="n9Q-dk-3iT">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="smallSystem"/>
@@ -47,7 +47,7 @@ DQ
                     </connections>
                 </button>
                 <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="LA4-2H-9rP">
-                    <rect key="frame" x="381" y="8" width="55" height="14"/>
+                    <rect key="frame" x="373" y="8" width="59" height="14"/>
                     <buttonCell key="cell" type="roundRect" title="cancel" bezelStyle="roundedRect" alignment="center" controlSize="small" lineBreakMode="truncatingTail" state="on" imageScaling="proportionallyDown" inset="2" id="xU2-2T-xm9">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="smallSystem"/>
@@ -58,7 +58,7 @@ DQ
                     </connections>
                 </button>
                 <progressIndicator hidden="YES" maxValue="100" indeterminate="YES" controlSize="small" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="GTR-zR-Hnl" userLabel="Updater Check Progress Indicator">
-                    <rect key="frame" x="364" y="7" width="16" height="16"/>
+                    <rect key="frame" x="356" y="7" width="16" height="16"/>
                 </progressIndicator>
             </subviews>
             <constraints>
