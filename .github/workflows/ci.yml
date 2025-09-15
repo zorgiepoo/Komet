@@ -10,12 +10,12 @@ jobs:
   build:
     strategy:
       matrix:
-        config: ['14']
+        config: ['15']
         include:
-            - config: '14'
-              runner: 'macos-14'
-              xcode-path: '/Applications/Xcode_15.4.app/Contents/Developer'
-              upload-name: 'build-logs-macos14'
+            - config: '15'
+              runner: 'macos-15'
+              xcode-path: '/Applications/Xcode_16.4.app/Contents/Developer'
+              upload-name: 'build-logs-macos15'
     
     name: Build and Test Komet on macOS
     runs-on: ${{ matrix.runner }}
