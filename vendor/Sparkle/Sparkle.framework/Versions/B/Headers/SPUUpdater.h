@@ -42,6 +42,8 @@ NS_ASSUME_NONNULL_BEGIN
  - `feedURL`
  
  Please view the documentation on each of these properties for more detail if you are to configure them dynamically.
+ 
+ This class must be used on the main thread.
  */
 SU_EXPORT @interface SPUUpdater : NSObject
 
@@ -100,8 +102,9 @@ SU_EXPORT @interface SPUUpdater : NSObject
  (as long as the user driver is the standard `SPUStandardUserDriver` or if it implements `-[SPUUserDriver showUpdateInFocus]`).
  
  This will find updates that the user has previously opted into skipping.
- 
  See `canCheckForUpdates` property which can determine when this method may be invoked.
+
+ This must be called on the main thread.
  */
 - (void)checkForUpdates;
 
@@ -127,6 +130,8 @@ SU_EXPORT @interface SPUUpdater : NSObject
  This will not find updates that the user has opted into skipping.
  
  This method does not do anything if there is a `sessionInProgress`.
+
+ This must be called on the main thread.
  */
 - (void)checkForUpdatesInBackground;
 
@@ -145,6 +150,8 @@ SU_EXPORT @interface SPUUpdater : NSObject
  Updates that have been skipped by the user will not be found.
  
  This method does not do anything if there is a `sessionInProgress`.
+
+ This must be called on the main thread.
  */
 - (void)checkForUpdateInformation;
 
@@ -198,7 +205,9 @@ SU_EXPORT @interface SPUUpdater : NSObject
  to your app's command line arguments instead of setting this property.
  
  The update schedule cycle will be reset in a short delay after the property's new value is set.
- This is to allow reverting this property without kicking off a schedule change immediately
+ This is to allow reverting this property without kicking off a schedule change immediately.
+ 
+ This property is KVO compliant. This property must be called on the main thread.
  */
 @property (nonatomic) BOOL automaticallyChecksForUpdates;
 
@@ -213,7 +222,9 @@ SU_EXPORT @interface SPUUpdater : NSObject
  Do not always set it on launch unless you want to ignore the user's preference.
  
  The update schedule cycle will be reset in a short delay after the property's new value is set.
- This is to allow reverting this property without kicking off a schedule change immediately
+ This is to allow reverting this property without kicking off a schedule change immediately.
+ 
+ This property is KVO compliant. This property must be called on the main thread.
  */
 @property (nonatomic) NSTimeInterval updateCheckInterval;
 
@@ -235,6 +246,8 @@ SU_EXPORT @interface SPUUpdater : NSObject
  Hence developers shouldn't maintain an additional user default for this property.
  Only set this property if the user wants to change the default via a user settings option.
  Do not always set it on launch unless you want to ignore the user's preference.
+ 
+ This property is KVO compliant. This property must be called on the main thread.
  */
 @property (nonatomic) BOOL automaticallyDownloadsUpdates;
 
@@ -326,6 +339,8 @@ SU_EXPORT @interface SPUUpdater : NSObject
  A property indicating whether or not the user's system profile information is sent when checking for updates.
 
  Setting this property will persist in the host bundle's user defaults.
+ 
+ This property is KVO compliant. This property must be called on the main thread.
  */
 @property (nonatomic) BOOL sendsSystemProfile;
 
@@ -335,6 +350,8 @@ SU_EXPORT @interface SPUUpdater : NSObject
  For testing purposes, the last update check is stored in the `SULastCheckTime` key in the host bundle's user defaults.
  For example, `defaults delete my-bundle-id SULastCheckTime` can be invoked to clear the last update check time and test
  if update checks are automatically scheduled.
+ 
+ This property must be called on the main thread.
  */
 @property (nonatomic, readonly, copy, nullable) NSDate *lastUpdateCheckDate;
 
@@ -346,6 +363,8 @@ SU_EXPORT @interface SPUUpdater : NSObject
  If the `updateCheckInterval` or `automaticallyChecksForUpdates` properties are changed, this method is automatically invoked after a short delay using `-resetUpdateCycleAfterShortDelay`. In these cases, manually resetting the update cycle is not necessary.
  
  See also `-resetUpdateCycleAfterShortDelay` which gives the user a short delay before triggering a cycle reset.
+ 
+ This must be called on the main thread.
  */
 - (void)resetUpdateCycle;
 
@@ -359,6 +378,8 @@ SU_EXPORT @interface SPUUpdater : NSObject
  no cycle reset will be done.
  
  If the `updateCheckInterval` or `automaticallyChecksForUpdates` properties are changed, this method is automatically invoked. In these cases, manually resetting the update cycle is not necessary.
+ 
+ This must be called on the main thread.
  */
 - (void)resetUpdateCycleAfterShortDelay;
 

@@ -6,7 +6,15 @@
 	<dict>
 		<key>Resources/Info.plist</key>
 		<data>
-		XUfErsWIQFk2B5xNDPW1g4hQ9qU=
+		N/AK6mEq4fISrxEgdeBPGcImwpk=
+		</data>
+		<key>Resources/SUUpdateAlert.nib</key>
+		<data>
+		aBY/8sWAcbKxrkcg0p2M+gv0eDg=
+		</data>
+		<key>Resources/SUUpdatePermissionPrompt.nib</key>
+		<data>
+		zWe0e02UlZdX+N7AUu4TSBx7tIo=
 		</data>
 	</dict>
 	<key>files2</key>
@@ -15,10 +23,10 @@
 		<dict>
 			<key>cdhash</key>
 			<data>
-			bkVeqmNmuKNxc3gvdMRaqVt4xr0=
+			aU01lK0LXeNqycV5c0OqHo6GpS4=
 			</data>
 			<key>requirement</key>
-			<string>cdhash H"6e455eaa6366b8a37173782f74c45aa95b78c6bd" or cdhash H"52776703da7f1bdeee38ec9c81a82961b3b91d34"</string>
+			<string>cdhash H"694d3594ad0b5de36ac9c5797343aa1e8e86a52e" or cdhash H"1f437e974c090444f8d92508ef854f800846ddc1"</string>
 		</dict>
 		<key>Headers/SPUDownloadData.h</key>
 		<dict>
@@ -31,7 +39,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			gf8QsQfI+rsdQIHZdznFSFICnui4Oavnhgn9ybmv6Hs=
+			xb9sne2eIGRdDBQU8Gw0a/zVET43e9g8duKWBWHLVfs=
 			</data>
 		</dict>
 		<key>Headers/SPUStandardUserDriver.h</key>
@@ -66,7 +74,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			+ka/paesJMyA98P/dNWHNH7LeyzJu+acyW/MpqHY9lY=
+			aUXoztPF81lXMnFb/N7yAZwVBqFCFzf83J3FnvHpxUY=
 			</data>
 		</dict>
 		<key>Headers/SPUUpdaterDelegate.h</key>
@@ -80,7 +88,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			Nnk1lMwSl/z+ugdM8ovU0U/bQUoOWG6zjYQHXPF+kCU=
+			GiYGeD+dxWuBIX54u11Tgrg9lNjritBVEN/4WWlE61M=
 			</data>
 		</dict>
 		<key>Headers/SPUUserDriver.h</key>
@@ -108,14 +116,14 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			imKkb6r+8fp+9enH9Xlnh0VZ5S12ZkwmU53UHTx/Tdo=
+			vz8FZzMme+74ydZ2E7v8UlIK1XDwKATrL+tEfVF99A0=
 			</data>
 		</dict>
 		<key>Headers/SUErrors.h</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			fmP8Y0mI10K5McjVGtVKtgzae36JLxmqLw3sr7vdBGY=
+			IdPofMbgIxKD7Bb94Ptqvb7kAPGfIR4ajS2zqO5bfbY=
 			</data>
 		</dict>
 		<key>Headers/SUExport.h</key>
@@ -206,7 +214,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			hj9Br7Gf1Y8X1dqNvSUHMP70K+Q+S9xZAyPYMqKthFQ=
+			eSRnJrGHhArw4ip9KaIVo3bknF8bHywhkQaEY3RbLmo=
 			</data>
 		</dict>
 		<key>PrivateHeaders/SPUStandardUserDriver+Private.h</key>
@@ -241,17 +249,31 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			/kSVyJUSdarMr8ev3Qw4dUgbNw0+dU/ev/icxd0xxKg=
+			t1G440767hbdoALcobtacbRGIrOWztiRqJhMO2n4hxQ=
+			</data>
+		</dict>
+		<key>Resources/SUUpdateAlert.nib</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			RdxbkmhTqm4jEyi6s+NLfAaGwEuSIe94p3qvlyb9vs8=
+			</data>
+		</dict>
+		<key>Resources/SUUpdatePermissionPrompt.nib</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			3hPMTRyHFd+VkmEv13rM90gZp79xeICeTqc4epB8jQM=
 			</data>
 		</dict>
 		<key>Updater.app</key>
 		<dict>
 			<key>cdhash</key>
 			<data>
-			q34Liy4QBnDuxuhdjQ+mUl0HbJs=
+			qk3FnfaScXqojzEvo4GNq1Va5jg=
 			</data>
 			<key>requirement</key>
-			<string>cdhash H"ab7e0b8b2e100670eec6e85d8d0fa6525d076c9b" or cdhash H"9e906f5cd232c87deec41bdd62522aa5d12f9ff5"</string>
+			<string>cdhash H"aa4dc59df692717aa88f312fa3818dab555ae638" or cdhash H"834ef54e20e71b72db9637e4e4ec8adb31c9d62c"</string>
 		</dict>
 	</dict>
 	<key>rules</key>
