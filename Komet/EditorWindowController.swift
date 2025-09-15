@@ -66,6 +66,7 @@ private let APP_SUPPORT_DIRECTORY_NAME = "Komet"
 			ZGEditorRecommendedBodyLineLengthLimitEnabledKey: false,
 			ZGEditorRecommendedBodyLineLengthLimitKey: 72,
 			ZGEditorAutomaticNewlineInsertionAfterSubjectKey: true,
+			ZGHighlightFileChangesKey: true,
 			ZGResumeIncompleteSessionKey: true,
 			ZGResumeIncompleteSessionTimeoutIntervalKey: 60.0 * 60, // around 1 hour
 			ZGWindowVibrancyKey: false,

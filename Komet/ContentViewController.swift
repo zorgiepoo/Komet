@@ -444,11 +444,72 @@ class ContentViewController: NSViewController, NSTextStorageDelegate, NSTextCont
 		} else {
 			let commentFont = ZGReadDefaultFont(userDefaults, ZGCommentsFontNameKey, ZGCommentsFontPointSizeKey)
 			
-			let displayAttributes: [NSAttributedString.Key: AnyObject] = [.font: commentFont, .foregroundColor: style.commentColor]
+			var commentChangeColorAndCommentPrefixLength: (NSColor, Int)? = nil
+			if isCommentSection && versionControlledFile && UserDefaults.standard.bool(forKey: ZGHighlightFileChangesKey) {
+				if #available(macOS 13, *) {
+					if let (label, commentPrefixLength) = TextProcessor.labelInCommentLine(originalText.string, versionControlType: commentVersionControlType) {
+						switch commentVersionControlType {
+						case .git:
+							switch label {
+							case "renamed": fallthrough
+							case "copied": fallthrough
+							case "modified":
+								commentChangeColorAndCommentPrefixLength = (style.changeModifiedColor, commentPrefixLength)
+							case "new file":
+								commentChangeColorAndCommentPrefixLength = (style.changeAddedColor, commentPrefixLength)
+							case "deleted":
+								commentChangeColorAndCommentPrefixLength = (style.changeDeletedColor, commentPrefixLength)
+							default:
+								break
+							}
+						case .jj:
+							switch label {
+							case "R": fallthrough
+							case "C": fallthrough
+							case "M":
+								commentChangeColorAndCommentPrefixLength = (style.changeModifiedColor, commentPrefixLength)
+							case "A":
+								commentChangeColorAndCommentPrefixLength = (style.changeAddedColor, commentPrefixLength)
+							case "D":
+								commentChangeColorAndCommentPrefixLength = (style.changeDeletedColor, commentPrefixLength)
+							default:
+								break
+							}
+						case .hg:
+							switch label {
+							case "changed":
+								commentChangeColorAndCommentPrefixLength = (style.changeModifiedColor, commentPrefixLength)
+							case "added":
+								commentChangeColorAndCommentPrefixLength = (style.changeAddedColor, commentPrefixLength)
+							case "removed":
+								commentChangeColorAndCommentPrefixLength = (style.changeDeletedColor, commentPrefixLength)
+							default:
+								break
+							}
+						case .svn:
+							// Not testing svn
+							break
+						}
+					}
+				}
+			}
 			
 			let textWithDisplayAttributes = NSMutableAttributedString(attributedString: originalText)
 			
-			textWithDisplayAttributes.addAttributes(displayAttributes, range: NSMakeRange(0, range.length))
+			if let (commentChangeColor, commentPrefixLength) = commentChangeColorAndCommentPrefixLength {
+				do {
+					let displayAttributes: [NSAttributedString.Key: AnyObject] = [.font: commentFont, .foregroundColor: style.commentColor]
+					textWithDisplayAttributes.addAttributes(displayAttributes, range: NSMakeRange(0, commentPrefixLength))
+				}
+				
+				if range.length > commentPrefixLength {
+					let displayAttributes: [NSAttributedString.Key: AnyObject] = [.font: commentFont, .foregroundColor: commentChangeColor]
+					textWithDisplayAttributes.addAttributes(displayAttributes, range: NSMakeRange(commentPrefixLength, range.length - commentPrefixLength))
+				}
+			} else {
+				let displayAttributes: [NSAttributedString.Key: AnyObject] = [.font: commentFont, .foregroundColor: style.commentColor]
+				textWithDisplayAttributes.addAttributes(displayAttributes, range: NSMakeRange(0, range.length))
+			}
 			
 			if updateBreadcrumbs && !isCommentSection && breadcrumbs != nil {
 				breadcrumbs!.commentLineRanges.append(range.location ..< NSMaxRange(range))

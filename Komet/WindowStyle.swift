@@ -24,6 +24,9 @@ struct WindowStyle {
 	let diffAddColor: NSColor
 	let diffRemoveColor: NSColor
 	let diffHighlightsBackground: Bool
+	let changeModifiedColor: NSColor
+	let changeAddedColor: NSColor
+	let changeDeletedColor: NSColor
 	let scrollerKnobStyle: NSScroller.KnobStyle
 	
 	static func withTheme(_ theme: WindowStyleTheme) -> WindowStyle {
@@ -46,6 +49,9 @@ struct WindowStyle {
 					diffAddColor: NSColor(deviceRed: 0.0, green: 1.0, blue: 0.0, alpha: 0.3),
 					diffRemoveColor: NSColor(deviceRed: 1.0, green: 0.0, blue: 0.0, alpha: 0.3),
 					diffHighlightsBackground: true,
+					changeModifiedColor: NSColor(deviceRed: 0.0, green: 0.0, blue: 1.0, alpha: 0.7),
+					changeAddedColor: NSColor(deviceRed: 0.0, green: 0.7, blue: 0.0, alpha: 1.0),
+					changeDeletedColor: NSColor(deviceRed: 1.0, green: 0.0, blue: 0.0, alpha: 0.7),
 					scrollerKnobStyle: .dark)
 		case .dark:
 			return
@@ -54,7 +60,7 @@ struct WindowStyle {
 					barTextColor: NSColor(deviceRed: 1.0, green: 1.0, blue: 1.0, alpha: 1.0),
 					primaryBarButtonColor: NSColor(deviceRed: 80.0 / 255.0, green: 80.0 / 255.0, blue: 80.0 / 255.0, alpha: 1.0),
 					secondaryBarButtonColor: NSColor(deviceRed: 80.0 / 255.0, green: 80.0 / 255.0, blue: 80.0 / 255.0, alpha: 0.3),
-					dividerLineColor: NSColor(deviceRed: 0.0, green: 0.0, blue: 0.0, alpha: 1.0),
+					dividerLineColor: NSColor(deviceRed: 0.1, green: 0.1, blue: 0.1, alpha: 1.0),
 					appearance: NSAppearance(named: .darkAqua),
 					textColor: NSColor(deviceRed: 1.0, green: 1.0, blue: 1.0, alpha: 1.0),
 					textHighlightColor: NSColor(deviceRed: 0.0, green: 0.0, blue: 1.0, alpha: 0.75),
@@ -65,6 +71,9 @@ struct WindowStyle {
 					diffAddColor: NSColor(deviceRed: 0.0, green: 1.0, blue: 0.0, alpha: 0.7),
 					diffRemoveColor: NSColor(deviceRed: 1.0, green: 0.0, blue: 0.0, alpha: 0.7),
 					diffHighlightsBackground: false,
+					changeModifiedColor: NSColor(deviceRed: 0.0, green: 0.7, blue: 0.7, alpha: 1.0),
+					changeAddedColor: NSColor(deviceRed: 0.0, green: 1.0, blue: 0.0, alpha: 0.7),
+					changeDeletedColor: NSColor(deviceRed: 1.0, green: 0.0, blue: 0.0, alpha: 0.7),
 					scrollerKnobStyle: .light)
 		case .papyrus:
 			return
@@ -84,6 +93,9 @@ struct WindowStyle {
 					diffAddColor: NSColor(deviceRed: 0.0, green: 1.0, blue: 0.0, alpha: 0.3),
 					diffRemoveColor: NSColor(deviceRed: 1.0, green: 0.0, blue: 0.0, alpha: 0.3),
 					diffHighlightsBackground: true,
+					changeModifiedColor: NSColor(deviceRed: 0.0, green: 0.0, blue: 1.0, alpha: 0.7),
+					changeAddedColor: NSColor(deviceRed: 0.0, green: 0.8, blue: 0.0, alpha: 1.0),
+					changeDeletedColor: NSColor(deviceRed: 0.8, green: 0.0, blue: 0.0, alpha: 0.8),
 					scrollerKnobStyle: .dark)
 		case .blue:
 			let barAndTextHighlightColor = NSColor(deviceRed: 0.204, green: 0.596, blue: 0.859, alpha: 1.0)
@@ -104,6 +116,9 @@ struct WindowStyle {
 					diffAddColor: NSColor(deviceRed: 0.0, green: 1.0, blue: 0.0, alpha: 0.3),
 					diffRemoveColor: NSColor(deviceRed: 1.0, green: 0.0, blue: 0.0, alpha: 0.3),
 					diffHighlightsBackground: true,
+					changeModifiedColor: NSColor(deviceRed: 0.0, green: 0.0, blue: 1.0, alpha: 0.7),
+					changeAddedColor: NSColor(deviceRed: 0.0, green: 0.7, blue: 0.0, alpha: 1.0),
+					changeDeletedColor: NSColor(deviceRed: 0.8, green: 0.0, blue: 0.0, alpha: 0.8),
 					scrollerKnobStyle: .dark)
 		case .green:
 			let barAndTextHighlightColor = NSColor(deviceRed: 0.361, green: 0.514, blue: 0.184, alpha: 1.0)
@@ -124,6 +139,9 @@ struct WindowStyle {
 					diffAddColor: NSColor(deviceRed: 0.0, green: 1.0, blue: 0.0, alpha: 0.3),
 					diffRemoveColor: NSColor(deviceRed: 1.0, green: 0.0, blue: 0.0, alpha: 0.3),
 					diffHighlightsBackground: true,
+					changeModifiedColor: NSColor(deviceRed: 0.0, green: 0.0, blue: 1.0, alpha: 0.7),
+					changeAddedColor: NSColor(deviceRed: 0.0, green: 0.6, blue: 0.0, alpha: 1.0),
+					changeDeletedColor: NSColor(deviceRed: 0.8, green: 0.0, blue: 0.0, alpha: 0.8),
 					scrollerKnobStyle: .dark)
 		case .red:
 			let barAndTextHighlightColor = NSColor(deviceRed: 0.863, green: 0.208, blue: 0.133, alpha: 1.0)
@@ -144,6 +162,9 @@ struct WindowStyle {
 					diffAddColor: NSColor(deviceRed: 0.0, green: 0.8, blue: 0.0, alpha: 1.0),
 					diffRemoveColor: NSColor(deviceRed: 0.8, green: 0.0, blue: 0.0, alpha: 1.0),
 					diffHighlightsBackground: false,
+					changeModifiedColor: NSColor(deviceRed: 0.0, green: 0.5, blue: 0.5, alpha: 1.0),
+					changeAddedColor: NSColor(deviceRed: 0.0, green: 0.8, blue: 0.0, alpha: 1.0),
+					changeDeletedColor: NSColor(deviceRed: 0.8, green: 0.0, blue: 0.0, alpha: 1.0),
 					scrollerKnobStyle: .light)
 		}
 	}
