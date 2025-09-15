@@ -50,8 +50,10 @@ class TopBarViewController: NSViewController {
 				commitLabelTextField.textColor = style.barTextColor
 				
 				if #available(macOS 26.0, *) {
+#if canImport(AppKit, _version: "2665.8")
 					commitButton.borderShape = .capsule
 					commitButton.tintProminence = .primary
+#endif
 					commitButton.bezelColor = style.primaryBarButtonColor
 				} else {
 					let commitTitle = NSMutableAttributedString(attributedString: commitButton.attributedTitle)
@@ -60,9 +62,11 @@ class TopBarViewController: NSViewController {
 				}
 				
 				if #available(macOS 26.0, *) {
+#if canImport(AppKit, _version: "2665.8")
 					cancelButton.borderShape = .capsule
-					cancelButton.isBordered = true
 					cancelButton.tintProminence = .primary
+#endif
+					cancelButton.isBordered = true
 					cancelButton.bezelColor = style.secondaryBarButtonColor
 				} else {
 					let cancelTitle = NSMutableAttributedString(attributedString: cancelButton.attributedTitle)
