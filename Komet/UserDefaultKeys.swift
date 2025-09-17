@@ -20,6 +20,8 @@ let ZGEditorRecommendedBodyLineLengthLimitEnabledKey = "ZGEditorRecommendedBodyL
 
 let ZGEditorAutomaticNewlineInsertionAfterSubjectKey = "ZGEditorAutomaticNewlineInsertionAfterSubject"
 
+let ZGHighlightFileChangesKey = "ZGHighlightFileChanges"
+
 let ZGWindowStyleThemeKey = "ZGWindowStyleTheme"
 let ZGWindowVibrancyKey = "ZGWindowVibrancy"
 

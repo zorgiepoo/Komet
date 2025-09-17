@@ -45,6 +45,49 @@ struct TextProcessor {
 		// Note a line that is "--" could have the prefix and suffix the same, but we want to make sure it's at least "--...--" length long
 		return line.hasPrefix(prefix) && line.hasSuffix(suffix) && line.count >= prefix.count + suffix.count
 	}
+	
+	@available(macOS 13, *)
+	static func labelInCommentLine(_ line: String, versionControlType: VersionControlType) -> (String, Int)? {
+		let commentPrefixLength: Int
+		switch versionControlType {
+		case .git:
+			commentPrefixLength = 1
+		case .hg:
+			commentPrefixLength = 3
+		case .jj:
+			commentPrefixLength = 3
+		case .svn:
+			// Not testing svn for this
+			return nil
+		}
+		
+		let linePastCommentPrefixIndex = line.index(line.startIndex, offsetBy: commentPrefixLength)
+		let remainingLine = line[linePastCommentPrefixIndex ..< line.endIndex]
+		let trimmedRemainingLine = remainingLine.trimmingPrefix { character in
+			character == " " || character == "\t"
+		}
+		
+		let separatorIndex: Substring.Index?
+		switch versionControlType {
+		case .git:
+			separatorIndex = trimmedRemainingLine.firstIndex(of: ":")
+		case .hg: fallthrough
+		case .jj:
+			separatorIndex = trimmedRemainingLine.firstIndex(where: { character in
+				character == " " || character == "\t"
+			})
+		case .svn:
+			// Not testing svn for this
+			separatorIndex = nil
+		}
+		
+		guard let separatorIndex else {
+			return nil
+		}
+		
+		let label = trimmedRemainingLine[..<separatorIndex]
+		return (String(label), commentPrefixLength)
+	}
 
 	static func isScissorLine(_ line: String, versionControlType: VersionControlType) -> Bool {
 		switch versionControlType {
