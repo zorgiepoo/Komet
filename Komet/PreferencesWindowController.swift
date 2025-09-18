@@ -38,7 +38,7 @@ extension UserDefaults
 	}
 }
 
-@objc class ZGPreferencesWindowController: NSWindowController {
+@objc class ZGPreferencesWindowController: NSWindowController, NSFontChanging {
 	private weak var editorListener: UserDefaultsEditorListener?
 	private weak var updaterListener: UpdaterSettingsListener?
 	
@@ -162,6 +162,7 @@ extension UserDefaults
 		selectedFontType = fontType
 		
 		let fontManager = NSFontManager.shared
+		fontManager.target = self
 		fontManager.setSelectedFont(selectedFont, isMultiple: false)
 		fontManager.orderFrontFontPanel(nil)
 	}
@@ -176,7 +177,7 @@ extension UserDefaults
 		showFontPrompt(selectedFont: commentsFont, fontType: .comments)
 	}
 	
-	@objc func changeFont(_ sender: Any?) {
+	@objc func changeFont(_ sender: NSFontManager?) {
 		let fontManager = NSFontManager.shared
 		guard let selectedFont = fontManager.selectedFont, let selectedFontType = selectedFontType else {
 			return
