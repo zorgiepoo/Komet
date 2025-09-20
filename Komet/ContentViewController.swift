@@ -8,6 +8,12 @@
 
 import Cocoa
 
+enum FileChangeType: Equatable {
+	case added
+	case deleted
+	case modified
+}
+
 class ContentViewController: NSViewController, NSTextStorageDelegate, NSTextContentStorageDelegate, ZGCommitViewDelegate, NSTextViewDelegate {
 	@IBOutlet private var scrollViewContainer: NSView!
 	
@@ -444,7 +450,7 @@ class ContentViewController: NSViewController, NSTextStorageDelegate, NSTextCont
 		} else {
 			let commentFont = ZGReadDefaultFont(userDefaults, ZGCommentsFontNameKey, ZGCommentsFontPointSizeKey)
 			
-			var commentChangeColorAndCommentPrefixLength: (NSColor, Int)? = nil
+			var commentChangeColorAndCommentPrefixLength: (FileChangeType, Int)? = nil
 			if isCommentSection && versionControlledFile && UserDefaults.standard.bool(forKey: ZGHighlightFileChangesKey) {
 				if #available(macOS 13, *) {
 					if let (label, commentPrefixLength) = TextProcessor.labelInCommentLine(originalText.string, versionControlType: commentVersionControlType) {
@@ -454,11 +460,11 @@ class ContentViewController: NSViewController, NSTextStorageDelegate, NSTextCont
 							case "renamed": fallthrough
 							case "copied": fallthrough
 							case "modified":
-								commentChangeColorAndCommentPrefixLength = (style.changeModifiedColor, commentPrefixLength)
+								commentChangeColorAndCommentPrefixLength = (.modified, commentPrefixLength)
 							case "new file":
-								commentChangeColorAndCommentPrefixLength = (style.changeAddedColor, commentPrefixLength)
+								commentChangeColorAndCommentPrefixLength = (.added, commentPrefixLength)
 							case "deleted":
-								commentChangeColorAndCommentPrefixLength = (style.changeDeletedColor, commentPrefixLength)
+								commentChangeColorAndCommentPrefixLength = (.deleted, commentPrefixLength)
 							default:
 								break
 							}
@@ -467,22 +473,22 @@ class ContentViewController: NSViewController, NSTextStorageDelegate, NSTextCont
 							case "R": fallthrough
 							case "C": fallthrough
 							case "M":
-								commentChangeColorAndCommentPrefixLength = (style.changeModifiedColor, commentPrefixLength)
+								commentChangeColorAndCommentPrefixLength = (.modified, commentPrefixLength)
 							case "A":
-								commentChangeColorAndCommentPrefixLength = (style.changeAddedColor, commentPrefixLength)
+								commentChangeColorAndCommentPrefixLength = (.added, commentPrefixLength)
 							case "D":
-								commentChangeColorAndCommentPrefixLength = (style.changeDeletedColor, commentPrefixLength)
+								commentChangeColorAndCommentPrefixLength = (.deleted, commentPrefixLength)
 							default:
 								break
 							}
 						case .hg:
 							switch label {
 							case "changed":
-								commentChangeColorAndCommentPrefixLength = (style.changeModifiedColor, commentPrefixLength)
+								commentChangeColorAndCommentPrefixLength = (.modified, commentPrefixLength)
 							case "added":
-								commentChangeColorAndCommentPrefixLength = (style.changeAddedColor, commentPrefixLength)
+								commentChangeColorAndCommentPrefixLength = (.added, commentPrefixLength)
 							case "removed":
-								commentChangeColorAndCommentPrefixLength = (style.changeDeletedColor, commentPrefixLength)
+								commentChangeColorAndCommentPrefixLength = (.deleted, commentPrefixLength)
 							default:
 								break
 							}
@@ -496,15 +502,39 @@ class ContentViewController: NSViewController, NSTextStorageDelegate, NSTextCont
 			
 			let textWithDisplayAttributes = NSMutableAttributedString(attributedString: originalText)
 			
-			if let (commentChangeColor, commentPrefixLength) = commentChangeColorAndCommentPrefixLength {
+			if let (fileChangeType, commentPrefixLength) = commentChangeColorAndCommentPrefixLength {
 				do {
 					let displayAttributes: [NSAttributedString.Key: AnyObject] = [.font: commentFont, .foregroundColor: style.commentColor]
 					textWithDisplayAttributes.addAttributes(displayAttributes, range: NSMakeRange(0, commentPrefixLength))
 				}
 				
 				if range.length > commentPrefixLength {
+					let fileChangedTextRange = NSMakeRange(commentPrefixLength, range.length - commentPrefixLength)
+					
+					let commentChangeColor: NSColor
+					switch fileChangeType {
+					case .modified:
+						commentChangeColor = style.changeModifiedColor
+						
+						if updateBreadcrumbs && breadcrumbs != nil {
+							breadcrumbs!.fileChangeModifiedLineRanges.append(fileChangedTextRange.location ..< NSMaxRange(fileChangedTextRange))
+						}
+					case .deleted:
+						commentChangeColor = style.changeDeletedColor
+						
+						if updateBreadcrumbs && breadcrumbs != nil {
+							breadcrumbs!.fileChangeDeletedLineRanges.append(fileChangedTextRange.location ..< NSMaxRange(fileChangedTextRange))
+						}
+					case .added:
+						commentChangeColor = style.changeAddedColor
+						
+						if updateBreadcrumbs && breadcrumbs != nil {
+							breadcrumbs!.fileChangeAddedLineRanges.append(fileChangedTextRange.location ..< NSMaxRange(fileChangedTextRange))
+						}
+					}
+					
 					let displayAttributes: [NSAttributedString.Key: AnyObject] = [.font: commentFont, .foregroundColor: commentChangeColor]
-					textWithDisplayAttributes.addAttributes(displayAttributes, range: NSMakeRange(commentPrefixLength, range.length - commentPrefixLength))
+					textWithDisplayAttributes.addAttributes(displayAttributes, range: fileChangedTextRange)
 				}
 			} else {
 				let displayAttributes: [NSAttributedString.Key: AnyObject] = [.font: commentFont, .foregroundColor: style.commentColor]

@@ -1,0 +1,11 @@
+
+
+JJ: This commit contains the following changes:
+JJ:     D .DS_Store
+JJ:     A MyVersionControlTest/.DS_Store
+JJ:     A MyVersionControlTest/baz.m
+JJ:     M MyVersionControlTest/main.m
+JJ:     M MyVersionControlTest/foo.m
+JJ:     M MyVersionControlTest/bar.m
+JJ:
+JJ: Lines starting with "JJ:" (like this one) will be removed.

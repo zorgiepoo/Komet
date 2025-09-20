@@ -1,0 +1,13 @@
+
+# Please enter the commit message for your changes. Lines starting
+# with '#' will be ignored, and an empty message aborts the commit.
+#
+# On branch main
+# Changes to be committed:
+#	deleted:    GitTest/AppDelegate.h
+#	modified:   GitTest/AppDelegate.m
+#	modified:   GitTest/foo.m
+#	modified:   GitTest/baz.m
+#	new file:   GitTest/bar.m
+#	new file:   GitTest/bark.m
+#

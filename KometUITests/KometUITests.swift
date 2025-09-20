@@ -764,6 +764,19 @@ class KometUITests: XCTestCase {
 		XCTAssertEqual(breadcrumbs!.diffRemoveLineRanges.count, 0)
 	}
 	
+	func testFilesChanged() throws {
+		let app = try KometApp(filename: "files-changed")
+	
+		let newContent = "Hello there"
+		app.typeText(newContent)
+	
+		let (breadcrumbs, _) = try app.commit()
+		XCTAssertEqual(breadcrumbs!.exitStatus, 0, "commit failed with non-zero status")
+		XCTAssertEqual(breadcrumbs!.fileChangeModifiedLineRanges.count, 3)
+		XCTAssertEqual(breadcrumbs!.fileChangeAddedLineRanges.count, 2)
+		XCTAssertEqual(breadcrumbs!.fileChangeDeletedLineRanges.count, 1)
+	}
+	
 	// MARK: Comments
 	
 	func testNoEditingBeginningOfComments() throws {
@@ -1193,6 +1206,19 @@ class KometUITests: XCTestCase {
 		XCTAssertEqual(breadcrumbs!.diffHeaderLineRanges.count, 6)
 		XCTAssertEqual(breadcrumbs!.diffAddLineRanges.count, 5)
 		XCTAssertEqual(breadcrumbs!.diffRemoveLineRanges.count, 0)
+	}
+	
+	func testJJFilesChanged() throws {
+		let app = try KometApp(filename: "files-changed.jjdescription")
+	
+		let newContent = "Hello there"
+		app.typeText(newContent)
+	
+		let (breadcrumbs, _) = try app.commit()
+		XCTAssertEqual(breadcrumbs!.exitStatus, 0, "commit failed with non-zero status")
+		XCTAssertEqual(breadcrumbs!.fileChangeModifiedLineRanges.count, 3)
+		XCTAssertEqual(breadcrumbs!.fileChangeAddedLineRanges.count, 2)
+		XCTAssertEqual(breadcrumbs!.fileChangeDeletedLineRanges.count, 1)
 	}
 	
 	// MARK: Emoji

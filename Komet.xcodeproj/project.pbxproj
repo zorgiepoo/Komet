@@ -38,6 +38,8 @@
 		726F32F71DE27AB7004FB4AF /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 726F32F51DE27AB7004FB4AF /* Credits.rtf */; };
 		726FC0982C229E0800177986 /* new-commit-scissor in Resources */ = {isa = PBXBuildFile; fileRef = 726FC0962C229E0800177986 /* new-commit-scissor */; };
 		726FC0992C229E0800177986 /* amended-commit-scissor in Resources */ = {isa = PBXBuildFile; fileRef = 726FC0972C229E0800177986 /* amended-commit-scissor */; };
+		7271A0462E7F5D9500B86395 /* files-changed.jjdescription in Resources */ = {isa = PBXBuildFile; fileRef = 7271A0452E7F5D9500B86395 /* files-changed.jjdescription */; };
+		7271A0672E7F603B00B86395 /* files-changed in Resources */ = {isa = PBXBuildFile; fileRef = 7271A0662E7F603B00B86395 /* files-changed */; };
 		7272EB4A25588D4300C78C4D /* WindowStyleTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72D3BE78254F24CF0051914F /* WindowStyleTheme.swift */; };
 		7272EB4D25588DC900C78C4D /* WindowStyleDefaultTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7272EB4C25588DC900C78C4D /* WindowStyleDefaultTheme.swift */; };
 		7290A9E82E04A6C800A30BC0 /* TopBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7290A9E52E04A6C800A30BC0 /* TopBarViewController.swift */; };
@@ -118,6 +120,8 @@
 		726F32F61DE27AB7004FB4AF /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = Base; path = Base.lproj/Credits.rtf; sourceTree = "<group>"; };
 		726FC0962C229E0800177986 /* new-commit-scissor */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "new-commit-scissor"; sourceTree = "<group>"; };
 		726FC0972C229E0800177986 /* amended-commit-scissor */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "amended-commit-scissor"; sourceTree = "<group>"; };
+		7271A0452E7F5D9500B86395 /* files-changed.jjdescription */ = {isa = PBXFileReference; lastKnownFileType = text; path = "files-changed.jjdescription"; sourceTree = "<group>"; };
+		7271A0662E7F603B00B86395 /* files-changed */ = {isa = PBXFileReference; lastKnownFileType = text; path = "files-changed"; sourceTree = "<group>"; };
 		7272EB4C25588DC900C78C4D /* WindowStyleDefaultTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowStyleDefaultTheme.swift; sourceTree = "<group>"; };
 		7290A9E52E04A6C800A30BC0 /* TopBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopBarViewController.swift; sourceTree = "<group>"; };
 		7290A9E92E04A88200A30BC0 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = "Base.lproj/Top Bar.xib"; sourceTree = "<group>"; };
@@ -178,6 +182,7 @@
 				7211A97F253BC29E00F95773 /* hg-histedit */,
 				723C85822E67E0F10002B660 /* new-description.jjdescription */,
 				723C85882E6CB2450002B660 /* new-description-amend-scissor.jjdescription */,
+				7271A0452E7F5D9500B86395 /* files-changed.jjdescription */,
 				723C85842E67F2300002B660 /* split.jjdescription */,
 				723C85862E6CB1880002B660 /* split-amend.jjdescription */,
 				7211A977253BBBBB00F95773 /* svn-new-commit */,
@@ -185,6 +190,7 @@
 				726FC0962C229E0800177986 /* new-commit-scissor */,
 				72120FB725328B490018201E /* amended-commit */,
 				726FC0972C229E0800177986 /* amended-commit-scissor */,
+				7271A0662E7F603B00B86395 /* files-changed */,
 				72120FC32533EC570018201E /* linux-partial */,
 				72120FC72533F7650018201E /* interactive-rebase */,
 				72120FD12533F91D0018201E /* interactive-rebase-2 */,
@@ -356,8 +362,10 @@
 				72120FC42533EC570018201E /* linux-partial in Resources */,
 				726FC0992C229E0800177986 /* amended-commit-scissor in Resources */,
 				72120FD22533F91D0018201E /* interactive-rebase-2 in Resources */,
+				7271A0462E7F5D9500B86395 /* files-changed.jjdescription in Resources */,
 				7211A978253BBBBB00F95773 /* svn-new-commit in Resources */,
 				723C85892E6CB2450002B660 /* new-description-amend-scissor.jjdescription in Resources */,
+				7271A0672E7F603B00B86395 /* files-changed in Resources */,
 				723C858B2E6FD4100002B660 /* cherry-pick-conflict in Resources */,
 				723C85872E6CB1880002B660 /* split-amend.jjdescription in Resources */,
 				7211A974253BB68A00F95773 /* hg-new-commit in Resources */,

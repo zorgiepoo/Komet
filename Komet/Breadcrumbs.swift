@@ -16,6 +16,9 @@ struct Breadcrumbs: Codable {
 	var diffHeaderLineRanges: Array<Range<UTF16Offset>> = []
 	var diffAddLineRanges: Array<Range<UTF16Offset>> = []
 	var diffRemoveLineRanges: Array<Range<UTF16Offset>> = []
+	var fileChangeModifiedLineRanges: Array<Range<UTF16Offset>> = []
+	var fileChangeAddedLineRanges: Array<Range<UTF16Offset>> = []
+	var fileChangeDeletedLineRanges: Array<Range<UTF16Offset>> = []
 	var exitStatus: Int32 = 0
 	var spellChecking: Bool = false
 }
