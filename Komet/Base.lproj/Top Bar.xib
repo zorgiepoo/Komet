@@ -21,7 +21,7 @@
             <rect key="frame" x="0.0" y="0.0" width="500" height="30"/>
             <subviews>
                 <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="gZM-K9-1TQ">
-                    <rect key="frame" x="3" y="8" width="77" height="14"/>
+                    <rect key="frame" x="4" y="8" width="77" height="14"/>
                     <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="project_name" id="Yi1-b8-NCB">
                         <font key="font" metaFont="smallSystem"/>
                         <color key="textColor" name="disabledControlTextColor" catalog="System" colorSpace="catalog"/>
@@ -68,7 +68,7 @@ DQ
                 <constraint firstItem="LA4-2H-9rP" firstAttribute="centerY" secondItem="Xbe-BU-bfD" secondAttribute="centerY" id="Llq-1z-td3"/>
                 <constraint firstAttribute="trailing" secondItem="zn7-nG-YEr" secondAttribute="trailing" constant="4" id="TKF-VJ-mB1"/>
                 <constraint firstAttribute="height" constant="30" id="WnQ-5b-jTy"/>
-                <constraint firstItem="gZM-K9-1TQ" firstAttribute="leading" secondItem="Xbe-BU-bfD" secondAttribute="leading" constant="5" id="fmm-vt-ori"/>
+                <constraint firstItem="gZM-K9-1TQ" firstAttribute="leading" secondItem="Xbe-BU-bfD" secondAttribute="leading" constant="6" id="fmm-vt-ori"/>
                 <constraint firstItem="GTR-zR-Hnl" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="gZM-K9-1TQ" secondAttribute="trailing" constant="100" id="hUR-ew-Akd"/>
                 <constraint firstItem="gZM-K9-1TQ" firstAttribute="centerY" secondItem="Xbe-BU-bfD" secondAttribute="centerY" id="kiq-8t-AEI"/>
                 <constraint firstItem="GTR-zR-Hnl" firstAttribute="centerY" secondItem="LA4-2H-9rP" secondAttribute="centerY" id="ln3-7X-zkE"/>

@@ -167,9 +167,9 @@ class ContentViewController: NSViewController, NSTextStorageDelegate, NSTextCont
 		scrollView.documentView = textView
 		scrollViewContainer.addSubview(scrollView)
 		
-		// Give a little vertical padding between the text and the top of the text view container
+		// Give a little padding between the text and the text view container
 		let textContainerInset = textView.textContainerInset
-		textView.textContainerInset = NSMakeSize(textContainerInset.width, textContainerInset.height + 2)
+		textView.textContainerInset = NSMakeSize(textContainerInset.width + 1, textContainerInset.height + 2)
 		
 		// Nobody ever wants these;
 		// Because macOS may have some of these settings globally in System Preferences, I don't trust IB very much..
