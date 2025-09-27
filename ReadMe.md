@@ -42,7 +42,7 @@ The [Options](https://github.com/zorgiepoo/Komet/wiki/Options) page elaborates o
 
 **Version Control**:
 
-Git, Mercurial (hg), Subversion (svn)
+Git, Jujutsu (jj), Mercurial (hg), Subversion (svn)
 
 For optimal behavior, Komet depends on being able to distinguish the commit message content and the comment section at the end of the file. Thus, Komet has a small bit of code for handling each of its supported version control systems.
 
