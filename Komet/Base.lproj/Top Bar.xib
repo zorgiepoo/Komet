@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="24127" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="24412" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="24127"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="24412"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -57,8 +57,8 @@ DQ
                         <action selector="cancelCommit:" target="-2" id="Xcr-0O-HRV"/>
                     </connections>
                 </button>
-                <progressIndicator hidden="YES" maxValue="100" indeterminate="YES" controlSize="small" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="GTR-zR-Hnl" userLabel="Updater Check Progress Indicator">
-                    <rect key="frame" x="356" y="7" width="16" height="16"/>
+                <progressIndicator hidden="YES" wantsLayer="YES" maxValue="100" indeterminate="YES" controlSize="small" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="GTR-zR-Hnl" userLabel="Updater Check Progress Indicator">
+                    <rect key="frame" x="353" y="7" width="16" height="16"/>
                 </progressIndicator>
             </subviews>
             <constraints>
@@ -72,7 +72,7 @@ DQ
                 <constraint firstItem="GTR-zR-Hnl" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="gZM-K9-1TQ" secondAttribute="trailing" constant="100" id="hUR-ew-Akd"/>
                 <constraint firstItem="gZM-K9-1TQ" firstAttribute="centerY" secondItem="Xbe-BU-bfD" secondAttribute="centerY" id="kiq-8t-AEI"/>
                 <constraint firstItem="GTR-zR-Hnl" firstAttribute="centerY" secondItem="LA4-2H-9rP" secondAttribute="centerY" id="ln3-7X-zkE"/>
-                <constraint firstItem="LA4-2H-9rP" firstAttribute="leading" secondItem="GTR-zR-Hnl" secondAttribute="trailing" constant="1" id="tUe-z1-7W8"/>
+                <constraint firstItem="LA4-2H-9rP" firstAttribute="leading" secondItem="GTR-zR-Hnl" secondAttribute="trailing" constant="4" id="tUe-z1-7W8"/>
                 <constraint firstItem="LA4-2H-9rP" firstAttribute="width" secondItem="zn7-nG-YEr" secondAttribute="width" id="twa-dd-pFg"/>
             </constraints>
             <point key="canvasLocation" x="402" y="-219"/>
