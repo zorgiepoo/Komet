@@ -328,8 +328,8 @@ class ContentViewController: NSViewController, NSTextStorageDelegate, NSTextCont
 		let originalTextString = originalText.string
 		
 		let commentRange: NSRange
+		let plainText = currentPlainText()
 		do {
-			let plainText = currentPlainText()
 			commentRange = TextProcessor.commentUTF16Range(plainText: plainText, commentSectionLength: commentSectionLength)
 		}
 		
@@ -419,27 +419,32 @@ class ContentViewController: NSViewController, NSTextStorageDelegate, NSTextCont
 				} else if !isSquashMessage {
 					// Render text overflow highlights
 					
-					let lengthLimit: Int?
-					if range.location == 0 {
-						lengthLimit = Self.lengthLimitWarningEnabled(userDefaults: userDefaults, userDefaultKey: ZGEditorRecommendedSubjectLengthLimitEnabledKey, versionControlledFile: versionControlledFile) ? ZGReadDefaultLineLimit(userDefaults, ZGEditorRecommendedSubjectLengthLimitKey) : nil
-					} else {
-						lengthLimit = Self.lengthLimitWarningEnabled(userDefaults: userDefaults, userDefaultKey: ZGEditorRecommendedBodyLineLengthLimitEnabledKey, versionControlledFile: versionControlledFile) ? ZGReadDefaultLineLimit(userDefaults, ZGEditorRecommendedBodyLineLengthLimitKey) : nil
-					}
-					
-					if let lengthLimit = lengthLimit {
-						let distance = originalTextString.distance(from: originalTextString.startIndex, to: originalTextString.endIndex)
+					if let startContentLineIndex = TextProcessor.firstContentLineIndex(plainText: plainText, versionControlType: commentVersionControlType) {
 						
-						if distance > lengthLimit {
-							let overflowRange = originalTextString.index(originalTextString.startIndex, offsetBy: lengthLimit) ..< originalTextString.endIndex
+						let lengthLimit: Int?
+						let startContentLocationRange = TextProcessor.convertToUTF16Range(range: startContentLineIndex ..< startContentLineIndex, in: plainText)
+						
+						if range.location == startContentLocationRange.location {
+							lengthLimit = Self.lengthLimitWarningEnabled(userDefaults: userDefaults, userDefaultKey: ZGEditorRecommendedSubjectLengthLimitEnabledKey, versionControlledFile: versionControlledFile) ? ZGReadDefaultLineLimit(userDefaults, ZGEditorRecommendedSubjectLengthLimitKey) : nil
+						} else {
+							lengthLimit = Self.lengthLimitWarningEnabled(userDefaults: userDefaults, userDefaultKey: ZGEditorRecommendedBodyLineLengthLimitEnabledKey, versionControlledFile: versionControlledFile) ? ZGReadDefaultLineLimit(userDefaults, ZGEditorRecommendedBodyLineLengthLimitKey) : nil
+						}
+						
+						if let lengthLimit {
+							let distance = originalTextString.distance(from: originalTextString.startIndex, to: originalTextString.endIndex)
 							
-							let overflowUtf16Range = TextProcessor.convertToUTF16Range(range: overflowRange, in: originalTextString)
-							
-							let overflowAttributes: [NSAttributedString.Key: AnyObject] = [.font: contentFont, .backgroundColor: style.overflowColor]
-							
-							textWithDisplayAttributes.addAttributes(overflowAttributes, range: overflowUtf16Range)
-							
-							if updateBreadcrumbs && breadcrumbs != nil {
-								breadcrumbs!.textOverflowRanges.append(range.location + overflowUtf16Range.location ..< range.location + NSMaxRange(overflowUtf16Range))
+							if distance > lengthLimit {
+								let overflowRange = originalTextString.index(originalTextString.startIndex, offsetBy: lengthLimit) ..< originalTextString.endIndex
+								
+								let overflowUtf16Range = TextProcessor.convertToUTF16Range(range: overflowRange, in: originalTextString)
+								
+								let overflowAttributes: [NSAttributedString.Key: AnyObject] = [.font: contentFont, .backgroundColor: style.overflowColor]
+								
+								textWithDisplayAttributes.addAttributes(overflowAttributes, range: overflowUtf16Range)
+								
+								if updateBreadcrumbs && breadcrumbs != nil {
+									breadcrumbs!.textOverflowRanges.append(range.location + overflowUtf16Range.location ..< range.location + NSMaxRange(overflowUtf16Range))
+								}
 							}
 						}
 					}

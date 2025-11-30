@@ -1208,6 +1208,29 @@ class KometUITests: XCTestCase {
 		XCTAssertEqual(breadcrumbs!.diffRemoveLineRanges.count, 0)
 	}
 	
+	func testJJSplitSubjectExceedingLimitWithEmoji() throws {
+		let app = try KometApp(filename: "split.jjdescription")
+		
+		let emoji = "📝"
+		let subject = "Hello this is a line that will be exactly 69 characters long and yepa\(emoji)"
+		app.typeText(subject)
+		
+		let (breadcrumbs, _) = try app.commit()
+		XCTAssertEqual(breadcrumbs!.exitStatus, 0)
+		
+		let textOverflowRanges = breadcrumbs!.textOverflowRanges
+		XCTAssertEqual(textOverflowRanges.count, 1)
+		
+		// The first line is a comment line in this file, and the content starts
+		// at the next line.
+		let firstNewlineRange = app.initialContent.range(of: "\n")!
+		let firstNewlineEndUTF16 = app.initialContent.utf16.distance(from: app.initialContent.utf16.startIndex, to: firstNewlineRange.upperBound)
+		
+		let subjectOverflowRange = (firstNewlineEndUTF16 + subject.utf16.count - emoji.utf16.count) ..< (firstNewlineEndUTF16 + subject.utf16.count)
+		
+		XCTAssertEqual(textOverflowRanges[0], subjectOverflowRange)
+	}
+	
 	func testJJFilesChanged() throws {
 		let app = try KometApp(filename: "files-changed.jjdescription")
 	
