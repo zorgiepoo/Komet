@@ -8,14 +8,6 @@
 		<data>
 		JUEJycW6g3uIEzqY0woym9DEryQ=
 		</data>
-		<key>Resources/SUUpdateAlert.nib</key>
-		<data>
-		6M789C1QB9aMJ8C+60BqTx4LYfo=
-		</data>
-		<key>Resources/SUUpdatePermissionPrompt.nib</key>
-		<data>
-		G8eOjQUTFIOj7ExP2MX2PoUb1rE=
-		</data>
 	</dict>
 	<key>files2</key>
 	<dict>
@@ -257,20 +249,6 @@
 			<key>hash2</key>
 			<data>
 			7e+QDMuup14+Fqd3GaaXa2g3ajdNp80oQzcSSqmODxk=
-			</data>
-		</dict>
-		<key>Resources/SUUpdateAlert.nib</key>
-		<dict>
-			<key>hash2</key>
-			<data>
-			OYejM9p8JyjvLLllbl7q8IMohIc8q/eDU/y5CZxdj74=
-			</data>
-		</dict>
-		<key>Resources/SUUpdatePermissionPrompt.nib</key>
-		<dict>
-			<key>hash2</key>
-			<data>
-			LmK51ac21TseryF0MsTQrQUhfol3h88b3xBx/yIwjUY=
 			</data>
 		</dict>
 		<key>Updater.app</key>
