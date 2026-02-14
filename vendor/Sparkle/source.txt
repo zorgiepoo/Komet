@@ -1,3 +1,3 @@
 Git: https://github.com/sparkle-project/Sparkle.git
-Commit: 65898f2dc620513f5c0e257be11db6cf67c86b8d
+Commit: 99ace46e4afc7fe017e968e2a33fc64adf6520c2
 Configuration: Set MACOSX_DEPLOYMENT_TARGET to 12.4 and disable pretty much everything, remove nibs.
