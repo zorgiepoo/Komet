@@ -4,9 +4,13 @@
 <dict>
 	<key>files</key>
 	<dict>
+		<key>Resources/.DS_Store</key>
+		<data>
+		3y++sUAKzaCQmjLBz2v0kvESHgc=
+		</data>
 		<key>Resources/Info.plist</key>
 		<data>
-		JUEJycW6g3uIEzqY0woym9DEryQ=
+		SZ4ivtFpNQN7EPC19Qmoqt02AAA=
 		</data>
 	</dict>
 	<key>files2</key>
@@ -15,10 +19,10 @@
 		<dict>
 			<key>cdhash</key>
 			<data>
-			Xzv5u7tngqBRGQgYXyXPKdBgRSw=
+			g69YStoHU9iOIdwFrh8H3mO9jgw=
 			</data>
 			<key>requirement</key>
-			<string>cdhash H"5f3bf9bbbb6782a0511908185f25cf29d060452c" or cdhash H"1c60ac97f24625af62de38dc083e6210288096b5"</string>
+			<string>cdhash H"83af584ada0753d88e21dc05ae1f07de63bd8e0c" or cdhash H"8a80d02ad8840565c5529d6fef9eb0f469884f6d"</string>
 		</dict>
 		<key>Headers/SPUAppcastSigningValidationStatus.h</key>
 		<dict>
@@ -248,17 +252,17 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			7e+QDMuup14+Fqd3GaaXa2g3ajdNp80oQzcSSqmODxk=
+			c055lyzU6aqOEH4Wx++CHPM5e92JtYcNzfIbuN7SlN0=
 			</data>
 		</dict>
 		<key>Updater.app</key>
 		<dict>
 			<key>cdhash</key>
 			<data>
-			xAtxoN/1dzBHgTtNWcnAWMfaMbc=
+			abPeUJcTeD2wmh8gQE2EEtV0V18=
 			</data>
 			<key>requirement</key>
-			<string>cdhash H"c40b71a0dff5773047813b4d59c9c058c7da31b7" or cdhash H"661036293ad02a23276e7a3fdbd41cc2dcca470f"</string>
+			<string>cdhash H"69b3de509713783db09a1f20404d8412d574575f" or cdhash H"131070d6feca6d546b8180f1ed1c95f919d4ffdd"</string>
 		</dict>
 	</dict>
 	<key>rules</key>
