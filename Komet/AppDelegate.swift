@@ -43,11 +43,28 @@ typealias StatFS = statfs
 		
 		let fileManager = FileManager()
 		
-		// The system can pass command line arguments unfortunately
-		// So to distinguish between a user starting the app normally and a tool like git launching the app,
-		// we should see detect if the file exists
-		let arguments = ProcessInfo.processInfo.arguments
-		let inputFileURL: URL? = (arguments.count >= 2) ? URL(fileURLWithPath: arguments[1]) : nil
+		// Process through command line arguments ignoring user default flags,
+		// and try to find a file path. Later we'll see if the file exists to determine
+		// if the app is being launched from a VCS tool or just being launched on its own
+		var inputFileURL: URL? = nil
+		do {
+			let arguments = ProcessInfo.processInfo.arguments
+			var foundUserDefaultArgument = false
+			for argument in arguments[1...] {
+				if argument.hasPrefix("-") {
+					foundUserDefaultArgument = true
+					continue
+				}
+				
+				if foundUserDefaultArgument {
+					foundUserDefaultArgument = false
+					continue
+				}
+				
+				inputFileURL = URL(fileURLWithPath: argument)
+				break
+			}
+		}
 		
 		let tutorialMode: Bool
 		var commitFileURL: URL?

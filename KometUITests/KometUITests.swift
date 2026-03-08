@@ -48,8 +48,7 @@ class KometApp {
 		
 		application = XCUIApplication()
 		application.launchArguments =
-			[fileURL.path,
-			 key(ZGEditorAutomaticNewlineInsertionAfterSubjectKey), String(automicNewlineInsertion),
+			[key(ZGEditorAutomaticNewlineInsertionAfterSubjectKey), String(automicNewlineInsertion),
 			 key(ZGResumeIncompleteSessionKey), String(resumeIncompleteSession),
 			 key(ZGResumeIncompleteSessionTimeoutIntervalKey), String(60.0 * 5),
 			 key(ZGDisableSpellCheckingAndCorrectionForSquashesKey), String(true),
@@ -68,7 +67,8 @@ class KometApp {
 			 key(ZGAssumeVersionControlledFileKey), String(versionControlledFile),
 			 key(ZGCommitTextViewContinuousSpellCheckingKey), String(true),
 			 key(ZGCommitTextViewAutomaticSpellingCorrectionKey), String(false),
-			 key(ZGCommitTextViewAutomaticTextReplacementKey), String(false)]
+			 key(ZGCommitTextViewAutomaticTextReplacementKey), String(false),
+			 fileURL.path]
 		
 		application.launchEnvironment = [
 			ZGBreadcrumbsURLKey: breadcrumbsURL.path,
